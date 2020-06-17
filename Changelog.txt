@@ -1,0 +1,14 @@
+----------------------------------------------
+Alexandria EMU - BY Player-xD
+Basado en Ancestra Remake rev47
+----------------------------------------------
+
+v0.00.1
+- Actualizacion de las librerias e implementada la libreria de Hikari
+- MainServer a Kotlin, ex Ancestra.java
+- Eliminada columna ultima conexion, nivel, alineacion y sfx de la tabla miembros_gremio
+- Nivel, ultima conexion, alineacion y sfx para miembros de gremios se toma desde personaje y cuenta
+- Agregado Hikari para consultas a la BDD
+- Division de la base de datos a dinamicos y estaticos
+- Re organizacion de la base de datos
+- Traduccion de las tablas y columnas reorganizadas

@@ -1,0 +1,79 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<LINK href="styles/dofus.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript">
+	function closeBrowserWindow(){
+		window.close();
+	}
+	
+	function setFlashStyle(divid, styleName){
+		document.getElementById(divid).className = styleName + getUserAgentID();
+	}
+	
+	function canResizeFlash(){
+		var ua = navigator.userAgent.toLowerCase();
+		var opera = ua.indexOf("opera");
+		if( document.getElementById ){
+			if(opera == -1) return true;
+			else if(parseInt(ua.substr(opera+6, 1)) >= 7) return true;
+		}
+		return false;
+	}
+	
+	function getUserAgentID(){
+		var ua = navigator.userAgent.toLowerCase();
+		if(ua.indexOf("msie") != -1) return "IE";
+		else if(ua.indexOf("gecko") != -1) return "MOZILLA";
+		return "";
+	}
+</script>
+
+<title>Dofus</title>
+<BODY marginwidth="0" marginHeight="0" topmargin="0" leftmargin="0" scroll="no" bgcolor="#29261F">
+
+<table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
+<tr valign="middle" align="center">
+	<td align="center">
+
+    <script type="text/javascript">
+      e = canResizeFlash();
+			document.write('<div id="flashid" class="start' + getUserAgentID() + '" >');
+      document.write('<object data="loader.swf" width="100%" height="100%" type="application/x-shockwave-flash">');
+      document.write('  <param name="movie" value="loader.swf" />');
+      document.write('  <param name="FlashVars" value="&allowResize=' + e + '" />');
+      document.write('  <param name="bgcolor" value="#000000" />');
+      document.write('</object>');
+      document.write('</div>');
+    </script>
+    <noscript>
+			<table cellpadding="2" cellspacing="0" bgcolor="white" border="0">
+			<tr>
+				<td>
+				<table width="742px" height="556px" cellpadding="0" cellspacing="0" bgcolor="#000000">
+				<tr>
+					<td>
+
+					<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="742" height="556" id="DOFUS" align="">
+						<param name="movie" value="loader.swf?htmlLang=es" /> 
+						<param name="quality" value="high" />
+						<param name="bgcolor" value="#000000" />
+						<param name="menu" value="true" />
+						<embed src="loader.swf?htmlLang=es" quality="high" menu="true" bgcolor="#000000" width="742" height="556" name="DOFUS" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
+					</object>
+		
+					</td>
+				</tr>
+				</table>
+				</td>
+			</tr>
+			</table>
+    </noscript>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

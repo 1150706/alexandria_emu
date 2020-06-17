@@ -1,0 +1,83 @@
+#Fichero de configuracion Alexandria Emu
+
+#Configuracion General
+GAME_PORT = 5555
+REALM_PORT = 444
+DEBUG = false
+USE_IP = true
+HOST_IP = 127.0.0.1
+MOTD = <b>PrivateDofus! - http://privatedofus.net</b>
+MOTD_COLOR = FF0000
+SEND_POLICY = false
+SAVE_TIME = 30
+LOCALIP_LOOPBACK = true
+LOG = true
+LOAD_ACTION_DELAY = 600
+PLAYER_LIMIT = 60
+ALLOW_MULTI_ACCOUNT = true
+
+
+
+# Rates
+XP_PVP = 1
+XP_METIER = 1
+XP_PVM = 1
+DROP = 1
+KAMAS = 1
+HONOR = 3
+
+
+# Configuration de la base de donnée
+DB_HOST = 127.0.0.1
+DB_USER = root
+DB_PASS = 
+STATIC_DB_NAME = alexandria_estaticos
+OTHER_DB_NAME = alexandria_dinamicos
+
+# Configuration du GamePlay
+MAX_PERSO_PAR_COMPTE = 5
+USE_MOBS = false
+USE_CUSTOM_START = false
+START_MAP = 5
+START_CELL = 255
+START_LEVEL = 80
+START_KAMAS = 5000000
+ZAAP = true
+LVL_PVP = 5000
+ALLOW_MULE_PVP = false
+AURA_SYSTEM = true
+MAX_IDLE_TIME = 500
+NOT_IN_HDV = 4820
+
+#Ajout de Mihawk
+
+XP_DEFI = true
+ALLOW_PLAYER_COMMANDS = true
+DD_LVL_DEPART = 100
+NOM_DD = AncestraDinde
+
+MAP_SHOP = 7411
+CELL_SHOP = 369
+
+ENCLOS_MAP = 8746 
+CELL_ENCLOS = 369
+
+MAP_PVP = 7412
+CELL_PVP = 369
+
+MAP_PVM = 7412
+CELL_PVM = 369
+
+# Arenes
+ARENA_MAP = 10134,10132,10131,10133,10137,10135,10136,10138
+ARENA_TIMER = 600000
+
+# Utilisation du SendManager (Ne pas utiliser pour le moment)
+USE_COMPACT_DATA = false
+TIME_COMPACT_DATA = 200
+
+# Sauvegarde atomatique (en secondes)
+LOAD_SAVE_DELAY = 1800
+
+# Temps pour l'apparition d'étoiles bonus (par defaut : 60)
+TIME_BONUS_ETOILES = 60

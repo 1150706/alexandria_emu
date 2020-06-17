@@ -12,3 +12,7 @@ v0.00.1
 - Division de la base de datos a dinamicos y estaticos
 - Re organizacion de la base de datos
 - Traduccion de las tablas y columnas reorganizadas
+
+v0.00.2
+- Arreglo error al guardar los objetos de los personajes
+- Arreglo en base de datos, carga de personajes en el gremio

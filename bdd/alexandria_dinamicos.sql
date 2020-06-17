@@ -11,7 +11,7 @@
  Target Server Version : 100411
  File Encoding         : 65001
 
- Date: 17/06/2020 04:59:56
+ Date: 17/06/2020 17:23:23
 */
 
 SET NAMES utf8mb4;
@@ -1643,7 +1643,7 @@ CREATE TABLE `datos_cuenta`  (
 -- ----------------------------
 -- Records of datos_cuenta
 -- ----------------------------
-INSERT INTO `datos_cuenta` VALUES (24, 'admin', '123', 5, 0, '', '127.0.0.1', '2020~06~17~04~36', 'supprimer ?', 'oui', '', 0, 0, 0, '', '', '', 0, 0, '', '0', 0, 0, '');
+INSERT INTO `datos_cuenta` VALUES (24, 'admin', '123', 5, 0, '', '127.0.0.1', '2020~06~17~15~34', 'supprimer ?', 'oui', '', 0, 0, 0, '', '', '', 0, 1, '', '0', 0, 0, '');
 
 -- ----------------------------
 -- Table structure for datos_gremio
@@ -1666,7 +1666,7 @@ CREATE TABLE `datos_gremio`  (
 -- ----------------------------
 -- Records of datos_gremio
 -- ----------------------------
-INSERT INTO `datos_gremio` VALUES (1, 'Testeo', '2,9o33h,7,0', 1, 0, 0, 0, '462;0|461;0|460;0|459;0|458;0|457;0|456;0|455;0|454;0|453;0|452;0|451;0', '176;100|158;1000|124;100');
+INSERT INTO `datos_gremio` VALUES (1, 'Testeo', '2,9o33h,7,0', 1, 0, 0, 0, '451;0|452;0|453;0|454;0|455;0|456;0|457;0|458;0|459;0|460;0|461;0|462;0', '124;100|158;1000|176;100');
 
 -- ----------------------------
 -- Table structure for datos_ipbaneadas
@@ -1726,14 +1726,22 @@ CREATE TABLE `datos_montura`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `datos_objetos`;
 CREATE TABLE `datos_objetos`  (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `modelo` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
   `ubicacion` int(11) NOT NULL,
   `caracteristicas` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `dueño` int(11) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `guid`(`id`) USING BTREE
-) ENGINE = MyISAM CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of datos_objetos
+-- ----------------------------
+INSERT INTO `datos_objetos` VALUES (1, 7201, 1, -1, '64#1a#25#0#1d12+25,73#5#0#0#0d0+5,77#15#0#0#0d0+21,7c#18#0#0#0d0+24');
+INSERT INTO `datos_objetos` VALUES (2, 7201, 1, -1, '64#1a#25#0#1d12+25,73#7#0#0#0d0+7,77#10#0#0#0d0+16,7c#14#0#0#0d0+20');
+INSERT INTO `datos_objetos` VALUES (3, 7201, 1, -1, '64#1a#25#0#1d12+25,73#7#0#0#0d0+7,77#19#0#0#0d0+25,7c#14#0#0#0d0+20');
+INSERT INTO `datos_objetos` VALUES (4, 7201, 1, -1, '64#1a#25#0#1d12+25,73#7#0#0#0d0+7,77#14#0#0#0d0+20,7c#14#0#0#0d0+20');
 
 -- ----------------------------
 -- Table structure for datos_objetos_cercados
@@ -1817,7 +1825,7 @@ CREATE TABLE `datos_personajes`  (
 -- ----------------------------
 -- Records of datos_personajes
 -- ----------------------------
-INSERT INTO `datos_personajes` VALUES (1, 'Player-xD', 0, 9, -1, -1, -1, 5000033, 129, 745, 10000, 150, 534476000, 100, 90, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '*#%!pi$:?', 7437, 214, 100, '161;5;b,162;1;_,163;1;_,164;1;d,165;1;_,166;1;_,167;1;_,168;1;_,169;1;c,170;1;_,171;1;_,172;1;_,173;1;_,174;1;_,175;1;_,176;1;_,177;1;_,178;1;_,179;1;_,180;1;_,414;1;_,415;5;e', '', '', '7411,297', '164,528,844,935,951,1158,1242,1841,2191,3022,3250,4263,4739,5295,6137,6855,6954,7411,8037,8088,8125,8163,8437,8785,9454,10297,10304,10317,10349,10643,11170,11210', '', 0, -1, 0, 0);
+INSERT INTO `datos_personajes` VALUES (1, 'Player-xD', 0, 9, -1, -1, -1, 5000033, 129, 745, 10000, 150, 534476000, 100, 90, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '*#%!pi$:?', 7437, 339, 100, '161;5;b,162;1;_,163;1;_,164;1;d,165;1;_,166;1;_,167;1;_,168;1;_,169;1;c,170;1;_,171;1;_,172;1;_,173;1;_,174;1;_,175;1;_,176;1;_,177;1;_,178;1;_,179;1;_,180;1;_,414;1;_,415;5;e', '0|1|2|3|4|', '', '7411,297', '164,528,844,935,951,1158,1242,1841,2191,3022,3250,4263,4739,5295,6137,6855,6954,7411,8037,8088,8125,8163,8437,8785,9454,10297,10304,10317,10349,10643,11170,11210', '', 0, -1, 0, 0);
 
 -- ----------------------------
 -- Table structure for datos_recaudadores

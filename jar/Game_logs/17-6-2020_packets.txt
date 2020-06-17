@@ -522,3 +522,125 @@ Lancement du serveur...
 4:50:3: Game: Recv << gIG
 4:50:3: Game: Recv << gIM
 Lancement du serveur...
+Lancement du serveur...
+11:23:41: Game: Recv << AT24
+11:23:41: Game: Recv << Ak0
+11:23:41: Game: Recv << AV
+11:23:41: Game: Recv << Ages
+11:23:41: Game: Recv << AiDfzPmUid7Xo8M53rEjL7o1
+11:23:41: Game: Recv << AL
+11:23:41: Game: Recv << Af
+11:23:42: Game: Recv << AS1
+11:23:42: Game: Recv << Af
+11:23:42: Game: Recv << GC1
+11:23:43: Game: Recv << BD
+11:23:43: Game: Recv << Ir742;556;2
+11:23:43: Game: Recv << GI
+11:23:44: Game: Recv << GA001edtdeNcfebft
+11:23:47: Game: Recv << GKK0
+11:24:25: Game: Recv << BA!getitem 8411 1
+11:24:25: Game: Recv << BA!getitem 8445 1
+11:24:25: Game: Recv << BA!getitem 8453 1
+11:24:25: Game: Recv << BA!getitem 8465 1
+11:24:25: Game: Recv << BA!getitem 8459 2
+11:24:25: Game: Recv << BA!getitem 8538 1
+11:24:25: Game: Recv << BA!getitem 8469 1
+11:24:47: Game: Recv << BAsave
+11:25:27: Game: Recv << BAexit
+Lancement du serveur...
+11:25:42: Game: Recv << AT24
+11:25:42: Game: Recv << Ak0
+11:25:42: Game: Recv << AV
+11:25:42: Game: Recv << Ages
+11:25:42: Game: Recv << AiDfzPmUid7Xo8M53rEjL7o1
+11:25:42: Game: Recv << AL
+11:25:42: Game: Recv << Af
+11:27:39: Game: Recv << AS1
+11:27:39: Game: Recv << Af
+11:27:39: Game: Recv << GC1
+11:27:39: Game: Recv << BD
+11:27:39: Game: Recv << GI
+Lancement du serveur...
+11:28:15: Game: Recv << AT24
+11:28:15: Game: Recv << Ak0
+11:28:15: Game: Recv << AV
+11:28:15: Game: Recv << Ages
+11:28:15: Game: Recv << AiDfzPmUid7Xo8M53rEjL7o1
+11:28:15: Game: Recv << AL
+11:28:15: Game: Recv << Af
+11:28:16: Game: Recv << AS1
+11:28:16: Game: Recv << Af
+11:28:16: Game: Recv << GC1
+11:28:16: Game: Recv << BD
+11:28:16: Game: Recv << GI
+11:28:18: Game: Recv << gIG
+11:28:18: Game: Recv << gIM
+Lancement du serveur...
+15:19:39: Game: Recv << AT24
+15:19:39: Game: Recv << Ak0
+15:19:39: Game: Recv << AV
+15:19:39: Game: Recv << Ages
+15:19:39: Game: Recv << AiDfzPmUid7Xo8M53rEjL7o1
+15:19:39: Game: Recv << AL
+15:19:39: Game: Recv << Af
+15:19:42: Game: Recv << AS1
+15:19:42: Game: Recv << Af
+15:19:42: Game: Recv << GC1
+15:19:42: Game: Recv << BD
+15:19:42: Game: Recv << GI
+15:20:19: Game: Recv << BA!getitem 9193 1
+15:20:19: Game: Recv << BA!getitem 9658 1
+15:20:19: Game: Recv << BA!getitem 9463 1
+15:20:19: Game: Recv << BA!getitem 9464 1
+15:20:32: Game: Recv << OM0|0
+15:20:32: Game: Recv << BD
+15:20:34: Game: Recv << OM0|-1
+15:20:34: Game: Recv << OM1|0
+15:20:34: Game: Recv << BD
+15:20:34: Game: Recv << BD
+15:20:39: Game: Recv << BAsave
+15:21:20: Game: Recv << AT24
+15:21:20: Game: Recv << Ak0
+15:21:20: Game: Recv << AV
+15:21:20: Game: Recv << Ages
+15:21:20: Game: Recv << AiDfzPmUid7Xo8M53rEjL7o1
+15:21:20: Game: Recv << AL
+15:21:20: Game: Recv << Af
+15:21:25: Game: Recv << AS1
+15:21:25: Game: Recv << Af
+15:21:25: Game: Recv << GC1
+15:21:25: Game: Recv << BD
+15:21:25: Game: Recv << GI
+Lancement du serveur...
+15:34:46: Game: Recv << AT24
+15:34:46: Game: Recv << Ak0
+15:34:46: Game: Recv << AV
+15:34:46: Game: Recv << Ages
+15:34:46: Game: Recv << AiDfzPmUid7Xo8M53rEjL7o1
+15:34:46: Game: Recv << AL
+15:34:46: Game: Recv << Af
+15:34:54: Game: Recv << AS1
+15:34:54: Game: Recv << Af
+15:34:54: Game: Recv << GC1
+15:34:55: Game: Recv << BD
+15:34:55: Game: Recv << GI
+15:34:55: Game: Recv << Ir742;556;2
+15:38:22: Game: Recv << BA!getitem 10172 1
+15:38:39: Game: Recv << BAitem 7200
+15:38:51: Game: Recv << AB11
+15:38:55: Game: Recv << KV
+15:39:10: Game: Recv << BAsalvar
+15:39:13: Game: Recv << BAsave
+15:40:19: Game: Recv << BAitem 7201
+15:40:31: Game: Recv << BAsave
+17:21:26: Game: Recv << BAsave
+17:21:28: Game: Recv << BAitem 7201
+17:21:29: Game: Recv << BAitem 7201
+17:21:31: Game: Recv << BAitem 7201
+17:21:32: Game: Recv << BAsave
+17:21:56: Game: Recv << OD4|1
+17:21:56: Game: Recv << BD
+17:22:2: Game: Recv << GA001bfIafJ
+17:22:3: Game: Recv << GKK0
+17:22:5: Game: Recv << GA001efI
+17:22:6: Game: Recv << GKK0

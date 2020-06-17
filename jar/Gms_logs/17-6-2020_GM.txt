@@ -43,3 +43,33 @@ learnspell 414 <=127.0.0.1 : admin / Player-xD  [4:48:21]
 learnspell 415 <=127.0.0.1 : admin / Player-xD  [4:48:23]
 dar_nivel 150 <=127.0.0.1 : admin / Player-xD  [4:49:54]
 Lancement du serveur...
+Lancement du serveur...
+!getitem 8411 1 <=127.0.0.1 : admin / Player-xD  [11:24:25]
+!getitem 8445 1 <=127.0.0.1 : admin / Player-xD  [11:24:25]
+!getitem 8453 1 <=127.0.0.1 : admin / Player-xD  [11:24:25]
+!getitem 8465 1 <=127.0.0.1 : admin / Player-xD  [11:24:25]
+!getitem 8459 2 <=127.0.0.1 : admin / Player-xD  [11:24:25]
+!getitem 8538 1 <=127.0.0.1 : admin / Player-xD  [11:24:25]
+!getitem 8469 1 <=127.0.0.1 : admin / Player-xD  [11:24:25]
+save <=127.0.0.1 : admin / Player-xD  [11:24:47]
+exit <=127.0.0.1 : admin / Player-xD  [11:25:27]
+Lancement du serveur...
+Lancement du serveur...
+Lancement du serveur...
+!getitem 9193 1 <=127.0.0.1 : admin / Player-xD  [15:20:19]
+!getitem 9658 1 <=127.0.0.1 : admin / Player-xD  [15:20:19]
+!getitem 9463 1 <=127.0.0.1 : admin / Player-xD  [15:20:19]
+!getitem 9464 1 <=127.0.0.1 : admin / Player-xD  [15:20:19]
+save <=127.0.0.1 : admin / Player-xD  [15:20:39]
+Lancement du serveur...
+!getitem 10172 1 <=127.0.0.1 : admin / Player-xD  [15:38:22]
+item 7200 <=127.0.0.1 : admin / Player-xD  [15:38:39]
+salvar <=127.0.0.1 : admin / Player-xD  [15:39:10]
+save <=127.0.0.1 : admin / Player-xD  [15:39:13]
+item 7201 <=127.0.0.1 : admin / Player-xD  [15:40:19]
+save <=127.0.0.1 : admin / Player-xD  [15:40:31]
+save <=127.0.0.1 : admin / Player-xD  [17:21:26]
+item 7201 <=127.0.0.1 : admin / Player-xD  [17:21:28]
+item 7201 <=127.0.0.1 : admin / Player-xD  [17:21:29]
+item 7201 <=127.0.0.1 : admin / Player-xD  [17:21:31]
+save <=127.0.0.1 : admin / Player-xD  [17:21:32]

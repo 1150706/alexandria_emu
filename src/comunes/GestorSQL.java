@@ -580,8 +580,7 @@ public class GestorSQL {
 						RS.getInt("tamaño"),
 						RS.getInt("gfx"),
 						RS.getByte("alineacion"),
-						RS.getInt("cuenta"),
-						stats,
+						RS.getInt("cuenta"), stats,
 						RS.getByte("veramigos"),
 						RS.getByte("veralineacion"),
 						RS.getByte("vervendedor"),
@@ -934,8 +933,7 @@ public class GestorSQL {
 			System.exit(1);
 		};
 		if(saveItem) {
-			baseQuery = "UPDATE `datos_objetos` SET cantidad = ?, ubicacion = ?, caracteristicas = ?"+
-			" dueño = ? WHERE id = ?;";
+			baseQuery = "UPDATE `datos_objetos` SET cantidad = ?, ubicacion = ?, caracteristicas = ? WHERE id = ?;";
 			try {
 				p = newTransact(baseQuery, _dinamicos);
 			} catch (SQLException e1) {
@@ -951,9 +949,7 @@ public class GestorSQL {
 					p.setInt(1, obj.getQuantity());
 					p.setInt(2, obj.getPosition());
 					p.setString(3, obj.parseToSave());
-					//Agregamos la ID del dueño a la tabla datos_objetos
-					p.setInt(4, _perso.get_GUID());
-					p.setInt(5, Integer.parseInt(idStr));
+					p.setInt(4, Integer.parseInt(idStr));
 					
 					p.execute();
 				}catch(Exception e){continue;}
@@ -1096,7 +1092,6 @@ public class GestorSQL {
 				String xp = RS.getString("experiencia");
 				boolean capturable;
 				capturable = RS.getInt("capturable") == 1;
-				
 				Mundo.addMobTemplate(id, new Monstruo(id, gfxID, align, colors, grades, spells, stats, pdvs, pts, inits, mK, MK, xp, IAType, capturable));
 			}
 			closeResultSet(RS);
@@ -1276,8 +1271,7 @@ public class GestorSQL {
 	}
 
 	public static void guardar_objeto(Objeto item) {
-		Jugador personaje = null;
-		String baseQuery = "REPLACE INTO `datos_objetos` VALUES (?,?,?,?,?,?);";
+		String baseQuery = "REPLACE INTO `datos_objetos` VALUES (?,?,?,?,?);";
 		try {
 			PreparedStatement p = newTransact(baseQuery, _dinamicos);
 			p.setInt(1, item.getGuid());
@@ -1285,7 +1279,6 @@ public class GestorSQL {
 			p.setInt(3, item.getQuantity());
 			p.setInt(4, item.getPosition());
 			p.setString(5,item.parseToSave());
-			p.setInt(6, personaje.get_GUID());
 			p.execute();
 			closePreparedStatement(p);
 		} catch (SQLException e) {
@@ -1798,7 +1791,7 @@ public class GestorSQL {
 			ResultSet GuildQuery = GestorSQL.executeQuery("SELECT gremio FROM `datos_miembros_gremio` WHERE id ="+guid+";", MainServidor.OTHER_DB_NAME);
 			boolean found = GuildQuery.first();
 			if(found)
-				guildId = GuildQuery.getInt("guild");
+				guildId = GuildQuery.getInt("gremio");
 			closeResultSet(GuildQuery);
 		}catch(SQLException e) {
 			JuegoServidor.addToLog("SQL ERROR: "+e.getMessage());
@@ -1814,8 +1807,8 @@ public class GestorSQL {
 			ResultSet GuildQuery = GestorSQL.executeQuery("SELECT gremio,id FROM `datos_miembros_gremio` WHERE nombre ='"+name+"';", MainServidor.OTHER_DB_NAME);
 			boolean found = GuildQuery.first();
 			if(found) {
-				guildId = GuildQuery.getInt("guild");
-				guid = GuildQuery.getInt("guid");
+				guildId = GuildQuery.getInt("gremio");
+				guid = GuildQuery.getInt("id");
 			}
 			
 			closeResultSet(GuildQuery);

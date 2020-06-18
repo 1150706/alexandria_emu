@@ -17,3 +17,4 @@ v0.00.2
 - Arreglo error al guardar los objetos de los personajes
 - Arreglo en base de datos, carga de personajes en el gremio
 - Agregado de capital en caracteristicas reparado
+- Agregada accion 104 Cliqueador automatico

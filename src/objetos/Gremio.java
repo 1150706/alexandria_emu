@@ -6,7 +6,8 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import objetos.Personaje.Stats;
-import objetos.Hechizos.SortStats;
+import objetos.casas.House;
+import objetos.hechizos.Hechizos.SortStats;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Days;

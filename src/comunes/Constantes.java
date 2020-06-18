@@ -11,7 +11,7 @@ import objetos.Personaje;
 import objetos.Oficio.JobAction;
 import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Stats;
-import objetos.Hechizos.SortStats;
+import objetos.hechizos.Hechizos.SortStats;
 
 public class Constantes
 {

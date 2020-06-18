@@ -14,6 +14,7 @@ import objetos.Mapa.Case;
 import objetos.Mapa.InteractiveObject;
 import objetos.Objeto.ObjTemplate;
 import comunes.*;
+import objetos.hechizos.EfectoHechizo;
 
 public class Oficio {
 

@@ -14,6 +14,8 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 import comunes.*;
 import comunes.Mundo.*;
+import objetos.casas.Cofres;
+import objetos.casas.House;
 
 public class Mapa {
 	private short _id;

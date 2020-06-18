@@ -29,7 +29,7 @@ import objetos.Monstruo.MobGroup;
 import objetos.NPCModelo.NPC;
 import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Grupo;
-import objetos.Cofres;
+import objetos.casas.Cofres;
 
 import realm.RealmServer;
 

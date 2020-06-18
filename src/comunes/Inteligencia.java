@@ -9,7 +9,9 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import objetos.*;
-import objetos.Hechizos.SortStats;
+import objetos.hechizos.EfectoHechizo;
+import objetos.hechizos.Hechizos;
+import objetos.hechizos.Hechizos.SortStats;
 import objetos.Mapa.Case;
 import objetos.Pelea.*;
 

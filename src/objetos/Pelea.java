@@ -21,7 +21,8 @@ import objetos.Monstruo.MobGroup;
 import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Grupo;
 import objetos.Personaje.Stats;
-import objetos.Hechizos.SortStats;
+import objetos.hechizos.EfectoHechizo;
+import objetos.hechizos.Hechizos.SortStats;
 
 import comunes.*;
 import comunes.Mundo.*;

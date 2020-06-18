@@ -18,6 +18,9 @@ import objetos.Mercadillo.HdvEntry;
 import objetos.NPCModelo.*;
 import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Stats;
+import objetos.casas.Cofres;
+import objetos.casas.House;
+import objetos.hechizos.Hechizos;
 
 public class Mundo {
 
@@ -679,10 +682,10 @@ public class Mundo {
 	
 	public static void createWorld()
 	{
-		System.out.println("====>Donnees statique<====");
-		System.out.println("Chargement des niveaux d'experiences:");
+		System.out.println("====> Cargando datos estaticos <====");
+		System.out.println("Cargando las experiencias:");
 		GestorSQL.cargar_experiencias();
-		System.out.println(ExpLevels.size()+" niveaux ont ete charges");
+		System.out.println(ExpLevels.size()+" niveles cargados");
 		System.out.println("Chargement des sorts:");
 		GestorSQL.cargar_hechizos();
 		System.out.println(Sorts.size()+" sorts ont ete charges");
@@ -741,7 +744,7 @@ public class Mundo {
 		GestorSQL.cargar_animaciones();
 		System.out.println(Animations.size() + " ont ete chargees");
 		
-		System.out.println("====>Donnees dynamique<====");
+		System.out.println("====> Cargando los datos dinamicos <====");
 		System.out.print("Mise a 0 des logged: ");
 		GestorSQL.conectado_a_0();
 		System.out.println("Ok !");
@@ -787,10 +790,10 @@ public class Mundo {
 		System.out.print("Chargement des BAN_IP: ");
 		nbr = GestorSQL.cargar_ip_baneadas();
 		System.out.println(nbr+" BAN_IP chargees");
-		System.out.print("Chargement des HDV: ");
+		System.out.print("Cargando los mercadillos: ");
 		GestorSQL.cargar_mercadillos();
+		System.out.print("Cargando los objetos de los mercadillos: ");
 		GestorSQL.cargar_objetos_mercadillos();
-		
 		nextObjetID = GestorSQL.siguiente_id_objeto();
 	}
 	
@@ -873,20 +876,16 @@ public class Mundo {
 		return Cartes.get(id);
 	}
 	
-	public static  void addCarte(Mapa map)
-	{
+	public static  void addCarte(Mapa map) {
 		if(!Cartes.containsKey(map.get_id()))
 			Cartes.put(map.get_id(),map);
 	}
 	
-	public static void delCarte(Mapa map)
-	{
-		  if (Cartes.containsKey(map.get_id()))
-			  Cartes.remove(map.get_id());
+	public static void delCarte(Mapa map) {
+		Cartes.remove(map.get_id());
 	}
 	
-	public static Cuenta getCompteByName(String name)
-	{
+	public static Cuenta getCompteByName(String name) {
 		return (ComptebyName.get(name.toLowerCase())!=null?Comptes.get(ComptebyName.get(name.toLowerCase())):null);
 	}
 	
@@ -895,28 +894,24 @@ public class Mundo {
 		return Persos.get(guid);
 	}
 	
-	public static void addAccount(Cuenta compte)
-	{
+	public static void addAccount(Cuenta compte) {
 		Comptes.put(compte.get_GUID(), compte);
 		ComptebyName.put(compte.get_name().toLowerCase(), compte.get_GUID());
 	}
 	
-	public static void addChallenge(String chal)
-	{	
+	public static void addChallenge(String chal) {
 		//ChalID,gainXP,gainDrop,gainParMob,Conditions;...
 		if(!Challenges.toString().isEmpty())
 			Challenges.append(";");
 		Challenges.append(chal);
 	}
 	
-	public static String getChallengeFromConditions(boolean sevEnn, boolean sevAll, boolean bothSex, boolean EvenEnn,boolean MoreEnn,boolean hasCaw,boolean hasChaf,boolean hasRoul,boolean hasArak, boolean isBoss)
-	{
+	public static String getChallengeFromConditions(boolean sevEnn, boolean sevAll, boolean bothSex, boolean EvenEnn,boolean MoreEnn,boolean hasCaw,boolean hasChaf,boolean hasRoul,boolean hasArak, boolean isBoss) {
 		String noBossChals = ";2;5;9;17;19;24;38;47;50;"; // ceux impossibles contre boss
 		StringBuilder toReturn = new StringBuilder();
 		boolean isFirst = true, isGood = false;
 		int cond = 0;
-		for(String chal : Challenges.toString().split(";"))
-		{
+		for(String chal : Challenges.toString().split(";")) {
 			if(!isFirst && isGood)
 				toReturn.append(";");
 			isGood = true;
@@ -958,8 +953,7 @@ public class Mundo {
 		return toReturn.toString();
 	}
 	
-	public static ArrayList<String> getRandomChallenge(int nombreChal, String challenges)
-	{
+	public static ArrayList<String> getRandomChallenge(int nombreChal, String challenges) {
 		String MovingChals = ";1;2;8;36;37;39;40;"; // Challenges de d?placements incompatibles
 		boolean hasMovingChal = false;
 		String TargetChals = ";3;4;10;25;31;32;34;35;38;42;"; // ceux qui ciblent
@@ -973,7 +967,7 @@ public class Mundo {
 		
 		int compteur = 0, i = 0;
 		ArrayList<String> toReturn = new ArrayList<>();
-		String chal = new String();
+		String chal;
 		while(compteur < 100 && toReturn.size() < nombreChal) {
 			
 			compteur++;
@@ -1030,18 +1024,14 @@ public class Mundo {
 		Persos.put(perso.get_GUID(), perso);
 	}
 
-	public static Personaje getPersoByName(String name)
-	{
-		ArrayList<Personaje> Ps = new ArrayList<>();
-		Ps.addAll(Persos.values());
+	public static Personaje getPersoByName(String name) {
+		ArrayList<Personaje> Ps = new ArrayList<>(Persos.values());
 		for(Personaje P : Ps)if(P.get_name().equalsIgnoreCase(name))return P;
 		return null;
 	}
 
-	public static void deletePerso(Personaje perso)
-	{
-		if(perso.get_guild() != null)
-		{
+	public static void deletePerso(Personaje perso) {
+		if(perso.get_guild() != null) {
 			if(perso.get_guild().getMembers().size() <= 1)//Il est tout seul dans la guilde : Supression
 			{
 				Mundo.removeGuild(perso.get_guild().get_id());
@@ -1049,11 +1039,9 @@ public class Mundo {
 			{
 				int curMaxRight = 0;
 				Personaje Meneur = null;
-				for(Personaje newMeneur : perso.get_guild().getMembers())
-				{
+				for(Personaje newMeneur : perso.get_guild().getMembers()) {
 					if(newMeneur == perso) continue;
-					if(newMeneur.getGuildMember().getRights() < curMaxRight)
-					{
+					if(newMeneur.getGuildMember().getRights() < curMaxRight) {
 						Meneur = newMeneur;
 					}
 				}
@@ -1068,22 +1056,19 @@ public class Mundo {
 		Mundo.unloadPerso(perso.get_GUID());//UnLoad du perso+item
 	}
 
-	public static String getSousZoneStateString()
-	{
+	public static String getSousZoneStateString() {
 		String data = "";
 		/* TODO: Sous Zone Alignement */
 		return data;
 	}
 	
-	public static long getPersoXpMin(int _lvl)
-	{
+	public static long getPersoXpMin(int _lvl) {
 		if(_lvl > getExpLevelSize()) 	_lvl = getExpLevelSize();
 		if(_lvl < 1) 	_lvl = 1;
 		return ExpLevels.get(_lvl).perso;
 	}
 	
-	public static long getPersoXpMax(int _lvl)
-	{
+	public static long getPersoXpMax(int _lvl) {
 		if(_lvl >= getExpLevelSize()) 	_lvl = (getExpLevelSize()-1);
 		if(_lvl <= 1)	 	_lvl = 1;
 		return ExpLevels.get(_lvl+1).perso;
@@ -1123,15 +1108,11 @@ public class Mundo {
 		return MobTemplates.get(id);
 	}
 
-	public static List<Personaje> getOnlinePersos()
-	{
+	public static List<Personaje> getOnlinePersos() {
 		List<Personaje> online = new ArrayList<>();
-		for(Entry<Integer, Personaje> perso : Persos.entrySet())
-		{
-			if(perso.getValue().isOnline() && perso.getValue().get_compte().getGameThread() != null)
-			{
-				if(perso.getValue().get_compte().getGameThread().get_out() != null)
-				{
+		for(Entry<Integer, Personaje> perso : Persos.entrySet()) {
+			if(perso.getValue().isOnline() && perso.getValue().get_compte().getGameThread() != null) {
+				if(perso.getValue().get_compte().getGameThread().get_out() != null) {
 					online.add(perso.getValue());
 				}
 			}
@@ -1144,13 +1125,13 @@ public class Mundo {
 		if(saveSQL)
 			GestorSQL.guardar_nuevo_objeto(item);
 	}
+
 	public static Objeto getObjet(int guid)
 	{
 		return Objets.get(guid);
 	}
 
-	public static void removeItem(int guid)
-	{
+	public static void removeItem(int guid) {
 		Objets.remove(guid);
 		GestorSQL.eliminar_objeto(guid);
 	}

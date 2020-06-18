@@ -1,4 +1,4 @@
-package objetos;
+package objetos.casas;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -9,6 +9,9 @@ import comunes.Constantes;
 import comunes.GestorSQL;
 import comunes.GestorSalida;
 import comunes.Mundo;
+import objetos.Cuenta;
+import objetos.Gremio;
+import objetos.Personaje;
 
 public class House
 {

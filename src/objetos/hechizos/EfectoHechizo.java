@@ -1,4 +1,4 @@
-package objetos;
+package objetos.hechizos;
 
 import juego.JuegoServidor;
 
@@ -8,11 +8,14 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import objetos.Mapa.Case;
+import objetos.Pelea;
 import objetos.Pelea.Fighter;
 import objetos.Pelea.Glyphe;
 import objetos.Pelea.Piege;
 import objetos.Monstruo.MobGrade;
-import objetos.Hechizos.SortStats;
+import objetos.Personaje;
+import objetos.Retos;
+import objetos.hechizos.Hechizos.SortStats;
 
 import comunes.MainServidor;
 import comunes.Constantes;

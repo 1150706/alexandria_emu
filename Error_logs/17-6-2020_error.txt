@@ -6,7 +6,7 @@ java.lang.NumberFormatException: For input string: "-"
 	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:68)
 	at java.base/java.lang.Integer.parseInt(Integer.java:642)
 	at java.base/java.lang.Integer.parseInt(Integer.java:770)
-	at objetos.House.OpenHouse(House.java:257)
+	at objetos.casas.House.OpenHouse(House.java:257)
 	at juego.JuegoThread.House_code(JuegoThread.java:271)
 	at juego.JuegoThread.parseHouseKodePacket(JuegoThread.java:257)
 	at juego.JuegoThread.parsePacket(JuegoThread.java:202)

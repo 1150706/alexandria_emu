@@ -12,7 +12,9 @@ import java.util.Timer;
 import objetos.Mapa.Case;
 import objetos.Pelea.Fighter;
 import objetos.Personaje.Stats;
-import objetos.Hechizos.SortStats;
+import objetos.hechizos.EfectoHechizo;
+import objetos.hechizos.Hechizos;
+import objetos.hechizos.Hechizos.SortStats;
 import comunes.*;
 import comunes.Mundo.*;
 

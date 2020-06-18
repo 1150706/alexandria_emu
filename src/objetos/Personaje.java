@@ -17,7 +17,10 @@ import javax.swing.Timer;
 import objetos.Mapa.*;
 import objetos.Gremio.GuildMember;
 import objetos.Oficio.*;
-import objetos.Hechizos.SortStats;
+import objetos.casas.Cofres;
+import objetos.casas.House;
+import objetos.hechizos.EfectoHechizo;
+import objetos.hechizos.Hechizos.SortStats;
 
 import comunes.MainServidor;
 import comunes.Constantes;

@@ -1,4 +1,4 @@
-package objetos;
+package objetos.casas;
 
 import juego.JuegoServidor;
 
@@ -12,6 +12,9 @@ import comunes.Constantes;
 import comunes.GestorSQL;
 import comunes.GestorSalida;
 import comunes.Mundo;
+import objetos.Cuenta;
+import objetos.Objeto;
+import objetos.Personaje;
 
 
 /** Adlesne **/

@@ -1,4 +1,4 @@
-package objetos;
+package objetos.hechizos;
 
 import juego.JuegoServidor;
 
@@ -12,6 +12,7 @@ import comunes.Formulas;
 import comunes.Camino;
 import comunes.Mundo;
 import objetos.Mapa.Case;
+import objetos.Pelea;
 import objetos.Pelea.Fighter;
 
 public class Hechizos {

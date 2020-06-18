@@ -23,7 +23,10 @@ import objetos.Personaje;
 import objetos.NPCModelo.*;
 import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Grupo;
-import objetos.Hechizos.SortStats;
+import objetos.casas.Cofres;
+import objetos.casas.House;
+import objetos.hechizos.EfectoHechizo;
+import objetos.hechizos.Hechizos.SortStats;
 import comunes.*;
 
 public class JuegoThread implements Runnable {

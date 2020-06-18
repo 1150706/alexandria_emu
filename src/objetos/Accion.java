@@ -19,6 +19,7 @@ import comunes.Mundo;
 
 import juego.JuegoServidor;
 import juego.JuegoThread;
+import objetos.casas.House;
 
 public class Accion {
 

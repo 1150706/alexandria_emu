@@ -14,6 +14,7 @@ import comunes.Constantes;
 import comunes.Formulas;
 import comunes.GestorSQL;
 import comunes.Mundo;
+import objetos.hechizos.EfectoHechizo;
 
 public class Objeto {
 

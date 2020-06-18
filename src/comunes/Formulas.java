@@ -10,6 +10,7 @@ import comunes.Mundo.Couple;
 import objetos.*;
 import objetos.Pelea.*;
 import objetos.Gremio.GuildMember;
+import objetos.hechizos.EfectoHechizo;
 
 public class Formulas {
 

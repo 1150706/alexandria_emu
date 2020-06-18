@@ -19,3 +19,6 @@ v0.00.2
 - Agregado de capital en caracteristicas reparado
 - Agregada accion 104 Cliqueador automatico
 - Agregada accion 105 teletransportar a todos los miembros del grupo
+
+v0.00.3
+- Agregado NPC guardianes de mazmorras con sus respectivos dialogos

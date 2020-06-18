@@ -16,31 +16,31 @@ import comunes.Mundo;
 import comunes.Constantes;
 
 public class Gremio {
-	private int _id;
+	private final int _id;
 	private String _name = "";
 	private String _emblem = "";
-	private Map<Integer,GuildMember> _members = new TreeMap<>();
+	private final Map<Integer,GuildMember> _members = new TreeMap<>();
 	private int _lvl;
 	private long _xp;
 	
 	//Percepteur
 	private int _capital = 0;
 	private int _nbrPerco = 0;
-	private Map<Integer, SortStats> Spells = new TreeMap<>();	//<ID, Level>
-	private Map<Integer, Integer> stats = new TreeMap<>(); //<Effet, Quantité>
+	private final Map<Integer, SortStats> Spells = new TreeMap<>();	//<ID, Level>
+	private final Map<Integer, Integer> stats = new TreeMap<>(); //<Effet, Quantité>
 	//Stats en combat
-	private Map<Integer,Integer> statsFight = new TreeMap<>();
+	private final Map<Integer,Integer> statsFight = new TreeMap<>();
 	
 	public static class GuildMember {
-		private int _guid;
-		private Gremio _guild;
+		private final int _guid;
+		private final Gremio _guild;
 		private int _rank = 0;
 		private byte _pXpGive = 0;
 		private long _xpGave = 0;
 		private int _rights = 0;
 		
 		//Droit
-		private Map<Integer,Boolean> haveRight = new TreeMap<>();
+		private final Map<Integer,Boolean> haveRight = new TreeMap<>();
 
 		public GuildMember(int gu, Gremio g, int r, long x, byte pXp, int ri) {
 			_guid = gu;
@@ -168,9 +168,9 @@ public class Gremio {
 			
 			while(total > 0) {
 				for (int i = haveRight.size()-1; i < haveRight.size(); i--) {
-					if(mapKey[i].intValue() <= total)
+					if(mapKey[i] <= total)
 					{
-						total ^= mapKey[i].intValue();
+						total ^= mapKey[i];
 						haveRight.put(mapKey[i],true);
 						break;
 					}
@@ -425,14 +425,13 @@ public class Gremio {
 	
 	public String parsePercotoGuild() {
 		//Percomax|NbPerco|100*level|level|perco_add_pods|perco_prospection|perco_sagesse|perco_max|perco_boost|1000+10*level|perco_spells
-		StringBuilder packet = new StringBuilder();
-		
-		packet.append(get_nbrPerco()).append("|");
-		packet.append(Recaudador.CountPercoGuild(get_id())).append("|");
-		packet.append(100*get_lvl()).append("|").append(get_lvl()).append("|");
-		packet.append(get_Stats(158)).append("|").append(get_Stats(176)).append("|");
-		packet.append(get_Stats(124)).append("|").append(get_nbrPerco()).append("|");
-		packet.append(get_Capital()).append("|").append((1000+(10*get_lvl()))).append("|").append(compileSpell());
-		return packet.toString();
+
+		String packet = get_nbrPerco() + "|" +
+				Recaudador.CountPercoGuild(get_id()) + "|" +
+				100 * get_lvl() + "|" + get_lvl() + "|" +
+				get_Stats(158) + "|" + get_Stats(176) + "|" +
+				get_Stats(124) + "|" + get_nbrPerco() + "|" +
+				get_Capital() + "|" + (1000 + (10 * get_lvl())) + "|" + compileSpell();
+		return packet;
 	}
 }

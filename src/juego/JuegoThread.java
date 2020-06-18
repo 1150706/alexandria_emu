@@ -13,13 +13,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import objetos.*;
 import objetos.Mapa.*;
-import objetos.Mapa;
-import objetos.Mapa.Case;
 import objetos.Pelea.Fighter;
 import objetos.Gremio.GuildMember;
 import objetos.Mercadillo.HdvEntry;
 import objetos.Oficio.StatsMetier;
-import objetos.Personaje;
 import objetos.NPCModelo.*;
 import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Grupo;
@@ -36,15 +33,15 @@ public class JuegoThread implements Runnable {
 	private Socket _s;
 	private Cuenta _compte;
 	private Personaje _perso;
-	private Map<Integer,GameAction> _actions = new TreeMap<>();
+	private final Map<Integer,GameAction> _actions = new TreeMap<>();
 	private long _timeLastTradeMsg = 0, _timeLastRecrutmentMsg = 0, _timeLastsave = 0, _timeLastAlignMsg = 0;
 	private long _timeLastIncarnamMsg = 0;
 	private Comandos command;
 	
 	public static class GameAction {
-		public int _id;
-		public int _actionID;
-		public String _packet;
+		public final int _id;
+		public final int _actionID;
+		public final String _packet;
 		public String _args;
 		
 		public GameAction(int aId, int aActionId,String aPacket) {
@@ -97,8 +94,8 @@ public class JuegoThread implements Runnable {
 	    			_compte.setRealmThread(null);
 	    		}
 	    		if(!_s.isClosed())_s.close();
-	    	}catch(IOException e1){e1.printStackTrace();};
-    	}catch(Exception e) {
+	    	}catch(IOException e1){e1.printStackTrace();}
+		}catch(Exception e) {
     		e.printStackTrace();
     		JuegoServidor.addToLog(e.getMessage());
     	} finally {
@@ -198,78 +195,74 @@ public class JuegoThread implements Runnable {
 	
 	private void parseHousePacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-		case 'B'://Acheter la maison
-			packet = packet.substring(2);
-			House.HouseAchat(_perso);
-		break;
-		case 'G'://Maison de guilde
-			packet = packet.substring(2);
-			if(packet.isEmpty()) packet = null;
-			House.parseHG(_perso, packet);
-		break;
-		case 'Q'://Quitter/Expulser de la maison
-			packet = packet.substring(2);
-			House.Leave(_perso, packet);
-		break;
-		case 'S'://Modification du prix de vente
-			packet = packet.substring(2);
-			House.SellPrice(_perso, packet);
-		break;
-		case 'V'://Fermer fenetre d'achat
-			House.closeBuy(_perso);
-		break;
+		switch (packet.charAt(1)) {
+//Acheter la maison
+			case 'B' -> {
+				packet = packet.substring(2);
+				House.HouseAchat(_perso);
+			}
+//Maison de guilde
+			case 'G' -> {
+				packet = packet.substring(2);
+				if (packet.isEmpty()) packet = null;
+				House.parseHG(_perso, packet);
+			}
+//Quitter/Expulser de la maison
+			case 'Q' -> {
+				packet = packet.substring(2);
+				House.Leave(_perso, packet);
+			}
+//Modification du prix de vente
+			case 'S' -> {
+				packet = packet.substring(2);
+				House.SellPrice(_perso, packet);
+			}
+//Fermer fenetre d'achat
+			case 'V' -> House.closeBuy(_perso);
 		}
 	}
 	
 	private void parseHouseKodePacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-		case 'V'://Fermer fenetre du code
-			House.closeCode(_perso);
-		break;
-		case 'K'://Envoi du code
-			House_code(packet);
-		break;
+		switch (packet.charAt(1)) {
+//Fermer fenetre du code
+			case 'V' -> House.closeCode(_perso);
+//Envoi du code
+			case 'K' -> House_code(packet);
 		}
 	}
 	
 	private void House_code(String packet)
 	{
-		switch(packet.charAt(2))
-		{
-		case '0'://Envoi du code
-			packet = packet.substring(4);
-			if(_perso.getInTrunk() != null)
+		switch (packet.charAt(2)) {
+//Envoi du code
+			case '0' -> {
+				packet = packet.substring(4);
+				if (_perso.getInTrunk() != null)
 					Cofres.OpenTrunk(_perso, packet, false);
 				else
 					House.OpenHouse(_perso, packet, false);
-		break;
-		case '1'://Changement du code
-			packet = packet.substring(4);
-			if(_perso.getInTrunk() != null)
-				Cofres.LockTrunk(_perso, packet);
-			else
-			    House.LockHouse(_perso, packet);
-		break;
+			}
+//Changement du code
+			case '1' -> {
+				packet = packet.substring(4);
+				if (_perso.getInTrunk() != null)
+					Cofres.LockTrunk(_perso, packet);
+				else
+					House.LockHouse(_perso, packet);
+			}
 		}
 	}
 	
 	private void parse_enemyPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-		case 'A'://Ajouter
-			Enemy_add(packet);
-		break;
-		case 'D'://Delete
-			Enemy_delete(packet);
-		break;
-		case 'L'://Liste
-			GestorSalida.GAME_SEND_ENEMY_LIST(_perso);
-		break;
+		switch (packet.charAt(1)) {
+//Ajouter
+			case 'A' -> Enemy_add(packet);
+//Delete
+			case 'D' -> Enemy_delete(packet);
+//Liste
+			case 'L' -> GestorSalida.GAME_SEND_ENEMY_LIST(_perso);
 		}
 	}
 	
@@ -277,39 +270,36 @@ public class JuegoThread implements Runnable {
 	{
 		if(_perso == null)return;
 		int guid = -1;
-		switch(packet.charAt(2))
-		{
-			case '%'://Nom de perso
+		switch (packet.charAt(2)) {
+//Nom de perso
+			case '%' -> {
 				packet = packet.substring(3);
 				Personaje P = Mundo.getPersoByName(packet);
-				if(P == null)
-				{
+				if (P == null) {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = P.getAccID();
-				
-			break;
-			case '*'://Pseudo
+			}
+//Pseudo
+			case '*' -> {
 				packet = packet.substring(3);
 				Cuenta C = Mundo.getCompteByPseudo(packet);
-				if(C==null)
-				{
+				if (C == null) {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = C.get_GUID();
-			break;
-			default:
+			}
+			default -> {
 				packet = packet.substring(2);
 				Personaje Pr = Mundo.getPersoByName(packet);
-				if(Pr == null?true:!Pr.isOnline())
-				{
+				if (Pr == null ? true : !Pr.isOnline()) {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = Pr.get_compte().get_GUID();
-			break;
+			}
 		}
 		if(guid == -1)
 		{
@@ -323,39 +313,36 @@ public class JuegoThread implements Runnable {
 	{
 		if(_perso == null)return;
 		int guid = -1;
-		switch(packet.charAt(2))
-		{
-			case '%'://Nom de perso
+		switch (packet.charAt(2)) {
+//Nom de perso
+			case '%' -> {
 				packet = packet.substring(3);
 				Personaje P = Mundo.getPersoByName(packet);
-				if(P == null)
-				{
+				if (P == null) {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = P.getAccID();
-				
-			break;
-			case '*'://Pseudo
+			}
+//Pseudo
+			case '*' -> {
 				packet = packet.substring(3);
 				Cuenta C = Mundo.getCompteByPseudo(packet);
-				if(C==null)
-				{
+				if (C == null) {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = C.get_GUID();
-			break;
-			default:
+			}
+			default -> {
 				packet = packet.substring(2);
 				Personaje Pr = Mundo.getPersoByName(packet);
-				if(Pr == null?true:!Pr.isOnline())
-				{
+				if (Pr == null ? true : !Pr.isOnline()) {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = Pr.get_compte().get_GUID();
-			break;
+			}
 		}
 		if(guid == -1 || !_compte.isEnemyWith(guid))
 		{
@@ -367,20 +354,15 @@ public class JuegoThread implements Runnable {
 	
 	private void parseWaypointPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'U'://Use
-				Waypoint_use(packet);
-			break;
-			case 'u'://use zaapi
-				Zaapi_use(packet);
-			break;
-			case 'v'://quitter zaapi
-				Zaapi_close();
-			break;
-			case 'V'://Quitter
-				Waypoint_quit();
-			break;
+		switch (packet.charAt(1)) {
+//Use
+			case 'U' -> Waypoint_use(packet);
+//use zaapi
+			case 'u' -> Zaapi_use(packet);
+//quitter zaapi
+			case 'v' -> Zaapi_close();
+//Quitter
+			case 'V' -> Waypoint_quit();
 		}
 	}
 
@@ -393,7 +375,7 @@ public class JuegoThread implements Runnable {
 	{
 		if(_perso.getDeshonor() >= 2) 
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "183");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "183");
 			return;
 		}
 		_perso.Zaapi_use(packet);
@@ -410,146 +392,133 @@ public class JuegoThread implements Runnable {
 		try
 		{
 			id = Short.parseShort(packet.substring(2));
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 		if( id == -1)return;
 		_perso.useZaap(id);
 	}
 	private void parseGuildPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'B'://Stats
-				if(_perso.get_guild() == null)return;
+		switch (packet.charAt(1)) {
+//Stats
+			case 'B' -> {
+				if (_perso.get_guild() == null) return;
 				Gremio G = _perso.get_guild();
-				if(!_perso.getGuildMember().canDo(Constantes.G_BOOST))return;
-				switch(packet.charAt(2))
-				{
-					case 'p'://Prospec
-						if(G.get_Capital() < 1)return;
-						if(G.get_Stats(176) >= 500)return;
-						G.set_Capital(G.get_Capital()-1);
+				if (!_perso.getGuildMember().canDo(Constantes.G_BOOST)) return;
+				switch (packet.charAt(2)) {
+//Prospec
+					case 'p' -> {
+						if (G.get_Capital() < 1) return;
+						if (G.get_Stats(176) >= 500) return;
+						G.set_Capital(G.get_Capital() - 1);
 						G.upgrade_Stats(176, 1);
-					break;
-					case 'x'://Sagesse
-						if(G.get_Capital() < 1)return;
-						if(G.get_Stats(124) >= 400)return;
-						G.set_Capital(G.get_Capital()-1);
+					}
+//Sagesse
+					case 'x' -> {
+						if (G.get_Capital() < 1) return;
+						if (G.get_Stats(124) >= 400) return;
+						G.set_Capital(G.get_Capital() - 1);
 						G.upgrade_Stats(124, 1);
-					break;
-					case 'o'://Pod
-						if(G.get_Capital() < 1)return;
-						if(G.get_Stats(158) >= 5000)return;
-						G.set_Capital(G.get_Capital()-1);
+					}
+//Pod
+					case 'o' -> {
+						if (G.get_Capital() < 1) return;
+						if (G.get_Stats(158) >= 5000) return;
+						G.set_Capital(G.get_Capital() - 1);
 						G.upgrade_Stats(158, 20);
-					break;
-					case 'k'://Nb Perco
-						if(G.get_Capital() < 10)return;
-						if(G.get_nbrPerco() >= 50)return;
-						G.set_Capital(G.get_Capital()-10);
-						G.set_nbrPerco(G.get_nbrPerco()+1);
-					break;
+					}
+//Nb Perco
+					case 'k' -> {
+						if (G.get_Capital() < 10) return;
+						if (G.get_nbrPerco() >= 50) return;
+						G.set_Capital(G.get_Capital() - 10);
+						G.set_nbrPerco(G.get_nbrPerco() + 1);
+					}
 				}
 				GestorSQL.actualizar_gremio(G);
 				GestorSalida.GAME_SEND_gIB_PACKET(_perso, _perso.get_guild().parsePercotoGuild());
-			break;
-			case 'b'://Sorts
-				if(_perso.get_guild() == null)return;
+			}
+//Sorts
+			case 'b' -> {
+				if (_perso.get_guild() == null) return;
 				Gremio G2 = _perso.get_guild();
-				if(!_perso.getGuildMember().canDo(Constantes.G_BOOST))return;
+				if (!_perso.getGuildMember().canDo(Constantes.G_BOOST)) return;
 				int spellID = Integer.parseInt(packet.substring(2));
-				if(G2.getSpells().containsKey(spellID))
-				{
-					if(G2.get_Capital() < 5)return;
-					G2.set_Capital(G2.get_Capital()-5);
+				if (G2.getSpells().containsKey(spellID)) {
+					if (G2.get_Capital() < 5) return;
+					G2.set_Capital(G2.get_Capital() - 5);
 					G2.boostSpell(spellID);
 					GestorSQL.actualizar_gremio(G2);
 					GestorSalida.GAME_SEND_gIB_PACKET(_perso, _perso.get_guild().parsePercotoGuild());
-				}else
-				{
-					JuegoServidor.addToLog("[ERROR]Sort "+spellID+" non trouve.");
+				} else {
+					JuegoServidor.addToLog("[ERROR]Sort " + spellID + " non trouve.");
 				}
-			break;
-			case 'C'://Creation
-				guild_create(packet);
-			break;
-			case 'f'://Tï¿½lï¿½portation enclo de guilde
-				guild_enclo(packet.substring(2));
-			break;
-			case 'F'://Retirer percepteur
-				guild_remove_perco(packet.substring(2));
-			break;
-			case 'h'://Tï¿½lï¿½portation maison de guilde
-				guild_house(packet.substring(2));
-			break;
-			case 'H'://Poser un percepteur
-				guild_add_perco();
-			break;
-			case 'I'://Infos
-				guild_infos(packet.charAt(2));
-			break;
-			case 'J'://Join
-				guild_join(packet.substring(2));
-			break;
-			case 'K'://Kick
-				guild_kick(packet.substring(2));
-			break;
-			case 'P'://Promote
-				guild_promote(packet.substring(2));
-			break;
-			case 'T'://attaque sur percepteur
-				guild_perco_join_fight(packet.substring(2));
-			break;
-			case 'V'://Ferme le panneau de crï¿½ation de guilde
-				guild_CancelCreate();
-			break;
+			}
+//Creation
+			case 'C' -> guild_create(packet);
+//Tï¿½lï¿½portation enclo de guilde
+			case 'f' -> guild_enclo(packet.substring(2));
+//Retirer percepteur
+			case 'F' -> guild_remove_perco(packet.substring(2));
+//Tï¿½lï¿½portation maison de guilde
+			case 'h' -> guild_house(packet.substring(2));
+//Poser un percepteur
+			case 'H' -> guild_add_perco();
+//Infos
+			case 'I' -> guild_infos(packet.charAt(2));
+//Join
+			case 'J' -> guild_join(packet.substring(2));
+//Kick
+			case 'K' -> guild_kick(packet.substring(2));
+//Promote
+			case 'P' -> guild_promote(packet.substring(2));
+//attaque sur percepteur
+			case 'T' -> guild_perco_join_fight(packet.substring(2));
+//Ferme le panneau de crï¿½ation de guilde
+			case 'V' -> guild_CancelCreate();
 		}
 	}
 	
 	private void guild_perco_join_fight(String packet) 
 	{
-		switch(packet.charAt(0))
-		{
-			case 'J'://Rejoindre
-				String PercoID = Integer.toString(Integer.parseInt(packet.substring(1)), 36);
-				
-				int TiD = -1;
-				try
-				{
-					TiD = Integer.parseInt(PercoID);
-				}catch(Exception e){};
-				
-				Recaudador perco = Mundo.getPerco(TiD);
-				if(perco == null) return;
-				
-				int FightID = -1;
-				try
-				{
-					FightID = perco.get_inFightID();
-				}catch(Exception e){};
-				
-				short MapID = -1;
-				try
-				{
-					MapID = Mundo.getCarte((short)perco.get_mapID()).getFight(FightID).get_map().get_id();
-				}catch(Exception e){};
-				
-				int CellID = -1;
-				try
-				{
-					CellID = perco.get_cellID();
-				}catch(Exception e){};
-				
-				if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("[DEBUG] Percepteur INFORMATIONS : TiD:"+TiD+", FightID:"+FightID+", MapID:"+MapID+", CellID"+CellID);
-				if(TiD == -1 || FightID == -1 || MapID == -1 || CellID == -1) return;
-				if(_perso.get_fight() == null && !_perso.is_away())
-				{
-					if(_perso.getActualMapa().get_id() != MapID)
-					{
-						_perso.teletransportar(MapID, CellID);
-					}
-					Mundo.getCarte(MapID).getFight(FightID).joinPercepteurFight(_perso,_perso.get_GUID(), TiD);
+		if (packet.charAt(0) == 'J') {//Rejoindre
+			String PercoID = Integer.toString(Integer.parseInt(packet.substring(1)), 36);
+
+			int TiD = -1;
+			try {
+				TiD = Integer.parseInt(PercoID);
+			} catch (Exception e) {
+			}
+
+			Recaudador perco = Mundo.getPerco(TiD);
+			if (perco == null) return;
+
+			int FightID = -1;
+			try {
+				FightID = perco.get_inFightID();
+			} catch (Exception e) {
+			}
+
+			short MapID = -1;
+			try {
+				MapID = Mundo.getCarte((short) perco.get_mapID()).getFight(FightID).get_map().get_id();
+			} catch (Exception e) {
+			}
+
+			int CellID = -1;
+			try {
+				CellID = perco.get_cellID();
+			} catch (Exception e) {
+			}
+
+			if (MainServidor.CONFIG_DEBUG)
+				JuegoServidor.addToLog("[DEBUG] Percepteur INFORMATIONS : TiD:" + TiD + ", FightID:" + FightID + ", MapID:" + MapID + ", CellID" + CellID);
+			if (TiD == -1 || FightID == -1 || MapID == -1 || CellID == -1) return;
+			if (_perso.get_fight() == null && !_perso.is_away()) {
+				if (_perso.getActualMapa().get_id() != MapID) {
+					_perso.teletransportar(MapID, CellID);
 				}
-			break;
+				Mundo.getCarte(MapID).getFight(FightID).joinPercepteurFight(_perso, _perso.get_GUID(), TiD);
+			}
 		}
 	}
 
@@ -571,7 +540,7 @@ public class JuegoThread implements Runnable {
 				String str = "";
 				str += "R"+perco.get_N1()+","+perco.get_N2()+"|";
 				str += perco.get_mapID()+"|";
-				str += Mundo.getCarte((short)perco.get_mapID()).getX()+"|"+ Mundo.getCarte((short)perco.get_mapID()).getY()+"|"+_perso.get_name();
+				str += Mundo.getCarte(perco.get_mapID()).getX()+"|"+ Mundo.getCarte(perco.get_mapID()).getY()+"|"+_perso.get_name();
 				GestorSalida.GAME_SEND_gT_PACKET(z, str);
 			}
 		}
@@ -585,17 +554,17 @@ public class JuegoThread implements Runnable {
 		short price = (short)(1000+10*_perso.get_guild().get_lvl());//Calcul du prix du percepteur
 		if(_perso.get_kamas() < price)//Kamas insuffisants
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "182");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "182");
 			return;
 		}
 		if(Recaudador.GetPercoGuildID(_perso.getActualMapa().get_id()) > 0)//La carte possï¿½de un perco
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1168;1");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1168;1");
 			return;
 		}
 		if(_perso.getActualMapa().get_placesStr().length() < 5)//La map ne possï¿½de pas de "places"
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "113");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "113");
 			return;
 		}
 		if(Recaudador.CountPercoGuild(_perso.get_guild().get_id()) >= _perso.get_guild().get_nbrPerco()) return;//Limite de percepteur
@@ -615,7 +584,7 @@ public class JuegoThread implements Runnable {
 				String str = "";
 				str += "S"+perco.get_N1()+","+perco.get_N2()+"|";
 				str += perco.get_mapID()+"|";
-				str += Mundo.getCarte((short)perco.get_mapID()).getX()+"|"+ Mundo.getCarte((short)perco.get_mapID()).getY()+"|"+_perso.get_name();
+				str += Mundo.getCarte(perco.get_mapID()).getX()+"|"+ Mundo.getCarte(perco.get_mapID()).getY()+"|"+_perso.get_name();
 				GestorSalida.GAME_SEND_gT_PACKET(z, str);
 			}
 		}
@@ -625,7 +594,7 @@ public class JuegoThread implements Runnable {
 	{
 		if(_perso.get_guild() == null)
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1135");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1135");
 			return;
 		}
 		
@@ -634,7 +603,7 @@ public class JuegoThread implements Runnable {
 		MountPark MP = Mundo.getCarte(MapID).getMountPark();
 		if(MP.get_guild().get_id() != _perso.get_guild().get_id())
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1135");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1135");
 			return;
 		}
 		int CellID = Mundo.getEncloCellIdByMapId(MapID);
@@ -644,7 +613,7 @@ public class JuegoThread implements Runnable {
 			_perso.teletransportar(MapID, CellID);
 		}else
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1159");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1159");
 			return;
 		}
 	}
@@ -653,7 +622,7 @@ public class JuegoThread implements Runnable {
 	{
 		if(_perso.get_guild() == null)
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1135");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1135");
 			return;
 		}
 		
@@ -663,12 +632,12 @@ public class JuegoThread implements Runnable {
 		if(h == null) return;
 		if(_perso.get_guild().get_id() != h.get_guild_id()) 
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1135");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1135");
 			return;
 		}
 		if(!h.canDo(Constantes.H_GTELE))
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1136");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1136");
 			return;
 		}
 		if (_perso.hasItemTemplate(8883, 1))
@@ -677,7 +646,7 @@ public class JuegoThread implements Runnable {
 			_perso.teletransportar((short)h.get_mapid(), h.get_caseid());
 		}else
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1137");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1137");
 			return;
 		}
 	}
@@ -791,7 +760,7 @@ public class JuegoThread implements Runnable {
 		GuildMember toRemMember;
 		if(P == null)
 		{
-			int infos[] = GestorSQL.isPersoInGuild(name);
+			int[] infos = GestorSQL.isPersoInGuild(name);
 			guid = infos[0];
 			guildId = infos[1];
 			if(guildId < 0 || guid < 0)return;
@@ -883,7 +852,7 @@ public class JuegoThread implements Runnable {
 			}
 			if(_perso.get_guild().getMembers().size() >= (40+_perso.get_guild().get_lvl()))//Limite membres max
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(_perso, "155;"+(40+_perso.get_guild().get_lvl()));
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "155;"+(40+_perso.get_guild().get_lvl()));
 				return;
 			}
 			
@@ -923,28 +892,23 @@ public class JuegoThread implements Runnable {
 
 	private void guild_infos(char c)
 	{
-		switch(c)
-		{
-		case 'B'://Perco
-			GestorSalida.GAME_SEND_gIB_PACKET(_perso, _perso.get_guild().parsePercotoGuild());
-		break;
-		case 'F'://Enclos
-			GestorSalida.GAME_SEND_gIF_PACKET(_perso, Mundo.parseMPtoGuild(_perso.get_guild().get_id()));
-		break;
-		case 'G'://General
-			GestorSalida.GAME_SEND_gIG_PACKET(_perso, _perso.get_guild());
-		break;
-		case 'H'://House
-			GestorSalida.GAME_SEND_gIH_PACKET(_perso, House.parseHouseToGuild(_perso));
-		break;
-		case 'M'://Members
-			GestorSalida.GAME_SEND_gIM_PACKET(_perso, _perso.get_guild(),'+');
-		break;
-		case 'T'://Perco
-			GestorSalida.GAME_SEND_gITM_PACKET(_perso, Recaudador.parsetoGuild(_perso.get_guild().get_id()));
-			Recaudador.parseAttaque(_perso, _perso.get_guild().get_id());
-			Recaudador.parseDefense(_perso, _perso.get_guild().get_id());
-		break;
+		switch (c) {
+//Perco
+			case 'B' -> GestorSalida.GAME_SEND_gIB_PACKET(_perso, _perso.get_guild().parsePercotoGuild());
+//Enclos
+			case 'F' -> GestorSalida.GAME_SEND_gIF_PACKET(_perso, Mundo.parseMPtoGuild(_perso.get_guild().get_id()));
+//General
+			case 'G' -> GestorSalida.GAME_SEND_gIG_PACKET(_perso, _perso.get_guild());
+//House
+			case 'H' -> GestorSalida.GAME_SEND_gIH_PACKET(_perso, House.parseHouseToGuild(_perso));
+//Members
+			case 'M' -> GestorSalida.GAME_SEND_gIM_PACKET(_perso, _perso.get_guild(), '+');
+//Perco
+			case 'T' -> {
+				GestorSalida.GAME_SEND_gITM_PACKET(_perso, Recaudador.parsetoGuild(_perso.get_guild().get_id()));
+				Recaudador.parseAttaque(_perso, _perso.get_guild().get_id());
+				Recaudador.parseDefense(_perso, _perso.get_guild().get_id());
+			}
 		}
 	}
 
@@ -1026,7 +990,7 @@ public class JuegoThread implements Runnable {
 			{
 				if(!_perso.hasItemTemplate(1575,1))//Guildalogemme
 				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "14");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "14");
 					return;
 				}
 				_perso.removeByTemplateID(1575, 1);
@@ -1041,83 +1005,71 @@ public class JuegoThread implements Runnable {
 			GestorSalida.GAME_SEND_gS_PACKET(_perso, gm);
 			GestorSalida.GAME_SEND_gC_PACKET(_perso,"K");
 			GestorSalida.GAME_SEND_gV_PACKET(_perso);
-		}catch(Exception e){return;};
+		}catch(Exception e){return;}
 	}
 
 	private void parseChanelPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'C'://Changement des Canaux
-				Chanels_change(packet);
-			break;
+		if (packet.charAt(1) == 'C') {//Changement des Canaux
+			Chanels_change(packet);
 		}
 	}
 
 	private void Chanels_change(String packet)
 	{
 		String chan = packet.charAt(3)+"";
-		switch(packet.charAt(2))
-		{
-			case '+'://Ajout du Canal
-				_perso.addChanel(chan);
-			break;
-			case '-'://Desactivation du canal
-				_perso.removeChanel(chan);
-			break;
+		switch (packet.charAt(2)) {
+//Ajout du Canal
+			case '+' -> _perso.addChanel(chan);
+//Desactivation du canal
+			case '-' -> _perso.removeChanel(chan);
 		}
 		GestorSQL.guardar_personaje(_perso, false);
 	}
 
 	private void parseMountPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'b'://Achat d'un enclos
+		//On rafraichit l'enclo
+		//On rafraichit l'enclo
+		switch (packet.charAt(1)) {
+//Achat d'un enclos
+			case 'b' -> {
 				GestorSalida.GAME_SEND_R_PACKET(_perso, "v");//Fermeture du panneau
 				MountPark MP = _perso.getActualMapa().getMountPark();
 				Personaje Seller = Mundo.getPersonnage(MP.get_owner());
-				if(MP.get_owner() == -1)
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "196");
+				if (MP.get_owner() == -1) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "196");
 					return;
 				}
-				if(MP.get_price() == 0)
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "197");
+				if (MP.get_price() == 0) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "197");
 					return;
 				}
-				if(_perso.get_guild() == null)
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "1135");
+				if (_perso.get_guild() == null) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1135");
 					return;
 				}
-				if(_perso.getGuildMember().getRank() != 1)
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "198");
+				if (_perso.getGuildMember().getRank() != 1) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "198");
 					return;
 				}
-				byte enclosMax = (byte)Math.floor(_perso.get_guild().get_lvl()/10);
+				byte enclosMax = (byte) Math.floor(_perso.get_guild().get_lvl() / 10);
 				byte TotalEncloGuild = (byte) Mundo.totalMPGuild(_perso.get_guild().get_id());
-				if(TotalEncloGuild >= enclosMax)
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "1103");
+				if (TotalEncloGuild >= enclosMax) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1103");
 					return;
 				}
-				if(_perso.get_kamas() < MP.get_price())
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "182");
+				if (_perso.get_kamas() < MP.get_price()) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "182");
 					return;
 				}
-				long NewKamas = _perso.get_kamas()-MP.get_price();
+				long NewKamas = _perso.get_kamas() - MP.get_price();
 				_perso.set_kamas(NewKamas);
-				if(Seller != null)
-				{
-					long NewSellerBankKamas = Seller.getBankKamas()+MP.get_price();
+				if (Seller != null) {
+					long NewSellerBankKamas = Seller.getBankKamas() + MP.get_price();
 					Seller.setBankKamas(NewSellerBankKamas);
-					if(Seller.isOnline())
-					{
-						GestorSalida.GAME_SEND_MESSAGE(_perso, "Un enclo a ete vendu a "+MP.get_price()+".", MainServidor.CONFIG_MOTD_COLOR);
+					if (Seller.isOnline()) {
+						GestorSalida.GAME_SEND_MESSAGE(_perso, "Un enclo a ete vendu a " + MP.get_price() + ".", MainServidor.CONFIG_MOTD_COLOR);
 					}
 				}
 				MP.set_price(0);//On vide le prix
@@ -1125,58 +1077,44 @@ public class JuegoThread implements Runnable {
 				MP.set_guild(_perso.get_guild());
 				GestorSQL.guardar_cercados(MP);
 				GestorSQL.guardar_personaje(_perso, true);
-				//On rafraichit l'enclo
-				for(Personaje z:_perso.getActualMapa().getPersos())
-				{
+				for (Personaje z : _perso.getActualMapa().getPersos()) {
 					GestorSalida.GAME_SEND_Rp_PACKET(z, MP);
 				}
-			break;
-		
-			case 'd'://Demande Description
-				Mount_description(packet);
-			break;
-			
-			case 'n'://Change le nom
-				Mount_name(packet.substring(2));
-			break;
-			
-			case 'r'://Monter sur la dinde
-				Mount_ride();
-			break;
-			case 's'://Vendre l'enclo
+			}
+//Demande Description
+			case 'd' -> Mount_description(packet);
+//Change le nom
+			case 'n' -> Mount_name(packet.substring(2));
+//Monter sur la dinde
+			case 'r' -> Mount_ride();
+//Vendre l'enclo
+			case 's' -> {
 				GestorSalida.GAME_SEND_R_PACKET(_perso, "v");//Fermeture du panneau
 				int price = Integer.parseInt(packet.substring(2));
 				MountPark MP1 = _perso.getActualMapa().getMountPark();
-				if(!MP1.getData().isEmpty())
-				{
+				if (!MP1.getData().isEmpty()) {
 					GestorSalida.GAME_SEND_MESSAGE(_perso, "[ENCLO] Impossible de vendre un enclo plein.", MainServidor.CONFIG_MOTD_COLOR);
 					return;
 				}
-				if(MP1.get_owner() == -1)
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "194");
+				if (MP1.get_owner() == -1) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "194");
 					return;
 				}
-				if(MP1.get_owner() != _perso.get_GUID())
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "195");
+				if (MP1.get_owner() != _perso.get_GUID()) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "195");
 					return;
 				}
 				MP1.set_price(price);
 				GestorSQL.guardar_cercados(MP1);
 				GestorSQL.guardar_personaje(_perso, true);
-				//On rafraichit l'enclo
-				for(Personaje z:_perso.getActualMapa().getPersos())
-				{
+				for (Personaje z : _perso.getActualMapa().getPersos()) {
 					GestorSalida.GAME_SEND_Rp_PACKET(z, MP1);
 				}
-			break;
-			case 'v'://Fermeture panneau d'achat
-				GestorSalida.GAME_SEND_R_PACKET(_perso, "v");
-			break;
-			case 'x'://Change l'xp donner a la dinde
-				Mount_changeXpGive(packet);
-			break;
+			}
+//Fermeture panneau d'achat
+			case 'v' -> GestorSalida.GAME_SEND_R_PACKET(_perso, "v");
+//Change l'xp donner a la dinde
+			case 'x' -> Mount_changeXpGive(packet);
 		}
 	}
 
@@ -1189,7 +1127,7 @@ public class JuegoThread implements Runnable {
 			if(xp >90)xp = 90;
 			_perso.setMountGiveXp(xp);
 			GestorSalida.GAME_SEND_Rx_PACKET(_perso);
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 	}
 
 	private void Mount_name(String name)
@@ -1216,7 +1154,7 @@ public class JuegoThread implements Runnable {
 		{
 			DDid = Integer.parseInt(packet.substring(2).split("\\|")[0]);
 			//on ignore le temps?
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 		if(DDid == -1)return;
 		Dragopavo DD = Mundo.getDragoByID(DDid);
 		if(DD == null)return;
@@ -1237,16 +1175,15 @@ public class JuegoThread implements Runnable {
 				GestorSalida.GAME_SEND_FRIENDLIST_PACKET(_perso);
 			break;
 			case 'O':
-				switch(packet.charAt(2))
-				{
-				case '-':
-					 _perso.SetSeeFriendOnline(false);
-					 GestorSalida.GAME_SEND_BN(_perso);
-					 break;
-				 case'+':
-					 _perso.SetSeeFriendOnline(true);
-					 GestorSalida.GAME_SEND_BN(_perso);
-					 break;
+				switch (packet.charAt(2)) {
+					case '-' -> {
+						_perso.SetSeeFriendOnline(false);
+						GestorSalida.GAME_SEND_BN(_perso);
+					}
+					case '+' -> {
+						_perso.SetSeeFriendOnline(true);
+						GestorSalida.GAME_SEND_BN(_perso);
+					}
 				}
 			break;
 			case 'J': //Wife
@@ -1261,8 +1198,8 @@ public class JuegoThread implements Runnable {
 		if(Wife == null) return;
 		if(!Wife.isOnline())
 		{
-			if(Wife.get_sexe() == 0) GestorSalida.GAME_SEND_Im_PACKET(_perso, "140");
-			else GestorSalida.GAME_SEND_Im_PACKET(_perso, "139");
+			if(Wife.get_sexe() == 0) GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "140");
+			else GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "139");
 			
 			GestorSalida.GAME_SEND_FRIENDLIST_PACKET(_perso);
 			return;
@@ -1296,39 +1233,38 @@ public class JuegoThread implements Runnable {
 	private void Friend_delete(String packet) {
 		if(_perso == null)return;
 		int guid = -1;
-		switch(packet.charAt(2))
-		{
-			case '%'://Nom de perso
+		switch (packet.charAt(2)) {
+//Nom de perso
+			case '%' -> {
 				packet = packet.substring(3);
 				Personaje P = Mundo.getPersoByName(packet);
-				if(P == null)//Si P est nul, ou si P est nonNul et P offline
+				if (P == null)//Si P est nul, ou si P est nonNul et P offline
 				{
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = P.getAccID();
-				
-			break;
-			case '*'://Pseudo
+			}
+//Pseudo
+			case '*' -> {
 				packet = packet.substring(3);
 				Cuenta C = Mundo.getCompteByPseudo(packet);
-				if(C==null)
-				{
+				if (C == null) {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = C.get_GUID();
-			break;
-			default:
+			}
+			default -> {
 				packet = packet.substring(2);
 				Personaje Pr = Mundo.getPersoByName(packet);
-				if(Pr == null?true:!Pr.isOnline())//Si P est nul, ou si P est nonNul et P offline
+				if (Pr == null ? true : !Pr.isOnline())//Si P est nul, ou si P est nonNul et P offline
 				{
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = Pr.get_compte().get_GUID();
-			break;
+			}
 		}
 		if(guid == -1 || !_compte.isFriendWith(guid))
 		{
@@ -1342,38 +1278,38 @@ public class JuegoThread implements Runnable {
 	{
 		if(_perso == null)return;
 		int guid = -1;
-		switch(packet.charAt(2))
-		{
-			case '%'://Nom de perso
+		switch (packet.charAt(2)) {
+//Nom de perso
+			case '%' -> {
 				packet = packet.substring(3);
 				Personaje P = Mundo.getPersoByName(packet);
-				if(P == null?true:!P.isOnline())//Si P est nul, ou si P est nonNul et P offline
+				if (P == null ? true : !P.isOnline())//Si P est nul, ou si P est nonNul et P offline
 				{
 					GestorSalida.GAME_SEND_FA_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = P.getAccID();
-			break;
-			case '*'://Pseudo
+			}
+//Pseudo
+			case '*' -> {
 				packet = packet.substring(3);
 				Cuenta C = Mundo.getCompteByPseudo(packet);
-				if(C==null?true:!C.isOnline())
-				{
+				if (C == null ? true : !C.isOnline()) {
 					GestorSalida.GAME_SEND_FA_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = C.get_GUID();
-			break;
-			default:
+			}
+			default -> {
 				packet = packet.substring(2);
 				Personaje Pr = Mundo.getPersoByName(packet);
-				if(Pr == null?true:!Pr.isOnline())//Si P est nul, ou si P est nonNul et P offline
+				if (Pr == null ? true : !Pr.isOnline())//Si P est nul, ou si P est nonNul et P offline
 				{
 					GestorSalida.GAME_SEND_FA_PACKET(_perso, "Ef");
 					return;
 				}
 				guid = Pr.get_compte().get_GUID();
-			break;
+			}
 		}
 		if(guid == -1)
 		{
@@ -1385,105 +1321,83 @@ public class JuegoThread implements Runnable {
 
 	private void parseGroupPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'A'://Accepter invitation
-				group_accept(packet);
-			break;
-			
-			case 'F'://Suivre membre du groupe PF+GUID
+		switch (packet.charAt(1)) {
+//Accepter invitation
+			case 'A' -> group_accept(packet);
+//Suivre membre du groupe PF+GUID
+			case 'F' -> {
 				Grupo g = _perso.getActualGrupo();
-				if(g == null)return;
-				
+				if (g == null) return;
 				int pGuid = -1;
-				try
-				{
+				try {
 					pGuid = Integer.parseInt(packet.substring(3));
-				}catch(NumberFormatException e){return;};
-				
-				if(pGuid == -1) return;
-				
+				} catch (NumberFormatException e) {
+					return;
+				}
+				if (pGuid == -1) return;
 				Personaje P = Mundo.getPersonnage(pGuid);
-				
-				if(P == null || !P.isOnline()) return;
-				
-				if(packet.charAt(2) == '+')//Suivre
+				if (P == null || !P.isOnline()) return;
+				if (packet.charAt(2) == '+')//Suivre
 				{
-					if(_perso._Follows != null)
-					{
+					if (_perso._Follows != null) {
 						_perso._Follows._Follower.remove(_perso.get_GUID());
 					}
 					GestorSalida.GAME_SEND_FLAG_PACKET(_perso, P);
-					GestorSalida.GAME_SEND_PF(_perso, "+"+P.get_GUID());
+					GestorSalida.GAME_SEND_PF(_perso, "+" + P.get_GUID());
 					_perso._Follows = P;
 					P._Follower.put(_perso.get_GUID(), _perso);
-				}
-				else if(packet.charAt(2) == '-')//Ne plus suivre
+				} else if (packet.charAt(2) == '-')//Ne plus suivre
 				{
 					GestorSalida.GAME_SEND_DELETE_FLAG_PACKET(_perso);
 					GestorSalida.GAME_SEND_PF(_perso, "-");
 					_perso._Follows = null;
 					P._Follower.remove(_perso.get_GUID());
 				}
-			break;
-			case 'G'://Suivez le tous PG+GUID
+			}
+//Suivez le tous PG+GUID
+			case 'G' -> {
 				Grupo g2 = _perso.getActualGrupo();
-				if(g2 == null)return;
-				
+				if (g2 == null) return;
 				int pGuid2 = -1;
-				try
-				{
+				try {
 					pGuid2 = Integer.parseInt(packet.substring(3));
-				}catch(NumberFormatException e){return;};
-				
-				if(pGuid2 == -1) return;
-				
+				} catch (NumberFormatException e) {
+					return;
+				}
+				if (pGuid2 == -1) return;
 				Personaje P2 = Mundo.getPersonnage(pGuid2);
-				
-				if(P2 == null || !P2.isOnline()) return;
-				
-				if(packet.charAt(2) == '+')//Suivre
+				if (P2 == null || !P2.isOnline()) return;
+				if (packet.charAt(2) == '+')//Suivre
 				{
-					for(Personaje T : g2.getMiembrosGrupo())
-					{
-						if(T.get_GUID() == P2.get_GUID()) continue;
-						if(T._Follows != null)
-						{
+					for (Personaje T : g2.getMiembrosGrupo()) {
+						if (T.get_GUID() == P2.get_GUID()) continue;
+						if (T._Follows != null) {
 							T._Follows._Follower.remove(_perso.get_GUID());
 						}
 						GestorSalida.GAME_SEND_FLAG_PACKET(T, P2);
-						GestorSalida.GAME_SEND_PF(T, "+"+P2.get_GUID());
+						GestorSalida.GAME_SEND_PF(T, "+" + P2.get_GUID());
 						T._Follows = P2;
 						P2._Follower.put(T.get_GUID(), T);
 					}
-				}
-				else if(packet.charAt(2) == '-')//Ne plus suivre
+				} else if (packet.charAt(2) == '-')//Ne plus suivre
 				{
-					for(Personaje T : g2.getMiembrosGrupo())
-					{
-						if(T.get_GUID() == P2.get_GUID()) continue;
+					for (Personaje T : g2.getMiembrosGrupo()) {
+						if (T.get_GUID() == P2.get_GUID()) continue;
 						GestorSalida.GAME_SEND_DELETE_FLAG_PACKET(T);
 						GestorSalida.GAME_SEND_PF(T, "-");
 						T._Follows = null;
 						P2._Follower.remove(T.get_GUID());
 					}
 				}
-			break;
-			
-			case 'I'://inviation
-				group_invite(packet);
-			break;
-			
-			case 'R'://Refuse
-				group_refuse();
-			break;
-			
-			case 'V'://Quitter
-				group_quit(packet);
-			break;
-			case 'W'://Localisation du groupe
-				group_locate();
-			break;
+			}
+//inviation
+			case 'I' -> group_invite(packet);
+//Refuse
+			case 'R' -> group_refuse();
+//Quitter
+			case 'V' -> group_quit(packet);
+//Localisation du groupe
+			case 'W' -> group_locate();
 		}
 	}
 	
@@ -1519,7 +1433,7 @@ public class JuegoThread implements Runnable {
 			try
 			{
 				guid = Integer.parseInt(packet.substring(2));
-			}catch(NumberFormatException e){return;};
+			}catch(NumberFormatException e){return;}
 			if(guid == -1)return;
 			Personaje t = Mundo.getPersonnage(guid);
 			g.leave(t);
@@ -1598,28 +1512,18 @@ public class JuegoThread implements Runnable {
 
 	private void parseObjectPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'd'://Supression d'un objet
-				Object_delete(packet);
-				break;
-			case 'D'://Depose l'objet au sol
-				Object_drop(packet);
-				break;
-			case 'M'://Bouger un objet (Equiper/dï¿½sï¿½quiper) // Associer obvijevan
-				Object_move(packet);
-				break;
-			case 'U'://Utiliser un objet (potions)
-				Object_use(packet);
-				break;
-			case 'x':
-			    Object_obvijevan_desassocier(packet);
-			    break;
-			case 'f':
-				Object_obvijevan_feed(packet);
-				break;
-			case 's':
-				Object_obvijevan_changeApparence(packet);
+		switch (packet.charAt(1)) {
+//Supression d'un objet
+			case 'd' -> Object_delete(packet);
+//Depose l'objet au sol
+			case 'D' -> Object_drop(packet);
+//Bouger un objet (Equiper/dï¿½sï¿½quiper) // Associer obvijevan
+			case 'M' -> Object_move(packet);
+//Utiliser un objet (potions)
+			case 'U' -> Object_use(packet);
+			case 'x' -> Object_obvijevan_desassocier(packet);
+			case 'f' -> Object_obvijevan_feed(packet);
+			case 's' -> Object_obvijevan_changeApparence(packet);
 		}
 	}
 
@@ -1631,7 +1535,7 @@ public class JuegoThread implements Runnable {
 		{
 			guid = Integer.parseInt(packet.substring(2).split("\\|")[0]);
 			qua = Integer.parseInt(packet.split("\\|")[1]);
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 		if(guid == -1 || qua <= 0 || !_perso.hasItemGuid(guid) || _perso.get_fight() != null || _perso.is_away())return;
 		Objeto obj = Mundo.getObjet(guid);
 		
@@ -1639,7 +1543,7 @@ public class JuegoThread implements Runnable {
 		int cellPosition = Constantes.getNearCellidUnused(_perso);
 		if(cellPosition < 0)
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1145");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1145");
 			return;
 		}
 		if(obj.getPosition() != Constantes.ITEM_POS_NO_EQUIPED)
@@ -1686,12 +1590,12 @@ public class JuegoThread implements Runnable {
 			try
 			{
 				targetGuid = Integer.parseInt(infos[1]);
-			}catch(Exception e){targetGuid = -1;};
+			}catch(Exception e){targetGuid = -1;}
 			try
 			{
 				cellID = Short.parseShort(infos[2]);
-			}catch(Exception e){cellID = -1;};
-		}catch(Exception e){return;};
+			}catch(Exception e){cellID = -1;}
+		}catch(Exception e){return;}
 		//Si le joueur n'a pas l'objet
 		if(Mundo.getPersonnage(targetGuid) != null)
 		{
@@ -1702,9 +1606,9 @@ public class JuegoThread implements Runnable {
 		Objeto obj = Mundo.getObjet(guid);
 		if(obj == null) return;
 		ObjTemplate T = obj.getTemplate();
-		if(!obj.getTemplate().getConditions().equalsIgnoreCase("") && !Condiciones.validConditions(_perso,obj.getTemplate().getConditions()))
+		if(!obj.getTemplate().getConditions().equalsIgnoreCase("") && !Condiciones.ValidarCondicion(_perso,obj.getTemplate().getConditions()))
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "119|43");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "119|43");
 			return;
 		}
 		T.applyAction(_perso, Target, guid, cellID);
@@ -1734,8 +1638,8 @@ public class JuegoThread implements Runnable {
 					return;
 			if(!Constantes.isValidPlaceForItem(obj.getTemplate(),pos) && pos != Constantes.ITEM_POS_NO_EQUIPED) // si mauvaise place
 				return;
-			if(!obj.getTemplate().getConditions().equalsIgnoreCase("") && !Condiciones.validConditions(_perso,obj.getTemplate().getConditions())) {
-				GestorSalida.GAME_SEND_Im_PACKET(_perso, "119|43"); // si le perso ne vï¿½rifie pas les conditions diverses
+			if(!obj.getTemplate().getConditions().equalsIgnoreCase("") && !Condiciones.ValidarCondicion(_perso,obj.getTemplate().getConditions())) {
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "119|43"); // si le perso ne vï¿½rifie pas les conditions diverses
 				return;
 			}
 			if(obj.getTemplate().getLevel() > _perso.get_lvl())  {// si le perso n'a pas le level
@@ -1768,12 +1672,11 @@ public class JuegoThread implements Runnable {
 					
 				_perso.removeItem(obj.getGuid(), 1, false, false); // on enlï¿½ve l'existance de l'obvi en lui-mï¿½me
 				GestorSalida.send(_perso, "OR" + obj.getGuid()); // on le prï¿½cise au client
-					
-				StringBuilder cibleNewStats = new StringBuilder();
-				cibleNewStats.append(obj.parseStatsStringSansUserObvi()).append(",").append(exObj.parseStatsStringSansUserObvi());
-				cibleNewStats.append(",3ca#").append(Integer.toHexString(objGUID)).append("#0#0#0d0+").append(objGUID);
+
 				exObj.clearStats();
-				exObj.parseStringToStats(cibleNewStats.toString());
+				String cibleNewStats = obj.parseStatsStringSansUserObvi() + "," + exObj.parseStatsStringSansUserObvi() +
+						",3ca#" + Integer.toHexString(objGUID) + "#0#0#0d0+" + objGUID;
+				exObj.parseStringToStats(cibleNewStats);
 					
 				GestorSalida.send(_perso, exObj.obvijevanOCO_Packet(pos));
 					
@@ -1918,7 +1821,7 @@ public class JuegoThread implements Runnable {
 			try
 			{
 				qua = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null || !_perso.hasItemGuid(guid) || qua <= 0 || _perso.get_fight() != null || _perso.is_away())
 			{
@@ -1947,19 +1850,13 @@ public class JuegoThread implements Runnable {
 
 	private void parseDialogPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'C'://Demande de l'initQuestion
-				Dialog_start(packet);
-			break;
-			
-			case 'R'://Rï¿½ponse du joueur
-				Dialog_response(packet);
-			break;
-			
-			case 'V'://Fin du dialog
-				Dialog_end();
-			break;
+		switch (packet.charAt(1)) {
+//Demande de l'initQuestion
+			case 'C' -> Dialog_start(packet);
+//Rï¿½ponse du joueur
+			case 'R' -> Dialog_response(packet);
+//Fin du dialog
+			case 'V' -> Dialog_end();
 		}
 	}
 
@@ -2008,73 +1905,54 @@ public class JuegoThread implements Runnable {
 			}
 			GestorSalida.GAME_SEND_QUESTION_PACKET(_out,quest.parseToDQPacket(_perso));
 			_perso.set_isTalkingWith(npcID);
-		}catch(NumberFormatException e){};
+		}catch(NumberFormatException ignored){}
 	}
 
 	private void parseExchangePacket(String packet)
-	{	
-		switch(packet.charAt(1))
-		{
-			case 'A'://Accepter demande d'ï¿½change
-				Exchange_accept();
-			break;
-			case 'B'://Achat
-				Exchange_onBuyItem(packet);
-			break;
-			
-			case 'H'://Demande prix moyen + catï¿½gorie
-				Exchange_HDV(packet);
-			break;
-			
-			case 'K'://Ok
-				Exchange_isOK();
-			break;
-			case 'L'://jobAction : Refaire le craft prï¿½cedent
-				Exchange_doAgain();
-			break;
-			
-			case 'M'://Move (Ajouter//retirer un objet a l'ï¿½change)
-				Exchange_onMoveItem(packet);
-			break;
-			
-			case 'q'://Mode marchand
-				if(_perso.get_isTradingWith() > 0 || _perso.get_fight() != null || _perso.is_away())return;
-		        if (_perso.getActualMapa().getStoreCount() == 5)
-		        {
-		        	GestorSalida.GAME_SEND_Im_PACKET(_perso, "125;5");
-		        	return;
-		        }
-		        if (_perso.parseStoreItemsList().isEmpty())
-		        {
-		        	GestorSalida.GAME_SEND_Im_PACKET(_perso, "123");
-		        	return;
-		        }
-		        int orientation = Formulas.getRandomValue(1, 3);
-		        _perso.set_orientation(orientation);
-		        Mapa map = _perso.getActualMapa();
-		        _perso.set_showSeller(true);
-		        Mundo.addSeller(_perso);
-		        kick();
-		        for(Personaje z : map.getPersos())
-		        {
-		        	if(z != null && z.isOnline())
-		        		GestorSalida.GAME_SEND_MERCHANT_LIST(z, z.getActualMapa().get_id());
-		        }
-			break;
-			case 'r'://Rides => Monture
-				Exchange_mountPark(packet);
-			break;
-			
-			case 'R'://liste d'achat NPC
-				Exchange_start(packet);
-			break;
-			case 'S'://Vente
-				Exchange_onSellItem(packet);
-			break;
-			
-			case 'V'://Fin de l'ï¿½change
-				Exchange_finish_buy();
-			break;
+	{
+		switch (packet.charAt(1)) {
+//Accepter demande d'ï¿½change
+			case 'A' -> Exchange_accept();
+//Achat
+			case 'B' -> Exchange_onBuyItem(packet);
+//Demande prix moyen + catï¿½gorie
+			case 'H' -> Exchange_HDV(packet);
+//Ok
+			case 'K' -> Exchange_isOK();
+//jobAction : Refaire le craft prï¿½cedent
+			case 'L' -> Exchange_doAgain();
+//Move (Ajouter//retirer un objet a l'ï¿½change)
+			case 'M' -> Exchange_onMoveItem(packet);
+//Mode marchand
+			case 'q' -> {
+				if (_perso.get_isTradingWith() > 0 || _perso.get_fight() != null || _perso.is_away()) return;
+				if (_perso.getActualMapa().getStoreCount() == 5) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "125;5");
+					return;
+				}
+				if (_perso.parseStoreItemsList().isEmpty()) {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "123");
+					return;
+				}
+				int orientation = Formulas.getRandomValue(1, 3);
+				_perso.set_orientation(orientation);
+				Mapa map = _perso.getActualMapa();
+				_perso.set_showSeller(true);
+				Mundo.addSeller(_perso);
+				kick();
+				for (Personaje z : map.getPersos()) {
+					if (z != null && z.isOnline())
+						GestorSalida.GAME_SEND_MERCHANT_LIST(z, z.getActualMapa().get_id());
+				}
+			}
+//Rides => Monture
+			case 'r' -> Exchange_mountPark(packet);
+//liste d'achat NPC
+			case 'R' -> Exchange_start(packet);
+//Vente
+			case 'S' -> Exchange_onSellItem(packet);
+//Fin de l'ï¿½change
+			case 'V' -> Exchange_finish_buy();
 		}
 	}
 	
@@ -2082,58 +1960,53 @@ public class JuegoThread implements Runnable {
 	{
 		if(_perso.get_isTradingWith() > 0 || _perso.get_fight() != null || _perso.is_away())return;
 		int templateID;
-		switch(packet.charAt(2))
-		{
-			case 'B': //Confirmation d'achat
+		switch (packet.charAt(2)) {
+//Confirmation d'achat
+			case 'B' -> {
 				String[] info = packet.substring(3).split("\\|");//ligneID|amount|price
-				
 				Mercadillo curHdv = Mundo.getHdv(Math.abs(_perso.get_isTradingWith()));
-				
 				int ligneID = Integer.parseInt(info[0]);
 				byte amount = Byte.parseByte(info[1]);
-				
-				if(curHdv.buyItem(ligneID,amount,Integer.parseInt(info[2]),_perso))
-				{
-					GestorSalida.GAME_SEND_EHm_PACKET(_perso,"-",ligneID+"");//Enleve la ligne
-					if(curHdv.getLigne(ligneID) != null && !curHdv.getLigne(ligneID).isEmpty())
+				if (curHdv.buyItem(ligneID, amount, Integer.parseInt(info[2]), _perso)) {
+					GestorSalida.GAME_SEND_EHm_PACKET(_perso, "-", ligneID + "");//Enleve la ligne
+					if (curHdv.getLigne(ligneID) != null && !curHdv.getLigne(ligneID).isEmpty())
 						GestorSalida.GAME_SEND_EHm_PACKET(_perso, "+", curHdv.getLigne(ligneID).parseToEHm());//Rï¿½ajoute la ligne si elle n'est pas vide
-					
+
 					/*if(curHdv.getLigne(ligneID) != null)
 					{
 						String str = curHdv.getLigne(ligneID).parseToEHm();
 						SocketManager.GAME_SEND_EHm_PACKET(_perso,"+",str);
 					}*/
-					
-					
+
+
 					_perso.refreshStats();
 					GestorSalida.GAME_SEND_Ow_PACKET(_perso);
-					GestorSalida.GAME_SEND_Im_PACKET(_perso,"068");//Envoie le message "Lot achetï¿½"
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "068");//Envoie le message "Lot achetï¿½"
+				} else {
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "172");//Envoie un message d'erreur d'achat
 				}
-				else
-				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso,"172");//Envoie un message d'erreur d'achat
-				}
-			break;
-			case 'l'://Demande listage d'un template (les prix)
+			}
+//Demande listage d'un template (les prix)
+			case 'l' -> {
 				templateID = Integer.parseInt(packet.substring(3));
-				try
+				try {
+					GestorSalida.GAME_SEND_EHl(_perso, Mundo.getHdv(Math.abs(_perso.get_isTradingWith())), templateID);
+				} catch (NullPointerException e)//Si erreur il y a, retire le template de la liste chez le client
 				{
-					GestorSalida.GAME_SEND_EHl(_perso, Mundo.getHdv(Math.abs(_perso.get_isTradingWith())),templateID);
-				}catch(NullPointerException e)//Si erreur il y a, retire le template de la liste chez le client
-				{
-					GestorSalida.GAME_SEND_EHM_PACKET(_perso,"-",templateID+"");
+					GestorSalida.GAME_SEND_EHM_PACKET(_perso, "-", templateID + "");
 				}
-				
-			break;
-			case 'P'://Demande des prix moyen
+			}
+//Demande des prix moyen
+			case 'P' -> {
 				templateID = Integer.parseInt(packet.substring(3));
-				GestorSalida.GAME_SEND_EHP_PACKET(_perso,templateID);
-			break;			
-			case 'T'://Demande des template de la catï¿½gorie
+				GestorSalida.GAME_SEND_EHP_PACKET(_perso, templateID);
+			}
+//Demande des template de la catï¿½gorie
+			case 'T' -> {
 				int categ = Integer.parseInt(packet.substring(3));
 				String allTemplate = Mundo.getHdv(Math.abs(_perso.get_isTradingWith())).parseTemplate(categ);
-				GestorSalida.GAME_SEND_EHL_PACKET(_perso,categ,allTemplate);
-			break;			
+				GestorSalida.GAME_SEND_EHL_PACKET(_perso, categ, allTemplate);
+			}
 		}
 	}
 	
@@ -2150,14 +2023,14 @@ public class JuegoThread implements Runnable {
 			try
 			{
 				guid = Integer.parseInt(packet);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			switch(c)
 			{
 				case 'C'://Parcho => Etable (Stocker)
 					if(guid == -1 || !_perso.hasItemGuid(guid))return;
 					if(MP.get_size() <= MP.MountParkDATASize())
 					{
-						GestorSalida.GAME_SEND_Im_PACKET(_perso, "1145");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1145");
 						return;
 					}
 					Objeto obj = Mundo.getObjet(guid);
@@ -2196,7 +2069,7 @@ public class JuegoThread implements Runnable {
 							!_perso.getGuildMember().canDo(Constantes.G_OTHDINDE))
 					{
 						//Mï¿½me guilde, pas le droit
-						GestorSalida.GAME_SEND_Im_PACKET(_perso, "1101");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1101");
 						return;
 					}
 					//on retire la dinde de l'ï¿½table
@@ -2236,7 +2109,7 @@ public class JuegoThread implements Runnable {
 							!_perso.getGuildMember().canDo(Constantes.G_OTHDINDE))
 					{
 						//Mï¿½me guilde, pas le droit
-						GestorSalida.GAME_SEND_Im_PACKET(_perso, "1101");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1101");
 						return;
 					}
 					
@@ -2299,47 +2172,42 @@ public class JuegoThread implements Runnable {
 		//Store
 		if(_perso.get_isTradingWith() == _perso.get_GUID())
 		{
-			switch(packet.charAt(2))
-			{
-			case 'O'://Objets
-				if(packet.charAt(3) == '+')
-				{
+			if (packet.charAt(2) == 'O') {//Objets
+				if (packet.charAt(3) == '+') {
 					String[] infos = packet.substring(4).split("\\|");
-					try
-					{
-						
+					try {
+
 						int guid = Integer.parseInt(infos[0]);
-						int qua  = Integer.parseInt(infos[1]);
-						int price  = Integer.parseInt(infos[2]);
-						
+						int qua = Integer.parseInt(infos[1]);
+						int price = Integer.parseInt(infos[2]);
+
 						Objeto obj = Mundo.getObjet(guid);
-						if(obj == null)return;
-						
-						if(qua > obj.getQuantity())
+						if (obj == null) return;
+
+						if (qua > obj.getQuantity())
 							qua = obj.getQuantity();
-						
+
 						_perso.addinStore(obj.getGuid(), price, qua);
-						
-					}catch(NumberFormatException e){};
-				}else
-				{
+
+					} catch (NumberFormatException e) {
+					}
+				} else {
 					String[] infos = packet.substring(4).split("\\|");
-					try
-					{
+					try {
 						int guid = Integer.parseInt(infos[0]);
-						int qua  = Integer.parseInt(infos[1]);
-						
-						if(qua <= 0)return;
-						
+						int qua = Integer.parseInt(infos[1]);
+
+						if (qua <= 0) return;
+
 						Objeto obj = Mundo.getObjet(guid);
-						if(obj == null)return;
-						if(qua > obj.getQuantity())return;
-						if(qua < obj.getQuantity()) qua = obj.getQuantity();
-						
+						if (obj == null) return;
+						if (qua > obj.getQuantity()) return;
+						if (qua < obj.getQuantity()) qua = obj.getQuantity();
+
 						_perso.removeFromStore(obj.getGuid(), qua);
-					}catch(NumberFormatException e){};
+					} catch (NumberFormatException e) {
+					}
 				}
-			break;
 			}
 			return;
 		}
@@ -2376,8 +2244,8 @@ public class JuegoThread implements Runnable {
 					{
 						guid = Integer.parseInt(infos[0]);
 						qua  = Integer.parseInt(infos[1]);
-					}catch(NumberFormatException e){};
-					
+					}catch(NumberFormatException ignored){}
+
 					if(guid <= 0 || qua <= 0) return;
 					
 					Objeto obj = Mundo.getObjet(guid);
@@ -2400,70 +2268,56 @@ public class JuegoThread implements Runnable {
 		//HDV
 		if(_perso.get_isTradingWith() < 0)
 		{
-			switch(packet.charAt(3))
-			{
-				case '-'://Retirer un objet de l'HDV
+			switch (packet.charAt(3)) {
+//Retirer un objet de l'HDV
+				case '-' -> {
 					int cheapestID = Integer.parseInt(packet.substring(4).split("\\|")[0]);
 					int count = Integer.parseInt(packet.substring(4).split("\\|")[1]);
-					if(count <= 0)return;
-					
-					_perso.get_compte().recoverItem(cheapestID,count);//Retire l'objet de la liste de vente du compte
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(_out,'-',"",cheapestID+"");
-				break;
-				case '+'://Mettre un objet en vente
+					if (count <= 0) return;
+					_perso.get_compte().recoverItem(cheapestID, count);//Retire l'objet de la liste de vente du compte
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(_out, '-', "", cheapestID + "");
+				}
+//Mettre un objet en vente
+				case '+' -> {
 					int itmID = Integer.parseInt(packet.substring(4).split("\\|")[0]);
 					byte amount = Byte.parseByte(packet.substring(4).split("\\|")[1]);
 					int price = Integer.parseInt(packet.substring(4).split("\\|")[2]);
-					if(amount <= 0 || price <= 0)return;
-					
+					if (amount <= 0 || price <= 0) return;
 					Mercadillo curHdv = Mundo.getHdv(Math.abs(_perso.get_isTradingWith()));
-					int taxe = (int)(price * (curHdv.getTaxe()/100));
-					
-					
-					if(!_perso.hasItemGuid(itmID))//Vï¿½rifie si le personnage a bien l'item spï¿½cifiï¿½ et l'argent pour payer la taxe
+					int taxe = (int) (price * (curHdv.getTaxe() / 100));
+					if (!_perso.hasItemGuid(itmID))//Vï¿½rifie si le personnage a bien l'item spï¿½cifiï¿½ et l'argent pour payer la taxe
 						return;
-					if(_perso.get_compte().countHdvItems(curHdv.getHdvID()) >= curHdv.getMaxItemCompte())
-					{
-						GestorSalida.GAME_SEND_Im_PACKET(_perso, "058");
+					if (_perso.get_compte().countHdvItems(curHdv.getHdvID()) >= curHdv.getMaxItemCompte()) {
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "058");
 						return;
 					}
-					if(_perso.get_kamas() < taxe)
-					{
-						GestorSalida.GAME_SEND_Im_PACKET(_perso, "176");
+					if (_perso.get_kamas() < taxe) {
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "176");
 						return;
 					}
-					
-					_perso.addKamas(taxe *-1);//Retire le montant de la taxe au personnage
-					
+					_perso.addKamas(taxe * -1);//Retire le montant de la taxe au personnage
 					GestorSalida.GAME_SEND_STATS_PACKET(_perso);//Met a jour les kamas du client
-					
 					Objeto obj = Mundo.getObjet(itmID);//Rï¿½cupï¿½re l'item
-					if(amount > obj.getQuantity())//S'il veut mettre plus de cette objet en vente que ce qu'il possï¿½de
+					if (amount > obj.getQuantity())//S'il veut mettre plus de cette objet en vente que ce qu'il possï¿½de
 						return;
-					
-					int rAmount = (int)(Math.pow(10,amount)/10);
-					int newQua = (obj.getQuantity()-rAmount);
-					
-					if(newQua <= 0)//Si c'est plusieurs objets ensemble enleve seulement la quantitï¿½ de mise en vente
+					int rAmount = (int) (Math.pow(10, amount) / 10);
+					int newQua = (obj.getQuantity() - rAmount);
+					if (newQua <= 0)//Si c'est plusieurs objets ensemble enleve seulement la quantitï¿½ de mise en vente
 					{
 						_perso.removeItem(itmID);//Enlï¿½ve l'item de l'inventaire du personnage
-						GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso,itmID);//Envoie un packet au client pour retirer l'item de son inventaire
-					}
-					else
-					{
+						GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso, itmID);//Envoie un packet au client pour retirer l'item de son inventaire
+					} else {
 						obj.setQuantity(obj.getQuantity() - rAmount);
-						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso,obj);
-						
+						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
+
 						Objeto newObj = Objeto.getCloneObjet(obj, rAmount);
 						Mundo.addObjet(newObj, true);
 						obj = newObj;
 					}
-					
-					HdvEntry toAdd = new HdvEntry(price,amount,_perso.get_compte().get_GUID(),obj);
-					curHdv.addEntry(toAdd);	//Ajoute l'entry dans l'HDV
-					
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(_out,'+',"",toAdd.parseToEmK());	//Envoie un packet pour ajouter l'item dans la fenetre de l'HDV du client
-				break;
+					HdvEntry toAdd = new HdvEntry(price, amount, _perso.get_compte().get_GUID(), obj);
+					curHdv.addEntry(toAdd);    //Ajoute l'entry dans l'HDV
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(_out, '+', "", toAdd.parseToEmK());    //Envoie un packet pour ajouter l'item dans la fenetre de l'HDV du client
+				}
 			}
 			return;
 		}
@@ -2489,7 +2343,7 @@ public class JuegoThread implements Runnable {
 						if(obj.getQuantity()<qua)
 							qua = obj.getQuantity();
 							_perso.getCurJobAction().modifIngredient(_perso,guid,qua);
-					}catch(NumberFormatException e){};
+					}catch(NumberFormatException ignored){}
 				}else
 				{
 					String[] infos = packet.substring(4).split("\\|");
@@ -2501,7 +2355,7 @@ public class JuegoThread implements Runnable {
 						Objeto obj = Mundo.getObjet(guid);
 						if(obj == null)return;
 						_perso.getCurJobAction().modifIngredient(_perso,guid,-qua);
-					}catch(NumberFormatException e){};
+					}catch(NumberFormatException ignored){}
 				}
 				
 			}else
@@ -2511,7 +2365,7 @@ public class JuegoThread implements Runnable {
 				{
 					int c = Integer.parseInt(packet.substring(3));
 					_perso.getCurJobAction().repeat(c,_perso);
-				}catch(Exception e){};
+				}catch(Exception ignored){}
 			}
 			return;
 		}
@@ -2519,55 +2373,48 @@ public class JuegoThread implements Runnable {
 		if(_perso.isInBank())
 		{
 			if(_perso.get_curExchange() != null)return;
-			switch(packet.charAt(2))
-			{
-				case 'G'://Kamas
+			switch (packet.charAt(2)) {
+//Kamas
+				case 'G' -> {
 					long kamas = 0;
-					try
-					{
-							kamas = Integer.parseInt(packet.substring(3));
-					}catch(Exception e){};
-					if(kamas == 0)return;
-					
-					if(kamas > 0)//Si On ajoute des kamas a la banque
-					{
-						if(_perso.get_kamas() < kamas)kamas = _perso.get_kamas();
-						_perso.setBankKamas(_perso.getBankKamas()+kamas);//On ajoute les kamas a la banque
-						_perso.set_kamas(_perso.get_kamas()-kamas);//On retire les kamas du personnage
-						GestorSalida.GAME_SEND_STATS_PACKET(_perso);
-						GestorSalida.GAME_SEND_EsK_PACKET(_perso,"G"+_perso.getBankKamas());
-					}else
-					{
-						kamas = -kamas;//On repasse en positif
-						if(_perso.getBankKamas() < kamas)kamas = _perso.getBankKamas();
-						_perso.setBankKamas(_perso.getBankKamas()-kamas);//On retire les kamas de la banque
-						_perso.set_kamas(_perso.get_kamas()+kamas);//On ajoute les kamas du personnage
-						GestorSalida.GAME_SEND_STATS_PACKET(_perso);
-						GestorSalida.GAME_SEND_EsK_PACKET(_perso,"G"+_perso.getBankKamas());
+					try {
+						kamas = Integer.parseInt(packet.substring(3));
+					} catch (Exception ignored) {
 					}
-				break;
-				
-				case 'O'://Objet
+					if (kamas == 0) return;
+					if (kamas > 0)//Si On ajoute des kamas a la banque
+					{
+						if (_perso.get_kamas() < kamas) kamas = _perso.get_kamas();
+						_perso.setBankKamas(_perso.getBankKamas() + kamas);//On ajoute les kamas a la banque
+						_perso.set_kamas(_perso.get_kamas() - kamas);//On retire les kamas du personnage
+						GestorSalida.GAME_SEND_STATS_PACKET(_perso);
+						GestorSalida.GAME_SEND_EsK_PACKET(_perso, "G" + _perso.getBankKamas());
+					} else {
+						kamas = -kamas;//On repasse en positif
+						if (_perso.getBankKamas() < kamas) kamas = _perso.getBankKamas();
+						_perso.setBankKamas(_perso.getBankKamas() - kamas);//On retire les kamas de la banque
+						_perso.set_kamas(_perso.get_kamas() + kamas);//On ajoute les kamas du personnage
+						GestorSalida.GAME_SEND_STATS_PACKET(_perso);
+						GestorSalida.GAME_SEND_EsK_PACKET(_perso, "G" + _perso.getBankKamas());
+					}
+				}
+//Objet
+				case 'O' -> {
 					int guid = 0;
 					int qua = 0;
-					try
-					{
+					try {
 						guid = Integer.parseInt(packet.substring(4).split("\\|")[0]);
 						qua = Integer.parseInt(packet.substring(4).split("\\|")[1]);
-					}catch(Exception e){};
-					if(guid == 0 || qua <= 0)return;
-					
-					switch(packet.charAt(3))
-					{
-						case '+'://Ajouter a la banque
-							_perso.addInBank(guid,qua);
-						break;
-						
-						case '-'://Retirer de la banque
-							_perso.removeFromBank(guid,qua);
-						break;
+					} catch (Exception ignored) {
 					}
-				break;
+					if (guid == 0 || qua <= 0) return;
+					switch (packet.charAt(3)) {
+//Ajouter a la banque
+						case '+' -> _perso.addInBank(guid, qua);
+//Retirer de la banque
+						case '-' -> _perso.removeFromBank(guid, qua);
+					}
+				}
 			}
 			return;
 		}
@@ -2577,63 +2424,55 @@ public class JuegoThread implements Runnable {
                 if(_perso.get_curExchange() != null)return;
                 Cofres t = _perso.getInTrunk();
                 if(t == null) return;
-               
-                switch(packet.charAt(2))
-                {
-                	case 'G'://Kamas
-                    	long kamas = 0;
-                    	try
-                    	{
-                    		kamas = Integer.parseInt(packet.substring(3));
-                        }catch(Exception e){};
-                        if(kamas == 0)return;
-                               
-                        if(kamas > 0)//Si On ajoute des kamas au coffre
-                        {
-                            if(_perso.get_kamas() < kamas)kamas = _perso.get_kamas();
-                            t.set_kamas(t.get_kamas() + kamas);//On ajoute les kamas au coffre
-                            _perso.set_kamas(_perso.get_kamas()-kamas);//On retire les kamas du personnage
-                            GestorSalida.GAME_SEND_STATS_PACKET(_perso);
-                        }else // On retire des kamas au coffre
-                        {
-                        	kamas = -kamas;//On repasse en positif
-                        	if(t.get_kamas() < kamas)kamas = t.get_kamas();
-                        	t.set_kamas(t.get_kamas()-kamas);//On retire les kamas de la banque
-                         	_perso.set_kamas(_perso.get_kamas()+kamas);//On ajoute les kamas du personnage
-                         	GestorSalida.GAME_SEND_STATS_PACKET(_perso);
-                        }
-                        for(Personaje P : Mundo.getOnlinePersos())
-                        {
-                        	if(P.getInTrunk() != null && _perso.getInTrunk().get_id() == P.getInTrunk().get_id())
-                            {
-                        		GestorSalida.GAME_SEND_EsK_PACKET(P,"G"+t.get_kamas());
-                         	}
-                        }
-                        GestorSQL.actualizar_cofre(t);
-                    break;
-              	
-                	case 'O'://Objet
-                		int guid = 0;
-                		int qua = 0;
-                		try
-                		{
-                			guid = Integer.parseInt(packet.substring(4).split("\\|")[0]);
-                			qua = Integer.parseInt(packet.substring(4).split("\\|")[1]);
-                		}catch(Exception e){};
-                		if(guid == 0 || qua <= 0)return;
-                               
-                		switch(packet.charAt(3))
-                		{
-                			case '+'://Ajouter a la banque
-                				t.addInTrunk(guid, qua, _perso);
-                			break;
-                                       
-                			case '-'://Retirer de la banque
-                				t.removeFromTrunk(guid,qua, _perso);
-                			break;
-                		}
-                	break;
-                }
+
+			switch (packet.charAt(2)) {
+//Kamas
+				case 'G' -> {
+					long kamas = 0;
+					try {
+						kamas = Integer.parseInt(packet.substring(3));
+					} catch (Exception ignored) {
+					}
+					if (kamas == 0) return;
+					if (kamas > 0)//Si On ajoute des kamas au coffre
+					{
+						if (_perso.get_kamas() < kamas) kamas = _perso.get_kamas();
+						t.set_kamas(t.get_kamas() + kamas);//On ajoute les kamas au coffre
+						_perso.set_kamas(_perso.get_kamas() - kamas);//On retire les kamas du personnage
+						GestorSalida.GAME_SEND_STATS_PACKET(_perso);
+					} else // On retire des kamas au coffre
+					{
+						kamas = -kamas;//On repasse en positif
+						if (t.get_kamas() < kamas) kamas = t.get_kamas();
+						t.set_kamas(t.get_kamas() - kamas);//On retire les kamas de la banque
+						_perso.set_kamas(_perso.get_kamas() + kamas);//On ajoute les kamas du personnage
+						GestorSalida.GAME_SEND_STATS_PACKET(_perso);
+					}
+					for (Personaje P : Mundo.getOnlinePersos()) {
+						if (P.getInTrunk() != null && _perso.getInTrunk().get_id() == P.getInTrunk().get_id()) {
+							GestorSalida.GAME_SEND_EsK_PACKET(P, "G" + t.get_kamas());
+						}
+					}
+					GestorSQL.actualizar_cofre(t);
+				}
+//Objet
+				case 'O' -> {
+					int guid = 0;
+					int qua = 0;
+					try {
+						guid = Integer.parseInt(packet.substring(4).split("\\|")[0]);
+						qua = Integer.parseInt(packet.substring(4).split("\\|")[1]);
+					} catch (Exception ignored) {
+					}
+					if (guid == 0 || qua <= 0) return;
+					switch (packet.charAt(3)) {
+//Ajouter a la banque
+						case '+' -> t.addInTrunk(guid, qua, _perso);
+//Retirer de la banque
+						case '-' -> t.removeFromTrunk(guid, qua, _perso);
+					}
+				}
+			}
                 return;
         }
 		if(_perso.get_curExchange() == null)return;
@@ -2660,7 +2499,7 @@ public class JuegoThread implements Runnable {
 						if(qua <= 0)return;
 						
 						_perso.get_curExchange().addItem(guid,qua,_perso.get_GUID());
-					}catch(NumberFormatException e){};
+					}catch(NumberFormatException ignored){}
 				}else
 				{
 					String[] infos = packet.substring(4).split("\\|");
@@ -2677,7 +2516,7 @@ public class JuegoThread implements Runnable {
 						if(qua > _perso.get_curExchange().getQuaItem(guid, _perso.get_GUID()))return;
 						
 						_perso.get_curExchange().removeItem(guid,qua,_perso.get_GUID());
-					}catch(NumberFormatException e){};
+					}catch(NumberFormatException ignored){}
 				}
 			break;
 			case 'G'://Kamas
@@ -2687,8 +2526,8 @@ public class JuegoThread implements Runnable {
 					if(_perso.get_kamas() < numb)
 						numb = _perso.get_kamas();
 					_perso.get_curExchange().setKamas(_perso.get_GUID(), numb);
-				}catch(NumberFormatException e){};
-			break;
+				}catch(NumberFormatException ignored){}
+				break;
 		}
 	}
 
@@ -2831,7 +2670,7 @@ public class JuegoThread implements Runnable {
 			e.printStackTrace();
 			GestorSalida.GAME_SEND_BUY_ERROR_PACKET(_out);
 			return;
-		};
+		}
 	}
 
 	private void Exchange_finish_buy()
@@ -2886,7 +2725,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_gITM_PACKET(z, Recaudador.parsetoGuild(z.get_guild().get_id()));
 					String str = "";
 					str += "G"+perco.get_N1()+","+perco.get_N2();
-					str += "|.|"+ Mundo.getCarte((short)perco.get_mapID()).getX()+"|"+ Mundo.getCarte((short)perco.get_mapID()).getY()+"|";
+					str += "|.|"+ Mundo.getCarte(perco.get_mapID()).getX()+"|"+ Mundo.getCarte(perco.get_mapID()).getY()+"|";
 					str += _perso.get_name()+"|";
 					str += perco.get_LogXp();
 					str += perco.get_LogItems();
@@ -2917,7 +2756,7 @@ public class JuegoThread implements Runnable {
 			
 			if(_perso.getDeshonor() >= 5) 
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(_perso, "183");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "183");
 				return;
 			}
 			
@@ -2943,7 +2782,7 @@ public class JuegoThread implements Runnable {
 			
 			if(_perso.getDeshonor() >= 5) 
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(_perso, "183");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "183");
 				return;
 			}
 			
@@ -2975,8 +2814,8 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_ECK_PACKET(_out, 0, npcID+"");
 					GestorSalida.GAME_SEND_ITEM_VENDOR_LIST_PACKET(_out,npc);
 					_perso.set_isTradingWith(npcID);
-				}catch(NumberFormatException e){};
-			break;
+				}catch(NumberFormatException ignored){}
+				break;
 			case '1'://Si joueur
 				try
 				{
@@ -3001,7 +2840,7 @@ public class JuegoThread implements Runnable {
 				GestorSalida.GAME_SEND_EXCHANGE_REQUEST_OK(target.get_compte().getGameThread().get_out(),_perso.get_GUID(), guidTarget,1);
 				_perso.set_isTradingWith(guidTarget);
 				target.set_isTradingWith(_perso.get_GUID());
-			}catch(NumberFormatException e){}
+			}catch(NumberFormatException ignored){}
 			break;
             case '4'://StorePlayer
             	int pID = 0;
@@ -3010,7 +2849,7 @@ public class JuegoThread implements Runnable {
 				{
             		pID = Integer.valueOf(packet.split("\\|")[1]);
             		//cellID = Integer.valueOf(packet.split("\\|")[2]);
-				}catch(NumberFormatException e){return;};
+				}catch(NumberFormatException e){return;}
 				if(_perso.get_isTradingWith() > 0 || _perso.get_fight() != null || _perso.is_away())return;
 				Personaje seller = Mundo.getPersonnage(pID);
 				if(seller == null) return;
@@ -3035,22 +2874,18 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_ITEM_LIST_PACKET_PERCEPTEUR(_out, perco);
 					_perso.set_isTradingWith(perco.getGuid());
 					_perso.set_isOnPercepteurID(perco.getGuid());
-				}catch(NumberFormatException e){};
-			break;
+				}catch(NumberFormatException ignored){}
+				break;
 		}
 	}
 
 	private void parse_environementPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'D'://Change direction
-				Environement_change_direction(packet);
-			break;
-			
-			case 'U'://Emote
-				Environement_emote(packet);
-			break;
+		switch (packet.charAt(1)) {
+//Change direction
+			case 'D' -> Environement_change_direction(packet);
+//Emote
+			case 'U' -> Environement_emote(packet);
 		}
 	}
 
@@ -3060,17 +2895,15 @@ public class JuegoThread implements Runnable {
 		try
 		{
 			emote = Integer.parseInt(packet.substring(2));
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 		if(emote == -1)return;
 		if(_perso == null)return;
 		if(_perso.get_fight() != null)return;//Pas d'ï¿½mote en combat
-		
-		switch(emote)//effets spï¿½ciaux des ï¿½motes
-		{
-			case 19://s'allonger 
-			case 1:// s'asseoir
-				_perso.setSitted(!_perso.isSitted());
-			break;
+
+		//effets spï¿½ciaux des ï¿½motes
+		switch (emote) {
+// s'asseoir
+			case 19, 1 -> _perso.setSitted(!_perso.isSitted());
 		}
 		if(_perso.emoteActive() == emote)_perso.setEmoteActive(0);
 		else _perso.setEmoteActive(emote);
@@ -3089,22 +2922,16 @@ public class JuegoThread implements Runnable {
 			int dir = Integer.parseInt(packet.substring(2));
 			_perso.set_orientation(dir);
 			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(_perso.getActualMapa(),_perso.get_GUID(),dir);
-		}catch(NumberFormatException e){return;};
+		}catch(NumberFormatException e){return;}
 	}
 
 	private void parseSpellPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'B':
-				boostSort(packet);
-			break;
-			case 'F'://Oublie de sort
-				forgetSpell(packet);
-			break;
-			case'M':
-				addToSpellBook(packet);
-			break;
+		switch (packet.charAt(1)) {
+			case 'B' -> boostSort(packet);
+//Oublie de sort
+			case 'F' -> forgetSpell(packet);
+			case 'M' -> addToSpellBook(packet);
 		}
 	}
 
@@ -3122,7 +2949,7 @@ public class JuegoThread implements Runnable {
 			}
 				
 			GestorSalida.GAME_SEND_BN(_out);
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 	}
 
 	private void boostSort(String packet)
@@ -3143,7 +2970,7 @@ public class JuegoThread implements Runnable {
 				return;
 			}
 		}catch(NumberFormatException e){
-			GestorSalida.GAME_SEND_SPELL_UPGRADE_FAILED(_out);return;};
+			GestorSalida.GAME_SEND_SPELL_UPGRADE_FAILED(_out);return;}
 	}
 
 	private void forgetSpell(String packet)
@@ -3167,65 +2994,53 @@ public class JuegoThread implements Runnable {
 	{
 		try
 		{
-			switch(packet.charAt(1))
-			{
-				case 'D'://Dï¿½tails d'un combat (liste des combats)
+			switch (packet.charAt(1)) {
+//Dï¿½tails d'un combat (liste des combats)
+				case 'D' -> {
 					int key = -1;
-					try
-					{
-						key = Integer.parseInt(packet.substring(2).replace(((int)0x0)+"", ""));
-					}catch(Exception e){};
-					if(key == -1)return;
-					GestorSalida.GAME_SEND_FIGHT_DETAILS(_out,_perso.getActualMapa().get_fights().get(key));
-				break;
-				
-				case 'H'://Aide
-					if(_perso.get_fight() == null)return;
+					try {
+						key = Integer.parseInt(packet.substring(2).replace(((int) 0x0) + "", ""));
+					} catch (Exception ignored) {
+					}
+					if (key == -1) return;
+					GestorSalida.GAME_SEND_FIGHT_DETAILS(_out, _perso.getActualMapa().get_fights().get(key));
+				}
+//Aide
+				case 'H' -> {
+					if (_perso.get_fight() == null) return;
 					_perso.get_fight().toggleHelp(_perso.get_GUID());
-				break;
-				
-				case 'L'://Lister les combats
-					GestorSalida.GAME_SEND_FIGHT_LIST_PACKET(_out, _perso.getActualMapa());
-				break;
-				case 'N'://Bloquer le combat
-					if(_perso.get_fight() == null)return;
+				}
+//Lister les combats
+				case 'L' -> GestorSalida.GAME_SEND_FIGHT_LIST_PACKET(_out, _perso.getActualMapa());
+//Bloquer le combat
+				case 'N' -> {
+					if (_perso.get_fight() == null) return;
 					_perso.get_fight().toggleLockTeam(_perso.get_GUID());
-				break;
-				case 'P'://Seulement le groupe
-					if(_perso.get_fight() == null || _perso.getActualGrupo() == null)return;
+				}
+//Seulement le groupe
+				case 'P' -> {
+					if (_perso.get_fight() == null || _perso.getActualGrupo() == null) return;
 					_perso.get_fight().toggleOnlyGroup(_perso.get_GUID());
-				break;
-				case 'S'://Bloquer les specs
-					if(_perso.get_fight() == null)return;
+				}
+//Bloquer les specs
+				case 'S' -> {
+					if (_perso.get_fight() == null) return;
 					_perso.get_fight().toggleLockSpec(_perso.get_GUID());
-				break;
-				
+				}
 			}
-		}catch(Exception e){e.printStackTrace();};
+		}catch(Exception e){e.printStackTrace();}
 	}
 
 	private void parseBasicsPacket(String packet)
 	{
-		switch(packet.charAt(1))
-		{
-			case 'A'://Console
-				Basic_console(packet);
-			break;
-			case 'D':
-				Basic_send_Date_Hour();
-			break;
-			case 'M':
-				Basic_chatMessage(packet);
-			break;
-			case 'W':
-				Basic_infosmessage(packet);
-			break;
-			case 'S':
-				_perso.emoticone(packet.substring(2));
-			break;
-			case 'Y':
-				Basic_state(packet);
-			break;
+		switch (packet.charAt(1)) {
+//Console
+			case 'A' -> Basic_console(packet);
+			case 'D' -> Basic_send_Date_Hour();
+			case 'M' -> Basic_chatMessage(packet);
+			case 'W' -> Basic_infosmessage(packet);
+			case 'S' -> _perso.emoticone(packet.substring(2));
+			case 'Y' -> Basic_state(packet);
 		}
 	}
 	public void Basic_state(String packet)
@@ -3236,26 +3051,26 @@ public class JuegoThread implements Runnable {
 				if(_perso._isAbsent)
 				{
 
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "038");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "038");
 
 					_perso._isAbsent = false;
 				}
 				else
 
 				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "037");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "037");
 					_perso._isAbsent = true;
 				}
 			break;
 			case 'I': //Invisible
 				if(_perso._isInvisible)
 				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "051");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "051");
 					_perso._isInvisible = false;
 				}
 				else
 				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "050");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "050");
 					_perso._isInvisible = true;
 				}
 			break;
@@ -3277,7 +3092,7 @@ public class JuegoThread implements Runnable {
 	{
 		try {
 			this._s.close();
-		} catch (IOException e) {}
+		} catch (IOException ignored) {}
 	}
 
 	private void Basic_chatMessage(String packet)
@@ -3285,7 +3100,7 @@ public class JuegoThread implements Runnable {
 		String msg = "";
 		if(_perso.isMuted())
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(_perso, "1124;"+_perso.get_compte()._muteTimer.getInitialDelay());//FIXME
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1124;"+_perso.get_compte()._muteTimer.getInitialDelay());//FIXME
 			return;
 		}
 		packet = packet.replace("<", "");
@@ -3648,12 +3463,12 @@ public class JuegoThread implements Runnable {
 					                                                
 					        if(nbreElement == 0)
 					        {
-					            GestorSalida.GAME_SEND_Im_PACKET(_perso, "116;<i>System</i>~Vous avez déjà plus de 100 partout !");
+					            GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "116;<i>System</i>~Vous avez déjà plus de 100 partout !");
 					        }
 					        else
 					        {
 					            GestorSalida.GAME_SEND_STATS_PACKET(_perso);
-					            GestorSalida.GAME_SEND_Im_PACKET(_perso, "116;<i>System</i>~Vous êtes parcho 101 en " + element + " !");
+					            GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "116;<i>System</i>~Vous êtes parcho 101 en " + element + " !");
 					        }
 					        return;
 					      }else if(msg.length() > 4 && msg.substring(1, 5).equalsIgnoreCase("vote")) {
@@ -3711,7 +3526,7 @@ public class JuegoThread implements Runnable {
 				if((l = System.currentTimeMillis() - _timeLastTradeMsg) < MainServidor.FLOOD_TIME)
 				{
 					l = (MainServidor.FLOOD_TIME  - l)/1000;//On calcul la diffï¿½rence en secondes
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "0115;"+((int)Math.ceil(l)+1));
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "0115;"+((int)Math.ceil(l)+1));
 					return;
 				}
 				_timeLastTradeMsg = System.currentTimeMillis();
@@ -3729,7 +3544,7 @@ public class JuegoThread implements Runnable {
 				if((j = System.currentTimeMillis() - _timeLastRecrutmentMsg) < MainServidor.FLOOD_TIME)
 				{
 					j = (MainServidor.FLOOD_TIME  - j)/1000;//On calcul la diffï¿½rence en secondes
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "0115;"+((int)Math.ceil(j)+1));
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "0115;"+((int)Math.ceil(j)+1));
 					return;
 				}
 				_timeLastRecrutmentMsg = System.currentTimeMillis();
@@ -3749,14 +3564,14 @@ public class JuegoThread implements Runnable {
 				if(_perso.get_align() == 0) return;
 				if(_perso.getDeshonor() >= 1) 
 				{
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "183");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "183");
 					return;
 				}
 				long k;
 				if((k = System.currentTimeMillis() - _timeLastAlignMsg) < MainServidor.FLOOD_TIME)
 				{
 					k = (MainServidor.FLOOD_TIME  - k)/1000;//On calcul la diffï¿½rence en secondes
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "0115;"+((int)Math.ceil(k)+1));
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "0115;"+((int)Math.ceil(k)+1));
 					return;
 				}
 				_timeLastAlignMsg = System.currentTimeMillis();
@@ -3769,7 +3584,7 @@ public class JuegoThread implements Runnable {
 				if((x = System.currentTimeMillis() - _timeLastIncarnamMsg) < MainServidor.FLOOD_TIME)
 				{
 					x = (MainServidor.FLOOD_TIME - x)/1000;//Calculamos a diferenï¿½a em segundos
-					GestorSalida.GAME_SEND_Im_PACKET(_perso, "0115;"+((int)Math.ceil(x)+1));
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "0115;"+((int)Math.ceil(x)+1));
 					return; 
 				} 
 				_timeLastIncarnamMsg = System.currentTimeMillis();
@@ -3801,7 +3616,7 @@ public class JuegoThread implements Runnable {
 					}
 					if(target.get_compte().isEnemyWith(_perso.get_compte().get_GUID()) == true || !target.isDispo(_perso))
 					{
-						GestorSalida.GAME_SEND_Im_PACKET(_perso, "114;"+target.get_name());
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "114;"+target.get_name());
 						return;
 					}
 					GestorSalida.GAME_SEND_cMK_PACKET(target, "F", _perso.get_GUID(), _perso.get_name(), msg);
@@ -3878,7 +3693,7 @@ public class JuegoThread implements Runnable {
 			try
 			{
 				targetID = Integer.parseInt(packet.substring(2));
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 		}
 		if(_perso.get_fight() == null)return;
 		if(targetID > 0)//Expulsion d'un joueurs autre que soi-meme
@@ -3903,7 +3718,7 @@ public class JuegoThread implements Runnable {
 		try
 		{
 			cellID = Integer.parseInt(packet.substring(2));
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 		if(cellID == -1)return;
 		_perso.get_fight().showCaseToTeam(_perso.get_GUID(),cellID);
 	}
@@ -3924,7 +3739,7 @@ public class JuegoThread implements Runnable {
 		{
 			int cell = Integer.parseInt(packet.substring(2));
 			_perso.get_fight().changePlace( _perso, cell);
-		}catch(NumberFormatException e){return;};
+		}catch(NumberFormatException e){return;}
 	}
 	
 	private void Game_on_Gdi_packet(String packet)
@@ -3946,7 +3761,7 @@ public class JuegoThread implements Runnable {
 		try
 		{
 			GameActionId = Integer.parseInt(infos[0]);
-		}catch(Exception e){return;};
+		}catch(Exception e){return;}
 		if(GameActionId == -1)return;
 		GameAction GA = _actions.get(GameActionId);
 		if(GA == null)return;
@@ -4002,7 +3817,7 @@ public class JuegoThread implements Runnable {
 					try
 					{
 						newCellID = Integer.parseInt(infos[1]);
-					}catch(Exception e){return;};
+					}catch(Exception e){return;}
 					if(newCellID == -1)return;
 					String path = GA._args;
 					_perso.getActualCelda().removePlayer(_perso.get_GUID());
@@ -4055,8 +3870,8 @@ public class JuegoThread implements Runnable {
 		try
 		{
 			actionID = Integer.parseInt(packet.substring(2,5));
-		}catch(NumberFormatException e){return;};
-		
+		}catch(NumberFormatException e){return;}
+
 		int nextGameActionID = 0;
 		if(_actions.size() > 0)
 		{
@@ -4064,66 +3879,48 @@ public class JuegoThread implements Runnable {
 			nextGameActionID = (Integer)(_actions.keySet().toArray()[_actions.size()-1])+1;
 		}
 		GameAction GA = new GameAction(nextGameActionID,actionID,packet);
-		
-		switch(actionID)
-		{
-			case 1://Deplacement
-				game_parseDeplacementPacket(GA);
-			break;
-			
-			case 300://Sort
-				game_tryCastSpell(packet);
-			break;
-			
-			case 303://Attaque CaC
-				game_tryCac(packet);
-			break;
-			
-			case 500://Action Sur Map
-				game_action(GA);
-			break;
-			
-			case 507://Panneau intï¿½rieur de la maison
-				house_action(packet);
-			break;
-			
-			case 618://Mariage oui
-				_perso.setisOK(Integer.parseInt(packet.substring(5,6)));
+
+		switch (actionID) {
+//Deplacement
+			case 1 -> game_parseDeplacementPacket(GA);
+//Sort
+			case 300 -> game_tryCastSpell(packet);
+//Attaque CaC
+			case 303 -> game_tryCac(packet);
+//Action Sur Map
+			case 500 -> game_action(GA);
+//Panneau intï¿½rieur de la maison
+			case 507 -> house_action(packet);
+//Mariage oui
+			case 618 -> {
+				_perso.setisOK(Integer.parseInt(packet.substring(5, 6)));
 				GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_perso.getActualMapa(), "", _perso.get_GUID(), _perso.get_name(), "Oui");
-				if(Mundo.getMarried(0).getisOK() > 0 && Mundo.getMarried(1).getisOK() > 0)
-				{
+				if (Mundo.getMarried(0).getisOK() > 0 && Mundo.getMarried(1).getisOK() > 0) {
 					Mundo.Wedding(Mundo.getMarried(0), Mundo.getMarried(1), 1);
 				}
-				if(Mundo.getMarried(0) != null && Mundo.getMarried(1) != null)
-				{
-					Mundo.PriestRequest((Mundo.getMarried(0)==_perso? Mundo.getMarried(1): Mundo.getMarried(0)), (Mundo.getMarried(0)==_perso? Mundo.getMarried(1).getActualMapa(): Mundo.getMarried(0).getActualMapa()), _perso.get_isTalkingWith());
+				if (Mundo.getMarried(0) != null && Mundo.getMarried(1) != null) {
+					Mundo.PriestRequest((Mundo.getMarried(0) == _perso ? Mundo.getMarried(1) : Mundo.getMarried(0)), (Mundo.getMarried(0) == _perso ? Mundo.getMarried(1).getActualMapa() : Mundo.getMarried(0).getActualMapa()), _perso.get_isTalkingWith());
 				}
-			break;
-			case 619://Mariage non
+			}
+//Mariage non
+			case 619 -> {
 				_perso.setisOK(0);
 				GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_perso.getActualMapa(), "", _perso.get_GUID(), _perso.get_name(), "Non");
 				Mundo.Wedding(Mundo.getMarried(0), Mundo.getMarried(1), 0);
-			break;
-			
-			case 900://Demande Defie
-				game_ask_duel(packet);
-			break;
-			case 901://Accepter Defie
-				game_accept_duel(packet);
-			break;
-			case 902://Refus/Anuler Defie
-				game_cancel_duel(packet);
-			break;
-			case 903://Rejoindre combat
-				game_join_fight(packet);
-			break;
-			case 906://Agresser
-				game_aggro(packet);
-			break;
-			case 909://Perco
-				game_perco(packet);
-			break;
-		}	
+			}
+//Demande Defie
+			case 900 -> game_ask_duel(packet);
+//Accepter Defie
+			case 901 -> game_accept_duel(packet);
+//Refus/Anuler Defie
+			case 902 -> game_cancel_duel(packet);
+//Rejoindre combat
+			case 903 -> game_join_fight(packet);
+//Agresser
+			case 906 -> game_aggro(packet);
+//Perco
+			case 909 -> game_perco(packet);
+		}
 	}
 
 	private void house_action(String packet)
@@ -4131,18 +3928,13 @@ public class JuegoThread implements Runnable {
 		int actionID = Integer.parseInt(packet.substring(5));
 		House h = _perso.getInHouse();
 		if(h == null) return;
-		switch(actionID)
-		{
-			case 81://Vï¿½rouiller maison
-				h.Lock(_perso);
-			break;
-			case 97://Acheter maison
-				h.BuyIt(_perso);
-			break;
-			case 98://Vendre
-			case 108://Modifier prix de vente
-				h.SellIt(_perso);
-			break;
+		switch (actionID) {
+//Vï¿½rouiller maison
+			case 81 -> h.Lock(_perso);
+//Acheter maison
+			case 97 -> h.BuyIt(_perso);
+//Modifier prix de vente
+			case 98, 108 -> h.SellIt(_perso);
 		}
 	}
 	
@@ -4167,12 +3959,12 @@ public class JuegoThread implements Runnable {
 			if(target.get_Exchange())
 			{
 				
-				GestorSalida.GAME_SEND_Im_PACKET(_perso, "1180");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1180");
 				return;
 			}
 			GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(_perso.getActualMapa(),"", 909, _perso.get_GUID()+"", id+"");
 			_perso.getActualMapa().startFigthVersusPercepteur(_perso, target);
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 	}
 	
 	private void game_aggro(String packet)
@@ -4193,13 +3985,13 @@ public class JuegoThread implements Runnable {
 			if(target.get_align() == 0) 
 			{
 				_perso.setDeshonor(_perso.getDeshonor()+1);
-				GestorSalida.GAME_SEND_Im_PACKET(_perso, "084;1");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "084;1");
 			}
 
 			_perso.toggleWings('+');
 			GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(_perso.getActualMapa(),"", 906, _perso.get_GUID()+"", id+"");
 			_perso.getActualMapa().newFight(_perso, target, Constantes.FIGHT_TYPE_AGRESSION);
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 	}
 
 	private void game_action(GameAction GA)
@@ -4212,7 +4004,7 @@ public class JuegoThread implements Runnable {
 		{
 			cellID = Integer.parseInt(packet.split(";")[0]);
 			actionID = Integer.parseInt(packet.split(";")[1]);
-		}catch(Exception e){}
+		}catch(Exception ignored){}
 		//Si packet invalide, ou cellule introuvable
 		if(cellID == -1 || actionID == -1 || _perso == null || _perso.getActualMapa() == null ||
 				_perso.getActualMapa().getCase(cellID) == null)
@@ -4231,10 +4023,10 @@ public class JuegoThread implements Runnable {
 			try
 			{
 				cellID = Integer.parseInt(packet.substring(5));
-			}catch(Exception e){return;};
-			
+			}catch(Exception e){return;}
+
 			_perso.get_fight().tryCaC(_perso,cellID);
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 	}
 
 	private void game_tryCastSpell(String packet)
@@ -4250,7 +4042,7 @@ public class JuegoThread implements Runnable {
 				if(SS == null)return;
 				_perso.get_fight().tryCastSpell(_perso.get_fight().getFighterByPerso(_perso),SS,caseID);
 			}
-		}catch(NumberFormatException e){return;};
+		}catch(NumberFormatException e){return;}
 	}
 
 	private void game_join_fight(String packet)
@@ -4262,7 +4054,7 @@ public class JuegoThread implements Runnable {
 			{
 				Pelea F = _perso.getActualMapa().getFight(Integer.parseInt(infos[0]));
 				F.joinAsSpect(_perso);
-			}catch(Exception e){return;};
+			}catch(Exception e){return;}
 		}else
 		{
 			try
@@ -4275,14 +4067,14 @@ public class JuegoThread implements Runnable {
 				}
 				if(Mundo.getPersonnage(guid) == null)return;
 				Mundo.getPersonnage(guid).get_fight().joinFight(_perso,guid);
-			}catch(Exception e){return;};
+			}catch(Exception e){return;}
 		}
 	}
 
 	private void game_accept_duel(String packet)
 	{
 		int guid = -1;
-		try{guid = Integer.parseInt(packet.substring(5));}catch(NumberFormatException e){return;};
+		try{guid = Integer.parseInt(packet.substring(5));}catch(NumberFormatException e){return;}
 		if(_perso.get_duelID() != guid || _perso.get_duelID() == -1)return;
 		GestorSalida.GAME_SEND_MAP_START_DUEL_TO_MAP(_perso.getActualMapa(),_perso.get_duelID(),_perso.get_GUID());
 		Pelea fight = _perso.getActualMapa().newFight(Mundo.getPersonnage(_perso.get_duelID()),_perso, Constantes.FIGHT_TYPE_CHALLENGE);
@@ -4301,7 +4093,7 @@ public class JuegoThread implements Runnable {
 			Mundo.getPersonnage(_perso.get_duelID()).set_duelID(-1);
 			_perso.set_away(false);
 			_perso.set_duelID(-1);	
-		}catch(NumberFormatException e){return;};
+		}catch(NumberFormatException e){return;}
 	}
 
 	private void game_ask_duel(String packet)
@@ -4335,7 +4127,7 @@ public class JuegoThread implements Runnable {
 		{
 			if(_perso.getPodUsed() > _perso.getMaxPod())
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(_perso, "112");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "112");
 				GestorSalida.GAME_SEND_GA_PACKET(_out, "", "0", "", "");
 				removeAction(GA);
 				return;
@@ -4395,7 +4187,7 @@ public class JuegoThread implements Runnable {
     		_in.close();
     		_out.close();
     		_t.interrupt();
-		}catch(IOException e1){e1.printStackTrace();};
+		}catch(IOException e1){e1.printStackTrace();}
 	}
 
 	private void parseAccountPacket(String packet) {
@@ -4617,29 +4409,21 @@ public class JuegoThread implements Runnable {
 			}if ((guid == -1) || (!_perso.hasItemGuid(guid))) return;
 			Objeto obj = Mundo.getObjet(guid);
 			int idOBVI = 0;
-			
-			switch (obj.getTemplate().getType())
-			{
-			case 1:
-				idOBVI = 9255;
-				break;
-			case 9:
-				idOBVI = 9256;
-				break;
-			case 16:
-				idOBVI = 9234;
-				break;
-			case 17:
-				idOBVI = 9233;
-				break;
-			default:
+
+		switch (obj.getTemplate().getType()) {
+			case 1 -> idOBVI = 9255;
+			case 9 -> idOBVI = 9256;
+			case 16 -> idOBVI = 9234;
+			case 17 -> idOBVI = 9233;
+			default -> {
 				GestorSalida.GAME_SEND_MESSAGE(_perso, "Erreur d'obvijevan numero: 4. Merci de nous le signaler si le probleme est grave.", "000000");
 				return;
 			}
+		}
 			Objeto.ObjTemplate t = Mundo.getObjTemplate(idOBVI);
 			Objeto obV = t.createNewItem(1, true);
 			String obviStats = obj.getObvijevanStatsOnly();
-			if (obviStats == "") {
+			if (obviStats.equals("")) {
 				GestorSalida.GAME_SEND_MESSAGE(_perso, "Erreur d'obvijevan numero: 3. Merci de nous le signaler si le probleme est grave.", "000000");
 				return;
 			}

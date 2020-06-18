@@ -8,27 +8,27 @@ import comunes.Mundo;
 import objetos.Objeto.ObjTemplate;
 
 public class NPCModelo {
-	private int _id;
-	private int _bonusValue;
-	private int _gfxID;
-	private int _scaleX;
-	private int _scaleY;
-	private int _sex;
-	private int _color1;
-	private int _color2;
-	private int _color3;
-	private String _acces;
-	private int _extraClip;
-	private int _customArtWork;
+	private final int _id;
+	private final int _bonusValue;
+	private final int _gfxID;
+	private final int _scaleX;
+	private final int _scaleY;
+	private final int _sex;
+	private final int _color1;
+	private final int _color2;
+	private final int _color3;
+	private final String _acces;
+	private final int _extraClip;
+	private final int _customArtWork;
 	private int _initQuestionID;
 	private ArrayList<ObjTemplate> _ventes = new ArrayList<>();
 	private Quest _quest;
 
 	public static class NPC_question
 	{
-		private int _id;
+		private final int _id;
 		private String _reponses;
-		private String _args;
+		private final String _args;
 		
 		//private String _cond;
 		//private int falseQuestion;
@@ -87,9 +87,9 @@ public class NPCModelo {
 	
 	public static class NPC
 	{
-		private NPCModelo _template;
+		private final NPCModelo _template;
 		private int _cellID;
-		private int _guid;
+		private final int _guid;
 		private byte _orientation;
 		
 		public NPC (NPCModelo temp, int guid, int cell, byte o)
@@ -178,8 +178,8 @@ public class NPCModelo {
 	
 	public static class NPC_reponse
 	{
-		private int _id;
-		private ArrayList<Accion> _actions = new ArrayList<>();
+		private final int _id;
+		private final ArrayList<Accion> _actions = new ArrayList<>();
 		
 		public NPC_reponse(int id)
 		{
@@ -235,15 +235,13 @@ public class NPCModelo {
 		_customArtWork = artWork;
 		_initQuestionID = questionID;
 		if(ventes.equals(""))return;
-		for(String obj : ventes.split("\\,"))
-		{
-			try
-			{
+		for(String obj : ventes.split(",")) {
+			try {
 				int tempID = Integer.parseInt(obj);
 				ObjTemplate temp = Mundo.getObjTemplate(tempID);
 				if(temp == null)continue;
 				_ventes.add(temp);
-			}catch(NumberFormatException e){continue;};
+			}catch(NumberFormatException e){continue;}
 		}
 	}
 
@@ -289,12 +287,11 @@ public class NPCModelo {
 
 	public String get_extraClip(Personaje p) {
 		System.out.println("Quest test " + _quest);
-		switch(_extraClip){
-		case -1: // Personnage NPC banal.
+		// Si on ne trouve pas le extraClip.
+		if (_extraClip == -1) { // Personnage NPC banal.
 			return "";
-		default: // Si on ne trouve pas le extraClip.
-			return Integer.toString(_extraClip);
 		}
+		return Integer.toString(_extraClip);
 	}
 
 	public int get_customArtWork() {

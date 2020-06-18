@@ -16,34 +16,33 @@ import objetos.Pelea;
 import objetos.Pelea.Fighter;
 
 public class Hechizos {
-	private int spellID;
-	private int spriteID;
-	private String spriteInfos;
-	private Map<Integer,SortStats> sortStats = new TreeMap<>();
-	private ArrayList<Integer> effectTargets = new ArrayList<>();
-	private ArrayList<Integer> CCeffectTargets = new ArrayList<>();
-	
-	public static class SortStats
+	private final int spellID;
+	private final int spriteID;
+	private final String spriteInfos;
+	private final Map<Integer,SortStats> sortStats = new TreeMap<>();
+	private final ArrayList<Integer> effectTargets = new ArrayList<>();
+
+    public static class SortStats
 	{
-		private int spellID;
-		private int level;
-		private int PACost;
-		private int minPO;
-		private int maxPO;
-		private int TauxCC;
-		private int TauxEC;
-		private boolean isLineLaunch;
-		private boolean hasLDV;
-		private boolean isEmptyCell;
-		private boolean isModifPO;
-		private int maxLaunchbyTurn;
-		private int maxLaunchbyByTarget;
-		private int coolDown;
-		private int reqLevel;
-		private boolean isEcEndTurn;
-		private ArrayList<EfectoHechizo> effects;
-		private ArrayList<EfectoHechizo> CCeffects;
-		private String porteeType;
+		private final int spellID;
+		private final int level;
+		private final int PACost;
+		private final int minPO;
+		private final int maxPO;
+		private final int TauxCC;
+		private final int TauxEC;
+		private final boolean isLineLaunch;
+		private final boolean hasLDV;
+		private final boolean isEmptyCell;
+		private final boolean isModifPO;
+		private final int maxLaunchbyTurn;
+		private final int maxLaunchbyByTarget;
+		private final int coolDown;
+		private final int reqLevel;
+		private final boolean isEcEndTurn;
+		private final ArrayList<EfectoHechizo> effects;
+		private final ArrayList<EfectoHechizo> CCeffects;
+		private final String porteeType;
 		
 		public SortStats(int AspellID,int Alevel,int cost, int minPO, int maxPO, int tauxCC,int tauxEC, boolean isLineLaunch, boolean hasLDV,
 				boolean isEmptyCell, boolean isModifPO, int maxLaunchbyTurn,int maxLaunchbyByTarget, int coolDown,
@@ -82,7 +81,7 @@ public class Hechizos {
 					int id = Integer.parseInt(a.split(";",2)[0]);
 					String args = a.split(";",2)[1];
 					effets.add(new EfectoHechizo(id, args,spellID,level));
-				}catch(Exception f){f.printStackTrace();System.out.println(a);System.exit(1);};
+				}catch(Exception f){f.printStackTrace();System.out.println(a);System.exit(1);}
 			}
 			return effets;
 		}
@@ -298,18 +297,19 @@ public class Hechizos {
 			{
 				effectTargets.add(0);
 				continue;
-			};
+			}
 		}
 		for(String num : ccET.split(";"))
 		{
-			try
+            ArrayList<Integer> CCeffectTargets = new ArrayList<>();
+            try
 			{
 				CCeffectTargets.add(Integer.parseInt(num));
 			}catch(Exception e)
 			{
 				CCeffectTargets.add(0);
 				continue;
-			};
+			}
 		}
 	}
 	

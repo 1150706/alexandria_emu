@@ -18,38 +18,38 @@ import objetos.casas.Cofres;
 import objetos.casas.House;
 
 public class Mapa {
-	private short _id;
-	private String _date;
-	private byte _w;
-	private byte _h;
-	private String _key;
+	private final short _id;
+	private final String _date;
+	private final byte _w;
+	private final byte _h;
+	private final String _key;
 	private String _placesStr;
 	private Map<Integer,Case> 		_cases 			= new TreeMap<>();
-	private Map<Integer, Pelea> 		_fights 		= new TreeMap<>();
-	private ArrayList<MobGrade> 	_mobPossibles 	= new ArrayList<>();
-	private Map<Integer,MobGroup> 	_mobGroups 		= new TreeMap<>();
-	private Map<Integer,MobGroup> 	_fixMobGroups 	= new TreeMap<>();
-	private Map<Integer,NPC>		_npcs	 		= new TreeMap<>();
+	private final Map<Integer, Pelea> 		_fights 		= new TreeMap<>();
+	private final ArrayList<MobGrade> 	_mobPossibles 	= new ArrayList<>();
+	private final Map<Integer,MobGroup> 	_mobGroups 		= new TreeMap<>();
+	private final Map<Integer,MobGroup> 	_fixMobGroups 	= new TreeMap<>();
+	private final Map<Integer,NPC>		_npcs	 		= new TreeMap<>();
 	int _nextObjectID = -1;
 	private byte _X = 0;
 	private byte _Y = 0;
 	private SubArea _subArea;
 	private MountPark _mountPark;
 	private byte _maxGroup = 3;
-	private Map<Integer,ArrayList<Accion>> _endFightAction = new TreeMap<>();
+	private final Map<Integer,ArrayList<Accion>> _endFightAction = new TreeMap<>();
 	private byte _maxSize;
 	
 	public static class MountPark
 	{
 		private int _owner;
-		private InteractiveObject _door;
-		private int _size;
-		private ArrayList<Case> _cases = new ArrayList<>();
+		private final InteractiveObject _door;
+		private final int _size;
+		private final ArrayList<Case> _cases = new ArrayList<>();
 		private Gremio _guild;
-		private Mapa _map;
+		private final Mapa _map;
 		private int _cellid = -1;
 		private int _price;
-		private Map<Integer,Integer> MountParkDATA = new TreeMap<>();//DragoID, IDperso
+		private final Map<Integer,Integer> MountParkDATA = new TreeMap<>();//DragoID, IDperso
 		
 		public MountPark(int owner, Mapa map, int cellid, int size, String data, int guild, int price)
 		{
@@ -69,7 +69,7 @@ public class Mapa {
 					Dragopavo DD = Mundo.getDragoByID(Integer.parseInt(secondCut[1]));
 					if(DD == null) continue;
 					MountParkDATA.put(Integer.parseInt(secondCut[1]), Integer.parseInt(secondCut[0]));
-				}catch(Exception E){};
+				}catch(Exception ignored){}
 			}
 		}
 
@@ -203,13 +203,13 @@ public class Mapa {
 	
 	public static class InteractiveObject
 	{
-		private int _id;
+		private final int _id;
 		private int _state;
-		private Mapa _map;
-		private Case _cell;
+		private final Mapa _map;
+		private final Case _cell;
 		private boolean _interactive = true;
 		private Timer _respawnTimer;
-		private IOTemplate _template;
+		private final IOTemplate _template;
 		
 		public InteractiveObject(Mapa a_map, Case a_cell, int a_id)
 		{
@@ -293,12 +293,12 @@ public class Mapa {
 	
 	public static class Case
 	{
-		private int _id;
+		private final int _id;
 		private Map<Integer, Personaje>	_persos;		//= new TreeMap<Integer, Personnage>();
 		private Map<Integer, Fighter> 		_fighters;	//= new TreeMap<Integer, Fighter>();
 		private boolean _Walkable = true;
 		private boolean _LoS = true;
-		private short _map;
+		private final short _map;
 		//private ArrayList<Action> _onCellPass;
 		//private ArrayList<Action> _onItemOnCell;
 		private ArrayList<Accion> _onCellStop;// = new ArrayList<Action>();
@@ -333,77 +333,59 @@ public class Mapa {
 					return _object.getID() == 7007;
 				//Faucher Blé
 				case 45:
-					switch(_object.getID())
-					{
-						case 7511://Blé
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7511) {//Blé
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Faucher Orge
 				case 53:
-					switch(_object.getID())
-					{
-						case 7515://Orge
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7515) {//Orge
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				
 				//Faucher Avoine
 				case 57:
-					switch(_object.getID())
-					{
-						case 7517://Avoine
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7517) {//Avoine
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;	
 				//Faucher Houblon
 				case 46:
-					switch(_object.getID())
-					{
-						case 7512://Houblon
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7512) {//Houblon
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Faucher Lin
 				case 50:
 				case 68:
-					switch(_object.getID())
-					{
-						case 7513://Lin
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7513) {//Lin
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Faucher Riz
 				case 159:
-					switch(_object.getID())
-					{
-						case 7550://Riz
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7550) {//Riz
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Faucher Seigle
 				case 52:
-					switch(_object.getID())
-					{
-						case 7516://Seigle
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7516) {//Seigle
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Faucher Malt
 				case 58:
-					switch(_object.getID())
-					{
-						case 7518://Malt
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7518) {//Malt
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;			
 				//Faucher Chanvre - Cueillir Chanvre
 				case 69:
 				case 54:
-					switch(_object.getID())
-					{
-						case 7514://Chanvre
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7514) {//Chanvre
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Scier - Bucheron
@@ -411,138 +393,104 @@ public class Mapa {
 					return _object.getID() == 7003;
 				//Couper Frêne
 				case 6:
-					switch(_object.getID())
-					{
-						case 7500://Frêne
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7500) {//Frêne
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Châtaignier
 				case 39:
-					switch(_object.getID())
-					{
-						case 7501://Châtaignier
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7501) {//Châtaignier
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Noyer
 				case 40:
-					switch(_object.getID())
-					{
-						case 7502://Noyer
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7502) {//Noyer
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Chêne
 				case 10:
-					switch(_object.getID())
-					{
-						case 7503://Chêne
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7503) {//Chêne
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Oliviolet
 				case 141:
-					switch(_object.getID())
-					{
-						case 7542://Oliviolet
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7542) {//Oliviolet
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Bombu
 				case 139:
-					switch(_object.getID())
-					{
-						case 7541://Bombu
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7541) {//Bombu
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Erable
 				case 37:
-					switch(_object.getID())
-					{
-						case 7504://Erable
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7504) {//Erable
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Bambou
 				case 154:
-					switch(_object.getID())
-					{
-						case 7553://Bambou
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7553) {//Bambou
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper If
 				case 33:
-					switch(_object.getID())
-					{
-						case 7505://If
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7505) {//If
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Merisier
 				case 41:
-					switch(_object.getID())
-					{
-						case 7506://Merisier
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7506) {//Merisier
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Ebène
 				case 34:
-					switch(_object.getID())
-					{
-						case 7507://Ebène
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7507) {//Ebène
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Kalyptus
 				case 174:
-					switch(_object.getID())
-					{
-						case 7557://Kalyptus
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7557) {//Kalyptus
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Charme
 				case 38:
-					switch(_object.getID())
-					{
-						case 7508://Charme
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7508) {//Charme
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Orme
 				case 35:
-					switch(_object.getID())
-					{
-						case 7509://Orme
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7509) {//Orme
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Bambou Sombre
 				case 155:
-					switch(_object.getID())
-					{
-						case 7554://Bambou Sombre
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7554) {//Bambou Sombre
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Couper Bambou Sacré
 				case 158:
-					switch(_object.getID())
-					{
-						case 7552://Bambou Sacré
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7552) {//Bambou Sacré
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Puiser
 				case 102:
-					switch(_object.getID())
-					{
-						case 7519://Puits
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7519) {//Puits
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Polir
@@ -553,90 +501,68 @@ public class Mapa {
 					return _object.getID() == 7002;
 				//Miner Fer
 				case 24:
-					switch(_object.getID())
-					{
-						case 7520://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7520) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Cuivre
 				case 25:
-					switch(_object.getID())
-					{
-						case 7522://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7522) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Bronze
 				case 26:
-					switch(_object.getID())
-					{
-						case 7523://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7523) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Kobalte
 				case 28:
-					switch(_object.getID())
-					{
-						case 7525://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7525) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Manga
 				case 56:
-					switch(_object.getID())
-					{
-						case 7524://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7524) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Sili
 				case 162:
-					switch(_object.getID())
-					{
-						case 7556://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7556) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Etain
 				case 55:
-					switch(_object.getID())
-					{
-						case 7521://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7521) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Argent
 				case 29:
-					switch(_object.getID())
-					{
-						case 7526://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7526) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Bauxite
 				case 31:
-					switch(_object.getID())
-					{
-						case 7528://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7528) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Or
 				case 30:
-					switch(_object.getID())
-					{
-						case 7527://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7527) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Miner Dolomite
 				case 161:
-					switch(_object.getID())
-					{
-						case 7555://Miner
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7555) {//Miner
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Fabriquer potion - Alchimiste
@@ -644,42 +570,32 @@ public class Mapa {
 					return _object.getID() == 7019;
 				//Cueillir Trèfle
 				case 71:
-					switch(_object.getID())
-					{
-						case 7533://Trèfle
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7533) {//Trèfle
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Cueillir Menthe
 				case 72:
-					switch(_object.getID())
-					{
-						case 7534://Menthe
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7534) {//Menthe
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Cueillir Orchidée
 				case 73:
-					switch(_object.getID())
-					{
-						case 7535:// Orchidée
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7535) {// Orchidée
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Cueillir Edelweiss
 				case 74:
-					switch(_object.getID())
-					{
-						case 7536://Edelweiss
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7536) {//Edelweiss
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Cueillir Graine de Pandouille
 				case 160:
-					switch(_object.getID())
-					{
-						case 7551://Graine de Pandouille
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7551) {//Graine de Pandouille
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Vider - Pêcheur
@@ -687,82 +603,62 @@ public class Mapa {
 					return _object.getID() == 7024;
 				//Pêcher Petits poissons de mer
 				case 128:
-					switch(_object.getID())
-					{
-						case 7530://Petits poissons de mer
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7530) {//Petits poissons de mer
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Petits poissons de rivière
 				case 124:
-					switch(_object.getID())
-					{
-						case 7529://Petits poissons de rivière
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7529) {//Petits poissons de rivière
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Pichon
 				case 136:
-					switch(_object.getID())
-					{
-						case 7544://Pichon
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7544) {//Pichon
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Ombre Etrange
 				case 140:
-					switch(_object.getID())
-					{
-						case 7543://Ombre Etrange
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7543) {//Ombre Etrange
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Poissons de rivière
 				case 125:
-					switch(_object.getID())
-					{
-						case 7532://Poissons de rivière
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7532) {//Poissons de rivière
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Poissons de mer
 				case 129:
-					switch(_object.getID())
-					{
-						case 7531://Poissons de mer
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7531) {//Poissons de mer
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Gros poissons de rivière
 				case 126:
-					switch(_object.getID())
-					{
-						case 7537://Gros poissons de rivière
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7537) {//Gros poissons de rivière
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Gros poissons de mers
 				case 130:
-					switch(_object.getID())
-					{
-						case 7538://Gros poissons de mers
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7538) {//Gros poissons de mers
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Poissons géants de rivière
 				case 127:
-					switch(_object.getID())
-					{
-						case 7539://Poissons géants de rivière
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7539) {//Poissons géants de rivière
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Pêcher Poissons géants de mer
 				case 131:
-					switch(_object.getID())
-					{
-						case 7540://Poissons géants de mer
-							return _object.getState() == Constantes.IOBJECT_STATE_FULL;
+					if (_object.getID() == 7540) {//Poissons géants de mer
+						return _object.getState() == Constantes.IOBJECT_STATE_FULL;
 					}
 				return false;
 				//Boulanger
@@ -782,52 +678,29 @@ public class Mapa {
 					return (_object.getID() == 7030 || _object.getID() == 7031);
 				case 44://Sauvegarder le Zaap
 				case 114://Utiliser le Zaap
-					switch(_object.getID())
-					{
-						//Zaaps
-						case 7000:
-						case 7026:
-						case 7029:
-						case 4287:
-							return true;
-					}
-				return false;
-				
+					//Zaaps
+					return switch (_object.getID()) {
+						case 7000, 7026, 7029, 4287 -> true;
+						default -> false;
+					};
+
 				case 175://Accéder
 				case 176://Acheter
 				case 177://Vendre
 				case 178://Modifier le prix de vente
-					switch(_object.getID())
-					{
-						//Enclos
-						case 6763:
-						case 6766:
-						case 6767:
-						case 6772:
-							return true;
-					}
-				return false;
-				
+					//Enclos
+					return switch (_object.getID()) {
+						case 6763, 6766, 6767, 6772 -> true;
+						default -> false;
+					};
+
 				//Se rendre à incarnam
 				case 183:
-					switch(_object.getID())
-					{
-						case 1845:
-						case 1853:
-						case 1854:
-						case 1855:
-						case 1856:
-						case 1857:
-						case 1858:
-						case 1859:
-						case 1860:
-						case 1861:
-						case 1862:
-						case 2319:
-							return true;
-					}
-				return false;
-				
+					return switch (_object.getID()) {
+						case 1845, 1853, 1854, 1855, 1856, 1857, 1858, 1859, 1860, 1861, 1862, 2319 -> true;
+						default -> false;
+					};
+
 				//Enclume magique
 				case  1:
 				case 113:
@@ -1020,168 +893,161 @@ public class Mapa {
 				perso.doJobAction(actionID,_object,GA,this);
 				return;
 			}
-			switch(actionID)
-			{
-				case 44://Sauvegarder pos
-					String str = _map+","+_id;
+			//SocketManager.GAME_SEND_GDF_PACKET_TO_MAP(perso.get_curCarte(),this);
+			switch (actionID) {
+//Sauvegarder pos
+				case 44 -> {
+					String str = _map + "," + _id;
 					perso.set_savePos(str);
-					GestorSalida.GAME_SEND_Im_PACKET(perso, "06");
-				break;
-			
-				case 102://Puiser
-					if(!_object.isInteractive())return;//Si l'objet est utilisé
-					if(_object.getState() != Constantes.IOBJECT_STATE_FULL)return;//Si le puits est vide
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "06");
+				}
+//Puiser
+				case 102 -> {
+					if (!_object.isInteractive()) return;//Si l'objet est utilisé
+					if (_object.getState() != Constantes.IOBJECT_STATE_FULL) return;//Si le puits est vide
 					_object.setState(Constantes.IOBJECT_STATE_EMPTYING);
 					_object.setInteractive(false);
-					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(),""+GA._id, 501, perso.get_GUID()+"", _id+","+_object.getUseDuration()+","+_object.getUnknowValue());
-					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(perso.getActualMapa(),this);
-				break;
-				case 114://Utiliser (zaap)
+					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "" + GA._id, 501, perso.get_GUID() + "", _id + "," + _object.getUseDuration() + "," + _object.getUnknowValue());
+					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(perso.getActualMapa(), this);
+				}
+//Utiliser (zaap)
+				case 114 -> {
 					perso.openZaapMenu();
 					perso.get_compte().getGameThread().removeAction(GA);
-				break;
-				case 157: //Zaapis
-					String ZaapiList= "";
+				}
+//Zaapis
+				case 157 -> {
+					String ZaapiList = "";
 					String[] Zaapis;
 					int count = 0;
 					int price = 20;
-					
 					if (perso.getActualMapa()._subArea.get_area().get_id() == 7 && (perso.get_align() == 1 || perso.get_align() == 0 || perso.get_align() == 3))//Ange, Neutre ou Sérianne
 					{
 						Zaapis = Constantes.ZAAPI.get(Constantes.ALIGNEMENT_BONTARIEN).split(",");
 						if (perso.get_align() == 1) price = 10;
-					}
-					else if (perso.getActualMapa()._subArea.get_area().get_id() == 11 && (perso.get_align() == 2 || perso.get_align() == 0 || perso.get_align() == 3))//Démons, Neutre ou Sérianne
+					} else if (perso.getActualMapa()._subArea.get_area().get_id() == 11 && (perso.get_align() == 2 || perso.get_align() == 0 || perso.get_align() == 3))//Démons, Neutre ou Sérianne
 					{
 						Zaapis = Constantes.ZAAPI.get(Constantes.ALIGNEMENT_BRAKMARIEN).split(",");
 						if (perso.get_align() == 2) price = 10;
-					}
-					else
-					{
+					} else {
 						Zaapis = Constantes.ZAAPI.get(Constantes.ALIGNEMENT_NEUTRE).split(",");
 					}
-					
-					if(Zaapis.length > 0)
-					{
-						for (String s : Zaapis)
-						{
-							if(count == Zaapis.length)
-								ZaapiList += s+";"+price;
+					if (Zaapis.length > 0) {
+						for (String s : Zaapis) {
+							if (count == Zaapis.length)
+								ZaapiList += s + ";" + price;
 							else
-								ZaapiList += s+";"+price+"|";
+								ZaapiList += s + ";" + price + "|";
 							count++;
 						}
 						perso.SetZaaping(true);
 						GestorSalida.GAME_SEND_ZAAPI_PACKET(perso, ZaapiList);
 					}
-				break;
-				case 175://Acceder a un enclos
-					if(_object.getState() != Constantes.IOBJECT_STATE_EMPTY);
-					//SocketManager.GAME_SEND_GDF_PACKET_TO_MAP(perso.get_curCarte(),this);
+				}
+//Acceder a un enclos
+				case 175 -> {
+					if (_object.getState() != Constantes.IOBJECT_STATE_EMPTY) ;
 					perso.openMountPark();
-				break;
-				case 176://Achat enclo
+				}
+//Achat enclo
+				case 176 -> {
 					MountPark MP = perso.getActualMapa().getMountPark();
-					if(MP.get_owner() == -1)//Public
+					if (MP.get_owner() == -1)//Public
 					{
-						GestorSalida.GAME_SEND_Im_PACKET(perso, "196");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "196");
 						return;
 					}
-					if(MP.get_price() == 0)//Non en vente
+					if (MP.get_price() == 0)//Non en vente
 					{
-						GestorSalida.GAME_SEND_Im_PACKET(perso, "197");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "197");
 						return;
 					}
-					if(perso.get_guild() == null)//Pas de guilde
+					if (perso.get_guild() == null)//Pas de guilde
 					{
-						GestorSalida.GAME_SEND_Im_PACKET(perso, "1135");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1135");
 						return;
 					}
-					if(perso.getGuildMember().getRank() != 1)//Non meneur
+					if (perso.getGuildMember().getRank() != 1)//Non meneur
 					{
-						GestorSalida.GAME_SEND_Im_PACKET(perso, "198");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "198");
 						return;
 					}
-					GestorSalida.GAME_SEND_R_PACKET(perso, "D"+MP.get_price()+"|"+MP.get_price());
-				break;
-				case 177://Vendre enclo
-				case 178://Modifier prix de vente
+					GestorSalida.GAME_SEND_R_PACKET(perso, "D" + MP.get_price() + "|" + MP.get_price());
+				}
+//Modifier prix de vente
+				case 177, 178 -> {
 					MountPark MP1 = perso.getActualMapa().getMountPark();
-					if(MP1.get_owner() == -1)
-					{
-						GestorSalida.GAME_SEND_Im_PACKET(perso, "194");
+					if (MP1.get_owner() == -1) {
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "194");
 						return;
 					}
-					if(MP1.get_owner() != perso.get_GUID())
-					{
-						GestorSalida.GAME_SEND_Im_PACKET(perso, "195");
+					if (MP1.get_owner() != perso.get_GUID()) {
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "195");
 						return;
 					}
-					GestorSalida.GAME_SEND_R_PACKET(perso, "D"+MP1.get_price()+"|"+MP1.get_price());
-				break;
-				case 183://Retourner sur Incarnam
-					if(perso.get_lvl()>15)
-					{
-						GestorSalida.GAME_SEND_Im_PACKET(perso, "1127");
+					GestorSalida.GAME_SEND_R_PACKET(perso, "D" + MP1.get_price() + "|" + MP1.get_price());
+				}
+//Retourner sur Incarnam
+				case 183 -> {
+					if (perso.get_lvl() > 15) {
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1127");
 						perso.get_compte().getGameThread().removeAction(GA);
 						return;
 					}
-					short mapID  = Constantes.getStartMap(perso.get_classe());
+					short mapID = Constantes.getStartMap(perso.get_classe());
 					int cellID = Constantes.getStartCell(perso.get_classe());
 					perso.teletransportar(mapID, cellID);
 					perso.get_compte().getGameThread().removeAction(GA);
-				break;
-				case 81://Vérouiller maison
+				}
+//Vérouiller maison
+				case 81 -> {
 					House h = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
-					if(h == null)return;
+					if (h == null) return;
 					perso.setInHouse(h);
 					h.Lock(perso);
-				break;
-				case 84://Rentrer dans une maison
+				}
+//Rentrer dans une maison
+				case 84 -> {
 					House h2 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
-					if(h2 == null)return;
+					if (h2 == null) return;
 					perso.setInHouse(h2);
 					h2.HopIn(perso);
-				break;
-				case 97://Acheter maison
+				}
+//Acheter maison
+				case 97 -> {
 					House h3 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
-					if(h3 == null)return;
+					if (h3 == null) return;
 					perso.setInHouse(h3);
 					h3.BuyIt(perso);
-				break;
-				
-                case 104://Ouvrir coffre privé
-                	Cofres trunk = Cofres.get_trunk_id_by_coord(perso.getActualMapa().get_id(), CcellID);
-                	if(trunk == null)
-                    {
-                    	JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : "+perso.getActualMapa().get_id()+" CELLID : "+CcellID);
-                    	return;
-                    }
-                    perso.setInTrunk(trunk);
-                    trunk.HopIn(perso);
-                break;
-                case 105://Vérouiller coffre
-                    Cofres t = Cofres.get_trunk_id_by_coord(perso.getActualMapa().get_id(), CcellID);
-                    if(t == null)
-                    {
-                    	JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : "+perso.getActualMapa().get_id()+" CELLID : "+CcellID);
-                    	return;
-                    }
-                    perso.setInTrunk(t);
-                    t.Lock(perso);
-                break;
-                
-				case 98://Vendre
-				case 108://Modifier prix de vente
+				}
+//Ouvrir coffre privé
+				case 104 -> {
+					Cofres trunk = Cofres.get_trunk_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					if (trunk == null) {
+						JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().get_id() + " CELLID : " + CcellID);
+						return;
+					}
+					perso.setInTrunk(trunk);
+					trunk.HopIn(perso);
+				}
+//Vérouiller coffre
+				case 105 -> {
+					Cofres t = Cofres.get_trunk_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					if (t == null) {
+						JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().get_id() + " CELLID : " + CcellID);
+						return;
+					}
+					perso.setInTrunk(t);
+					t.Lock(perso);
+				}
+//Modifier prix de vente
+				case 98, 108 -> {
 					House h4 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
-					if(h4 == null)return;
+					if (h4 == null) return;
 					perso.setInHouse(h4);
 					h4.SellIt(perso);
-				break;
-				
-				default:
-					JuegoServidor.addToLog("Case.startAction non definie pour l'actionID = "+actionID);
-				break;
+				}
+				default -> JuegoServidor.addToLog("Case.startAction non definie pour l'actionID = " + actionID);
 			}
 		}
 		public void finishAction(Personaje perso, GameAction GA)
@@ -1190,7 +1056,7 @@ public class Mapa {
 			try
 			{
 				actionID = Integer.parseInt(GA._args.split(";")[1]);
-			}catch(Exception e){}
+			}catch(Exception ignored){}
 			if(actionID == -1)return;
 			
 			if(Constantes.isJobAction(actionID))
@@ -1296,7 +1162,7 @@ public class Mapa {
 				{
 					obj = Integer.parseInt(cellInfos[3]);
 				}
-			}catch(Exception d){};
+			}catch(Exception ignored){}
 			if(Number == -1)continue;
 			
             _cases.put(Number, new Case(this,Number,Walkable,LineOfSight,obj));	
@@ -1312,7 +1178,7 @@ public class Mapa {
 			{
 				id = Integer.parseInt(mob.split(",")[0]);
 				lvl = Integer.parseInt(mob.split(",")[1]);
-			}catch(NumberFormatException e){continue;};
+			}catch(NumberFormatException e){continue;}
 			if(id == 0 || lvl == 0)continue;
 			if(Mundo.getMonstre(id) == null)continue;
 			if(Mundo.getMonstre(id).getGradeByLevel(lvl) == null)continue;
@@ -1731,7 +1597,7 @@ public class Mapa {
 		{
 			if(Camino.getDistanceBetween(this,caseID,group.getCellID()) <= group.getAggroDistance())//S'il y aggro
 			{
-				if((group.getAlignement() == -1 || ((perso.get_align() == 1 || perso.get_align() == 2) && (perso.get_align() != group.getAlignement()))) && Condiciones.validConditions(perso, group.getCondition()))
+				if((group.getAlignement() == -1 || ((perso.get_align() == 1 || perso.get_align() == 2) && (perso.get_align() != group.getAlignement()))) && Condiciones.ValidarCondicion(perso, group.getCondition()))
 				{
 					JuegoServidor.addToLog(perso.get_name()+" lance un combat contre le groupe "+group.getID()+" sur la map "+_id);
 					startFigthVersusMonstres(perso,group);

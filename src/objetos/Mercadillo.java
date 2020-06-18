@@ -20,7 +20,7 @@ public class Mercadillo {
 	 */
 	private class Categorie
 	{
-		Map<Integer,Template> _templates = new HashMap<>();//Dans le format <templateID,Template>
+		final Map<Integer,Template> _templates = new HashMap<>();//Dans le format <templateID,Template>
 		
 		@SuppressWarnings("unused")
 		int categID;
@@ -99,10 +99,10 @@ public class Mercadillo {
 	 * @author Mathieu
 	 *
 	 */
-	private class Template
+	private static class Template
 	{
-		int templateID;
-		Map<Integer, Ligne> _lignes = new HashMap<>();
+		final int templateID;
+		final Map<Integer, Ligne> _lignes = new HashMap<>();
 		
 		public Template(int templateID, HdvEntry toAdd)
 		{
@@ -184,10 +184,10 @@ public class Mercadillo {
 	 */
 	public static class Ligne
 	{
-		private int ligneID;
-		private ArrayList<ArrayList<HdvEntry>> _entries = new ArrayList<>(3);//La première ArrayList est un tableau de 3 (0=1 1=10 2=100 de quantité)
-		private String _strStats;
-		private int templateID;
+		private final int ligneID;
+		private final ArrayList<ArrayList<HdvEntry>> _entries = new ArrayList<>(3);//La première ArrayList est un tableau de 3 (0=1 1=10 2=100 de quantité)
+		private final String _strStats;
+		private final int templateID;
 		
 		public Ligne(int ligneID, HdvEntry toAdd)
 		{
@@ -318,7 +318,7 @@ public class Mercadillo {
 				try {
 					if (entry.get(0) != null)//Vérifie s'il existe un objet dans chacune des 3 quantité
 						return false;
-				} catch (IndexOutOfBoundsException e) {
+				} catch (IndexOutOfBoundsException ignored) {
 				}
 			}
 			
@@ -338,11 +338,11 @@ public class Mercadillo {
 	public static class HdvEntry implements Comparable<HdvEntry>
 	{
 		private int _hdvID;
-		private int _price;
-		private byte _amount;//Dans le format : 1=1 2=10 3=100
-		private Objeto _obj;
+		private final int _price;
+		private final byte _amount;//Dans le format : 1=1 2=10 3=100
+		private final Objeto _obj;
 		private int _ligneID;
-		private int _owner;
+		private final int _owner;
 		
 		public HdvEntry(int price, byte amount, int owner, Objeto obj)
 		{
@@ -368,7 +368,7 @@ public class Mercadillo {
 		public byte getAmount(boolean parseToRealNumber)
 		{
 			if(parseToRealNumber)
-				return (byte)(Math.pow(10,(double)_amount) / 10);
+				return (byte)(Math.pow(10, _amount) / 10);
 			else
 				return this._amount;
 		}
@@ -415,7 +415,7 @@ public class Mercadillo {
 		*/
 		public int compareTo(HdvEntry o)
 		{
-			HdvEntry e = (HdvEntry)o;
+			HdvEntry e = o;
 			int celuiCi = this.getPrice();
 			int autre = e.getPrice();
 			if(autre > celuiCi)
@@ -428,17 +428,17 @@ public class Mercadillo {
 		}
 	}
 	
-	private int _hdvID;
-	private float _taxe;
+	private final int _hdvID;
+	private final float _taxe;
 	private short _sellTime;
-	private short _maxCompteItem;
-	private String _strCategories;
-	private short _lvlMax;
+	private final short _maxCompteItem;
+	private final String _strCategories;
+	private final short _lvlMax;
 	
-	private Map<Integer,Categorie> _categories = new HashMap<>();
-	private Map<Integer,Couple<Integer, Integer>> _path = new HashMap<>();	//<LigneID,<CategID,TemplateID>>
+	private final Map<Integer,Categorie> _categories = new HashMap<>();
+	private final Map<Integer,Couple<Integer, Integer>> _path = new HashMap<>();	//<LigneID,<CategID,TemplateID>>
 	
-	private DecimalFormat pattern = new DecimalFormat("0.0"); 
+	private final DecimalFormat pattern = new DecimalFormat("0.0");
 	
 	public Mercadillo(int hdvID, float taxe, short sellTime, short maxItemCompte, short lvlMax, String categories)
 	{
@@ -575,7 +575,7 @@ public class Mercadillo {
 			
 			if(Mundo.getCompte(toBuy.getOwner()) != null && Mundo.getCompte(toBuy.getOwner()).get_curPerso() != null)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(Mundo.getCompte(toBuy.getOwner()).get_curPerso(),"065;"+price+"~"+toBuy.getObjet().getTemplate().getID()+"~"+toBuy.getObjet().getTemplate().getID()+"~1");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(Mundo.getCompte(toBuy.getOwner()).get_curPerso(),"065;"+price+"~"+toBuy.getObjet().getTemplate().getID()+"~"+toBuy.getObjet().getTemplate().getID()+"~1");
 				//Si le vendeur est connecter, envoie du packet qui lui annonce la vente de son objet
 			}
 			if(toBuy.getOwner() == -1)

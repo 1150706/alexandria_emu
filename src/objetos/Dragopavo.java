@@ -13,23 +13,23 @@ import objetos.Personaje.Stats;
 
 public class Dragopavo {
 
-	private int _id;
-	private int _color;
+	private final int _id;
+	private final int _color;
 	private int _sexe;
 	private int _amour;
 	private int _endurance;
 	private int _level;
 	private long _exp;
 	private String _nom;
-	private int _fatigue;
-	private int _energie;
-	private int _reprod;
-	private int _maturite;
-	private int _serenite;
+	private final int _fatigue;
+	private final int _energie;
+	private final int _reprod;
+	private final int _maturite;
+	private final int _serenite;
 	private Stats _stats = new Stats();
 	private String _ancetres = ",,,,,,,,,,,,,";
-	private ArrayList<Objeto> _items = new ArrayList<>();
-	private List<Integer> capacite = new ArrayList<>();
+	private final ArrayList<Objeto> _items = new ArrayList<>();
+	private final List<Integer> capacite = new ArrayList<>();
 	private String _ability = ",";
 	
 	public Dragopavo(int color)
@@ -77,7 +77,7 @@ public class Dragopavo {
 				int a = Integer.parseInt(s);
 				try {
 					this.capacite.add(Integer.valueOf(a));
-				} catch (Exception localException) {}
+				} catch (Exception ignored) {}
 			}
 		for(String str : items.split(";"))
 		{
@@ -162,29 +162,28 @@ public class Dragopavo {
 	
 	public String parse()
 	{
-		StringBuilder str = new StringBuilder();
-		str.append(_id).append(":");
-		str.append(_color).append(":");
-		str.append(_ancetres).append(":");
-		str.append(",,").append(_ability).append(":");//FIXME capacités
-		str.append(_nom).append(":");
-		str.append(_sexe).append(":");
-		str.append(parseXpString()).append(":");
-		str.append(_level).append(":");
-		str.append("1").append(":");//FIXME
-		str.append(getTotalPod()).append(":");
-		str.append("0").append(":");//FIXME podActuel?
-		str.append(_endurance).append(",10000:");
-		str.append(_maturite).append(",").append(getMaxMatu()).append(":");
-		str.append(_energie).append(",").append(getMaxEnergie()).append(":");
-		str.append(_serenite).append(",-10000,10000:");
-		str.append(_amour).append(",10000:");
-		str.append("-1").append(":");//FIXME
-		str.append("0").append(":");//FIXME
-		str.append(parseStats()).append(":");
-		str.append(_fatigue).append(",240:");
-		str.append(_reprod).append(",20:");
-		return str.toString();
+		String str = _id + ":" +
+				_color + ":" +
+				_ancetres + ":" +
+				",," + _ability + ":" +//FIXME capacités
+				_nom + ":" +
+				_sexe + ":" +
+				parseXpString() + ":" +
+				_level + ":" +
+				"1" + ":" +//FIXME
+				getTotalPod() + ":" +
+				"0" + ":" +//FIXME podActuel?
+				_endurance + ",10000:" +
+				_maturite + "," + getMaxMatu() + ":" +
+				_energie + "," + getMaxEnergie() + ":" +
+				_serenite + ",-10000,10000:" +
+				_amour + ",10000:" +
+				"-1" + ":" +//FIXME
+				"0" + ":" +//FIXME
+				parseStats() + ":" +
+				_fatigue + ",240:" +
+				_reprod + ",20:";
+		return str;
 	}
 
 	private String parseStats()
@@ -275,7 +274,7 @@ public class Dragopavo {
 			try
 			{
 				c = Integer.parseInt(s); 
-			} catch (Exception localException) {}
+			} catch (Exception ignored) {}
 			
 			if (c != 0)
 				capacite.add(Integer.valueOf(c));

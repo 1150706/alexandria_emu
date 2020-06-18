@@ -19,8 +19,8 @@ import objetos.hechizos.EfectoHechizo;
 public class Oficio {
 
 	public static class StatsMetier {
-		private int _id;
-		private Oficio _template;
+		private final int _id;
+		private final Oficio _template;
 		private int _lvl;
 		private long _xp;
 		private ArrayList<JobAction> _posActions = new ArrayList<>();
@@ -153,11 +153,10 @@ public class Oficio {
 		
 		public String getXpString(String s)
 		{
-			StringBuilder str = new StringBuilder();
-			str.append( Mundo.getExpLevel(_lvl).metier).append(s);
-			str.append(_xp).append(s);
-			str.append(Mundo.getExpLevel((_lvl<100?_lvl+1:_lvl)).metier);
-			return str.toString();
+			String str = Mundo.getExpLevel(_lvl).metier + s +
+					_xp + s +
+					Mundo.getExpLevel((_lvl < 100 ? _lvl + 1 : _lvl)).metier;
+			return str;
 		}
 		public Oficio getTemplate() {
 			
@@ -210,16 +209,16 @@ public class Oficio {
 	
 	public static class JobAction
 	{
-		private int _skID;
+		private final int _skID;
 		private int _min = 1;
 		private int _max = 1;
-		private boolean _isCraft;
+		private final boolean _isCraft;
 		private int _chan = 100;
 		private int _time = 0;
 		private int _xpWin = 0;
 		private long _startTime;
-		private Map<Integer,Integer> _ingredients = new TreeMap<>();
-		private Map<Integer,Integer> _lastCraft = new TreeMap<>();
+		private final Map<Integer,Integer> _ingredients = new TreeMap<>();
+		private final Map<Integer,Integer> _lastCraft = new TreeMap<>();
 		private Timer _craftTimer;
 		private Personaje _P;
 		
@@ -338,7 +337,7 @@ public class Oficio {
 			try
 			{
 				Thread.sleep(750);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			//Si Forgemagie
 			if(_skID == 1
 			|| _skID == 113
@@ -426,7 +425,7 @@ public class Oficio {
 			{
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EF");
 				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-"+tID);
-				GestorSalida.GAME_SEND_Im_PACKET(_P, "0118");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_P, "0118");
 			}else
 			{
 				Objeto newObj = Mundo.getObjTemplate(tID).createNewItem(1, false);
@@ -497,69 +496,7 @@ public class Oficio {
 					return;
 				}
 				int id =ing.getTemplate().getID();
-				switch(id)
-				{
 				//Potions
-				case 1333://Potion Etincelle
-					stat = 99; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1335://Potion crachin
-					stat = 96; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1337://Potion de courant d'air
-					stat = 98; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1338://Potion de secousse
-					stat = 97; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1340://Potion d'eboulement
-					stat = 97; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1341://Potion Averse
-					stat = 96; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1342://Potion de rafale
-					stat = 98; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1343://Potion de Flambée
-					stat = 99; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1345://Potion Incendie
-					stat = 99; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1346://Potion Tsunami
-					stat = 96; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1347://Potion Ouragan
-					stat = 98; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
-				case 1348://Potion de seisme
-					stat = 97; 
-					isElementChanging = ing.getTemplate().getLevel();
-					mod = ing;
-				break;
 				//Fin potions
 				//Runes
 				//Stats : Effect a changer dans les stats
@@ -568,372 +505,494 @@ public class Oficio {
 				/*
 				RUNES MANQUANTES :
 				Rune Pa Prospe 	+ 3 	9
-				
+
 				Rune Pa Ini 	+ 30 	3
 				Rune Ra Ini 	+ 100 	10
-				
+
 				Rune Pa Do Per 	+ 3 % 	6
 				Rune Ra Do Per 	+ 10 % 	20
-				
+
 				Rune Pa Pi 	+ 3 	45
 				Rune Ra Pi 	+ 10 	?
 
 				Rune Pa Pi Per 	+ 3 % 	6
 				Rune Ra Pi Per 	+ 10 % 	20
 				*/
-				case 1519://Force
-					mod=ing;
-					stats = "76";
-					add = 1;
-					poid = 1;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1521://Sagesse
-					mod=ing;
-					stats = "7c";
-					add = 1;
-					poid = 3;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1522://Intel
-					mod=ing;
-					stats = "7e";
-					add = 1;
-					poid = 1;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1523://Vita
-					mod=ing;
-					stats = "7d";
-					add = 3;
-					poid = 1;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1524://Agi
-					mod=ing;
-					stats = "77";
-					add = 1;
-					poid = 1;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1525://Chance
-					mod=ing;
-					stats = "7b";
-					add = 1;
-					poid = 1;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1545://Pa force
-					mod=ing;
-					stats = "77";
-					add = 3;
-					poid = 3;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1546://Pa Sagesse
-					mod=ing;
-					stats = "7c";
-					add = 3;
-					poid = 9;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1547://Pa Intel
-					mod=ing;
-					stats = "7e";
-					add = 3;
-					poid = 3;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1548://Pa VI
-					mod=ing;
-					stats = "7d";
-					add = 10;
-					poid = 3.3;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1549://Pa age
-					mod=ing;
-					stats = "77";
-					add = 3;
-					poid = 3;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1550://Pa cha
-					mod=ing;
-					stats = "7b";
-					add = 3;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1551://Ra Fo
-					mod=ing;
-					stats = "76";
-					add = 10;
-					poid = 10;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1552://Ra Sa
-					mod=ing;
-					stats = "7c";
-					add = 10;
-					poid = 30;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1553://Ra Ine
-					mod=ing;
-					stats = "7e";
-					add = 10;
-					poid = 10;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1554://Ra Vi
-					mod=ing;
-					stats = "7d";
-					add = 30;
-					poid = 10;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1555://Ra Age
-					mod=ing;
-					stats = "77";
-					add = 10;
-					poid = 10;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1556://Ra cha
-					mod=ing;
-					stats = "7b";
-					add = 10;
-					poid = 10;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1557://Ga PA
-					mod=ing;
-					stats ="6f";
-					add = 1;
-					poid = 100;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 1558://Ga PME
-					mod=ing;
-					stats ="80";
-					add = 1;
-					poid = 90;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7433://Cri
-					mod=ing;
-					stats ="73";
-					add = 1;
-					poid = 30;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7434://Soins
-					mod=ing;
-					stats ="b2";
-					add = 1;
-					poid = 20;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7435://Dommages
-					mod=ing;
-					stats ="70";
-					add = 1;
-					poid = 20;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7436://Domages %
-					mod=ing;
-					stats ="8a";
-					add = 1;
-					poid = 2;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7437://Domage renvoyé
-					mod=ing;
-					stats ="dc";
-					add = 1;
-					poid = 2;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7438://Porter
-					mod=ing;
-					stats ="75";
-					add = 1;
-					poid = 50;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7442://Invoque
-					mod=ing;
-					stats ="b6";
-					add = 1;
-					poid = 30;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7443://Pod
-					mod=ing;
-					stats ="9e";
-					add = 10;
-					poid = 1; // ?
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7444://Pa pod
-					mod=ing;
-					stats ="9e";
-					add = 30;
-					poid = 1; // ?
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7445://Ra pod
-					mod=ing;
-					stats ="9e";
-					add = 100;
-					poid = 1; // ?
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7446://Piège
-					mod=ing;
-					stats ="e1";
-					add = 1;
-					poid = 15;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7447://Piège %
-					mod=ing;
-					stats ="e2";
-					add = 1;
-					poid = 2;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7448://Initiative
-					mod=ing;
-					stats ="ae";
-					add = 10;
-					poid = 1;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7449://Pa Initiative
-					mod=ing;
-					stats ="ae";
-					add = 30;
-					poid = 3;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7450://Ra Initiative
-					mod=ing;
-					stats ="ae";
-					add = 100;
-					poid = 10;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7451://Prospec
-					mod=ing;
-					stats ="b0";
-					add = 1;
-					poid = 3;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7452://Ré Feu
-					mod=ing;
-					stats ="f3";
-					add = 1;
-					poid = 4;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7453://Ré Air
-					mod=ing;
-					stats ="f2";
-					add = 1;
-					poid = 4;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7454://Ré Eau
-					mod=ing;
-					stats ="f1";
-					add = 1;
-					poid = 4;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7455://Ré Terre
-					mod=ing;
-					stats ="f0";
-					add = 1;
-					poid = 4;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7456://Ré Neutre
-					mod=ing;
-					stats ="f4";
-					add = 1;
-					poid = 4;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7457://Ré % Feu
-					mod=ing;
-					stats ="d5";
-					add = 1;
-					poid = 5;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7458://Ré % Air
-					mod=ing;
-					stats ="d4";
-					add = 1;
-					poid = 5;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7459://Ré % Terre
-					mod=ing;
-					stats ="d2";
-					add = 1;
-					poid = 5;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7460://Ré % neutre
-					mod=ing;
-					stats ="d6";
-					add = 1;
-					poid = 5;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7560://Ré % Eau
-					mod=ing;
-					stats ="d3";
-					add = 1;
-					poid = 5;
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 8379:// Rune Vie
-					mod=ing;
-					//TODO : N'existe plus.
-					isStatsChanging = ing.getTemplate().getLevel();
-					break;
-				case 7508://Rune de signature
-					signed = true;
-					sign = ing;
-				break;
-				default://Si pas runes ou popo, et qu'il a un cout en PA, alors c'est une arme (une vérification du type serait préférable)
-					if(ing.getTemplate().getPACost()>0)obj = ing;
-					if(ing.getTemplate().getType() == 1
-							|| ing.getTemplate().getType() == 2
-							|| ing.getTemplate().getType() == 3
-							|| ing.getTemplate().getType() == 4
-							|| ing.getTemplate().getType() == 5
-							|| ing.getTemplate().getType() == 6
-							|| ing.getTemplate().getType() == 7
-							|| ing.getTemplate().getType() == 8
-							|| ing.getTemplate().getType() == 9
-							|| ing.getTemplate().getType() == 10
-							|| ing.getTemplate().getType() == 11
-							|| ing.getTemplate().getType() == 16
-							|| ing.getTemplate().getType() == 17
-							|| ing.getTemplate().getType() == 19
-							|| ing.getTemplate().getType() == 20
-							|| ing.getTemplate().getType() == 21
-							|| ing.getTemplate().getType() == 22
-							|| ing.getTemplate().getType() == 81
-							|| ing.getTemplate().getType() == 102
-							|| ing.getTemplate().getType() == 114) obj = ing;
-				break;
+				//TODO : N'existe plus.
+				switch (id) {
+//Potion Etincelle
+					case 1333 -> {
+						stat = 99;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion crachin
+					case 1335 -> {
+						stat = 96;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion de courant d'air
+					case 1337 -> {
+						stat = 98;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion de secousse
+					case 1338 -> {
+						stat = 97;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion d'eboulement
+					case 1340 -> {
+						stat = 97;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion Averse
+					case 1341 -> {
+						stat = 96;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion de rafale
+					case 1342 -> {
+						stat = 98;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion de Flambée
+					case 1343 -> {
+						stat = 99;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion Incendie
+					case 1345 -> {
+						stat = 99;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion Tsunami
+					case 1346 -> {
+						stat = 96;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion Ouragan
+					case 1347 -> {
+						stat = 98;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Potion de seisme
+					case 1348 -> {
+						stat = 97;
+						isElementChanging = ing.getTemplate().getLevel();
+						mod = ing;
+					}
+//Force
+					case 1519 -> {
+						mod = ing;
+						stats = "76";
+						add = 1;
+						poid = 1;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Sagesse
+					case 1521 -> {
+						mod = ing;
+						stats = "7c";
+						add = 1;
+						poid = 3;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Intel
+					case 1522 -> {
+						mod = ing;
+						stats = "7e";
+						add = 1;
+						poid = 1;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Vita
+					case 1523 -> {
+						mod = ing;
+						stats = "7d";
+						add = 3;
+						poid = 1;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Agi
+					case 1524 -> {
+						mod = ing;
+						stats = "77";
+						add = 1;
+						poid = 1;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Chance
+					case 1525 -> {
+						mod = ing;
+						stats = "7b";
+						add = 1;
+						poid = 1;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pa force
+					case 1545 -> {
+						mod = ing;
+						stats = "77";
+						add = 3;
+						poid = 3;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pa Sagesse
+					case 1546 -> {
+						mod = ing;
+						stats = "7c";
+						add = 3;
+						poid = 9;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pa Intel
+					case 1547 -> {
+						mod = ing;
+						stats = "7e";
+						add = 3;
+						poid = 3;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pa VI
+					case 1548 -> {
+						mod = ing;
+						stats = "7d";
+						add = 10;
+						poid = 3.3;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pa age
+					case 1549 -> {
+						mod = ing;
+						stats = "77";
+						add = 3;
+						poid = 3;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pa cha
+					case 1550 -> {
+						mod = ing;
+						stats = "7b";
+						add = 3;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ra Fo
+					case 1551 -> {
+						mod = ing;
+						stats = "76";
+						add = 10;
+						poid = 10;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ra Sa
+					case 1552 -> {
+						mod = ing;
+						stats = "7c";
+						add = 10;
+						poid = 30;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ra Ine
+					case 1553 -> {
+						mod = ing;
+						stats = "7e";
+						add = 10;
+						poid = 10;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ra Vi
+					case 1554 -> {
+						mod = ing;
+						stats = "7d";
+						add = 30;
+						poid = 10;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ra Age
+					case 1555 -> {
+						mod = ing;
+						stats = "77";
+						add = 10;
+						poid = 10;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ra cha
+					case 1556 -> {
+						mod = ing;
+						stats = "7b";
+						add = 10;
+						poid = 10;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ga PA
+					case 1557 -> {
+						mod = ing;
+						stats = "6f";
+						add = 1;
+						poid = 100;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ga PME
+					case 1558 -> {
+						mod = ing;
+						stats = "80";
+						add = 1;
+						poid = 90;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Cri
+					case 7433 -> {
+						mod = ing;
+						stats = "73";
+						add = 1;
+						poid = 30;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Soins
+					case 7434 -> {
+						mod = ing;
+						stats = "b2";
+						add = 1;
+						poid = 20;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Dommages
+					case 7435 -> {
+						mod = ing;
+						stats = "70";
+						add = 1;
+						poid = 20;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Domages %
+					case 7436 -> {
+						mod = ing;
+						stats = "8a";
+						add = 1;
+						poid = 2;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Domage renvoyé
+					case 7437 -> {
+						mod = ing;
+						stats = "dc";
+						add = 1;
+						poid = 2;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Porter
+					case 7438 -> {
+						mod = ing;
+						stats = "75";
+						add = 1;
+						poid = 50;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Invoque
+					case 7442 -> {
+						mod = ing;
+						stats = "b6";
+						add = 1;
+						poid = 30;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pod
+					case 7443 -> {
+						mod = ing;
+						stats = "9e";
+						add = 10;
+						poid = 1; // ?
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pa pod
+					case 7444 -> {
+						mod = ing;
+						stats = "9e";
+						add = 30;
+						poid = 1; // ?
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ra pod
+					case 7445 -> {
+						mod = ing;
+						stats = "9e";
+						add = 100;
+						poid = 1; // ?
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Piège
+					case 7446 -> {
+						mod = ing;
+						stats = "e1";
+						add = 1;
+						poid = 15;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Piège %
+					case 7447 -> {
+						mod = ing;
+						stats = "e2";
+						add = 1;
+						poid = 2;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Initiative
+					case 7448 -> {
+						mod = ing;
+						stats = "ae";
+						add = 10;
+						poid = 1;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Pa Initiative
+					case 7449 -> {
+						mod = ing;
+						stats = "ae";
+						add = 30;
+						poid = 3;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ra Initiative
+					case 7450 -> {
+						mod = ing;
+						stats = "ae";
+						add = 100;
+						poid = 10;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Prospec
+					case 7451 -> {
+						mod = ing;
+						stats = "b0";
+						add = 1;
+						poid = 3;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré Feu
+					case 7452 -> {
+						mod = ing;
+						stats = "f3";
+						add = 1;
+						poid = 4;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré Air
+					case 7453 -> {
+						mod = ing;
+						stats = "f2";
+						add = 1;
+						poid = 4;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré Eau
+					case 7454 -> {
+						mod = ing;
+						stats = "f1";
+						add = 1;
+						poid = 4;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré Terre
+					case 7455 -> {
+						mod = ing;
+						stats = "f0";
+						add = 1;
+						poid = 4;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré Neutre
+					case 7456 -> {
+						mod = ing;
+						stats = "f4";
+						add = 1;
+						poid = 4;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré % Feu
+					case 7457 -> {
+						mod = ing;
+						stats = "d5";
+						add = 1;
+						poid = 5;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré % Air
+					case 7458 -> {
+						mod = ing;
+						stats = "d4";
+						add = 1;
+						poid = 5;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré % Terre
+					case 7459 -> {
+						mod = ing;
+						stats = "d2";
+						add = 1;
+						poid = 5;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré % neutre
+					case 7460 -> {
+						mod = ing;
+						stats = "d6";
+						add = 1;
+						poid = 5;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Ré % Eau
+					case 7560 -> {
+						mod = ing;
+						stats = "d3";
+						add = 1;
+						poid = 5;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+// Rune Vie
+					case 8379 -> {
+						mod = ing;
+						isStatsChanging = ing.getTemplate().getLevel();
+					}
+//Rune de signature
+					case 7508 -> {
+						signed = true;
+						sign = ing;
+					}
+//Si pas runes ou popo, et qu'il a un cout en PA, alors c'est une arme (une vérification du type serait préférable)
+					default -> {
+						if (ing.getTemplate().getPACost() > 0) obj = ing;
+						if (ing.getTemplate().getType() == 1
+								|| ing.getTemplate().getType() == 2
+								|| ing.getTemplate().getType() == 3
+								|| ing.getTemplate().getType() == 4
+								|| ing.getTemplate().getType() == 5
+								|| ing.getTemplate().getType() == 6
+								|| ing.getTemplate().getType() == 7
+								|| ing.getTemplate().getType() == 8
+								|| ing.getTemplate().getType() == 9
+								|| ing.getTemplate().getType() == 10
+								|| ing.getTemplate().getType() == 11
+								|| ing.getTemplate().getType() == 16
+								|| ing.getTemplate().getType() == 17
+								|| ing.getTemplate().getType() == 19
+								|| ing.getTemplate().getType() == 20
+								|| ing.getTemplate().getType() == 21
+								|| ing.getTemplate().getType() == 22
+								|| ing.getTemplate().getType() == 81
+								|| ing.getTemplate().getType() == 102
+								|| ing.getTemplate().getType() == 114) obj = ing;
+					}
 				}
 			}
 			StatsMetier SM = _P.getMetierBySkill(_skID);
@@ -1109,7 +1168,7 @@ public class Oficio {
 				GestorSalida.GAME_SEND_Em_PACKET(_P,"EC+"+obj.getGuid()+"|1|"+tID+"|"+obj.parseStatsString().replace(";","#"));//On replace l'item dans l'inventaire
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EF");
 				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-"+tID);
-				GestorSalida.GAME_SEND_Im_PACKET(_P, "0183");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_P, "0183");
 				GestorSQL.guardar_objeto(obj);
 			}else
 			{
@@ -1132,8 +1191,8 @@ public class Oficio {
 							//on calcule les nouvelles stats
 							int min = Integer.parseInt(infos[0],16);
 							int max = Integer.parseInt(infos[1],16);
-							int newMin = (int)((min * coef) /100);
-							int newMax = (int)((max * coef) /100);
+							int newMin = (min * coef) /100;
+							int newMax = (max * coef) /100;
 	
 							if(newMin == 0) newMin = 1;
 							String newJet = "1d"+(newMax-newMin+1)+"+"+(newMin-1);
@@ -1142,7 +1201,7 @@ public class Oficio {
 							SE.setArgs(newArgs);//on modifie les propriétés du SpellEffect
 							SE.setEffectID(stat);//On change l'élement d'attaque
 							
-						}catch(Exception e){e.printStackTrace();};
+						}catch(Exception e){e.printStackTrace();}
 					}
 				}
 				else if(isStatsChanging > 0 && isElementChanging == 0)//Si on modifier les stats (rune)
@@ -1297,9 +1356,9 @@ public class Oficio {
 		}
 	}
 	//Classe Metier
-	private int _id;
-	private ArrayList<Integer> _tools = new ArrayList<>();
-	private Map<Integer,ArrayList<Integer>> _crafts = new TreeMap<>();
+	private final int _id;
+	private final ArrayList<Integer> _tools = new ArrayList<>();
+	private final Map<Integer,ArrayList<Integer>> _crafts = new TreeMap<>();
 	
 	public Oficio(int id, String tools, String crafts)
 	{
@@ -1312,7 +1371,7 @@ public class Oficio {
 				{
 					int tool = Integer.parseInt(str);
 					_tools.add(tool);
-				}catch(Exception e){continue;};
+				}catch(Exception e){continue;}
 			}
 		}
 		
@@ -1326,7 +1385,7 @@ public class Oficio {
 					ArrayList<Integer> list = new ArrayList<>();
 					for(String str2 : str.split(";")[1].split(","))list.add(Integer.parseInt(str2));
 					_crafts.put(skID, list);
-				}catch(Exception e){continue;};
+				}catch(Exception e){continue;}
 			}
 		}
 	}

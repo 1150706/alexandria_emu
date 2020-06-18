@@ -19,18 +19,18 @@ import objetos.hechizos.EfectoHechizo;
 public class Objeto {
 
 	public static class ObjTemplate {
-		private int ID;
-		private String StrTemplate;
-		private String name;
-		private	int type;
-		private int level;
-		private int pod;
-		private int prix;
-		private int panopID;
-		private String conditions;
+		private final int ID;
+		private final String StrTemplate;
+		private final String name;
+		private final int type;
+		private final int level;
+		private final int pod;
+		private final int prix;
+		private final int panopID;
+		private final String conditions;
 		private int PACost,POmin,POmax,TauxCC,TauxEC,BonusCC;
 		private boolean isTwoHanded;
-		private ArrayList<Accion> onUseActions = new ArrayList<>();
+		private final ArrayList<Accion> onUseActions = new ArrayList<>();
 		private long sold;
 		private int avgPrice;
 		
@@ -64,8 +64,8 @@ public class Objeto {
 				TauxEC = Integer.parseInt(infos[4]);
 				BonusCC = Integer.parseInt(infos[5]);
 				isTwoHanded = infos[6].equals("1");
-			}catch(Exception ignored){};
-	
+			}catch(Exception ignored){}
+
 		}
 		
 		public int get_obviType() {
@@ -192,9 +192,9 @@ public class Objeto {
 							int max = Integer.parseInt(stats[2],16);
 							value = min;
 							if(max != 0)value = max;
-						}catch(Exception e){value = Formulas.getRandomJet(jet);};			
+						}catch(Exception e){value = Formulas.getRandomJet(jet);}
 					}
-				}catch(Exception e){};
+				}catch(Exception ignored){}
 				itemStats.addOneStat(statID, value);
 			}
 			return itemStats;
@@ -261,9 +261,8 @@ public class Objeto {
 	protected int obvijevan;
 	protected int obvijevanLook;
 	private Personaje.Stats Stats = new Stats();
-	protected int dueño;
 	private ArrayList<EfectoHechizo> Effects = new ArrayList<>();
-	private Map<Integer,String> txtStats = new TreeMap<>();
+	private final Map<Integer,String> txtStats = new TreeMap<>();
 	//Speaking Item
 	//private boolean isExchangeable = true;
 	protected boolean isSpeaking = false;
@@ -342,7 +341,7 @@ public class Objeto {
 				if(!follow)continue;//Si c'était un effet Actif d'arme ou une signature
 				int value = Integer.parseInt(stats[1],16);
 				Stats.addOneStat(statID, value);
-			}catch(Exception e){continue;};
+			}catch(Exception e){continue;}
 		}
 	}
 
@@ -431,8 +430,8 @@ public class Objeto {
 			{
 				e.printStackTrace();
 				continue;
-			};
-			
+			}
+
 			isFirst = false;
 		}
 		
@@ -440,11 +439,11 @@ public class Objeto {
 		{
 			if(!isFirst)
 				stats.append(",");
-			int statID = ((Integer)entry.getKey()).intValue();
+			int statID = (Integer) entry.getKey();
 
 			if ((statID == 970) || (statID == 971) || (statID == 972) || (statID == 973) || (statID == 974))
 			{
-				int jet = ((Integer)entry.getValue()).intValue();
+				int jet = (Integer) entry.getValue();
 				if ((statID == 974) || (statID == 972) || (statID == 970))
 					stats.append(Integer.toHexString(statID)).append("#0#0#").append(Integer.toHexString(jet));
 				else {
@@ -456,7 +455,7 @@ public class Objeto {
 			else {
 				String jet = "0d0+" + entry.getValue();
 				stats.append(Integer.toHexString(statID)).append("#");
-				stats.append(Integer.toHexString(((Integer)entry.getValue()).intValue())).append("#0#0#").append(jet);
+				stats.append(Integer.toHexString((Integer) entry.getValue())).append("#0#0#").append(jet);
 			}
 			//String jet = "0d0+"+entry.getValue();
 			//stats.append(Integer.toHexString(entry.getKey())).append("#").append(Integer.toHexString(entry.getValue()));
@@ -502,8 +501,8 @@ public class Objeto {
 			{
 				e.printStackTrace();
 				continue;
-			};
-			
+			}
+
 			isFirst = false;
 		}
 		
@@ -558,11 +557,11 @@ public class Objeto {
 			return;
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
-			if (entry.getKey().intValue() != 974) // on ne boost que la stat de l'expérience de l'obvi
+			if (entry.getKey() != 974) // on ne boost que la stat de l'expérience de l'obvi
 				continue;
-			if (entry.getValue().intValue() > 500) // si le boost a une valeur supérieure à 500 (irréaliste)
+			if (entry.getValue() > 500) // si le boost a une valeur supérieure à 500 (irréaliste)
 				return;
-			entry.setValue(Integer.valueOf(entry.getValue().intValue() + obj.getTemplate().getLevel() / 32)); // valeur d'origine + ObjLvl / 32
+			entry.setValue(Integer.valueOf(entry.getValue() + obj.getTemplate().getLevel() / 32)); // valeur d'origine + ObjLvl / 32
 			// s'il mange un obvi, on récupère son expérience
 			/*if (obj.getTemplate().getID() == getTemplate().getID()) {
 				for(Map.Entry<Integer, Integer> ent : obj.getStats().getMap().entrySet()) {
@@ -578,7 +577,7 @@ public class Objeto {
 	{
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
-			if (((Integer)entry.getKey()).intValue() != statID) continue; entry.setValue(Integer.valueOf(val));
+			if ((Integer) entry.getKey() != statID) continue; entry.setValue(Integer.valueOf(val));
 		}
 	}
 	
@@ -587,10 +586,10 @@ public class Objeto {
 		Personaje.Stats StatsSansObvi = new Personaje.Stats();
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
-			int statID = ((Integer)entry.getKey()).intValue();
+			int statID = (Integer) entry.getKey();
 			if ((statID == 970) || (statID == 971) || (statID == 972) || (statID == 973) || (statID == 974))
 				continue;
-			StatsSansObvi.addOneStat(statID, ((Integer)entry.getValue()).intValue());
+			StatsSansObvi.addOneStat(statID, (Integer) entry.getValue());
 		}
 		Stats = StatsSansObvi;
 	}
@@ -601,10 +600,10 @@ public class Objeto {
 		Personaje.Stats StatsSansObvi = new Personaje.Stats();
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
-			int statID = ((Integer)entry.getKey()).intValue();
+			int statID = (Integer) entry.getKey();
 			if ((statID != 971) && (statID != 972) && (statID != 973) && (statID != 974))
 				continue;
-			StatsSansObvi.addOneStat(statID, ((Integer)entry.getValue()).intValue());
+			StatsSansObvi.addOneStat(statID, (Integer) entry.getValue());
 		}
 		Stats = StatsSansObvi;
 	}
@@ -639,8 +638,8 @@ public class Objeto {
 			{
 				e.printStackTrace();
 				continue;
-			};
-			
+			}
+
 			isFirst = false;
 		}
 		
@@ -696,8 +695,8 @@ public class Objeto {
 			{
 				e.printStackTrace();
 				continue;
-			};
-			
+			}
+
 			isFirst = false;
 		}
 		
@@ -715,7 +714,7 @@ public class Objeto {
 				{
 					float a = (float)((entry.getValue()*poid)/100);
 					if(a < 1) a = 1;
-					float chute = (float)(entry.getValue()+a);
+					float chute = entry.getValue()+a;
 					newstats = (int)Math.floor(chute);
 					//On limite la chute du négatif a sont maximum
 					if(newstats > Oficio.getBaseMaxJet(obj.getTemplate().getID(), Integer.toHexString(entry.getKey())))
@@ -778,9 +777,9 @@ public class Objeto {
 						int max = Integer.parseInt(stats[2],16);
 						value = min;
 						if(max != 0)value = max;
-					}catch(Exception e){value = Formulas.getRandomJet(jet);};			
+					}catch(Exception e){value = Formulas.getRandomJet(jet);}
 				}
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			itemStats.addOneStat(statID, value);
 		}
 		return itemStats;
@@ -820,9 +819,9 @@ public class Objeto {
 						int max = Integer.parseInt(stats[2],16);
 						value = min;
 						if(max != 0)value = max;
-					}catch(Exception e){value = Formulas.getRandomJet(jet);};			
-			}catch(Exception e){};
-			
+					}catch(Exception e){value = Formulas.getRandomJet(jet);}
+			}catch(Exception ignored){}
+
 			int multi = 1;
 			if(statID == 118 || statID == 126 || statID == 125 || statID == 119 || statID == 123 || statID == 158 || statID == 174)//Force,Intel,Vita,Agi,Chance,Pod,Initiative
 			{
@@ -915,9 +914,9 @@ public class Objeto {
 						int max = Integer.parseInt(stats[2],16);
 						value = min;
 						if(max != 0)value = max;
-					}catch(Exception e){value = Formulas.getRandomJet(jet);};			
-			}catch(Exception e){};
-			
+					}catch(Exception e){value = Formulas.getRandomJet(jet);}
+			}catch(Exception ignored){}
+
 			int multi = 1;
 			if(statID == 118 || statID == 126 || statID == 125 || statID == 119 || statID == 123 || statID == 158 || statID == 174)//Force,Intel,Vita,Agi,Chance,Pod,Initiative
 			{
@@ -994,7 +993,7 @@ public class Objeto {
 				//osef du minMax, vu qu'on se sert du jet pour calculer les dégats
 				String newArgs = "0;0;0;-1;0;"+jet;
 				effets.add(new EfectoHechizo(SE.getEffectID(),newArgs,0,-1));
-			}catch(Exception e){continue;};
+			}catch(Exception e){continue;}
 		}
 		return effets;
 	}

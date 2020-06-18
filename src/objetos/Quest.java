@@ -8,15 +8,12 @@ import java.util.TreeMap;
       
 	public class Quest
 	{
-		private int _ID;
-		private Map<Integer, Step> _step = new TreeMap<>();
-		private int _lvl;
-		private long _xp;
-		private int _ali;
-		private ArrayList<Objeto.ObjTemplate> _gainob = new ArrayList<>();
-		private Map<Objeto.ObjTemplate, Integer> _gain = new TreeMap<>();
-		private int _kamas;
-		private String _name;
+		private final int _ID;
+		private final int _lvl;
+		private final long _xp;
+		private final int _ali;
+		private final int _kamas;
+		private final String _name;
 		//private int _lastquestrequired;
       
 		public Quest(int ID, String step, int lvl, long xp, int ali, String gainob, String gainbb, int kamas, String name, int lastquestrequired)
@@ -34,11 +31,12 @@ import java.util.TreeMap;
 				ie = step.split("\\|");
 				int a = 0;
 				while (a != ie.length) {
-					a++;	
-					this._step.put(Integer.valueOf(a), Mundo.getStep(Integer.parseInt(ie[(a - 1)])));
+					a++;
+					Map<Integer, Step> _step = new TreeMap<>();
+					_step.put(Integer.valueOf(a), Mundo.getStep(Integer.parseInt(ie[(a - 1)])));
 				}
 			} catch (Exception e) {
-				ie = (String[])null;
+				ie = null;
 			}
 			try
 			{
@@ -46,10 +44,11 @@ import java.util.TreeMap;
 				int a = 0;
 				while (a != ie.length) {
 					a++;
-					this._gainob.add(Mundo.getObjTemplate(Integer.parseInt(ie[(a - 1)])));
+					ArrayList<Objeto.ObjTemplate> _gainob = new ArrayList<>();
+					_gainob.add(Mundo.getObjTemplate(Integer.parseInt(ie[(a - 1)])));
 				}
 			} catch (Exception e) {
-				ie = (String[])null;
+				ie = null;
 			}
 			try
 			{
@@ -58,10 +57,11 @@ import java.util.TreeMap;
 				while (a != ie.length) {
 					a++;
 					String[] avz = gainbb.split("-");
-					this._gain.put(Mundo.getObjTemplate(Integer.parseInt(avz[0])),
+					Map<Objeto.ObjTemplate, Integer> _gain = new TreeMap<>();
+					_gain.put(Mundo.getObjTemplate(Integer.parseInt(avz[0])),
 							Integer.valueOf(Integer.parseInt(avz[1])));
 				}
-			} catch (Exception localException1) {
+			} catch (Exception ignored) {
 			}
 		}
 		
@@ -93,9 +93,9 @@ import java.util.TreeMap;
 		}
 		
 		public static class Step {
-			private int _id;
-			private int _type;
-			private int _objectif;
+			private final int _id;
+			private final int _type;
+			private final int _objectif;
 			
 			public Step(int id, int type, int objectif) { 
 				this._id = id;

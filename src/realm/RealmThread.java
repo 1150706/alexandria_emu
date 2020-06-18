@@ -22,8 +22,7 @@ public class RealmThread implements Runnable{
 	private String _hashKey;
 	private int _packetNum = 0;
 	private String _accountName;
-	private String _hashPass;
-	private Cuenta _compte;
+    private Cuenta _compte;
 	
 	public RealmThread(Socket sock) {
 		try {
@@ -38,7 +37,7 @@ public class RealmThread implements Runnable{
 		{
 			try {
 				if(!_s.isClosed())_s.close();
-			} catch (IOException e1) {}
+			} catch (IOException ignored) {}
 		}
 		finally
 		{
@@ -56,7 +55,7 @@ public class RealmThread implements Runnable{
 		try
     	{
 			String packet = "";
-			char charCur[] = new char[1];
+			char[] charCur = new char[1];
 			if(MainServidor.CONFIG_POLICY)
 				GestorSalida.REALM_SEND_POLICY_FILE(_out);
 	        
@@ -90,8 +89,8 @@ public class RealmThread implements Runnable{
 	    		}
 	    		if(!_s.isClosed())_s.close();
 	    		_t.interrupt();
-	    	}catch(IOException e1){};
-    	}
+	    	}catch(IOException ignored){}
+		}
     	finally
     	{
     		try
@@ -107,8 +106,8 @@ public class RealmThread implements Runnable{
 	    		}
 	    		if(!_s.isClosed())_s.close();
 	    		_t.interrupt();
-	    	}catch(IOException e1){};
-    	}
+	    	}catch(IOException ignored){}
+		}
 	}
 	
 	private void parsePacket(String packet)
@@ -121,7 +120,7 @@ public class RealmThread implements Runnable{
 					GestorSalida.REALM_SEND_REQUIRED_VERSION(_out);
 					try {
 						this._s.close();
-					} catch (IOException e) {}
+					} catch (IOException ignored) {}
 				}
 				break;
 			case 2://Account Name
@@ -132,11 +131,10 @@ public class RealmThread implements Runnable{
 				{
 					try {
 						this._s.close();
-					} catch (IOException e) {}
+					} catch (IOException ignored) {}
 				}
-				_hashPass = packet;
-				
-				if(Cuenta.COMPTE_LOGIN(_accountName,_hashPass,_hashKey))
+
+                if(Cuenta.COMPTE_LOGIN(_accountName, packet,_hashKey))
 				{
 					_compte = Mundo.getCompteByName(_accountName);
 					if(_compte.isOnline() && _compte.getGameThread() != null)
@@ -153,7 +151,7 @@ public class RealmThread implements Runnable{
 						GestorSalida.REALM_SEND_BANNED(_out);
 						try {
 							_s.close();
-						} catch (IOException e) {}
+						} catch (IOException ignored) {}
 						return;
 					}
 					if(MainServidor.CONFIG_PLAYER_LIMIT != -1 && MainServidor.CONFIG_PLAYER_LIMIT <= MainServidor.gameServer.getPlayerNumber())
@@ -164,7 +162,7 @@ public class RealmThread implements Runnable{
 							GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
 							try {
 								_s.close();
-							} catch (IOException e) {}
+							} catch (IOException ignored) {}
 							return;
 						}
 					}
@@ -187,7 +185,7 @@ public class RealmThread implements Runnable{
 							GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
 							try {
 								_s.close();
-							} catch (IOException e) {}
+							} catch (IOException ignored) {}
 							return;
 						}
 					}
@@ -199,7 +197,7 @@ public class RealmThread implements Runnable{
 				}else//Si le compte n'a pas été reconnu
 				{
 					GestorSQL.Cargar_cuenta_por_usuario(_accountName);
-					if(Cuenta.COMPTE_LOGIN(_accountName,_hashPass,_hashKey)) {
+					if(Cuenta.COMPTE_LOGIN(_accountName, packet,_hashKey)) {
 						_compte = Mundo.getCompteByName(_accountName);
 						if(_compte.isOnline() && _compte.getGameThread() != null) {
 							_compte.getGameThread().closeSocket();
@@ -212,7 +210,7 @@ public class RealmThread implements Runnable{
 							GestorSalida.REALM_SEND_BANNED(_out);
 							try {
 								this._s.close();
-							} catch (IOException e) {}
+							} catch (IOException ignored) {}
 							return;
 						}
 						if(MainServidor.CONFIG_PLAYER_LIMIT != -1 && MainServidor.CONFIG_PLAYER_LIMIT <= MainServidor.gameServer.getPlayerNumber()) {
@@ -221,7 +219,7 @@ public class RealmThread implements Runnable{
 								GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
 								try {
 									_s.close();
-								} catch (IOException e) {}
+								} catch (IOException ignored) {}
 								return;
 							}
 						}
@@ -240,7 +238,7 @@ public class RealmThread implements Runnable{
 								GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
 								try {
 									_s.close();
-								} catch (IOException e) {}
+								} catch (IOException ignored) {}
 								return;
 							}
 						}

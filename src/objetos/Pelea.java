@@ -35,13 +35,13 @@ public class Pelea
 	 */
 	public static class Piege
 	{
-		private Fighter _caster;
-		private Case _cell;
-		private byte _size;
-		private int _spell;
-		private SortStats _trapSpell;
-		private Pelea _fight;
-		private int _color;
+		private final Fighter _caster;
+		private final Case _cell;
+		private final byte _size;
+		private final int _spell;
+		private final SortStats _trapSpell;
+		private final Pelea _fight;
+		private final int _color;
 		private boolean _isunHide = true;
 		private int _teamUnHide = -1;
 		//private Map<Integer, Challenge> _challenges = new TreeMap<Integer, Challenge>();
@@ -165,7 +165,7 @@ public class Pelea
 	{
 		private int _id = 0;
 		private boolean _canPlay = false;
-		private Pelea _fight;
+		private final Pelea _fight;
 		private int _type = 0; // 1 : Personnage, 2 : Mob, 5 : Perco
 		private MobGrade _mob = null;
 		private Personaje _perso = null;
@@ -173,9 +173,8 @@ public class Pelea
 		private Personaje _double = null;
 		private int _team = -2;
 		private Case _cell;
-		private ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<>();
-		private Map<Integer,Integer> _chatiValue = new TreeMap<>();
-		private int _orientation; 
+		private final ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<>();
+		private final Map<Integer,Integer> _chatiValue = new TreeMap<>();
 		private Fighter _invocator;
 		public int _nbInvoc = 0;
 		private int _PDVMAX;
@@ -183,10 +182,10 @@ public class Pelea
 		private boolean _isDead;
 		private boolean _hasLeft;
 		private int _gfxID;
-		private Map<Integer,Integer> _state = new TreeMap<>();
+		private final Map<Integer,Integer> _state = new TreeMap<>();
 		private Fighter _isHolding;
 		private Fighter _holdedBy;
-		private ArrayList<LaunchedSort> _launchedSort = new ArrayList<>();
+		private final ArrayList<LaunchedSort> _launchedSort = new ArrayList<>();
 		private Fighter _oldCible = null;
 		
 		public Fighter get_oldCible() {
@@ -396,26 +395,26 @@ public class Pelea
 			StringBuilder str = new StringBuilder();
 			str.append("GM|").append(c);
 			str.append(_cell.getID()).append(";");
-			_orientation = 1;
+			int _orientation = 1;
 			str.append(_orientation).append(";");
 			str.append("0;");
 			str.append(getGUID()).append(";");
 			str.append(getPacketsName()).append(";");
 
-			switch(_type)
-			{
-				case 1://Perso
+			switch (_type) {
+//Perso
+				case 1 -> {
 					str.append(_perso.get_classe()).append(";");
 					str.append(_perso.get_gfxID()).append("^").append(_perso.get_size()).append(";");
 					str.append(_perso.get_sexe()).append(";");
 					str.append(_perso.get_lvl()).append(";");
 					str.append(_perso.get_align()).append(",");
 					str.append("0,");//TODO
-					str.append((_perso.is_showWings()?_perso.getGrade():"0")).append(",");
+					str.append((_perso.is_showWings() ? _perso.getGrade() : "0")).append(",");
 					str.append(_perso.get_GUID()).append(";");
-					str.append((_perso.get_color1()==-1?"-1":Integer.toHexString(_perso.get_color1()))).append(";");
-					str.append((_perso.get_color2()==-1?"-1":Integer.toHexString(_perso.get_color2()))).append(";");
-					str.append((_perso.get_color3()==-1?"-1":Integer.toHexString(_perso.get_color3()))).append(";");
+					str.append((_perso.get_color1() == -1 ? "-1" : Integer.toHexString(_perso.get_color1()))).append(";");
+					str.append((_perso.get_color2() == -1 ? "-1" : Integer.toHexString(_perso.get_color2()))).append(";");
+					str.append((_perso.get_color3() == -1 ? "-1" : Integer.toHexString(_perso.get_color3()))).append(";");
 					str.append(_perso.getGMStuffString()).append(";");
 					str.append(getPDV()).append(";");
 					str.append(getTotalStats().getEffect(Constantes.STATS_ADD_PA)).append(";");
@@ -428,11 +427,12 @@ public class Pelea
 					str.append(getTotalStats().getEffect(Constantes.STATS_ADD_AFLEE)).append(";");
 					str.append(getTotalStats().getEffect(Constantes.STATS_ADD_MFLEE)).append(";");
 					str.append(_team).append(";");
-					if(_perso.isOnMount() && _perso.getMount() != null)
+					if (_perso.isOnMount() && _perso.getMount() != null)
 						str.append(_perso.getMount().get_color(_perso.parsecolortomount()));
 					str.append(";");
-				break;
-				case 2://Mob
+				}
+//Mob
+				case 2 -> {
 					str.append("-2;");
 					str.append(_mob.getTemplate().getGfxID()).append("^100;");
 					str.append(_mob.getGrade()).append(";");
@@ -442,30 +442,32 @@ public class Pelea
 					str.append(_mob.getPA()).append(";");
 					str.append(_mob.getPM()).append(";");
 					str.append(_team);
-				break;
-				case 5://Perco
+				}
+//Perco
+				case 5 -> {
 					str.append("-6;");//Perco
 					str.append("6000^");//GFXID^
 					Gremio G = Mundo.getGuild(Recaudador.GetPercoGuildID(_fight._mapOld.get_id()));
-					str.append(50+G.get_lvl()).append(";"); // Size
+					str.append(50 + G.get_lvl()).append(";"); // Size
 					str.append(G.get_lvl()).append(";");
 					str.append("1;");//FIXME
 					str.append("2;4;");//FIXME
-					str.append((int)Math.floor(G.get_lvl()/2)).append(";").append((int)Math.floor(G.get_lvl()/2)).append(";").append((int)Math.floor(G.get_lvl()/2)).append(";").append((int)Math.floor(G.get_lvl()/2)).append(";").append((int)Math.floor(G.get_lvl()/2)).append(";").append((int)Math.floor(G.get_lvl()/2)).append(";").append((int)Math.floor(G.get_lvl()/2)).append(";");//R�sistances
+					str.append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";");//R�sistances
 					str.append(_team);
-				break;
-				case 10://Double
+				}
+//Double
+				case 10 -> {
 					str.append(_double.get_classe()).append(";");
 					str.append(_double.get_gfxID()).append("^").append(_double.get_size()).append(";");
 					str.append(_double.get_sexe()).append(";");
 					str.append(_double.get_lvl()).append(";");
 					str.append(_double.get_align()).append(",");
 					str.append("0,");//TODO
-					str.append((_double.is_showWings()?_double.getGrade():"0")).append(",");
+					str.append((_double.is_showWings() ? _double.getGrade() : "0")).append(",");
 					str.append(_double.get_GUID()).append(";");
-					str.append((_double.get_color1()==-1?"-1":Integer.toHexString(_double.get_color1()))).append(";");
-					str.append((_double.get_color2()==-1?"-1":Integer.toHexString(_double.get_color2()))).append(";");
-					str.append((_double.get_color3()==-1?"-1":Integer.toHexString(_double.get_color3()))).append(";");
+					str.append((_double.get_color1() == -1 ? "-1" : Integer.toHexString(_double.get_color1()))).append(";");
+					str.append((_double.get_color2() == -1 ? "-1" : Integer.toHexString(_double.get_color2()))).append(";");
+					str.append((_double.get_color3() == -1 ? "-1" : Integer.toHexString(_double.get_color3()))).append(";");
 					str.append(_double.getGMStuffString()).append(";");
 					str.append(getPDV()).append(";");
 					str.append(getTotalStats().getEffect(Constantes.STATS_ADD_PA)).append(";");
@@ -478,10 +480,10 @@ public class Pelea
 					str.append(getTotalStats().getEffect(Constantes.STATS_ADD_AFLEE)).append(";");
 					str.append(getTotalStats().getEffect(Constantes.STATS_ADD_MFLEE)).append(";");
 					str.append(_team).append(";");
-					if(_double.isOnMount() && _double.getMount() != null)
+					if (_double.isOnMount() && _double.getMount() != null)
 						str.append(_double.getMount().get_color(_perso.parsecolortomount()));
 					str.append(";");
-				break;
+				}
 			}
 			
 			return str.toString();
@@ -655,7 +657,7 @@ public class Pelea
 							try
 							{
 								id = Integer.parseInt(args.split(";")[2]);
-							}catch(Exception e){}
+							}catch(Exception ignored){}
 							if(id == -1)return;
 							setState(id,0);
 							GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 950, entry.getCaster().getGUID()+"", entry.getCaster().getGUID()+","+id+",0");
@@ -710,48 +712,36 @@ public class Pelea
 			//Si c'est le jouer actif qui s'autoBuff, on ajoute 1 a la dur�e
 			_fightBuffs.add(new EfectoHechizo(id,val,(_canPlay?duration+1:duration),turns,debuff,caster,args,spellID));
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Ajout du Buff "+id+" sur le personnage Fighter ID = "+this.getGUID()+" val : "+val+" duration : "+duration+" turns : "+turns+" debuff : "+debuff+" spellid : "+spellID+" args : "+args);
-			
-				
-			switch(id)
-			{
-				case 6://Renvoie de sort
-					GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), -1, val+"", "10", "", duration, spellID);
-				break;
-				
-				case 79://Chance �ca
+
+
+			switch (id) {
+//Renvoie de sort
+				case 6 -> GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), -1, val + "", "10", "", duration, spellID);
+//Chance �ca
+				case 79 -> {
 					val = Integer.parseInt(args.split(";")[0]);
 					String valMax = args.split(";")[1];
 					String chance = args.split(";")[2];
 					GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, valMax, chance, "", duration, spellID);
-				break;
-				
-				case 788://Fait apparaitre message le temps de buff sacri Chatiment de X sur Y tours
+				}
+//Fait apparaitre message le temps de buff sacri Chatiment de X sur Y tours
+				case 788 -> {
 					val = Integer.parseInt(args.split(";")[1]);
 					String valMax2 = args.split(";")[2];
-					if(Integer.parseInt(args.split(";")[0]) == 108)return;
-					GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, ""+val, ""+valMax2, "", duration, spellID);
-					
-				break;
-
-				case 98://Poison insidieux
-				case 107://Mot d'�pine (2�3), Contre(3)
-				case 100://Fl�che Empoisonn�e, Tout ou rien
-				case 108://Mot de R�g�n�ration, Tout ou rien
-				case 165://Ma�trises
+					if (Integer.parseInt(args.split(";")[0]) == 108) return;
+					GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, "" + val, "" + valMax2, "", duration, spellID);
+				}
+//Ma�trises
+				case 98, 107, 100, 108, 165 -> {
 					val = Integer.parseInt(args.split(";")[0]);
 					String valMax1 = args.split(";")[1];
-					if(valMax1.compareTo("-1") == 0 || spellID == 82 || spellID == 94)
-					{
-					GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, "", "", "", duration, spellID);
-					}else if(valMax1.compareTo("-1") != 0)
-					{
-					GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, valMax1, "", "", duration, spellID);
+					if (valMax1.compareTo("-1") == 0 || spellID == 82 || spellID == 94) {
+						GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, "", "", "", duration, spellID);
+					} else if (valMax1.compareTo("-1") != 0) {
+						GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, valMax1, "", "", duration, spellID);
 					}
-					break;
-
-				default:
-					GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, "", "", "", duration, spellID);
-				break;
+				}
+				default -> GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_fight, 7, id, getGUID(), val, "", "", "", duration, spellID);
 			}
 		}
 		
@@ -938,17 +928,9 @@ public class Pelea
 			{
 				if(!SE.isDebuffabe())newBuffs.add(SE);
 				//On envoie les Packets si besoin
-				switch(SE.getEffectID())
-				{
-					case Constantes.STATS_ADD_PA:
-					case Constantes.STATS_ADD_PA2:
-						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 101,getGUID()+"",getGUID()+",-"+SE.getValue());
-					break;
-					
-					case Constantes.STATS_ADD_PM:
-					case Constantes.STATS_ADD_PM2:
-						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 127,getGUID()+"",getGUID()+",-"+SE.getValue());
-					break;
+				switch (SE.getEffectID()) {
+					case Constantes.STATS_ADD_PA, Constantes.STATS_ADD_PA2 -> GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 101, getGUID() + "", getGUID() + ",-" + SE.getValue());
+					case Constantes.STATS_ADD_PM, Constantes.STATS_ADD_PM2 -> GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 127, getGUID() + "", getGUID() + ",-" + SE.getValue());
 				}
 			}
 			_fightBuffs.clear();
@@ -1033,14 +1015,14 @@ public class Pelea
 	
 	public static class Glyphe
 	{
-		private Fighter _caster;
-		private Case _cell;
-		private byte _size;
-		private int _spell;
-		private SortStats _trapSpell;
+		private final Fighter _caster;
+		private final Case _cell;
+		private final byte _size;
+		private final int _spell;
+		private final SortStats _trapSpell;
 		private byte _duration;
-		private Pelea _fight;
-		private int _color;
+		private final Pelea _fight;
+		private final int _color;
 		
 		public Glyphe(Pelea fight, Fighter caster, Case cell, byte size, SortStats trapSpell, byte duration, int spell)
 		{
@@ -1166,14 +1148,14 @@ public class Pelea
 		
 	}
 	
-	private int _id;
-	private Map<Integer,Fighter> _team0 = new TreeMap<>();
-	private Map<Integer,Fighter> _team1 = new TreeMap<>();
-	private Map<Integer,Fighter> deadList = new TreeMap<>();
-	private Map<Integer, Personaje> _spec  = new TreeMap<>();
+	private final int _id;
+	private final Map<Integer,Fighter> _team0 = new TreeMap<>();
+	private final Map<Integer,Fighter> _team1 = new TreeMap<>();
+	private final Map<Integer,Fighter> deadList = new TreeMap<>();
+	private final Map<Integer, Personaje> _spec  = new TreeMap<>();
 	private Mapa _map;
-	private Mapa _mapOld;
-	private Fighter _init0;
+	private final Mapa _mapOld;
+	private final Fighter _init0;
 	private Fighter _init1;
 	private ArrayList<Case> _start0 = new ArrayList<>();
 	private ArrayList<Case> _start1 = new ArrayList<>();
@@ -1187,8 +1169,8 @@ public class Pelea
 	private boolean specOk = true;
 	private boolean help1 = false;
 	private boolean help2 = false;
-	private int _st2;
-	private int _st1;
+	private final int _st2;
+	private final int _st1;
 	private int _curPlayer;
 	private long _startTime = 0;
 	private int _curFighterPA;
@@ -1198,17 +1180,17 @@ public class Pelea
 	private String _curAction = "";
 	private List<Fighter> _ordreJeu = new ArrayList<>();
 	private Timer _turnTimer;
-	private List<Glyphe> _glyphs = new ArrayList<>();
-	private List<Piege> _traps = new ArrayList<>();
+	private final List<Glyphe> _glyphs = new ArrayList<>();
+	private final List<Piege> _traps = new ArrayList<>();
 	private MobGroup _mobGroup;
 	private Recaudador _perco;
 	
-	private ArrayList<Fighter> _captureur = new ArrayList<>(8);	//Cr�ation d'une liste de longueur 8. Les combats contiennent un max de 8 Attaquant
+	private final ArrayList<Fighter> _captureur = new ArrayList<>(8);	//Cr�ation d'une liste de longueur 8. Les combats contiennent un max de 8 Attaquant
 	private boolean isCapturable = false;
 	private int captWinner = -1;
 	private PiedraAlma pierrePleine;
-	private Map<Integer, Retos> _challenges = new TreeMap<>();
-	private Map<Integer, Case> _raulebaque = new TreeMap<>();
+	private final Map<Integer, Retos> _challenges = new TreeMap<>();
+	private final Map<Integer, Case> _raulebaque = new TreeMap<>();
 	private long _ticMyTimer_startTime = 0L;
 	private boolean _ticMyTimer_endTurn = false;
 	  
@@ -1251,7 +1233,7 @@ public class Pelea
 	        		  try {// on essaye de d�marrer le combat si ce n'est pas un challenge
 	        			  startFight(); }
 	              catch(Exception e){
-	                  GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-FIGHT", (new StringBuilder("startFight(); Dans ticMyTimer() a \351chou\351. MAPID: ")).append(get_map().get_id()).toString());
+	                  GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-FIGHT", "startFight(); Dans ticMyTimer() a \351chou\351. MAPID: " + get_map().get_id());
 	              }
 	              if(_perco != null)
 	            	  _perco.set_timeTurn(MainServidor.CONFIG_MS_FOR_START_FIGHT);
@@ -1274,7 +1256,7 @@ public class Pelea
 	              }
 	              catch(Exception e)
 	              {
-	                  GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-FIGHT", (new StringBuilder("endTurn(); Dans ticMyTimer() a \351chou\351. MAPID: ")).append(get_map().get_id()).toString());
+	                  GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-FIGHT", "endTurn(); Dans ticMyTimer() a \351chou\351. MAPID: " + get_map().get_id());
 	              }
 	          }
 	      }
@@ -1975,7 +1957,7 @@ public class Pelea
 				try
 				{
 					val = Integer.parseInt(SE.getArgs().split(";")[1]);
-				}catch(Exception e){};
+				}catch(Exception ignored){}
 				if(val == -1)continue;
 				
 				int nbr = (int) Math.floor((double)_curFighterUsedPA/(double)pas);
@@ -1988,7 +1970,7 @@ public class Pelea
 					int pdom = SE.getCaster().getTotalStats().getEffect(Constantes.STATS_ADD_PERDOM);
 					if(pdom < 0)pdom = 0;
 					//on applique le boost
-					dgt = (int)(((100+inte+pdom)/100) * dgt);
+					dgt = ((100+inte+pdom)/100) * dgt;
 				}
 				if(_ordreJeu.get(_curPlayer).hasBuff(184))
 				{
@@ -2253,7 +2235,7 @@ public class Pelea
 	{	
 		try {
 			Thread.sleep(700);
-		} catch (InterruptedException e) {};
+		} catch (InterruptedException ignored) {}
 		Fighter current_Join = null;
 		Case cell = getRandomCell(_start1);
 		if(cell == null)return;
@@ -2284,13 +2266,13 @@ public class Pelea
 			locked0 = !locked0;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(locked0?"L'equipe 1 devient bloquee":"L'equipe 1 n'est plus bloquee");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), locked0?'+':'-', 'A', guid);
-			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,1,locked0?"095":"096");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,1,locked0?"095":"096");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			locked1 = !locked1;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(locked1?"L'equipe 2 devient bloquee":"L'equipe 2 n'est plus bloquee");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), locked1?'+':'-', 'A', guid);
-			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,2,locked1?"095":"096");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,2,locked1?"095":"096");
 		}
 	}
 	
@@ -2301,13 +2283,13 @@ public class Pelea
 			onlyGroup0 = !onlyGroup0;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(locked0?"L'equipe 1 n'accepte que les membres du groupe":"L'equipe 1 n'est plus bloquee");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), onlyGroup0?'+':'-', 'P', guid);
-			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,1,onlyGroup0?"093":"094");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,1,onlyGroup0?"093":"094");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			onlyGroup1 = !onlyGroup1;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(locked1?"L'equipe 2 n'accepte que les membres du groupe":"L'equipe 2 n'est plus bloquee");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), onlyGroup1?'+':'-', 'P', guid);
-			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,2,onlyGroup1?"095":"096");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,2,onlyGroup1?"095":"096");
 		}
 	}
 	
@@ -2319,7 +2301,7 @@ public class Pelea
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(specOk?"Le combat accepte les spectateurs":"Le combat n'accepte plus les spectateurs");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), specOk?'+':'-', 'S', _init0.getGUID());
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), specOk?'+':'-', 'S', _init1.getGUID());
-			GestorSalida.GAME_SEND_Im_PACKET_TO_MAP(_map,specOk?"039":"040");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_AL_MAPA(_map,specOk?"039":"040");
 		}
 	}
 
@@ -2330,13 +2312,13 @@ public class Pelea
 			help1 = !help1;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(help2?"L'equipe 1 demande de l'aide":"L'equipe 1s ne demande plus d'aide");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), locked0?'+':'-', 'H', guid);
-			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,1,help1?"0103":"0104");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,1,help1?"0103":"0104");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			help2 = !help2;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(help2?"L'equipe 2 demande de l'aide":"L'equipe 2 ne demande plus d'aide");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), locked1?'+':'-', 'H', guid);
-			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,2,help2?"0103":"0104");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,2,help2?"0103":"0104");
 		}
 	}
 	
@@ -2436,8 +2418,10 @@ public class Pelea
 		
 		_curFighterPM -= nStep;
 		_curFighterUsedPM += nStep;
-		
-		int nextCellID = GestorEncriptador.cellCode_To_ID(newPath.substring(newPath.length() - 2));
+
+		String encriptarcelda = newPath.substring(newPath.length() - 2);
+
+		int nextCellID = GestorEncriptador.cellCode_To_ID(encriptarcelda);
 		//les monstres n'ont pas de GAS//GAF
 		if(_ordreJeu.get(_curPlayer).getPersonnage() != null)
 			GestorSalida.GAME_SEND_GAS_PACKET_TO_FIGHT(this,7,_ordreJeu.get(_curPlayer).getGUID());
@@ -2481,7 +2465,7 @@ public class Pelea
       	}
         
 		_ordreJeu.get(_curPlayer).get_fightCell().getFighters().clear();
-		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID= "+f.getGUID()+" se deplace de la case "+_ordreJeu.get(_curPlayer).get_fightCell().getID()+" vers "+ GestorEncriptador.cellCode_To_ID(newPath.substring(newPath.length() - 2)));
+		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID= "+f.getGUID()+" se deplace de la case "+_ordreJeu.get(_curPlayer).get_fightCell().getID()+" vers "+ GestorEncriptador.cellCode_To_ID(encriptarcelda));
         _ordreJeu.get(_curPlayer).set_fightCell(_map.getCase(nextCellID));
         _ordreJeu.get(_curPlayer).get_fightCell().addFighter(_ordreJeu.get(_curPlayer));
         if(po != null) po.get_fightCell().addFighter(po);// m�me erreur que tant�t, bug ou plus de fighter sur la case
@@ -2507,8 +2491,8 @@ public class Pelea
         {
         	try {
     			Thread.sleep(900+100*nStep);//Estimation de la dur�e du d�placement
-    		} catch (InterruptedException e) {};
-        	GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
+    		} catch (InterruptedException ignored) {}
+			GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
     		_curAction = "";
     		ArrayList<Piege> P = new ArrayList<>();
     		P.addAll(_traps);
@@ -2555,8 +2539,8 @@ public class Pelea
 		}
 		try {
 			Thread.sleep(500);
-		} catch (InterruptedException e) {};
-		
+		} catch (InterruptedException ignored) {}
+
 		_curAction = "";
 	}
 	
@@ -2638,13 +2622,13 @@ public class Pelea
 			
 			try {
 				Thread.sleep(500);
-			} catch (InterruptedException e) {};
+			} catch (InterruptedException ignored) {}
 			if((isEc && Spell.isEcEndTurn()))
 			{
 				_curAction = "";
 				try {
 					Thread.sleep(500);
-				} catch (InterruptedException e) {};
+				} catch (InterruptedException ignored) {}
 				if(fighter.getMob() != null || fighter.isInvocation())//Mob, Invoque
 				{
 					return 5;
@@ -2663,7 +2647,7 @@ public class Pelea
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 102,fighter.getGUID()+"",fighter.getGUID()+",-0"); // annonce le co�t en PA
 		try {
 			Thread.sleep(500);
-		} catch (InterruptedException e) {};
+		} catch (InterruptedException ignored) {}
 		_curAction = "";
 		return 0;
 	}
@@ -2687,7 +2671,7 @@ public class Pelea
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") Sort non existant");
 			if(perso != null)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "1169");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1169");
 			}
 			return false;
 		}
@@ -2697,7 +2681,7 @@ public class Pelea
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Ce n'est pas au joueur. Doit jouer :("+f.getGUID()+"). Fautif :("+fighter.getGUID()+")");
 			if(perso != null)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "1175");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1175");
 			}
 			return false;	
 		}
@@ -2707,7 +2691,7 @@ public class Pelea
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") Le joueur n'a pas assez de PA ("+_curFighterPA+"/"+spell.getPACost()+")");
 			if(perso != null)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "1170;" + _curFighterPA + "~" + spell.getPACost());
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1170;" + _curFighterPA + "~" + spell.getPACost());
 			}
 			return false;
 		}
@@ -2717,7 +2701,7 @@ public class Pelea
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") La cellule visee n'existe pas");
 			if(perso != null)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "1172");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1172");
 			}
 			return false;
 		}
@@ -2727,7 +2711,7 @@ public class Pelea
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") Le sort demande un lancer en ligne, or la case n'est pas alignee avec le joueur");
 			if(perso != null)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "1173");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1173");
 			}
 			return false;
 		}
@@ -2737,7 +2721,7 @@ public class Pelea
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") Le sort demande une ligne de vue, mais la case visee n'est pas visible pour le joueur");
 			if(perso != null)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "1174");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1174");
 			}
 			return false;
 		}
@@ -2747,7 +2731,7 @@ public class Pelea
 			if(!Camino.checkLoS(_map, Camino.GetCaseIDFromDirrection(ValidlaunchCase, dir, _map, true), cell.getID(), null, true)) {
 				if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") Le sort demande une ligne de vue, mais la case visee n'est pas visible pour le joueur");
 				if(perso != null)
-					GestorSalida.GAME_SEND_Im_PACKET(perso, "1174");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1174");
 				return false;
 			}
 		
@@ -2763,7 +2747,7 @@ public class Pelea
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+") La case est trop proche ou trop eloignee Min: "+spell.getMinPO()+" Max: "+spell.getMaxPO()+" Dist: "+dist);
 			if(perso != null)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "1171;" + spell.getMinPO() + "~" + spell.getMaxPO() + "~" + dist);
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1171;" + spell.getMinPO() + "~" + spell.getMaxPO() + "~" + dist);
 			}
 			return false;
 		}
@@ -2853,7 +2837,7 @@ public class Pelea
 		if ((this._type == 4) && (this._challenges.size() > 0)) {
   	       try {
   	    	   for (Entry<Integer, Retos> c : this._challenges.entrySet()) {
-  	    		   if ((c.getValue() == null) || (!((Retos)c.getValue()).get_win()))
+  	    		   if ((c.getValue() == null) || (!c.getValue().get_win()))
   	    			   continue; 
   	    		   factChalDrop += c.getValue().get_gainDrop();
   	    	   }
@@ -3391,8 +3375,8 @@ public class Pelea
 			try
 			{
 				Thread.sleep(1600);
-			}catch(Exception E){};
-			
+			}catch(Exception ignored){}
+
 			//Pour les gagnants, on active les endFight actions
 			for(Fighter F : winTeam)
 			{
@@ -3410,7 +3394,7 @@ public class Pelea
 					}
 					F._Perco.set_inFight((byte)0);
 					F._Perco.set_inFightID((byte)-1);
-					for(Personaje z : Mundo.getCarte((short)F._Perco.get_mapID()).getPersos())
+					for(Personaje z : Mundo.getCarte(F._Perco.get_mapID()).getPersos())
 					{
 						if(z == null) continue;
 						GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.get_compte().getGameThread().get_out(), z.getActualMapa());
@@ -3442,7 +3426,7 @@ public class Pelea
 				try
 				{
 					Thread.sleep(200);
-				}catch(Exception E){};
+				}catch(Exception ignored){}
 				F.getPersonnage().refreshMapAfterFight();
 			}
 			//Pour les perdant on TP au point de sauvegarde
@@ -3475,7 +3459,7 @@ public class Pelea
 					try
 					{
 						Thread.sleep(1000);
-					}catch(Exception E){};
+					}catch(Exception ignored){}
 					int EnergyLoos = Formulas.getLoosEnergy(F.get_lvl(), _type==1, _type==5);
 					int Energy = F.getPersonnage().get_energy() - EnergyLoos;
 					if(Energy < 0) Energy = 0;
@@ -3489,13 +3473,13 @@ public class Pelea
 						F.getPersonnage().set_PDV(1);
 					}
 					if(F.getPersonnage().isOnline())
-						GestorSalida.GAME_SEND_Im_PACKET(F.getPersonnage(), "034;"+EnergyLoos);
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(F.getPersonnage(), "034;"+EnergyLoos);
 				}
 				
 				try
 				{
 					Thread.sleep(200);
-				}catch(Exception E){};
+				}catch(Exception ignored){}
 				F.getPersonnage().refreshMapAfterFight();
 			}
 			
@@ -3539,7 +3523,7 @@ public class Pelea
 					if(index != -1)_ordreJeu.remove(index);
 					
 					if(_team0.containsKey(entry.getValue().getGUID()))_team0.remove(entry.getValue().getGUID());
-					else if (_team1.containsKey(entry.getValue().getGUID()))_team1.remove(entry.getValue().getGUID());
+					else _team1.remove(entry.getValue().getGUID());
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 999, target.getGUID()+"", getGTL());
 				}
 			}
@@ -3568,7 +3552,7 @@ public class Pelea
 					if(index != -1)_ordreJeu.remove(index);
 					
 					if(_team0.containsKey(entry.getValue().getGUID()))_team0.remove(entry.getValue().getGUID());
-					else if (_team1.containsKey(entry.getValue().getGUID()))_team1.remove(entry.getValue().getGUID());
+					else _team1.remove(entry.getValue().getGUID());
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 999, target.getGUID()+"", getGTL());
               	}
 			}
@@ -3603,10 +3587,10 @@ public class Pelea
 					
 					
 					if(_team0.containsKey(target.getGUID()))_team0.remove(target.getGUID());
-					else if (_team1.containsKey(target.getGUID()))_team1.remove(target.getGUID());
+					else _team1.remove(target.getGUID());
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 999, target.getGUID()+"", getGTL());
 				}
-			}catch(Exception e){e.printStackTrace();};
+			}catch(Exception e){e.printStackTrace();}
 		}
 		if ((this._type == 4) && (this._challenges.size() > 0))
 		{
@@ -3648,7 +3632,7 @@ public class Pelea
 		}
 		try {
 			Thread.sleep(500);
-		} catch (InterruptedException e) {};
+		} catch (InterruptedException ignored) {}
 	}
 
 	public int getTeamID(int guid)
@@ -3734,7 +3718,7 @@ public class Pelea
 				GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.get_GUID());//Fin de l'action
 				try{
 					Thread.sleep(500);
-				}catch(Exception e){}
+				}catch(Exception ignored){}
 				endTurn();
 			}
 			
@@ -3869,7 +3853,7 @@ public class Pelea
 								if(Energy < 0) Energy = 0;
 								P.set_energy(Energy);
 								if(P.isOnline())
-									GestorSalida.GAME_SEND_Im_PACKET(P, "034;"+EnergyLoos);
+									GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "034;"+EnergyLoos);
 								
 								if(_type == Constantes.FIGHT_TYPE_AGRESSION)
 								{
@@ -3877,15 +3861,15 @@ public class Pelea
 									if(honor < 0) honor = 0;
 									P.set_honor(honor);
 									if(P.isOnline())
-										GestorSalida.GAME_SEND_Im_PACKET(P, "076;"+honor);
+										GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "076;"+honor);
 								}
 								
 								
 								try
 								{
 									Thread.sleep(1000);
-								}catch(Exception E){};
-								
+								}catch(Exception ignored){}
+
 								if(Energy == 0)
 								{
 									P.set_Ghosts();
@@ -3901,7 +3885,7 @@ public class Pelea
 								try
 								{
 									Thread.sleep(200);
-								}catch(Exception E){};
+								}catch(Exception ignored){}
 								GestorSalida.GAME_SEND_GV_PACKET(P);
 								P.refreshMapAfterFight();
 							}
@@ -3954,7 +3938,7 @@ public class Pelea
 									try
 									{
 										Thread.sleep(200);
-									}catch(Exception E){};
+									}catch(Exception ignored){}
 									GestorSalida.GAME_SEND_GV_PACKET(P);
 									P.refreshMapAfterFight();
 								}
@@ -4009,7 +3993,7 @@ public class Pelea
 											try
 											{
 												Thread.sleep(200);
-											}catch(Exception E){};
+											}catch(Exception ignored){}
 											GestorSalida.GAME_SEND_GV_PACKET(P);
 											P.refreshMapAfterFight();
 										}
@@ -4022,7 +4006,7 @@ public class Pelea
 											if(Energy < 0) Energy = 0;
 											P.set_energy(Energy);
 											if(P.isOnline())
-												GestorSalida.GAME_SEND_Im_PACKET(P, "034;"+EnergyLoos);
+												GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "034;"+EnergyLoos);
 											
 											if(_type == Constantes.FIGHT_TYPE_AGRESSION)
 											{
@@ -4030,14 +4014,14 @@ public class Pelea
 												if(honor < 0) honor = 0;
 												P.set_honor(honor);
 												if(P.isOnline())
-													GestorSalida.GAME_SEND_Im_PACKET(P, "076;"+honor);
+													GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "076;"+honor);
 											}
 											
 											
 											try
 											{
 												Thread.sleep(1000);
-											}catch(Exception E){};
+											}catch(Exception ignored){}
 											if(Energy == 0)
 											{
 												P.set_Ghosts();
@@ -4053,7 +4037,7 @@ public class Pelea
 											try
 											{
 												Thread.sleep(200);
-											}catch(Exception E){};
+											}catch(Exception ignored){}
 											GestorSalida.GAME_SEND_GV_PACKET(P);
 											P.refreshMapAfterFight();
 										}
@@ -4079,7 +4063,7 @@ public class Pelea
 											try
 											{
 												Thread.sleep(200);
-											}catch(Exception E){};
+											}catch(Exception ignored){}
 											GestorSalida.GAME_SEND_GV_PACKET(P);
 											P.refreshMapAfterFight();
 										}
@@ -4103,7 +4087,7 @@ public class Pelea
 									}
 									_perco.set_inFight((byte)0);
 									_perco.set_inFightID((byte)-1);
-									for(Personaje z : Mundo.getCarte((short)_perco.get_mapID()).getPersos())
+									for(Personaje z : Mundo.getCarte(_perco.get_mapID()).getPersos())
 									{
 										if(z == null) continue;
 										GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.get_compte().getGameThread().get_out(), z.getActualMapa());
@@ -4140,7 +4124,7 @@ public class Pelea
 									if(Energy < 0) Energy = 0;
 									P.set_energy(Energy);
 									if(P.isOnline())
-										GestorSalida.GAME_SEND_Im_PACKET(P, "034;"+EnergyLoos);
+										GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "034;"+EnergyLoos);
 									
 									if(_type == Constantes.FIGHT_TYPE_AGRESSION)
 									{
@@ -4148,13 +4132,13 @@ public class Pelea
 										if(honor < 0) honor = 0;
 										P.set_honor(honor);
 										if(P.isOnline())
-											GestorSalida.GAME_SEND_Im_PACKET(P, "076;"+honor);
+											GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "076;"+honor);
 									}
 									
 									try
 									{
 										Thread.sleep(1000);
-									}catch(Exception E){};
+									}catch(Exception ignored){}
 									if(Energy == 0)
 									{
 										P.set_Ghosts();
@@ -4170,7 +4154,7 @@ public class Pelea
 									try
 									{
 										Thread.sleep(200);
-									}catch(Exception E){};
+									}catch(Exception ignored){}
 									GestorSalida.GAME_SEND_GV_PACKET(P);
 									P.refreshMapAfterFight();
 								}
@@ -4246,43 +4230,39 @@ public class Pelea
 		infos.append((_startTime  == 0?"-1":time)).append(";");
 		//Team1
 		infos.append("0,");//0 car toujours joueur :)
-		switch(_type)
-		{
-			case Constantes.FIGHT_TYPE_CHALLENGE:
+		//Team2
+		//Team2
+		//Team2
+		//Team2
+		switch (_type) {
+			case Constantes.FIGHT_TYPE_CHALLENGE -> {
 				infos.append("0,");
 				infos.append(_team0.size()).append(";");
-				//Team2
 				infos.append("0,");
 				infos.append("0,");
 				infos.append(_team1.size()).append(";");
-			break;
-			
-			case Constantes.FIGHT_TYPE_AGRESSION:
+			}
+			case Constantes.FIGHT_TYPE_AGRESSION -> {
 				infos.append(_init0.getPersonnage().get_align()).append(",");
 				infos.append(_team0.size()).append(";");
-				//Team2
 				infos.append("0,");
 				infos.append(_init1.getPersonnage().get_align()).append(",");
 				infos.append(_team1.size()).append(";");
-			break;
-			
-			case Constantes.FIGHT_TYPE_PVM:
+			}
+			case Constantes.FIGHT_TYPE_PVM -> {
 				infos.append("0,");
 				infos.append(_team0.size()).append(";");
-				//Team2
 				infos.append("1,");
 				infos.append(_team1.get(_team1.keySet().toArray()[0]).getMob().getTemplate().getAlign()).append(",");
 				infos.append(_team1.size()).append(";");
-			break;
-			
-			case Constantes.FIGHT_TYPE_PVT:
+			}
+			case Constantes.FIGHT_TYPE_PVT -> {
 				infos.append("0,");
 				infos.append(_team0.size()).append(";");
-				//Team2
 				infos.append("4,");
 				infos.append("0,");
 				infos.append(_team1.size()).append(";");
-			break;
+			}
 		}
 		return infos.toString();
 	}
@@ -4335,7 +4315,7 @@ public class Pelea
 	{
 		if(!specOk  || _state != Constantes.FIGHT_STATE_ACTIVE)
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(p, "157");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(p, "157");
 			return;
 		}
 		long timeRestant = (MainServidor.CONFIG_MS_PER_TURN - 1) - (System.currentTimeMillis() - _ticMyTimer_startTime);
@@ -4348,7 +4328,7 @@ public class Pelea
 		GestorSalida.GAME_SEND_GAMETURNSTART_PACKET(p,_ordreJeu.get(_curPlayer).getGUID(), Constantes.TIME_BY_TURN);
 		_spec.put(p.get_GUID(), p);
 		p.set_fight(this);
-		GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this, 7, "036;"+p.get_name());
+		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this, 7, "036;"+p.get_name());
 		
 		if ((this._type == 4) && (this._challenges.size() > 0))
 		{

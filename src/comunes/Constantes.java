@@ -16,7 +16,7 @@ import objetos.hechizos.Hechizos.SortStats;
 public class Constantes
 {
 	//DEBUG
-	public static int DEBUG_MAP_LIMIT 	=	20000;
+	public static final int DEBUG_MAP_LIMIT 	=	20000;
 	//Server
 	public static final String SERVER_VERSION	=	"3.0";
 	public static final String SERVER_MAKER		=	"Skillet";
@@ -24,9 +24,9 @@ public class Constantes
 	public static final	String CLIENT_VERSION	=	"1.29.1";
 	public static final boolean IGNORE_VERSION 		= false;
 	//ZAAPI <alignID,{mapID,mapID,...,mapID}>
-	public static Map<Integer, String> ZAAPI = new TreeMap<>();
+	public static final Map<Integer, String> ZAAPI = new TreeMap<>();
 	//ZAAP <mapID,cellID>
-	public static Map<Integer, Integer> ZAAPS = new TreeMap<>();
+	public static final Map<Integer, Integer> ZAAPS = new TreeMap<>();
 	//BANIP
 	public static String BAN_IP = "";
 	
@@ -41,28 +41,28 @@ public class Constantes
 	}
 	
 	//Valeur des droits de guilde
-	public static int G_BOOST = 2;			//Gérer les boost
-	public static int G_RIGHT = 4;			//Gérer les droits
-	public static int G_INVITE = 8;			//Inviter de nouveaux membres
-	public static int G_BAN = 16;				//Bannir
-	public static int G_ALLXP = 32;			//Gérer les répartitions d'xp
-	public static int G_HISXP = 256;			//Gérer sa répartition d'xp
-	public static int G_RANK = 64;			//Gérer les rangs
-	public static int G_POSPERCO = 128;		//Poser un percepteur
-	public static int G_COLLPERCO = 512;		//Collecter les percepteurs
-	public static int G_USEENCLOS = 4096;		//Utiliser les enclos
-	public static int G_AMENCLOS = 8192;		//Aménager les enclos
-	public static int G_OTHDINDE = 16384;		//Gérer les montures des autres membres
+	public static final int G_BOOST = 2;			//Gérer les boost
+	public static final int G_RIGHT = 4;			//Gérer les droits
+	public static final int G_INVITE = 8;			//Inviter de nouveaux membres
+	public static final int G_BAN = 16;				//Bannir
+	public static final int G_ALLXP = 32;			//Gérer les répartitions d'xp
+	public static final int G_HISXP = 256;			//Gérer sa répartition d'xp
+	public static final int G_RANK = 64;			//Gérer les rangs
+	public static final int G_POSPERCO = 128;		//Poser un percepteur
+	public static final int G_COLLPERCO = 512;		//Collecter les percepteurs
+	public static final int G_USEENCLOS = 4096;		//Utiliser les enclos
+	public static final int G_AMENCLOS = 8192;		//Aménager les enclos
+	public static final int G_OTHDINDE = 16384;		//Gérer les montures des autres membres
 	
 	//Valeur des droits de maison
-	public static int H_GBLASON = 2; //Afficher blason pour membre de la guilde
-	public static int H_OBLASON = 4; //Afficher blason pour les autres
-	public static int H_GNOCODE = 8; //Entrer sans code pour la guilde
-	public static int H_OCANTOPEN = 16; //Entrer impossible pour les non-guildeux
-	public static int C_GNOCODE = 32; //Coffre sans code pour la guilde
-	public static int C_OCANTOPEN = 64; //Coffre impossible pour les non-guildeux
-	public static int H_GREPOS = 256; //Guilde droit au repos
-	public static int H_GTELE = 128; //Guilde droit a la TP
+	public static final int H_GBLASON = 2; //Afficher blason pour membre de la guilde
+	public static final int H_OBLASON = 4; //Afficher blason pour les autres
+	public static final int H_GNOCODE = 8; //Entrer sans code pour la guilde
+	public static final int H_OCANTOPEN = 16; //Entrer impossible pour les non-guildeux
+	public static final int C_GNOCODE = 32; //Coffre sans code pour la guilde
+	public static final int C_OCANTOPEN = 64; //Coffre impossible pour les non-guildeux
+	public static final int H_GREPOS = 256; //Guilde droit au repos
+	public static final int H_GTELE = 128; //Guilde droit a la TP
 	
 	//ETAT
 	public static final int ETAT_NEUTRE				= 0;
@@ -517,69 +517,67 @@ public class Constantes
 	public static TreeMap<Integer, Character> getStartSortsPlaces(int classID)
 	{
 		TreeMap<Integer,Character> start = new TreeMap<>();
-		switch(classID)
-		{
-			case CLASS_FECA:
-				start.put(3,'b');//Attaque Naturelle
-				start.put(6,'c');//Armure Terrestre
-				start.put(17,'d');//Glyphe Agressif
-			break;
-			case CLASS_SRAM:
-				start.put(61,'b');//Sournoiserie
-				start.put(72,'c');//Invisibilité
-				start.put(65,'d');//Piege sournois
-			break;
-			case CLASS_ENIRIPSA:
-				start.put(125,'b');//Mot Interdit
-				start.put(128,'c');//Mot de Frayeur
-				start.put(121,'d');//Mot Curatif
-			break;
-			case CLASS_ECAFLIP:
-				start.put(102,'b');//Pile ou Face
-				start.put(103,'c');//Chance d'ecaflip
-				start.put(105,'d');//Bond du felin
-			break;
-			case CLASS_CRA:
-				start.put(161,'b');//Fleche Magique
-				start.put(169,'c');//Fleche de Recul
-				start.put(164,'d');//Fleche Empoisonnée(ex Fleche chercheuse)
-			break;
-			case CLASS_IOP:
-				start.put(143,'b');//Intimidation
-				start.put(141,'c');//Pression
-				start.put(142,'d');//Bond
-			break;
-			case CLASS_SADIDA:
-				start.put(183,'b');//Ronce
-				start.put(200,'c');//Poison Paralysant
-				start.put(193,'d');//La bloqueuse
-			break;
-			case CLASS_OSAMODAS:
-				start.put(34,'b');//Invocation de tofu
-				start.put(21,'c');//Griffe Spectrale
-				start.put(23,'d');//Cri de l'ours
-			break;
-			case CLASS_XELOR:
-				start.put(82,'b');//Contre
-				start.put(81,'c');//Ralentissement
-				start.put(83,'d');//Aiguille
-			break;
-			case CLASS_PANDAWA:
-				start.put(686,'b');//Picole
-				start.put(692,'c');//Gueule de bois
-				start.put(687,'d');//Poing enflammé
-			break;
-			case CLASS_ENUTROF:
-				start.put(51,'b');//Lancer de Piece
-				start.put(43,'c');//Lancer de Pelle
-				start.put(41,'d');//Sac animé
-			break;
-			case CLASS_SACRIEUR:
-				start.put(432,'b');//Pied du Sacrieur
-				start.put(431,'c');//Chatiment Osé
-				start.put(434,'d');//Attirance
-			break;
-			
+		switch (classID) {
+			case CLASS_FECA -> {
+				start.put(3, 'b');//Attaque Naturelle
+				start.put(6, 'c');//Armure Terrestre
+				start.put(17, 'd');//Glyphe Agressif
+			}
+			case CLASS_SRAM -> {
+				start.put(61, 'b');//Sournoiserie
+				start.put(72, 'c');//Invisibilité
+				start.put(65, 'd');//Piege sournois
+			}
+			case CLASS_ENIRIPSA -> {
+				start.put(125, 'b');//Mot Interdit
+				start.put(128, 'c');//Mot de Frayeur
+				start.put(121, 'd');//Mot Curatif
+			}
+			case CLASS_ECAFLIP -> {
+				start.put(102, 'b');//Pile ou Face
+				start.put(103, 'c');//Chance d'ecaflip
+				start.put(105, 'd');//Bond du felin
+			}
+			case CLASS_CRA -> {
+				start.put(161, 'b');//Fleche Magique
+				start.put(169, 'c');//Fleche de Recul
+				start.put(164, 'd');//Fleche Empoisonnée(ex Fleche chercheuse)
+			}
+			case CLASS_IOP -> {
+				start.put(143, 'b');//Intimidation
+				start.put(141, 'c');//Pression
+				start.put(142, 'd');//Bond
+			}
+			case CLASS_SADIDA -> {
+				start.put(183, 'b');//Ronce
+				start.put(200, 'c');//Poison Paralysant
+				start.put(193, 'd');//La bloqueuse
+			}
+			case CLASS_OSAMODAS -> {
+				start.put(34, 'b');//Invocation de tofu
+				start.put(21, 'c');//Griffe Spectrale
+				start.put(23, 'd');//Cri de l'ours
+			}
+			case CLASS_XELOR -> {
+				start.put(82, 'b');//Contre
+				start.put(81, 'c');//Ralentissement
+				start.put(83, 'd');//Aiguille
+			}
+			case CLASS_PANDAWA -> {
+				start.put(686, 'b');//Picole
+				start.put(692, 'c');//Gueule de bois
+				start.put(687, 'd');//Poing enflammé
+			}
+			case CLASS_ENUTROF -> {
+				start.put(51, 'b');//Lancer de Piece
+				start.put(43, 'c');//Lancer de Pelle
+				start.put(41, 'd');//Sac animé
+			}
+			case CLASS_SACRIEUR -> {
+				start.put(432, 'b');//Pied du Sacrieur
+				start.put(431, 'c');//Chatiment Osé
+				start.put(434, 'd');//Attirance
+			}
 		}
 		return start;
 	}
@@ -587,69 +585,67 @@ public class Constantes
 	public static TreeMap<Integer,SortStats> getStartSorts(int classID)
 	{
 		TreeMap<Integer,SortStats> start = new TreeMap<>();
-		switch(classID)
-		{
-			case CLASS_FECA:
+		switch (classID) {
+			case CLASS_FECA -> {
 				start.put(3, Mundo.getSort(3).getStatsByLevel(1));//Attaque Naturelle
 				start.put(6, Mundo.getSort(6).getStatsByLevel(1));//Armure Terrestre
 				start.put(17, Mundo.getSort(17).getStatsByLevel(1));//Glyphe Agressif
-			break;
-			case CLASS_SRAM:
+			}
+			case CLASS_SRAM -> {
 				start.put(61, Mundo.getSort(61).getStatsByLevel(1));//Sournoiserie
 				start.put(72, Mundo.getSort(72).getStatsByLevel(1));//Invisibilité
 				start.put(65, Mundo.getSort(65).getStatsByLevel(1));//Piege sournois
-			break;
-			case CLASS_ENIRIPSA:
+			}
+			case CLASS_ENIRIPSA -> {
 				start.put(125, Mundo.getSort(125).getStatsByLevel(1));//Mot Interdit
 				start.put(128, Mundo.getSort(128).getStatsByLevel(1));//Mot de Frayeur
 				start.put(121, Mundo.getSort(121).getStatsByLevel(1));//Mot Curatif
-			break;
-			case CLASS_ECAFLIP:
+			}
+			case CLASS_ECAFLIP -> {
 				start.put(102, Mundo.getSort(102).getStatsByLevel(1));//Pile ou Face
 				start.put(103, Mundo.getSort(103).getStatsByLevel(1));//Chance d'ecaflip
 				start.put(105, Mundo.getSort(105).getStatsByLevel(1));//Bond du felin
-			break;
-			case CLASS_CRA:
+			}
+			case CLASS_CRA -> {
 				start.put(161, Mundo.getSort(161).getStatsByLevel(1));//Fleche Magique
 				start.put(169, Mundo.getSort(169).getStatsByLevel(1));//Fleche de Recul
 				start.put(164, Mundo.getSort(164).getStatsByLevel(1));//Fleche Empoisonnée(ex Fleche chercheuse)
-			break;
-			case CLASS_IOP:
+			}
+			case CLASS_IOP -> {
 				start.put(143, Mundo.getSort(143).getStatsByLevel(1));//Intimidation
 				start.put(141, Mundo.getSort(141).getStatsByLevel(1));//Pression
 				start.put(142, Mundo.getSort(142).getStatsByLevel(1));//Bond
-			break;
-			case CLASS_SADIDA:
+			}
+			case CLASS_SADIDA -> {
 				start.put(183, Mundo.getSort(183).getStatsByLevel(1));//Ronce
 				start.put(200, Mundo.getSort(200).getStatsByLevel(1));//Poison Paralysant
 				start.put(193, Mundo.getSort(193).getStatsByLevel(1));//La bloqueuse
-			break;
-			case CLASS_OSAMODAS:
+			}
+			case CLASS_OSAMODAS -> {
 				start.put(34, Mundo.getSort(34).getStatsByLevel(1));//Invocation de tofu
 				start.put(21, Mundo.getSort(21).getStatsByLevel(1));//Griffe Spectrale
 				start.put(23, Mundo.getSort(23).getStatsByLevel(1));//Cri de l'ours
-			break;
-			case CLASS_XELOR:
+			}
+			case CLASS_XELOR -> {
 				start.put(82, Mundo.getSort(82).getStatsByLevel(1));//Contre
 				start.put(81, Mundo.getSort(81).getStatsByLevel(1));//Ralentissement
 				start.put(83, Mundo.getSort(83).getStatsByLevel(1));//Aiguille
-			break;
-			case CLASS_PANDAWA:
+			}
+			case CLASS_PANDAWA -> {
 				start.put(686, Mundo.getSort(686).getStatsByLevel(1));//Picole
 				start.put(692, Mundo.getSort(692).getStatsByLevel(1));//Gueule de bois
 				start.put(687, Mundo.getSort(687).getStatsByLevel(1));//Poing enflammé
-			break;
-			case CLASS_ENUTROF:
+			}
+			case CLASS_ENUTROF -> {
 				start.put(51, Mundo.getSort(51).getStatsByLevel(1));//Lancer de Piece
 				start.put(43, Mundo.getSort(43).getStatsByLevel(1));//Lancer de Pelle
 				start.put(41, Mundo.getSort(41).getStatsByLevel(1));//Sac animé
-			break;
-			case CLASS_SACRIEUR:
+			}
+			case CLASS_SACRIEUR -> {
 				start.put(432, Mundo.getSort(432).getStatsByLevel(1));//Pied du Sacrieur
 				start.put(431, Mundo.getSort(431).getStatsByLevel(1));//Chatiment Forcé
 				start.put(434, Mundo.getSort(434).getStatsByLevel(1));//Attirance
-		
-			break;
+			}
 		}
 		return start;
 	}
@@ -688,14 +684,11 @@ public class Constantes
 						return 3;
 						
 					case CLASS_FECA:
-						if(val < 50)
-							return 2;
-						if(val < 150)
-							return 3;
-						if(val < 250)
-							return 4;
-						return 5;
-						
+
+					case CLASS_ENIRIPSA:
+
+					case CLASS_OSAMODAS:
+
 					case CLASS_XELOR:
 						if(val < 50)
 							return 2;
@@ -704,8 +697,12 @@ public class Constantes
 						if(val < 250)
 							return 4;
 						return 5;
-						
+
 					case CLASS_SRAM:
+
+					case CLASS_IOP:
+
+					case CLASS_ECAFLIP:
 						if(val < 100)
 							return 1;
 						if(val < 200)
@@ -715,25 +712,7 @@ public class Constantes
 						if(val < 400)
 							return 4;
 						return 5;
-						
-					case CLASS_OSAMODAS:
-						if(val < 50)
-							return 2;
-						if(val < 150)
-							return 3;
-						if(val < 250)
-							return 4;
-						return 5;
-					
-					case CLASS_ENIRIPSA:
-						if(val < 50)
-							return 2;
-						if(val < 150)
-							return 3;
-						if(val < 250)
-							return 4;
-						return 5;
-					
+
 					case CLASS_PANDAWA:
 						if(val < 50)
 							return 1;
@@ -753,16 +732,7 @@ public class Constantes
 						return 5;
 						
 					case CLASS_CRA:
-						if(val < 50)
-							return 1;
-						if(val < 150)
-							return 2;
-						if(val < 250)
-							return 3;
-						if(val < 350)
-							return 4;
-						return 5;
-						
+
 					case CLASS_ENUTROF:
 						if(val < 50)
 							return 1;
@@ -772,46 +742,25 @@ public class Constantes
 							return 3;
 						if(val < 350)
 							return 4;
-						return 5;	
-						
-					case CLASS_ECAFLIP:
-						if(val < 100)
-							return 1;
-						if(val < 200)
-							return 2;
-						if(val < 300)
-							return 3;
-						if(val < 400)
-							return 4;
 						return 5;
-						
-					case CLASS_IOP:
-						if(val < 100)
-							return 1;
-						if(val < 200)
-							return 2;
-						if(val < 300)
-							return 3;
-						if(val < 400)
-							return 4;
-						return 5;
-					
+
 				}
 			break;
 			case 13://Chance
 				switch(classID)
 				{
 					case CLASS_FECA:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-						
+
+					case CLASS_CRA:
+
+					case CLASS_ENIRIPSA:
+
+					case CLASS_ECAFLIP:
+
+					case CLASS_IOP:
+
+					case CLASS_SRAM:
+
 					case CLASS_XELOR:
 						if(val < 20)
 							return 1;
@@ -822,22 +771,13 @@ public class Constantes
 						if(val < 80)
 							return 4;
 						return 5;
-						
+
 					case CLASS_SACRIEUR:
 						return 3;
-						
-					case CLASS_SRAM:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-						
+
 					case CLASS_SADIDA:
+
+					case CLASS_OSAMODAS:
 						if(val < 100)
 							return 1;
 						if(val < 200)
@@ -854,18 +794,7 @@ public class Constantes
 						if(val < 200)
 							return 2;
 						return 3;
-						
-					case CLASS_IOP:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-					
+
 					case CLASS_ENUTROF:
 						if(val < 100)
 							return 1;
@@ -876,67 +805,24 @@ public class Constantes
 						if(val < 330)
 							return 4;
 						return 5;
-						
-					case CLASS_OSAMODAS:
-						if(val < 100)
-							return 1;
-						if(val < 200)
-							return 2;
-						if(val < 300)
-							return 3;
-						if(val < 400)
-							return 4;
-						return 5;
-						
-					case CLASS_ECAFLIP:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-						
-					case CLASS_ENIRIPSA:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-						
-					case CLASS_CRA:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-				
+
 				}
 			break;
 			case 14://Agilité
 				switch(classID)
 				{
 					case CLASS_FECA:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-					
+
+					case CLASS_OSAMODAS:
+
+					case CLASS_ENUTROF:
+
+					case CLASS_IOP:
+
+					case CLASS_ENIRIPSA:
+
+					case CLASS_SADIDA:
+
 					case CLASS_XELOR:
 						if(val < 20)
 							return 1;
@@ -947,7 +833,7 @@ public class Constantes
 						if(val < 80)
 							return 4;
 						return 5;
-						
+
 					case CLASS_SACRIEUR:
 						return 3;
 						
@@ -961,69 +847,16 @@ public class Constantes
 						if(val < 400)
 							return 4;
 						return 5;
-						
-					case CLASS_SADIDA:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-						
+
 					case CLASS_PANDAWA:
 						if(val < 50)
 							return 1;
 						if(val < 200)
 							return 2;
 						return 3;
-						
-					case CLASS_ENIRIPSA:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-					
-					case CLASS_IOP:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-					
-					case CLASS_ENUTROF:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;	
-					
+
 					case CLASS_ECAFLIP:
-						if(val < 50)
-							return 1;
-						if(val < 100)
-							return 2;
-						if(val < 150)
-							return 3;
-						if(val < 200)
-							return 4;
-						return 5;
-						
+
 					case CLASS_CRA:
 						if(val < 50)
 							return 1;
@@ -1034,35 +867,21 @@ public class Constantes
 						if(val < 200)
 							return 4;
 						return 5;
-					
-					case CLASS_OSAMODAS:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-					
-						
+
+
 				}
 			break;
 			case 15://Intelligence
 				switch(classID)
 				{
 					case CLASS_XELOR:
-						if(val < 100)
-							return 1;
-						if(val < 200)
-							return 2;
-						if(val < 300)
-							return 3;
-						if(val < 400)
-							return 4;
-						return 5;
-						
+
+					case CLASS_OSAMODAS:
+
+					case CLASS_ENIRIPSA:
+
+					case CLASS_SADIDA:
+
 					case CLASS_FECA:
 						if(val < 100)
 							return 1;
@@ -1073,7 +892,7 @@ public class Constantes
 						if(val < 400)
 							return 4;
 						return 5;
-						
+
 					case CLASS_SACRIEUR:
 						return 3;
 					
@@ -1085,18 +904,7 @@ public class Constantes
 						if(val < 250)
 							return 4;
 						return 5;
-						
-					case CLASS_SADIDA:
-						if(val < 100)
-							return 1;
-						if(val < 200)
-							return 2;
-						if(val < 300)
-							return 3;
-						if(val < 400)
-							return 4;
-						return 5;
-						
+
 					case CLASS_ENUTROF:
 						if(val < 20)
 							return 1;
@@ -1116,49 +924,7 @@ public class Constantes
 						return 3;
 						
 					case CLASS_IOP:
-						if(val < 20)
-							return 1;
-						if(val < 40)
-							return 2;
-						if(val < 60)
-							return 3;
-						if(val < 80)
-							return 4;
-						return 5;
-					
-					case CLASS_ENIRIPSA:
-						if(val < 100)
-							return 1;
-						if(val < 200)
-							return 2;
-						if(val < 300)
-							return 3;
-						if(val < 400)
-							return 4;
-						return 5;
-						
-					case CLASS_CRA:
-						if(val < 50)
-							return 1;
-						if(val < 150)
-							return 2;
-						if(val < 250)
-							return 3;
-						if(val < 350)
-							return 4;
-						return 5;
-						
-					case CLASS_OSAMODAS:
-						if(val < 100)
-							return 1;
-						if(val < 200)
-							return 2;
-						if(val < 300)
-							return 3;
-						if(val < 400)
-							return 4;
-						return 5;
-						
+
 					case CLASS_ECAFLIP:
 						if(val < 20)
 							return 1;
@@ -1169,7 +935,18 @@ public class Constantes
 						if(val < 80)
 							return 4;
 						return 5;
-			
+
+					case CLASS_CRA:
+						if(val < 50)
+							return 1;
+						if(val < 150)
+							return 2;
+						if(val < 250)
+							return 3;
+						if(val < 350)
+							return 4;
+						return 5;
+
 				}
 			break;
 		}
@@ -1179,7 +956,7 @@ public class Constantes
 	public static int getAggroByLevel(int lvl)
 	{
 		int aggro = 0;
-		aggro = (int)(lvl/50);
+		aggro = lvl/50;
 		if(lvl>500)
 			aggro = 3;
 		return aggro;
@@ -1292,571 +1069,565 @@ public class Constantes
 	
 	public static void onLevelUpSpells(Personaje perso, int lvl)
 	{
-		switch(perso.get_classe())
-		{
-			case CLASS_FECA:
-				if(lvl == 3)
-					perso.learnSpell(4, 1,true,false);//Renvoie de sort
-				if(lvl == 6)
-					perso.learnSpell(2, 1,true,false);//Aveuglement
-				if(lvl == 9)
-					perso.learnSpell(1, 1,true,false);//Armure Incandescente
-				if(lvl == 13)
-					perso.learnSpell(9, 1,true,false);//Attaque nuageuse
-				if(lvl == 17)
-					perso.learnSpell(18, 1,true,false);//Armure Aqueuse
-				if(lvl == 21)
-					perso.learnSpell(20, 1,true,false);//Immunité
-				if(lvl == 26)
-					perso.learnSpell(14, 1,true,false);//Armure Venteuse
-				if(lvl == 31)
-					perso.learnSpell(19, 1,true,false);//Bulle
-				if(lvl == 36)
-					perso.learnSpell(5, 1,true,false);//Trêve
-				if(lvl == 42)
-					perso.learnSpell(16, 1,true,false);//Science du bâton
-				if(lvl == 48)
-					perso.learnSpell(8, 1,true,false);//Retour du bâton
-				if(lvl == 54)
-					perso.learnSpell(12, 1,true,false);//glyphe d'Aveuglement
-				if(lvl == 60)
-					perso.learnSpell(11, 1,true,false);//Téléportation
-				if(lvl == 70)
-					perso.learnSpell(10, 1,true,false);//Glyphe Enflammé
-				if(lvl == 80)
-					perso.learnSpell(7, 1,true,false);//Bouclier Féca
-				if(lvl == 90)
-					perso.learnSpell(15, 1,true,false);//Glyphe d'Immobilisation
-				if(lvl == 100)
-					perso.learnSpell(13, 1,true,false);//Glyphe de Silence
-				if(lvl == 200)
-					perso.learnSpell(1901, 1,true,false);//Invocation de Dopeul Féca
-			break;
-			
-			case CLASS_OSAMODAS:
-				if(lvl == 3)
-					perso.learnSpell(26, 1,true,false);//Bénédiction Animale
-				if(lvl == 6)
-					perso.learnSpell(22, 1,true,false);//Déplacement Félin
-				if(lvl == 9)
-					perso.learnSpell(35, 1,true,false);//Invocation de Bouftou
-				if(lvl == 13)
-					perso.learnSpell(28, 1,true,false);//Crapaud
-				if(lvl == 17)
-					perso.learnSpell(37, 1,true,false);//Invocation de Prespic
-				if(lvl == 21)
-					perso.learnSpell(30, 1,true,false);//Fouet
-				if(lvl == 26)
-					perso.learnSpell(27, 1,true,false);//Piqûre Motivante
-				if(lvl == 31)
-					perso.learnSpell(24, 1,true,false);//Corbeau
-				if(lvl == 36)
-					perso.learnSpell(33, 1,true,false);//Griffe Cinglante
-				if(lvl == 42)
-					perso.learnSpell(25, 1,true,false);//Soin Animal
-				if(lvl == 48)
-					perso.learnSpell(38, 1,true,false);//Invocation de Sanglier
-				if(lvl == 54)
-					perso.learnSpell(36, 1,true,false);//Frappe du Craqueleur
-				if(lvl == 60)
-					perso.learnSpell(32, 1,true,false);//Résistance Naturelle
-				if(lvl == 70)
-					perso.learnSpell(29, 1,true,false);//Crocs du Mulou
-				if(lvl == 80)
-					perso.learnSpell(39, 1,true,false);//Invocation de Bwork Mage
-				if(lvl == 90)
-					perso.learnSpell(40, 1,true,false);//Invocation de Craqueleur
-				if(lvl == 100)
-					perso.learnSpell(31, 1,true,false);//Invocation de Dragonnet Rouge
-				if(lvl == 200)
-					perso.learnSpell(1902, 1,true,false);//Invocation de Dopeul Osamodas
-			break;
-
-			case CLASS_ENUTROF:
-				if(lvl == 3)
-					perso.learnSpell(49, 1,true,false);//Pelle Fantomatique
-				if(lvl == 6)
-					perso.learnSpell(42, 1,true,false);//Chance
-				if(lvl == 9)
-					perso.learnSpell(47, 1,true,false);//Boîte de Pandore
-				if(lvl == 13)
-					perso.learnSpell(48, 1,true,false);//Remblai
-				if(lvl == 17)
-					perso.learnSpell(45, 1,true,false);//Clé Réductrice
-				if(lvl == 21)
-					perso.learnSpell(53, 1,true,false);//Force de l'Age
-				if(lvl == 26)
-					perso.learnSpell(46, 1,true,false);//Désinvocation
-				if(lvl == 31)
-					perso.learnSpell(52, 1,true,false);//Cupidité
-				if(lvl == 36)
-					perso.learnSpell(44, 1,true,false);//Roulage de Pelle
-				if(lvl == 42)
-					perso.learnSpell(50, 1,true,false);//Maladresse
-				if(lvl == 48)
-					perso.learnSpell(54, 1,true,false);//Maladresse de Masse
-				if(lvl == 54)
-					perso.learnSpell(55, 1,true,false);//Accélération
-				if(lvl == 60)
-					perso.learnSpell(56, 1,true,false);//Pelle du Jugement
-				if(lvl == 70)
-					perso.learnSpell(58, 1,true,false);//Pelle Massacrante
-				if(lvl == 80)
-					perso.learnSpell(59, 1,true,false);//Corruption
-				if(lvl == 90)
-					perso.learnSpell(57, 1,true,false);//Pelle Animée
-				if(lvl == 100)
-					perso.learnSpell(60, 1,true,false);//Coffre Animé
-				if(lvl == 200)
-					perso.learnSpell(1903, 1,true,false);//Invocation de Dopeul Enutrof
-			break;
-
-			case CLASS_SRAM:
-				if(lvl == 3)
-					perso.learnSpell(66, 1,true,false);//Poison insidieux
-				if(lvl == 6)
-					perso.learnSpell(68, 1,true,false);//Fourvoiement
-				if(lvl == 9)
-					perso.learnSpell(63, 1,true,false);//Coup Sournois
-				if(lvl == 13)
-					perso.learnSpell(74, 1,true,false);//Double
-				if(lvl == 17)
-					perso.learnSpell(64, 1,true,false);//Repérage
-				if(lvl == 21)
-					perso.learnSpell(79, 1,true,false);//Piège de Masse
-				if(lvl == 26)
-					perso.learnSpell(78, 1,true,false);//Invisibilité d'Autrui
-				if(lvl == 31)
-					perso.learnSpell(71, 1,true,false);//Piège Empoisonné
-				if(lvl == 36)
-					perso.learnSpell(62, 1,true,false);//Concentration de Chakra
-				if(lvl == 42)
-					perso.learnSpell(69, 1,true,false);//Piège d'Immobilisation
-				if(lvl == 48)
-					perso.learnSpell(77, 1,true,false);//Piège de Silence
-				if(lvl == 54)
-					perso.learnSpell(73, 1,true,false);//Piège répulsif
-				if(lvl == 60)
-					perso.learnSpell(67, 1,true,false);//Peur
-				if(lvl == 70)
-					perso.learnSpell(70, 1,true,false);//Arnaque
-				if(lvl == 80)
-					perso.learnSpell(75, 1,true,false);//Pulsion de Chakra
-				if(lvl == 90)
-					perso.learnSpell(76, 1,true,false);//Attaque Mortelle
-				if(lvl == 100)
-					perso.learnSpell(80, 1,true,false);//Piège Mortel
-				if(lvl == 200)
-					perso.learnSpell(1904, 1,true,false);//Invocation de Dopeul Sram
-			break;
-
-			case CLASS_XELOR:
-				if(lvl == 3)
-					perso.learnSpell(84, 1,true,false);//Gelure
-				if(lvl == 6)
-					perso.learnSpell(100, 1,true,false);//Sablier de Xélor
-				if(lvl == 9)
-					perso.learnSpell(92, 1,true,false);//Rayon Obscur
-				if(lvl == 13)
-					perso.learnSpell(88, 1,true,false);//Téléportation
-				if(lvl == 17)
-					perso.learnSpell(93, 1,true,false);//Flétrissement
-				if(lvl == 21)
-					perso.learnSpell(85, 1,true,false);//Flou
-				if(lvl == 26)
-					perso.learnSpell(96, 1,true,false);//Poussière Temporelle
-				if(lvl == 31)
-					perso.learnSpell(98, 1,true,false);//Vol du Temps
-				if(lvl == 36)
-					perso.learnSpell(86, 1,true,false);//Aiguille Chercheuse
-				if(lvl == 42)
-					perso.learnSpell(89, 1,true,false);//Dévouement
-				if(lvl == 48)
-					perso.learnSpell(90, 1,true,false);//Fuite
-				if(lvl == 54)
-					perso.learnSpell(87, 1,true,false);//Démotivation
-				if(lvl == 60)
-					perso.learnSpell(94, 1,true,false);//Protection Aveuglante
-				if(lvl == 70)
-					perso.learnSpell(99, 1,true,false);//Momification
-				if(lvl == 80)
-					perso.learnSpell(95, 1,true,false);//Horloge
-				if(lvl == 90)
-					perso.learnSpell(91, 1,true,false);//Frappe de Xélor
-				if(lvl == 100)
-					perso.learnSpell(97, 1,true,false);//Cadran de Xélor
-				if(lvl == 200)
-					perso.learnSpell(1905, 1,true,false);//Invocation de Dopeul Xélor
-			break;
-
-			case CLASS_ECAFLIP:
-				if(lvl == 3)
-					perso.learnSpell(109, 1,true,false);//Bluff
-				if(lvl == 6)
-					perso.learnSpell(113, 1,true,false);//Perception
-				if(lvl == 9)
-					perso.learnSpell(111, 1,true,false);//Contrecoup
-				if(lvl == 13)
-					perso.learnSpell(104, 1,true,false);//Trèfle
-				if(lvl == 17)
-					perso.learnSpell(119, 1,true,false);//Tout ou rien
-				if(lvl == 21)
-					perso.learnSpell(101, 1,true,false);//Roulette
-				if(lvl == 26)
-					perso.learnSpell(107, 1,true,false);//Topkaj
-				if(lvl == 31)
-					perso.learnSpell(116, 1,true,false);//Langue Râpeuse
-				if(lvl == 36)
-					perso.learnSpell(106, 1,true,false);//Roue de la Fortune
-				if(lvl == 42)
-					perso.learnSpell(117, 1,true,false);//Griffe Invocatrice
-				if(lvl == 48)
-					perso.learnSpell(108, 1,true,false);//Esprit Félin
-				if(lvl == 54)
-					perso.learnSpell(115, 1,true,false);//Odorat
-				if(lvl == 60)
-					perso.learnSpell(118, 1,true,false);//Réflexes
-				if(lvl == 70)
-					perso.learnSpell(110, 1,true,false);//Griffe Joueuse
-				if(lvl == 80)
-					perso.learnSpell(112, 1,true,false);//Griffe de Ceangal
-				if(lvl == 90)
-					perso.learnSpell(114, 1,true,false);//Rekop
-				if(lvl == 100)
-					perso.learnSpell(120, 1,true,false);//Destin d'Ecaflip
-				if(lvl == 200)
-					perso.learnSpell(1906, 1,true,false);//Invocation de Dopeul Ecaflip
-			break;
-
-			case CLASS_ENIRIPSA:
-				if(lvl == 3)
-					perso.learnSpell(124, 1,true,false);//Mot Soignant
-				if(lvl == 6)
-					perso.learnSpell(122, 1,true,false);//Mot Blessant
-				if(lvl == 9)
-					perso.learnSpell(126, 1,true,false);//Mot Stimulant
-				if(lvl == 13)
-					perso.learnSpell(127, 1,true,false);//Mot de Prévention
-				if(lvl == 17)
-					perso.learnSpell(123, 1,true,false);//Mot Drainant
-				if(lvl == 21)
-					perso.learnSpell(130, 1,true,false);//Mot Revitalisant
-				if(lvl == 26)
-					perso.learnSpell(131, 1,true,false);//Mot de Régénération
-				if(lvl == 31)
-					perso.learnSpell(132, 1,true,false);//Mot d'Epine
-				if(lvl == 36)
-					perso.learnSpell(133, 1,true,false);//Mot de Jouvence
-				if(lvl == 42)
-					perso.learnSpell(134, 1,true,false);//Mot Vampirique
-				if(lvl == 48)
-					perso.learnSpell(135, 1,true,false);//Mot de Sacrifice
-				if(lvl == 54)
-					perso.learnSpell(129, 1,true,false);//Mot d'Amitié
-				if(lvl == 60)
-					perso.learnSpell(136, 1,true,false);//Mot d'Immobilisation
-				if(lvl == 70)
-					perso.learnSpell(137, 1,true,false);//Mot d'Envol
-				if(lvl == 80)
-					perso.learnSpell(138, 1,true,false);//Mot de Silence
-				if(lvl == 90)
-					perso.learnSpell(139, 1,true,false);//Mot d'Altruisme
-				if(lvl == 100)
-					perso.learnSpell(140, 1,true,false);//Mot de Reconstitution
-				if(lvl == 200)
-					perso.learnSpell(1907, 1,true,false);//Invocation de Dopeul Eniripsa
-			break;
-
-			case CLASS_IOP:
-				if(lvl == 3)
-					perso.learnSpell(144, 1,true,false);//Compulsion
-				if(lvl == 6)
-					perso.learnSpell(145, 1,true,false);//Epée Divine
-				if(lvl == 9)
-					perso.learnSpell(146, 1,true,false);//Epée du Destin
-				if(lvl == 13)
-					perso.learnSpell(147, 1,true,false);//Guide de Bravoure
-				if(lvl == 17)
-					perso.learnSpell(148, 1,true,false);//Amplification
-				if(lvl == 21)
-					perso.learnSpell(154, 1,true,false);//Epée Destructrice
-				if(lvl == 26)
-					perso.learnSpell(150, 1,true,false);//Couper
-				if(lvl == 31)
-					perso.learnSpell(151, 1,true,false);//Souffle
-				if(lvl == 36)
-					perso.learnSpell(155, 1,true,false);//Vitalité
-				if(lvl == 42)
-					perso.learnSpell(152, 1,true,false);//Epée du Jugement
-				if(lvl == 48)
-					perso.learnSpell(153, 1,true,false);//Puissance
-				if(lvl == 54)
-					perso.learnSpell(149, 1,true,false);//Mutilation
-				if(lvl == 60)
-					perso.learnSpell(156, 1,true,false);//Tempête de Puissance
-				if(lvl == 70)
-					perso.learnSpell(157, 1,true,false);//Epée Céleste
-				if(lvl == 80)
-					perso.learnSpell(158, 1,true,false);//Concentration
-				if(lvl == 90)
-					perso.learnSpell(160, 1,true,false);//Epée de Iop
-				if(lvl == 100)
-					perso.learnSpell(159, 1,true,false);//Colère de Iop
-				if(lvl == 200)
-					perso.learnSpell(1908, 1,true,false);//Invocation de Dopeul Iop
-			break;
-
-			case CLASS_CRA:
-				if(lvl == 3)
-					perso.learnSpell(163, 1,true,false);//Flèche Glacée
-				if(lvl == 6)
-					perso.learnSpell(165, 1,true,false);//Flèche enflammée
-				if(lvl == 9)
-					perso.learnSpell(172, 1,true,false);//Tir Eloigné
-				if(lvl == 13)
-					perso.learnSpell(167, 1,true,false);//Flèche d'Expiation
-				if(lvl == 17)
-					perso.learnSpell(168, 1,true,false);//Oeil de Taupe
-				if(lvl == 21)
-					perso.learnSpell(162, 1,true,false);//Tir Critique
-				if(lvl == 26)
-					perso.learnSpell(170, 1,true,false);//Flèche d'Immobilisation
-				if(lvl == 31)
-					perso.learnSpell(171, 1,true,false);//Flèche Punitive
-				if(lvl == 36)
-					perso.learnSpell(166, 1,true,false);//Tir Puissant
-				if(lvl == 42)
-					perso.learnSpell(173, 1,true,false);//Flèche Harcelante
-				if(lvl == 48)
-					perso.learnSpell(174, 1,true,false);//Flèche Cinglante
-				if(lvl == 54)
-					perso.learnSpell(176, 1,true,false);//Flèche Persécutrice
-				if(lvl == 60)
-					perso.learnSpell(175, 1,true,false);//Flèche Destructrice
-				if(lvl == 70)
-					perso.learnSpell(178, 1,true,false);//Flèche Absorbante
-				if(lvl == 80)
-					perso.learnSpell(177, 1,true,false);//Flèche Ralentissante
-				if(lvl == 90)
-					perso.learnSpell(179, 1,true,false);//Flèche Explosive
-				if(lvl == 100)
-					perso.learnSpell(180, 1,true,false);//Maîtrise de l'Arc
-				if(lvl == 200)
-					perso.learnSpell(1909, 1,true,false);//Invocation de Dopeul Cra
-			break;
-
-			case CLASS_SADIDA:
-				if(lvl == 3)
-					perso.learnSpell(198, 1,true,false);//Sacrifice Poupesque
-				if(lvl == 6)
-					perso.learnSpell(195, 1,true,false);//Larme
-				if(lvl == 9)
-					perso.learnSpell(182, 1,true,false);//Invocation de la Folle
-				if(lvl == 13)
-					perso.learnSpell(192, 1,true,false);//Ronce Apaisante
-				if(lvl == 17)
-					perso.learnSpell(197, 1,true,false);//Puissance Sylvestre
-				if(lvl == 21)
-					perso.learnSpell(189, 1,true,false);//Invocation de la Sacrifiée
-				if(lvl == 26)
-					perso.learnSpell(181, 1,true,false);//Tremblement
-				if(lvl == 31)
-					perso.learnSpell(199, 1,true,false);//Connaissance des Poupées
-				if(lvl == 36)
-					perso.learnSpell(191, 1,true,false);//Ronce Multiples
-				if(lvl == 42)
-					perso.learnSpell(186, 1,true,false);//Arbre
-				if(lvl == 48)
-					perso.learnSpell(196, 1,true,false);//Vent Empoisonné
-				if(lvl == 54)
-					perso.learnSpell(190, 1,true,false);//Invocation de la Gonflable
-				if(lvl == 60)
-					perso.learnSpell(194, 1,true,false);//Ronces Agressives
-				if(lvl == 70)
-					perso.learnSpell(185, 1,true,false);//Herbe Folle
-				if(lvl == 80)
-					perso.learnSpell(184, 1,true,false);//Feu de Brousse
-				if(lvl == 90)
-					perso.learnSpell(188, 1,true,false);//Ronce Insolente
-				if(lvl == 100)
-					perso.learnSpell(187, 1,true,false);//Invocation de la Surpuissante
-				if(lvl == 200)
-					perso.learnSpell(1910, 1,true,false);//Invocation de Dopeul Sadida
-			break;
-
-			case CLASS_SACRIEUR:
-				if(lvl == 3)
-					perso.learnSpell(444, 1,true,false);//Dérobade
-				if(lvl == 6)
-					perso.learnSpell(449, 1,true,false);//Détour
-				if(lvl == 9)
-					perso.learnSpell(436, 1,true,false);//Assaut
-				if(lvl == 13)
-					perso.learnSpell(437, 1,true,false);//Châtiment Agile
-				if(lvl == 17)
-					perso.learnSpell(439, 1,true,false);//Dissolution
-				if(lvl == 21)
-					perso.learnSpell(433, 1,true,false);//Châtiment Osé
-				if(lvl == 26)
-					perso.learnSpell(443, 1,true,false);//Châtiment Spirituel
-				if(lvl == 31)
-					perso.learnSpell(440, 1,true,false);//Sacrifice
-				if(lvl == 36)
-					perso.learnSpell(442, 1,true,false);//Absorption
-				if(lvl == 42)
-					perso.learnSpell(441, 1,true,false);//Châtiment Vilatesque
-				if(lvl == 48)
-					perso.learnSpell(445, 1,true,false);//Coopération
-				if(lvl == 54)
-					perso.learnSpell(438, 1,true,false);//Transposition
-				if(lvl == 60)
-					perso.learnSpell(446, 1,true,false);//Punition
-				if(lvl == 70)
-					perso.learnSpell(447, 1,true,false);//Furie
-				if(lvl == 80)
-					perso.learnSpell(448, 1,true,false);//Epée Volante
-				if(lvl == 90)
-					perso.learnSpell(435, 1,true,false);//Tansfert de Vie
-				if(lvl == 100)
-					perso.learnSpell(450, 1,true,false);//Folie Sanguinaire
-				if(lvl == 200)
-					perso.learnSpell(1911, 1,true,false);//Invocation de Dopeul Sacrieur
-			break;
-
-			case CLASS_PANDAWA:
-				if(lvl == 3)
-					perso.learnSpell(689, 1,true,false);//Epouvante
-				if(lvl == 6)
-					perso.learnSpell(690, 1,true,false);//Souffle Alcoolisé
-				if(lvl == 9)
-					perso.learnSpell(691, 1,true,false);//Vulnérabilité Aqueuse
-				if(lvl == 13)
-					perso.learnSpell(688, 1,true,false);//Vulnérabilité Incandescente
-				if(lvl == 17)
-					perso.learnSpell(693, 1,true,false);//Karcham
-				if(lvl == 21)
-					perso.learnSpell(694, 1,true,false);//Vulnérabilité Venteuse
-				if(lvl == 26)
-					perso.learnSpell(695, 1,true,false);//Stabilisation
-				if(lvl == 31)
-					perso.learnSpell(696, 1,true,false);//Chamrak
-				if(lvl == 36)
-					perso.learnSpell(697, 1,true,false);//Vulnérabilité Terrestre
-				if(lvl == 42)
-					perso.learnSpell(698, 1,true,false);//Souillure
-				if(lvl == 48)
-					perso.learnSpell(699, 1,true,false);//Lait de Bambou
-				if(lvl == 54)
-					perso.learnSpell(700, 1,true,false);//Vague à Lame
-				if(lvl == 60)
-					perso.learnSpell(701, 1,true,false);//Colère de Zatoïshwan
-				if(lvl == 70)
-					perso.learnSpell(702, 1,true,false);//Flasque Explosive
-				if(lvl == 80)
-					perso.learnSpell(703, 1,true,false);//Pandatak
-				if(lvl == 90)
-					perso.learnSpell(704, 1,true,false);//Pandanlku
-				if(lvl == 100)
-					perso.learnSpell(705, 1,true,false);//Lien Spiritueux
-				if(lvl == 200)
-					perso.learnSpell(1912, 1,true,false);//Invocation de Dopeul Pandawa
-						break;
+		switch (perso.get_classe()) {
+			case CLASS_FECA -> {
+				if (lvl == 3)
+					perso.learnSpell(4, 1, true, false);//Renvoie de sort
+				if (lvl == 6)
+					perso.learnSpell(2, 1, true, false);//Aveuglement
+				if (lvl == 9)
+					perso.learnSpell(1, 1, true, false);//Armure Incandescente
+				if (lvl == 13)
+					perso.learnSpell(9, 1, true, false);//Attaque nuageuse
+				if (lvl == 17)
+					perso.learnSpell(18, 1, true, false);//Armure Aqueuse
+				if (lvl == 21)
+					perso.learnSpell(20, 1, true, false);//Immunité
+				if (lvl == 26)
+					perso.learnSpell(14, 1, true, false);//Armure Venteuse
+				if (lvl == 31)
+					perso.learnSpell(19, 1, true, false);//Bulle
+				if (lvl == 36)
+					perso.learnSpell(5, 1, true, false);//Trêve
+				if (lvl == 42)
+					perso.learnSpell(16, 1, true, false);//Science du bâton
+				if (lvl == 48)
+					perso.learnSpell(8, 1, true, false);//Retour du bâton
+				if (lvl == 54)
+					perso.learnSpell(12, 1, true, false);//glyphe d'Aveuglement
+				if (lvl == 60)
+					perso.learnSpell(11, 1, true, false);//Téléportation
+				if (lvl == 70)
+					perso.learnSpell(10, 1, true, false);//Glyphe Enflammé
+				if (lvl == 80)
+					perso.learnSpell(7, 1, true, false);//Bouclier Féca
+				if (lvl == 90)
+					perso.learnSpell(15, 1, true, false);//Glyphe d'Immobilisation
+				if (lvl == 100)
+					perso.learnSpell(13, 1, true, false);//Glyphe de Silence
+				if (lvl == 200)
+					perso.learnSpell(1901, 1, true, false);//Invocation de Dopeul Féca
+			}
+			case CLASS_OSAMODAS -> {
+				if (lvl == 3)
+					perso.learnSpell(26, 1, true, false);//Bénédiction Animale
+				if (lvl == 6)
+					perso.learnSpell(22, 1, true, false);//Déplacement Félin
+				if (lvl == 9)
+					perso.learnSpell(35, 1, true, false);//Invocation de Bouftou
+				if (lvl == 13)
+					perso.learnSpell(28, 1, true, false);//Crapaud
+				if (lvl == 17)
+					perso.learnSpell(37, 1, true, false);//Invocation de Prespic
+				if (lvl == 21)
+					perso.learnSpell(30, 1, true, false);//Fouet
+				if (lvl == 26)
+					perso.learnSpell(27, 1, true, false);//Piqûre Motivante
+				if (lvl == 31)
+					perso.learnSpell(24, 1, true, false);//Corbeau
+				if (lvl == 36)
+					perso.learnSpell(33, 1, true, false);//Griffe Cinglante
+				if (lvl == 42)
+					perso.learnSpell(25, 1, true, false);//Soin Animal
+				if (lvl == 48)
+					perso.learnSpell(38, 1, true, false);//Invocation de Sanglier
+				if (lvl == 54)
+					perso.learnSpell(36, 1, true, false);//Frappe du Craqueleur
+				if (lvl == 60)
+					perso.learnSpell(32, 1, true, false);//Résistance Naturelle
+				if (lvl == 70)
+					perso.learnSpell(29, 1, true, false);//Crocs du Mulou
+				if (lvl == 80)
+					perso.learnSpell(39, 1, true, false);//Invocation de Bwork Mage
+				if (lvl == 90)
+					perso.learnSpell(40, 1, true, false);//Invocation de Craqueleur
+				if (lvl == 100)
+					perso.learnSpell(31, 1, true, false);//Invocation de Dragonnet Rouge
+				if (lvl == 200)
+					perso.learnSpell(1902, 1, true, false);//Invocation de Dopeul Osamodas
+			}
+			case CLASS_ENUTROF -> {
+				if (lvl == 3)
+					perso.learnSpell(49, 1, true, false);//Pelle Fantomatique
+				if (lvl == 6)
+					perso.learnSpell(42, 1, true, false);//Chance
+				if (lvl == 9)
+					perso.learnSpell(47, 1, true, false);//Boîte de Pandore
+				if (lvl == 13)
+					perso.learnSpell(48, 1, true, false);//Remblai
+				if (lvl == 17)
+					perso.learnSpell(45, 1, true, false);//Clé Réductrice
+				if (lvl == 21)
+					perso.learnSpell(53, 1, true, false);//Force de l'Age
+				if (lvl == 26)
+					perso.learnSpell(46, 1, true, false);//Désinvocation
+				if (lvl == 31)
+					perso.learnSpell(52, 1, true, false);//Cupidité
+				if (lvl == 36)
+					perso.learnSpell(44, 1, true, false);//Roulage de Pelle
+				if (lvl == 42)
+					perso.learnSpell(50, 1, true, false);//Maladresse
+				if (lvl == 48)
+					perso.learnSpell(54, 1, true, false);//Maladresse de Masse
+				if (lvl == 54)
+					perso.learnSpell(55, 1, true, false);//Accélération
+				if (lvl == 60)
+					perso.learnSpell(56, 1, true, false);//Pelle du Jugement
+				if (lvl == 70)
+					perso.learnSpell(58, 1, true, false);//Pelle Massacrante
+				if (lvl == 80)
+					perso.learnSpell(59, 1, true, false);//Corruption
+				if (lvl == 90)
+					perso.learnSpell(57, 1, true, false);//Pelle Animée
+				if (lvl == 100)
+					perso.learnSpell(60, 1, true, false);//Coffre Animé
+				if (lvl == 200)
+					perso.learnSpell(1903, 1, true, false);//Invocation de Dopeul Enutrof
+			}
+			case CLASS_SRAM -> {
+				if (lvl == 3)
+					perso.learnSpell(66, 1, true, false);//Poison insidieux
+				if (lvl == 6)
+					perso.learnSpell(68, 1, true, false);//Fourvoiement
+				if (lvl == 9)
+					perso.learnSpell(63, 1, true, false);//Coup Sournois
+				if (lvl == 13)
+					perso.learnSpell(74, 1, true, false);//Double
+				if (lvl == 17)
+					perso.learnSpell(64, 1, true, false);//Repérage
+				if (lvl == 21)
+					perso.learnSpell(79, 1, true, false);//Piège de Masse
+				if (lvl == 26)
+					perso.learnSpell(78, 1, true, false);//Invisibilité d'Autrui
+				if (lvl == 31)
+					perso.learnSpell(71, 1, true, false);//Piège Empoisonné
+				if (lvl == 36)
+					perso.learnSpell(62, 1, true, false);//Concentration de Chakra
+				if (lvl == 42)
+					perso.learnSpell(69, 1, true, false);//Piège d'Immobilisation
+				if (lvl == 48)
+					perso.learnSpell(77, 1, true, false);//Piège de Silence
+				if (lvl == 54)
+					perso.learnSpell(73, 1, true, false);//Piège répulsif
+				if (lvl == 60)
+					perso.learnSpell(67, 1, true, false);//Peur
+				if (lvl == 70)
+					perso.learnSpell(70, 1, true, false);//Arnaque
+				if (lvl == 80)
+					perso.learnSpell(75, 1, true, false);//Pulsion de Chakra
+				if (lvl == 90)
+					perso.learnSpell(76, 1, true, false);//Attaque Mortelle
+				if (lvl == 100)
+					perso.learnSpell(80, 1, true, false);//Piège Mortel
+				if (lvl == 200)
+					perso.learnSpell(1904, 1, true, false);//Invocation de Dopeul Sram
+			}
+			case CLASS_XELOR -> {
+				if (lvl == 3)
+					perso.learnSpell(84, 1, true, false);//Gelure
+				if (lvl == 6)
+					perso.learnSpell(100, 1, true, false);//Sablier de Xélor
+				if (lvl == 9)
+					perso.learnSpell(92, 1, true, false);//Rayon Obscur
+				if (lvl == 13)
+					perso.learnSpell(88, 1, true, false);//Téléportation
+				if (lvl == 17)
+					perso.learnSpell(93, 1, true, false);//Flétrissement
+				if (lvl == 21)
+					perso.learnSpell(85, 1, true, false);//Flou
+				if (lvl == 26)
+					perso.learnSpell(96, 1, true, false);//Poussière Temporelle
+				if (lvl == 31)
+					perso.learnSpell(98, 1, true, false);//Vol du Temps
+				if (lvl == 36)
+					perso.learnSpell(86, 1, true, false);//Aiguille Chercheuse
+				if (lvl == 42)
+					perso.learnSpell(89, 1, true, false);//Dévouement
+				if (lvl == 48)
+					perso.learnSpell(90, 1, true, false);//Fuite
+				if (lvl == 54)
+					perso.learnSpell(87, 1, true, false);//Démotivation
+				if (lvl == 60)
+					perso.learnSpell(94, 1, true, false);//Protection Aveuglante
+				if (lvl == 70)
+					perso.learnSpell(99, 1, true, false);//Momification
+				if (lvl == 80)
+					perso.learnSpell(95, 1, true, false);//Horloge
+				if (lvl == 90)
+					perso.learnSpell(91, 1, true, false);//Frappe de Xélor
+				if (lvl == 100)
+					perso.learnSpell(97, 1, true, false);//Cadran de Xélor
+				if (lvl == 200)
+					perso.learnSpell(1905, 1, true, false);//Invocation de Dopeul Xélor
+			}
+			case CLASS_ECAFLIP -> {
+				if (lvl == 3)
+					perso.learnSpell(109, 1, true, false);//Bluff
+				if (lvl == 6)
+					perso.learnSpell(113, 1, true, false);//Perception
+				if (lvl == 9)
+					perso.learnSpell(111, 1, true, false);//Contrecoup
+				if (lvl == 13)
+					perso.learnSpell(104, 1, true, false);//Trèfle
+				if (lvl == 17)
+					perso.learnSpell(119, 1, true, false);//Tout ou rien
+				if (lvl == 21)
+					perso.learnSpell(101, 1, true, false);//Roulette
+				if (lvl == 26)
+					perso.learnSpell(107, 1, true, false);//Topkaj
+				if (lvl == 31)
+					perso.learnSpell(116, 1, true, false);//Langue Râpeuse
+				if (lvl == 36)
+					perso.learnSpell(106, 1, true, false);//Roue de la Fortune
+				if (lvl == 42)
+					perso.learnSpell(117, 1, true, false);//Griffe Invocatrice
+				if (lvl == 48)
+					perso.learnSpell(108, 1, true, false);//Esprit Félin
+				if (lvl == 54)
+					perso.learnSpell(115, 1, true, false);//Odorat
+				if (lvl == 60)
+					perso.learnSpell(118, 1, true, false);//Réflexes
+				if (lvl == 70)
+					perso.learnSpell(110, 1, true, false);//Griffe Joueuse
+				if (lvl == 80)
+					perso.learnSpell(112, 1, true, false);//Griffe de Ceangal
+				if (lvl == 90)
+					perso.learnSpell(114, 1, true, false);//Rekop
+				if (lvl == 100)
+					perso.learnSpell(120, 1, true, false);//Destin d'Ecaflip
+				if (lvl == 200)
+					perso.learnSpell(1906, 1, true, false);//Invocation de Dopeul Ecaflip
+			}
+			case CLASS_ENIRIPSA -> {
+				if (lvl == 3)
+					perso.learnSpell(124, 1, true, false);//Mot Soignant
+				if (lvl == 6)
+					perso.learnSpell(122, 1, true, false);//Mot Blessant
+				if (lvl == 9)
+					perso.learnSpell(126, 1, true, false);//Mot Stimulant
+				if (lvl == 13)
+					perso.learnSpell(127, 1, true, false);//Mot de Prévention
+				if (lvl == 17)
+					perso.learnSpell(123, 1, true, false);//Mot Drainant
+				if (lvl == 21)
+					perso.learnSpell(130, 1, true, false);//Mot Revitalisant
+				if (lvl == 26)
+					perso.learnSpell(131, 1, true, false);//Mot de Régénération
+				if (lvl == 31)
+					perso.learnSpell(132, 1, true, false);//Mot d'Epine
+				if (lvl == 36)
+					perso.learnSpell(133, 1, true, false);//Mot de Jouvence
+				if (lvl == 42)
+					perso.learnSpell(134, 1, true, false);//Mot Vampirique
+				if (lvl == 48)
+					perso.learnSpell(135, 1, true, false);//Mot de Sacrifice
+				if (lvl == 54)
+					perso.learnSpell(129, 1, true, false);//Mot d'Amitié
+				if (lvl == 60)
+					perso.learnSpell(136, 1, true, false);//Mot d'Immobilisation
+				if (lvl == 70)
+					perso.learnSpell(137, 1, true, false);//Mot d'Envol
+				if (lvl == 80)
+					perso.learnSpell(138, 1, true, false);//Mot de Silence
+				if (lvl == 90)
+					perso.learnSpell(139, 1, true, false);//Mot d'Altruisme
+				if (lvl == 100)
+					perso.learnSpell(140, 1, true, false);//Mot de Reconstitution
+				if (lvl == 200)
+					perso.learnSpell(1907, 1, true, false);//Invocation de Dopeul Eniripsa
+			}
+			case CLASS_IOP -> {
+				if (lvl == 3)
+					perso.learnSpell(144, 1, true, false);//Compulsion
+				if (lvl == 6)
+					perso.learnSpell(145, 1, true, false);//Epée Divine
+				if (lvl == 9)
+					perso.learnSpell(146, 1, true, false);//Epée du Destin
+				if (lvl == 13)
+					perso.learnSpell(147, 1, true, false);//Guide de Bravoure
+				if (lvl == 17)
+					perso.learnSpell(148, 1, true, false);//Amplification
+				if (lvl == 21)
+					perso.learnSpell(154, 1, true, false);//Epée Destructrice
+				if (lvl == 26)
+					perso.learnSpell(150, 1, true, false);//Couper
+				if (lvl == 31)
+					perso.learnSpell(151, 1, true, false);//Souffle
+				if (lvl == 36)
+					perso.learnSpell(155, 1, true, false);//Vitalité
+				if (lvl == 42)
+					perso.learnSpell(152, 1, true, false);//Epée du Jugement
+				if (lvl == 48)
+					perso.learnSpell(153, 1, true, false);//Puissance
+				if (lvl == 54)
+					perso.learnSpell(149, 1, true, false);//Mutilation
+				if (lvl == 60)
+					perso.learnSpell(156, 1, true, false);//Tempête de Puissance
+				if (lvl == 70)
+					perso.learnSpell(157, 1, true, false);//Epée Céleste
+				if (lvl == 80)
+					perso.learnSpell(158, 1, true, false);//Concentration
+				if (lvl == 90)
+					perso.learnSpell(160, 1, true, false);//Epée de Iop
+				if (lvl == 100)
+					perso.learnSpell(159, 1, true, false);//Colère de Iop
+				if (lvl == 200)
+					perso.learnSpell(1908, 1, true, false);//Invocation de Dopeul Iop
+			}
+			case CLASS_CRA -> {
+				if (lvl == 3)
+					perso.learnSpell(163, 1, true, false);//Flèche Glacée
+				if (lvl == 6)
+					perso.learnSpell(165, 1, true, false);//Flèche enflammée
+				if (lvl == 9)
+					perso.learnSpell(172, 1, true, false);//Tir Eloigné
+				if (lvl == 13)
+					perso.learnSpell(167, 1, true, false);//Flèche d'Expiation
+				if (lvl == 17)
+					perso.learnSpell(168, 1, true, false);//Oeil de Taupe
+				if (lvl == 21)
+					perso.learnSpell(162, 1, true, false);//Tir Critique
+				if (lvl == 26)
+					perso.learnSpell(170, 1, true, false);//Flèche d'Immobilisation
+				if (lvl == 31)
+					perso.learnSpell(171, 1, true, false);//Flèche Punitive
+				if (lvl == 36)
+					perso.learnSpell(166, 1, true, false);//Tir Puissant
+				if (lvl == 42)
+					perso.learnSpell(173, 1, true, false);//Flèche Harcelante
+				if (lvl == 48)
+					perso.learnSpell(174, 1, true, false);//Flèche Cinglante
+				if (lvl == 54)
+					perso.learnSpell(176, 1, true, false);//Flèche Persécutrice
+				if (lvl == 60)
+					perso.learnSpell(175, 1, true, false);//Flèche Destructrice
+				if (lvl == 70)
+					perso.learnSpell(178, 1, true, false);//Flèche Absorbante
+				if (lvl == 80)
+					perso.learnSpell(177, 1, true, false);//Flèche Ralentissante
+				if (lvl == 90)
+					perso.learnSpell(179, 1, true, false);//Flèche Explosive
+				if (lvl == 100)
+					perso.learnSpell(180, 1, true, false);//Maîtrise de l'Arc
+				if (lvl == 200)
+					perso.learnSpell(1909, 1, true, false);//Invocation de Dopeul Cra
+			}
+			case CLASS_SADIDA -> {
+				if (lvl == 3)
+					perso.learnSpell(198, 1, true, false);//Sacrifice Poupesque
+				if (lvl == 6)
+					perso.learnSpell(195, 1, true, false);//Larme
+				if (lvl == 9)
+					perso.learnSpell(182, 1, true, false);//Invocation de la Folle
+				if (lvl == 13)
+					perso.learnSpell(192, 1, true, false);//Ronce Apaisante
+				if (lvl == 17)
+					perso.learnSpell(197, 1, true, false);//Puissance Sylvestre
+				if (lvl == 21)
+					perso.learnSpell(189, 1, true, false);//Invocation de la Sacrifiée
+				if (lvl == 26)
+					perso.learnSpell(181, 1, true, false);//Tremblement
+				if (lvl == 31)
+					perso.learnSpell(199, 1, true, false);//Connaissance des Poupées
+				if (lvl == 36)
+					perso.learnSpell(191, 1, true, false);//Ronce Multiples
+				if (lvl == 42)
+					perso.learnSpell(186, 1, true, false);//Arbre
+				if (lvl == 48)
+					perso.learnSpell(196, 1, true, false);//Vent Empoisonné
+				if (lvl == 54)
+					perso.learnSpell(190, 1, true, false);//Invocation de la Gonflable
+				if (lvl == 60)
+					perso.learnSpell(194, 1, true, false);//Ronces Agressives
+				if (lvl == 70)
+					perso.learnSpell(185, 1, true, false);//Herbe Folle
+				if (lvl == 80)
+					perso.learnSpell(184, 1, true, false);//Feu de Brousse
+				if (lvl == 90)
+					perso.learnSpell(188, 1, true, false);//Ronce Insolente
+				if (lvl == 100)
+					perso.learnSpell(187, 1, true, false);//Invocation de la Surpuissante
+				if (lvl == 200)
+					perso.learnSpell(1910, 1, true, false);//Invocation de Dopeul Sadida
+			}
+			case CLASS_SACRIEUR -> {
+				if (lvl == 3)
+					perso.learnSpell(444, 1, true, false);//Dérobade
+				if (lvl == 6)
+					perso.learnSpell(449, 1, true, false);//Détour
+				if (lvl == 9)
+					perso.learnSpell(436, 1, true, false);//Assaut
+				if (lvl == 13)
+					perso.learnSpell(437, 1, true, false);//Châtiment Agile
+				if (lvl == 17)
+					perso.learnSpell(439, 1, true, false);//Dissolution
+				if (lvl == 21)
+					perso.learnSpell(433, 1, true, false);//Châtiment Osé
+				if (lvl == 26)
+					perso.learnSpell(443, 1, true, false);//Châtiment Spirituel
+				if (lvl == 31)
+					perso.learnSpell(440, 1, true, false);//Sacrifice
+				if (lvl == 36)
+					perso.learnSpell(442, 1, true, false);//Absorption
+				if (lvl == 42)
+					perso.learnSpell(441, 1, true, false);//Châtiment Vilatesque
+				if (lvl == 48)
+					perso.learnSpell(445, 1, true, false);//Coopération
+				if (lvl == 54)
+					perso.learnSpell(438, 1, true, false);//Transposition
+				if (lvl == 60)
+					perso.learnSpell(446, 1, true, false);//Punition
+				if (lvl == 70)
+					perso.learnSpell(447, 1, true, false);//Furie
+				if (lvl == 80)
+					perso.learnSpell(448, 1, true, false);//Epée Volante
+				if (lvl == 90)
+					perso.learnSpell(435, 1, true, false);//Tansfert de Vie
+				if (lvl == 100)
+					perso.learnSpell(450, 1, true, false);//Folie Sanguinaire
+				if (lvl == 200)
+					perso.learnSpell(1911, 1, true, false);//Invocation de Dopeul Sacrieur
+			}
+			case CLASS_PANDAWA -> {
+				if (lvl == 3)
+					perso.learnSpell(689, 1, true, false);//Epouvante
+				if (lvl == 6)
+					perso.learnSpell(690, 1, true, false);//Souffle Alcoolisé
+				if (lvl == 9)
+					perso.learnSpell(691, 1, true, false);//Vulnérabilité Aqueuse
+				if (lvl == 13)
+					perso.learnSpell(688, 1, true, false);//Vulnérabilité Incandescente
+				if (lvl == 17)
+					perso.learnSpell(693, 1, true, false);//Karcham
+				if (lvl == 21)
+					perso.learnSpell(694, 1, true, false);//Vulnérabilité Venteuse
+				if (lvl == 26)
+					perso.learnSpell(695, 1, true, false);//Stabilisation
+				if (lvl == 31)
+					perso.learnSpell(696, 1, true, false);//Chamrak
+				if (lvl == 36)
+					perso.learnSpell(697, 1, true, false);//Vulnérabilité Terrestre
+				if (lvl == 42)
+					perso.learnSpell(698, 1, true, false);//Souillure
+				if (lvl == 48)
+					perso.learnSpell(699, 1, true, false);//Lait de Bambou
+				if (lvl == 54)
+					perso.learnSpell(700, 1, true, false);//Vague à Lame
+				if (lvl == 60)
+					perso.learnSpell(701, 1, true, false);//Colère de Zatoïshwan
+				if (lvl == 70)
+					perso.learnSpell(702, 1, true, false);//Flasque Explosive
+				if (lvl == 80)
+					perso.learnSpell(703, 1, true, false);//Pandatak
+				if (lvl == 90)
+					perso.learnSpell(704, 1, true, false);//Pandanlku
+				if (lvl == 100)
+					perso.learnSpell(705, 1, true, false);//Lien Spiritueux
+				if (lvl == 200)
+					perso.learnSpell(1912, 1, true, false);//Invocation de Dopeul Pandawa
+			}
 		}
 	}
 
 	public static int getGlyphColor(int spell)
 	{
-		switch(spell)
-		{
-			case 10://Enflammé
-			case 2033://Dopeul
-				return 4;//Rouge
-			case 12://Aveuglement
-			case 2034://Dopeul
-				return 3;
-			case 13://Silence
-			case 2035://Dopeul
-				return 6;//Bleu
-			case 15://Immobilisation
-			case 2036://Dopeul
-				return 5;//Vert
-			case 17://Aggressif
-			case 2037://Dopeul
-				return 2;
-			//case 476://Blop
-			default:
-				return 4;
-		}
+		//case 476://Blop
+		return switch (spell) {
+//Dopeul
+//Rouge
+//Enflammé
+			case 10, 2033 -> 4;
+//Dopeul
+//Aveuglement
+			case 12, 2034 -> 3;
+//Dopeul
+//Bleu
+//Silence
+			case 13, 2035 -> 6;
+//Dopeul
+//Vert
+//Immobilisation
+			case 15, 2036 -> 5;
+//Dopeul
+//Aggressif
+			case 17, 2037 -> 2;
+			default -> 4;
+		};
 	}
 
 	public static int getTrapsColor(int spell)
 	{
-		switch(spell)
-		{
-			case 65://Sournois
-				return 7;
-			case 69://Immobilisation
-				return 10;
-			case 71://Empoisonnée
-			case 2068://Dopeul
-				return 9;
-			case 73://Repulsif
-				return 12;
-			case 77://Silence
-			case 2071://Dopeul
-				return 11;
-			case 79://Masse
-			case 2072://Dopeul
-				return 8;
-			case 80://Mortel
-				return 13;
-			default:
-				return 7;
-		}
+		return switch (spell) {
+//Sournois
+			case 65 -> 7;
+//Immobilisation
+			case 69 -> 10;
+//Dopeul
+//Empoisonnée
+			case 71, 2068 -> 9;
+//Repulsif
+			case 73 -> 12;
+//Dopeul
+//Silence
+			case 77, 2071 -> 11;
+//Dopeul
+//Masse
+			case 79, 2072 -> 8;
+//Mortel
+			case 80 -> 13;
+			default -> 7;
+		};
 	}
 
 	public static int getTotalCaseByJobLevel(int lvl)
 	{
 		if(lvl <10)return 2;
 		if(lvl == 100)return 9;
-		return (int)(lvl/20)+3;
+		return (lvl/20) +3;
 	}
 	
 	public static int getChanceForMaxCase(int lvl)
 	{
 		if(lvl <10)return 50;
-		return  54 + (int)((lvl/10)-1)*5;
+		return  54 + ((lvl/10)-1) *5;
 	}
 	
 	public static int calculXpWinCraft(int lvl,int numCase)
 	{
 		if(lvl == 100)return 0;
-		switch(numCase)
-		{
-			case 1:
-				if(lvl<10)return 1;
-			return 0;
-			case 2:
-				if(lvl<60)return 10;
-			return 0;
-			case 3:
-				if(lvl>9 && lvl<80)return 25;
-			return 0;
-			case 4:
-				if(lvl > 19)return 50;
-			return 0;
-			case 5:
-				if(lvl > 39)return 100;
-			return 0;
-			case 6:
-				if(lvl > 59)return 250;
-			return 0;
-			case 7:
-				if(lvl > 79)return 500;
-			return 0;
-			case 8:
-				if(lvl > 99)return 1000;
-			return 0;
+		switch (numCase) {
+			case 1 -> {
+				if (lvl < 10) return 1;
+				return 0;
+			}
+			case 2 -> {
+				if (lvl < 60) return 10;
+				return 0;
+			}
+			case 3 -> {
+				if (lvl > 9 && lvl < 80) return 25;
+				return 0;
+			}
+			case 4 -> {
+				if (lvl > 19) return 50;
+				return 0;
+			}
+			case 5 -> {
+				if (lvl > 39) return 100;
+				return 0;
+			}
+			case 6 -> {
+				if (lvl > 59) return 250;
+				return 0;
+			}
+			case 7 -> {
+				if (lvl > 79) return 500;
+				return 0;
+			}
+			case 8 -> {
+				if (lvl > 99) return 1000;
+				return 0;
+			}
 		}
 		return 0;
 	}
@@ -1866,428 +1637,339 @@ public class Constantes
 		ArrayList<JobAction> list = new ArrayList<>();
 		int timeWin = lvl*100;
 		int dropWin = lvl / 5;
-		switch(tID)
-		{
-			case JOB_BIJOUTIER:
-			//Faire Anneau 
-			list.add(new JobAction(11,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Faire Amullette
-			list.add(new JobAction(12,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_TAILLEUR:
-			//Faire Sac
-			list.add(new JobAction(64,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Faire Cape
-			list.add(new JobAction(123,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Faire Chapeau
-			list.add(new JobAction(63,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_F_BOUCLIER:
-			//Forger Bouclier
-			list.add(new JobAction(156,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_BRICOLEUR:
-			//Faire clef
-			list.add(new JobAction(171,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Faire objet brico
-			list.add(new JobAction(182,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_CORDONIER:
-			//Faire botte
-			list.add(new JobAction(13,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Faire ceinture
-			list.add(new JobAction(14,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_S_ARC:
-			//Sculter Arc
-			list.add(new JobAction(17,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//ReSculter Arc
-			list.add(new JobAction(16,3,0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_S_BATON:
-			//Sculter Baton
-			list.add(new JobAction(147,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//ReSculter Baton
-			list.add(new JobAction(148,3,0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_S_BAGUETTE:
-			//Sculter Baguette
-			list.add(new JobAction(149,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//ReSculter Baguette
-			list.add(new JobAction(15,3,0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_CORDOMAGE:
-				//FM Bottes
-				list.add(new JobAction(163,3,0,true,lvl,0));
-				//FM Ceinture
-				list.add(new JobAction(164,3,0,true,lvl,0));
-			break;
-
-			case JOB_JOAILLOMAGE:
-				//FM Anneau
-				list.add(new JobAction(169,3,0,true,lvl,0));
-				//FM  Amullette
-				list.add(new JobAction(168,3,0,true,lvl,0));
-			break;
-
-			case JOB_COSTUMAGE:
-				//FM Chapeau
-				list.add(new JobAction(165,3,0,true,lvl,0));
-				//FM Cape
-				list.add(new JobAction(167,3,0,true,lvl,0));
-				//FM Sac
-				list.add(new JobAction(166,3,0,true,lvl,0));
-			break;
-
-			case JOB_F_EPEE:
-			//Forger Epée
-			list.add(new JobAction(20,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Reforger Epée
-			list.add(new JobAction(146,3,0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_F_DAGUE:
-			//Forger Dague
-			list.add(new JobAction(142,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Reforger Dague
-			list.add(new JobAction(18,3,0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_F_MARTEAU:
-			//Forger Marteau
-			list.add(new JobAction(19,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Reforger Marteau
-			list.add(new JobAction(144,3,0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_F_PELLE:
-			//Forger Pelle
-			list.add(new JobAction(21,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Reforger Pelle
-			list.add(new JobAction(146,3,0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_F_HACHES:
-			//Forger Hache 
-			list.add(new JobAction(65,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Reforger Hache
-			list.add(new JobAction(143,3,0,true,getChanceForMaxCase(lvl),-1));
-			break;
-
-			case JOB_FM_HACHES:
-				//Reforger une hache
-				list.add(new JobAction(115,3,0,true,lvl,0));
-			break;
-			case JOB_FM_DAGUE:
-				//Reforger une dague
-				list.add(new JobAction(1,3,0,true,lvl,0));
-			break;
-			case JOB_FM_EPEE:
-				//Reforger une épée
-				list.add(new JobAction(113,3,0,true,lvl,0));
-			break;
-			case JOB_FM_MARTEAU:
-				//Reforger une marteau
-				list.add(new JobAction(116,3,0,true,lvl,0));
-			break;
-			case JOB_FM_PELLE:
-				//Reforger une pelle
-				list.add(new JobAction(117,3,0,true,lvl,0));
-			break;
-			case JOB_SM_ARC:
-				//Resculpter un arc
-				list.add(new JobAction(118,3,0,true,lvl,0));
-			break;
-			case JOB_SM_BATON:
-				//Resculpter un baton
-				list.add(new JobAction(120,3,0,true,lvl,0));
-			break;
-			case JOB_SM_BAGUETTE:
-				//Resculpter une baguette
-				list.add(new JobAction(119,3,0,true,lvl,0));
-			break;
-			
-			case JOB_CHASSEUR:
-			//Préparer une Viande
-			list.add(new JobAction(134,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-			
-			case JOB_BOUCHER:
-			//Préparer une Viande
-			list.add(new JobAction(132,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-			
-			case JOB_POISSONNIER:
-			//Preparer un Poisson
-			list.add(new JobAction(135,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-			
-			case JOB_BOULANGER:
-			//Cuir le Pain
-			list.add(new JobAction(27,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Faire des Bonbons
-			list.add(new JobAction(109,3,0,true,100,-1));
-			break;
-			
-			case JOB_MINEUR:
-			if(lvl > 99)
-			{
-			//Miner Dolomite
-			list.add(new JobAction(161,-19 + dropWin,-18 + dropWin,false,12000-timeWin,60));
+		//Faire Anneau
+		//Faire Amullette
+		//Faire Sac
+		//Faire Cape
+		//Faire Chapeau
+		//Forger Bouclier
+		//Faire clef
+		//Faire objet brico
+		//Faire botte
+		//Faire ceinture
+		//Sculter Arc
+		//ReSculter Arc
+		//Sculter Baton
+		//ReSculter Baton
+		//Sculter Baguette
+		//ReSculter Baguette
+		//FM Bottes
+		//FM Ceinture
+		//FM Anneau
+		//FM  Amullette
+		//FM Chapeau
+		//FM Cape
+		//FM Sac
+		//Forger Epée
+		//Reforger Epée
+		//Forger Dague
+		//Reforger Dague
+		//Forger Marteau
+		//Reforger Marteau
+		//Forger Pelle
+		//Reforger Pelle
+		//Forger Hache
+		//Reforger Hache
+		//Reforger une hache
+		//Reforger une dague
+		//Reforger une épée
+		//Reforger une marteau
+		//Reforger une pelle
+		//Resculpter un arc
+		//Resculpter un baton
+		//Resculpter une baguette
+		//Préparer une Viande
+		//Préparer une Viande
+		//Preparer un Poisson
+		//Cuir le Pain
+		//Faire des Bonbons
+		//Miner Fer
+		//Fondre
+		//Polir
+		//Pêcher Ombre Etrange
+		//Pêcher Pichon
+		//Pêcher Petits poissons de rivière
+		//Pêcher Petits poissons de mer
+		//Vider
+		//Cueillir Lin
+		//Fabriquer une Potion
+		//Couper Frêne
+		//Scie
+		//Faucher blé
+		//Moudre
+		//Egrener 100% 1 case tout le temps ?
+		switch (tID) {
+			case JOB_BIJOUTIER -> {
+				list.add(new JobAction(11, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(12, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl > 79)
-			{
-			//Miner Or
-			list.add(new JobAction(30,-15 + dropWin,-14 + dropWin,false,12000-timeWin,55));
+			case JOB_TAILLEUR -> {
+				list.add(new JobAction(64, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(123, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(63, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl > 69)
-			{
-			//Miner Bauxite
-			list.add(new JobAction(31,-13 + dropWin,-12 + dropWin,false,12000-timeWin,50));
+			case JOB_F_BOUCLIER -> list.add(new JobAction(156, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+			case JOB_BRICOLEUR -> {
+				list.add(new JobAction(171, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(182, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl > 59)
-			{
-			//Miner Argent
-			list.add(new JobAction(29,-11 + dropWin,-10 + dropWin,false,12000-timeWin,40));
+			case JOB_CORDONIER -> {
+				list.add(new JobAction(13, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(14, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl > 49)
-			{
-			//Miner Etain
-			list.add(new JobAction(55,-9 + dropWin,-8 + dropWin,false,12000-timeWin,35));
-			//Miner Silicate
-			list.add(new JobAction(162,-9 + dropWin,-8 + dropWin,false,12000-timeWin,35));
+			case JOB_S_ARC -> {
+				list.add(new JobAction(17, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(16, 3, 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl > 39)
-			{
-			//Miner Manganèse
-			list.add(new JobAction(56,-7 + dropWin,-6 + dropWin,false,12000-timeWin,30));
+			case JOB_S_BATON -> {
+				list.add(new JobAction(147, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(148, 3, 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl >29)
-			{
-			//Miner Kobalte
-			list.add(new JobAction(28,-5 + dropWin,-4 + dropWin,false,12000-timeWin,25));
+			case JOB_S_BAGUETTE -> {
+				list.add(new JobAction(149, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(15, 3, 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl >19)
-			{
-			//Miner Bronze
-			list.add(new JobAction(26,-3 + dropWin,-2 + dropWin,false,12000-timeWin,20));
+			case JOB_CORDOMAGE -> {
+				list.add(new JobAction(163, 3, 0, true, lvl, 0));
+				list.add(new JobAction(164, 3, 0, true, lvl, 0));
 			}
-			if(lvl >9)
-			{
-			//Miner Cuivre
-			list.add(new JobAction(25,-1 + dropWin,0 + dropWin,false,12000-timeWin,15));
+			case JOB_JOAILLOMAGE -> {
+				list.add(new JobAction(169, 3, 0, true, lvl, 0));
+				list.add(new JobAction(168, 3, 0, true, lvl, 0));
 			}
-			//Miner Fer
-			list.add(new JobAction(24,1 + dropWin,2 + dropWin,false,12000-timeWin,10));
-			//Fondre
-			list.add(new JobAction(32,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Polir
-			list.add(new JobAction(48,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-			
-			case JOB_PECHEUR:
-			if(lvl > 74)
-			{
-			//Pêcher Poissons géants de mer
-			list.add(new JobAction(131,0,1,false,12000-timeWin,35));
+			case JOB_COSTUMAGE -> {
+				list.add(new JobAction(165, 3, 0, true, lvl, 0));
+				list.add(new JobAction(167, 3, 0, true, lvl, 0));
+				list.add(new JobAction(166, 3, 0, true, lvl, 0));
 			}
-			if(lvl > 69)
-			{
-			//Pêcher Poissons géants de rivière
-			list.add(new JobAction(127,0,1,false,12000-timeWin,35));
+			case JOB_F_EPEE -> {
+				list.add(new JobAction(20, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(146, 3, 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl > 49)
-			{
-			//Pêcher Gros poissons de mers
-			list.add(new JobAction(130,0,1,false,12000-timeWin,30));
+			case JOB_F_DAGUE -> {
+				list.add(new JobAction(142, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(18, 3, 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl >39)
-			{
-			//Pêcher Gros poissons de rivière
-			list.add(new JobAction(126,0,1,false,12000-timeWin,25));
+			case JOB_F_MARTEAU -> {
+				list.add(new JobAction(19, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(144, 3, 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl >19)
-			{
-			//Pêcher Poissons de mer
-			list.add(new JobAction(129,0,1,false,12000-timeWin,20));
+			case JOB_F_PELLE -> {
+				list.add(new JobAction(21, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(146, 3, 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl >9)
-			{
-			//Pêcher Poissons de rivière
-			list.add(new JobAction(125,0,1,false,12000-timeWin,15));
+			case JOB_F_HACHES -> {
+				list.add(new JobAction(65, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(143, 3, 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			//Pêcher Ombre Etrange
-			list.add(new JobAction(140,0,1,false,12000-timeWin,50));
-			//Pêcher Pichon
-			list.add(new JobAction(136,1,1,false,12000-timeWin,5));
-			//Pêcher Petits poissons de rivière
-			list.add(new JobAction(124,0,1,false,12000-timeWin,10));
-			//Pêcher Petits poissons de mer
-			list.add(new JobAction(128,0,1,false,12000-timeWin,10));
-			//Vider
-			list.add(new JobAction(133,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-			
-			case JOB_ALCHIMISTE:
-			if(lvl > 49)
-			{
-			//Cueillir Graine de Pandouille
-			list.add(new JobAction(160,-9 + dropWin,-8 + dropWin,false,12000-timeWin,35));
-			//Cueillir Edelweiss
-			list.add(new JobAction(74,-9 + dropWin,-8 + dropWin,false,12000-timeWin,35));
+			case JOB_FM_HACHES -> list.add(new JobAction(115, 3, 0, true, lvl, 0));
+			case JOB_FM_DAGUE -> list.add(new JobAction(1, 3, 0, true, lvl, 0));
+			case JOB_FM_EPEE -> list.add(new JobAction(113, 3, 0, true, lvl, 0));
+			case JOB_FM_MARTEAU -> list.add(new JobAction(116, 3, 0, true, lvl, 0));
+			case JOB_FM_PELLE -> list.add(new JobAction(117, 3, 0, true, lvl, 0));
+			case JOB_SM_ARC -> list.add(new JobAction(118, 3, 0, true, lvl, 0));
+			case JOB_SM_BATON -> list.add(new JobAction(120, 3, 0, true, lvl, 0));
+			case JOB_SM_BAGUETTE -> list.add(new JobAction(119, 3, 0, true, lvl, 0));
+			case JOB_CHASSEUR -> list.add(new JobAction(134, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+			case JOB_BOUCHER -> list.add(new JobAction(132, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+			case JOB_POISSONNIER -> list.add(new JobAction(135, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+			case JOB_BOULANGER -> {
+				list.add(new JobAction(27, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(109, 3, 0, true, 100, -1));
 			}
-			if(lvl > 39)
-			{
-			//Cueillir Orchidée
-			list.add(new JobAction(73,-7 + dropWin,-6 + dropWin,false,12000-timeWin,30));
+			case JOB_MINEUR -> {
+				if (lvl > 99) {
+					//Miner Dolomite
+					list.add(new JobAction(161, -19 + dropWin, -18 + dropWin, false, 12000 - timeWin, 60));
+				}
+				if (lvl > 79) {
+					//Miner Or
+					list.add(new JobAction(30, -15 + dropWin, -14 + dropWin, false, 12000 - timeWin, 55));
+				}
+				if (lvl > 69) {
+					//Miner Bauxite
+					list.add(new JobAction(31, -13 + dropWin, -12 + dropWin, false, 12000 - timeWin, 50));
+				}
+				if (lvl > 59) {
+					//Miner Argent
+					list.add(new JobAction(29, -11 + dropWin, -10 + dropWin, false, 12000 - timeWin, 40));
+				}
+				if (lvl > 49) {
+					//Miner Etain
+					list.add(new JobAction(55, -9 + dropWin, -8 + dropWin, false, 12000 - timeWin, 35));
+					//Miner Silicate
+					list.add(new JobAction(162, -9 + dropWin, -8 + dropWin, false, 12000 - timeWin, 35));
+				}
+				if (lvl > 39) {
+					//Miner Manganèse
+					list.add(new JobAction(56, -7 + dropWin, -6 + dropWin, false, 12000 - timeWin, 30));
+				}
+				if (lvl > 29) {
+					//Miner Kobalte
+					list.add(new JobAction(28, -5 + dropWin, -4 + dropWin, false, 12000 - timeWin, 25));
+				}
+				if (lvl > 19) {
+					//Miner Bronze
+					list.add(new JobAction(26, -3 + dropWin, -2 + dropWin, false, 12000 - timeWin, 20));
+				}
+				if (lvl > 9) {
+					//Miner Cuivre
+					list.add(new JobAction(25, -1 + dropWin, 0 + dropWin, false, 12000 - timeWin, 15));
+				}
+				list.add(new JobAction(24, 1 + dropWin, 2 + dropWin, false, 12000 - timeWin, 10));
+				list.add(new JobAction(32, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(48, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl >29)
-			{
-			//Cueillir Menthe
-			list.add(new JobAction(72,-5 + dropWin,-4 + dropWin,false,12000-timeWin,25));
+			case JOB_PECHEUR -> {
+				if (lvl > 74) {
+					//Pêcher Poissons géants de mer
+					list.add(new JobAction(131, 0, 1, false, 12000 - timeWin, 35));
+				}
+				if (lvl > 69) {
+					//Pêcher Poissons géants de rivière
+					list.add(new JobAction(127, 0, 1, false, 12000 - timeWin, 35));
+				}
+				if (lvl > 49) {
+					//Pêcher Gros poissons de mers
+					list.add(new JobAction(130, 0, 1, false, 12000 - timeWin, 30));
+				}
+				if (lvl > 39) {
+					//Pêcher Gros poissons de rivière
+					list.add(new JobAction(126, 0, 1, false, 12000 - timeWin, 25));
+				}
+				if (lvl > 19) {
+					//Pêcher Poissons de mer
+					list.add(new JobAction(129, 0, 1, false, 12000 - timeWin, 20));
+				}
+				if (lvl > 9) {
+					//Pêcher Poissons de rivière
+					list.add(new JobAction(125, 0, 1, false, 12000 - timeWin, 15));
+				}
+				list.add(new JobAction(140, 0, 1, false, 12000 - timeWin, 50));
+				list.add(new JobAction(136, 1, 1, false, 12000 - timeWin, 5));
+				list.add(new JobAction(124, 0, 1, false, 12000 - timeWin, 10));
+				list.add(new JobAction(128, 0, 1, false, 12000 - timeWin, 10));
+				list.add(new JobAction(133, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl >19)
-			{
-			//Cueillir Trèfle
-			list.add(new JobAction(71,-3 + dropWin,-2 + dropWin,false,12000-timeWin,20));
+			case JOB_ALCHIMISTE -> {
+				if (lvl > 49) {
+					//Cueillir Graine de Pandouille
+					list.add(new JobAction(160, -9 + dropWin, -8 + dropWin, false, 12000 - timeWin, 35));
+					//Cueillir Edelweiss
+					list.add(new JobAction(74, -9 + dropWin, -8 + dropWin, false, 12000 - timeWin, 35));
+				}
+				if (lvl > 39) {
+					//Cueillir Orchidée
+					list.add(new JobAction(73, -7 + dropWin, -6 + dropWin, false, 12000 - timeWin, 30));
+				}
+				if (lvl > 29) {
+					//Cueillir Menthe
+					list.add(new JobAction(72, -5 + dropWin, -4 + dropWin, false, 12000 - timeWin, 25));
+				}
+				if (lvl > 19) {
+					//Cueillir Trèfle
+					list.add(new JobAction(71, -3 + dropWin, -2 + dropWin, false, 12000 - timeWin, 20));
+				}
+				if (lvl > 9) {
+					//Cueillir Chanvre
+					list.add(new JobAction(54, -1 + dropWin, 0 + dropWin, false, 12000 - timeWin, 15));
+				}
+				list.add(new JobAction(68, 1 + dropWin, 2 + dropWin, false, 12000 - timeWin, 10));
+				list.add(new JobAction(23, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			if(lvl >9)
-			{
-			//Cueillir Chanvre
-			list.add(new JobAction(54,-1 + dropWin,0 + dropWin,false,12000-timeWin,15));
+			case JOB_BUCHERON -> {
+				if (lvl > 99) {
+					//Couper Bambou Sacré
+					list.add(new JobAction(158, -19 + dropWin, -18 + dropWin, false, 12000 - timeWin, 75));
+				}
+				if (lvl > 89) {
+					//Couper Orme
+					list.add(new JobAction(35, -17 + dropWin, -16 + dropWin, false, 12000 - timeWin, 70));
+				}
+				if (lvl > 79) {
+					//Couper Charme
+					list.add(new JobAction(38, -15 + dropWin, -14 + dropWin, false, 12000 - timeWin, 65));
+					//Couper Bambou Sombre
+					list.add(new JobAction(155, -15 + dropWin, -14 + dropWin, false, 12000 - timeWin, 65));
+				}
+				if (lvl > 74) {
+					//Couper Kalyptus
+					list.add(new JobAction(174, -14 + dropWin, -13 + dropWin, false, 12000 - timeWin, 55));
+				}
+				if (lvl > 69) {
+					//Couper Ebène
+					list.add(new JobAction(34, -13 + dropWin, -12 + dropWin, false, 12000 - timeWin, 50));
+				}
+				if (lvl > 59) {
+					//Couper Merisier
+					list.add(new JobAction(41, -11 + dropWin, -10 + dropWin, false, 12000 - timeWin, 45));
+				}
+				if (lvl > 49) {
+					//Couper If
+					list.add(new JobAction(33, -9 + dropWin, -8 + dropWin, false, 12000 - timeWin, 40));
+					//Couper Bambou
+					list.add(new JobAction(154, -9 + dropWin, -8 + dropWin, false, 12000 - timeWin, 40));
+				}
+				if (lvl > 39) {
+					//Couper Erable
+					list.add(new JobAction(37, -7 + dropWin, -6 + dropWin, false, 12000 - timeWin, 35));
+				}
+				if (lvl > 34) {
+					//Couper Bombu
+					list.add(new JobAction(139, -6 + dropWin, -5 + dropWin, false, 12000 - timeWin, 30));
+					//Couper Oliviolet
+					list.add(new JobAction(141, -6 + dropWin, -5 + dropWin, false, 12000 - timeWin, 30));
+				}
+				if (lvl > 29) {
+					//Couper Chêne
+					list.add(new JobAction(10, -5 + dropWin, -4 + dropWin, false, 12000 - timeWin, 25));
+				}
+				if (lvl > 19) {
+					//Couper Noyer
+					list.add(new JobAction(40, -3 + dropWin, -2 + dropWin, false, 12000 - timeWin, 20));
+				}
+				if (lvl > 9) {
+					//Couper Châtaignier
+					list.add(new JobAction(39, -1 + dropWin, 0 + dropWin, false, 12000 - timeWin, 15));
+				}
+				list.add(new JobAction(6, 1 + dropWin, 2 + dropWin, false, 12000 - timeWin, 10));
+				list.add(new JobAction(101, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
 			}
-			//Cueillir Lin
-			list.add(new JobAction(68,1 + dropWin,2 + dropWin,false,12000-timeWin,10));
-			//Fabriquer une Potion
-			list.add(new JobAction(23,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-			
-			case JOB_BUCHERON:
-			if(lvl > 99)
-			{
-			//Couper Bambou Sacré
-			list.add(new JobAction(158,-19 + dropWin,-18 + dropWin,false,12000-timeWin,75));
+			case JOB_PAYSAN -> {
+				if (lvl > 69) {
+					//Faucher Chanvre
+					list.add(new JobAction(54, -13 + dropWin, -12 + dropWin, false, 12000 - timeWin, 45));
+				}
+				if (lvl > 59) {
+					//Faucher Malt
+					list.add(new JobAction(58, -11 + dropWin, -10 + dropWin, false, 12000 - timeWin, 40));
+				}
+				if (lvl > 49) {
+					//Faucher Riz
+					list.add(new JobAction(159, -9 + dropWin, -8 + dropWin, false, 12000 - timeWin, 35));
+					//Faucher Seigle
+					list.add(new JobAction(52, -9 + dropWin, -8 + dropWin, false, 12000 - timeWin, 35));
+				}
+				if (lvl > 39) {
+					//Faucher Lin
+					list.add(new JobAction(50, -7 + dropWin, -6 + dropWin, false, 12000 - timeWin, 30));
+				}
+				if (lvl > 29) {
+					//Faucher Houblon
+					list.add(new JobAction(46, -5 + dropWin, -4 + dropWin, false, 12000 - timeWin, 25));
+				}
+				if (lvl > 19) {
+					//Faucher Avoine
+					list.add(new JobAction(57, -3 + dropWin, -2 + dropWin, false, 12000 - timeWin, 20));
+				}
+				if (lvl > 9) {
+					//Faucher Orge
+					list.add(new JobAction(53, -1 + dropWin, 0 + dropWin, false, 12000 - timeWin, 15));
+				}
+				list.add(new JobAction(45, 1 + dropWin, 2 + dropWin, false, 12000 - timeWin, 10));
+				list.add(new JobAction(47, getTotalCaseByJobLevel(lvl), 0, true, getChanceForMaxCase(lvl), -1));
+				list.add(new JobAction(122, 1, 0, true, 100, -1));
 			}
-			if(lvl > 89)
-			{
-			//Couper Orme
-			list.add(new JobAction(35,-17 + dropWin,-16 + dropWin,false,12000-timeWin,70));
-			}
-			if(lvl > 79)
-			{
-			//Couper Charme
-			list.add(new JobAction(38,-15 + dropWin,-14 + dropWin,false,12000-timeWin,65));
-			//Couper Bambou Sombre
-			list.add(new JobAction(155,-15 + dropWin,-14 + dropWin,false,12000-timeWin,65));
-			}
-			if(lvl > 74)
-			{
-			//Couper Kalyptus
-			list.add(new JobAction(174,-14 + dropWin,-13 + dropWin,false,12000-timeWin,55));
-			}
-			if(lvl > 69)
-			{
-			//Couper Ebène
-			list.add(new JobAction(34,-13 + dropWin,-12 + dropWin,false,12000-timeWin,50));
-			}
-			if(lvl > 59)
-			{
-			//Couper Merisier
-			list.add(new JobAction(41,-11 + dropWin,-10 + dropWin,false,12000-timeWin,45));
-			}
-			if(lvl > 49)
-			{
-			//Couper If
-			list.add(new JobAction(33,-9 + dropWin,-8 + dropWin,false,12000-timeWin,40));
-			//Couper Bambou
-			list.add(new JobAction(154,-9 + dropWin,-8 + dropWin,false,12000-timeWin,40));
-			}
-			if(lvl > 39)
-			{
-			//Couper Erable
-			list.add(new JobAction(37,-7 + dropWin,-6 + dropWin,false,12000-timeWin,35));
-			}
-			if(lvl> 34)
-			{
-			//Couper Bombu
-			list.add(new JobAction(139,-6 + dropWin,-5 + dropWin,false,12000-timeWin,30));
-			//Couper Oliviolet
-			list.add(new JobAction(141,-6 + dropWin,-5 + dropWin,false,12000-timeWin,30));
-			}
-			if(lvl >29)
-			{
-			//Couper Chêne
-			list.add(new JobAction(10,-5 + dropWin,-4 + dropWin,false,12000-timeWin,25));
-			}
-			if(lvl >19)
-			{
-			//Couper Noyer
-			list.add(new JobAction(40,-3 + dropWin,-2 + dropWin,false,12000-timeWin,20));
-			}
-			if(lvl >9)
-			{
-			//Couper Châtaignier
-			list.add(new JobAction(39,-1 + dropWin,0 + dropWin,false,12000-timeWin,15));
-			}
-			//Couper Frêne
-			list.add(new JobAction(6,1 + dropWin,2 + dropWin,false,12000-timeWin,10));
-			//Scie
-			list.add(new JobAction(101,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			break;
-			
-			case JOB_PAYSAN:
-			if(lvl > 69)
-			{
-			//Faucher Chanvre
-			list.add(new JobAction(54,-13 + dropWin,-12 + dropWin,false,12000-timeWin,45));
-			}
-			if(lvl > 59)
-			{
-			//Faucher Malt
-			list.add(new JobAction(58,-11 + dropWin,-10 + dropWin,false,12000-timeWin,40));
-			}
-			if(lvl > 49)
-			{
-			//Faucher Riz
-			list.add(new JobAction(159,-9 + dropWin,-8 + dropWin,false,12000-timeWin,35));
-			//Faucher Seigle
-			list.add(new JobAction(52,-9 + dropWin,-8 + dropWin,false,12000-timeWin,35));
-			}
-			if(lvl> 39)
-			{
-			//Faucher Lin
-			list.add(new JobAction(50,-7 + dropWin,-6 + dropWin,false,12000-timeWin,30));
-			}
-			if(lvl >29)
-			{
-			//Faucher Houblon
-			list.add(new JobAction(46,-5 + dropWin,-4 + dropWin,false,12000-timeWin,25));
-			}
-			if(lvl >19)
-			{
-			//Faucher Avoine
-			list.add(new JobAction(57,-3 + dropWin,-2 + dropWin,false,12000-timeWin,20));
-			}
-			if(lvl >9)
-			{
-			//Faucher Orge
-			list.add(new JobAction(53,-1 + dropWin,0 + dropWin,false,12000-timeWin,15));
-			}
-			//Faucher blé
-			list.add(new JobAction(45,1 + dropWin,2 + dropWin,false,12000-timeWin,10));
-			//Moudre
-			list.add(new JobAction(47,getTotalCaseByJobLevel(lvl),0,true,getChanceForMaxCase(lvl),-1));
-			//Egrener 100% 1 case tout le temps ?
-			list.add(new JobAction(122,1,0,true,100,-1));
-			break;
 		}
 		return list;
 	}
@@ -2341,31 +2023,31 @@ public class Constantes
 			break;
 			//Dorée
 			case 18:
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2)); 
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/2.50)); // 100/2.50 = 40
 			break;
 			//Rousse-Amande
 			case 38:
 			stats.addOneStat(STATS_ADD_INIT, lvl*5); // 100*5 = 500
 			stats.addOneStat(STATS_ADD_VITA, lvl); 
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/50)); // 100/50 = 2
+			stats.addOneStat(STATS_CREATURE, lvl/50); // 100/50 = 2
 			break;
 			//Rousse-Dorée
 			case 46:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4)); //100/4 = 25
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4); //100/4 = 25
 		    break;
 			//Amande-Dorée
 			case 33:
 			stats.addOneStat(STATS_ADD_INIT, lvl*5);
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2));
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/100)); // 100/100 = 1
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
+			stats.addOneStat(STATS_CREATURE, lvl/100); // 100/100 = 1
 			break;
 			//Indigo |
 			case 17:
 			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/1.25));
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			break;
 			//Rousse-Indigo
 			case 62:
@@ -2380,80 +2062,80 @@ public class Constantes
 			//Amande-Indigo
 			case 36:
 			stats.addOneStat(STATS_ADD_INIT, lvl*5);
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2)); 
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/1.65));
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/100));
+			stats.addOneStat(STATS_CREATURE, lvl/100);
 			break;
 			//Pourpre | Stade 4
 			case 19:
 			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/1.25));
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			break;
 			//Orchidée
 			case 22:
 			stats.addOneStat(STATS_ADD_INTE, (int)(lvl/1.25));
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			break;
 			//Dorée-Orchidée |
 			case 48:
 			stats.addOneStat(STATS_ADD_VITA, (lvl));
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
 		    stats.addOneStat(STATS_ADD_INTE, (int)(lvl/1.65));
 			break;
 			//Indigo-Pourpre
 			case 65:
 			stats.addOneStat(STATS_ADD_VITA, (lvl));
-			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/2));
-			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_CHAN, lvl/2);
+			stats.addOneStat(STATS_ADD_FORC, lvl/2);
 			break;
 			//Indigo-Orchidée
 			case 67:
 			stats.addOneStat(STATS_ADD_VITA, (lvl));
-			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/2));
-			stats.addOneStat(STATS_ADD_INTE, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_CHAN, lvl/2);
+			stats.addOneStat(STATS_ADD_INTE, lvl/2);
 			break;
 			//Ebène-Pourpre
 			case 54:
 			stats.addOneStat(STATS_ADD_VITA, (lvl));
-			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/2));
-			stats.addOneStat(STATS_ADD_AGIL, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_FORC, lvl/2);
+			stats.addOneStat(STATS_ADD_AGIL, lvl/2);
 			break;
 			//Ebène-Orchidée
 			case 53:
 			stats.addOneStat(STATS_ADD_VITA, (lvl));
-			stats.addOneStat(STATS_ADD_AGIL, (int)(lvl/2));
-			stats.addOneStat(STATS_ADD_INTE, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_AGIL, lvl/2);
+			stats.addOneStat(STATS_ADD_INTE, lvl/2);
 			break;
 			//Pourpre-Orchidée
 			case 76:
 			stats.addOneStat(STATS_ADD_VITA, (lvl));
-			stats.addOneStat(STATS_ADD_INTE, (int)(lvl/2));
-			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_INTE, lvl/2);
+			stats.addOneStat(STATS_ADD_FORC, lvl/2);
 			break;
 			// Amande-Ebene	| Nami-start
 			case 37:
 			stats.addOneStat(STATS_ADD_INIT, lvl*5);
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2)); 
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			stats.addOneStat(STATS_ADD_AGIL, (int)(lvl/1.65));
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/100));
+			stats.addOneStat(STATS_CREATURE, lvl/100);
 			break;
 			// Amande-Rousse
 			case 44:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
 			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/1.65));
 			break;
 			// Dorée-Ebène
 			case 42:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
 			stats.addOneStat(STATS_ADD_AGIL, (int)(lvl/1.65));
 			break;
 			// Indigo-Ebène
 			case 51:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
-			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/2));
-			stats.addOneStat(STATS_ADD_AGIL, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_CHAN, lvl/2);
+			stats.addOneStat(STATS_ADD_AGIL, lvl/2);
 			break;
 			// Rousse-Pourpre
 			case 71:
@@ -2468,61 +2150,61 @@ public class Constantes
 			// Amande-Pourpre
 			case 41:
 			stats.addOneStat(STATS_ADD_INIT, lvl*5);
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2)); 
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/1.65));
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/100));
+			stats.addOneStat(STATS_CREATURE, lvl/100);
 			break;
 			// Amande-Orchidée
 			case 40:
 			stats.addOneStat(STATS_ADD_INIT, lvl*5);
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2)); 
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			stats.addOneStat(STATS_ADD_INTE, (int)(lvl/1.65));
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/100));
+			stats.addOneStat(STATS_CREATURE, lvl/100);
 			break;
 			// Dorée-Pourpre
 			case 49:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
 			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/1.65));
 			break;
 			// Ivoire
 			case 16:
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2));
-			stats.addOneStat(STATS_ADD_PERDOM, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
+			stats.addOneStat(STATS_ADD_PERDOM, lvl/2);
 			break;
 	        // Turquoise
 			case 15:
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			stats.addOneStat(STATS_ADD_PROS, (int)(lvl/1.25));
 			break;
 			//Rousse-Ivoire
 			case 11:
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl*2)); // 100*2 = 200
+			stats.addOneStat(STATS_ADD_VITA, lvl*2); // 100*2 = 200
 			stats.addOneStat(STATS_ADD_PERDOM, (int)(lvl/2.5)); // = 40
 			break;
 			//Rousse-Turquoise
 			case 69:
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl*2));
+			stats.addOneStat(STATS_ADD_VITA, lvl*2);
 			stats.addOneStat(STATS_ADD_PROS, (int)(lvl/2.50));
 			break;
 			//Amande-Turquoise
 			case 39:
 			stats.addOneStat(STATS_ADD_INIT, lvl*5);
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/2));
+			stats.addOneStat(STATS_ADD_VITA, lvl/2);
 			stats.addOneStat(STATS_ADD_PROS, (int)(lvl/2.50));
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/100));
+			stats.addOneStat(STATS_CREATURE, lvl/100);
 			break;
 			//Dorée-Ivoire
 			case 45:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
 			stats.addOneStat(STATS_ADD_PERDOM, (int)(lvl/2.5));
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
 			break;
 			//Dorée-Turquoise
 			case 47:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
 			stats.addOneStat(STATS_ADD_PROS, (int)(lvl/2.50));
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
 			break;
 			//Indigo-Ivoire
 			case 61:
@@ -2575,297 +2257,296 @@ public class Constantes
 			// Emeraude
 			case 21:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			// Prune
 			case 23:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2); // 100*2 = 200
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/50));
+			stats.addOneStat(STATS_ADD_PO, lvl/50);
 			break;
 			//Emeraude-Rousse
 			case 57:
 			stats.addOneStat(STATS_ADD_VITA, lvl*3); // 100*3 = 300
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			//Rousse-Prune
 			case 84:
 			stats.addOneStat(STATS_ADD_VITA, lvl*3);
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Amande-Emeraude
 			case 35:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
+			stats.addOneStat(STATS_CREATURE, lvl/100);
 			stats.addOneStat(STATS_ADD_INIT, lvl*5);
 			break;
 			//Amande-Prune
 			case 77:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
 			stats.addOneStat(STATS_ADD_INIT, lvl*5);
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
-			stats.addOneStat(STATS_CREATURE, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
+			stats.addOneStat(STATS_CREATURE, lvl/100);
 			break;
 			//Dorée-Emeraude
 			case 43:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			//Dorée-Prune
 			case 78:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
-			stats.addOneStat(STATS_ADD_SAGE, (int)(lvl/4));
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_SAGE, lvl/4);
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Indigo-Emeraude
 			case 55:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
 			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/3.33));
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			//Indigo-Prune
 			case 82:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
 			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/1.65));
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Ebène-Emeraude
 			case 50:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
 			stats.addOneStat(STATS_ADD_AGIL, (int)(lvl/3.33));
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			//Ebène-Prune
 			case 79:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
 			stats.addOneStat(STATS_ADD_AGIL, (int)(lvl/1.65));
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Pourpre-Emeraude
 			case 60:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
 			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/3.33));
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			//Pourpre-Prune
 			case 87:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
 			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/1.65));
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Orchidée-Emeraude
 			case 59:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
 			stats.addOneStat(STATS_ADD_INTE, (int)(lvl/3.33));
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			//Orchidée-Prune
 			case 86:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
 			stats.addOneStat(STATS_ADD_INTE, (int)(lvl/1.65));
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Ivoire-Emeraude
 			case 56:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
 			stats.addOneStat(STATS_ADD_PERDOM, (int)(lvl/3.33));
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			//Ivoire-Prune
 			case 83:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
 			stats.addOneStat(STATS_ADD_PERDOM, (int)(lvl/1.65));
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Turquoise-Emeraude
 			case 58:
 			stats.addOneStat(STATS_ADD_VITA, lvl);
 			stats.addOneStat(STATS_ADD_PROS, (int)(lvl/3.33));
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
 			break;
 			//Turquoise-Prune
 			case 85:
 			stats.addOneStat(STATS_ADD_VITA, lvl*2);
 			stats.addOneStat(STATS_ADD_PROS, (int)(lvl/1.65));
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Emeraude-Prune
 			case 80:
 		    stats.addOneStat(STATS_ADD_VITA, lvl*2);
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
-			stats.addOneStat(STATS_ADD_PO, (int)(lvl/100));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
+			stats.addOneStat(STATS_ADD_PO, lvl/100);
 			break;
 			//Armure
 			case 88:
-			stats.addOneStat(STATS_ADD_PERDOM, (int)(lvl/2));
-			stats.addOneStat(STATS_ADD_RP_AIR, (int)(lvl/20));
-			stats.addOneStat(STATS_ADD_RP_EAU, (int)(lvl/20));
-			stats.addOneStat(STATS_ADD_RP_TER, (int)(lvl/20));
-			stats.addOneStat(STATS_ADD_RP_FEU, (int)(lvl/20));
-			stats.addOneStat(STATS_ADD_RP_NEU, (int)(lvl/20));
+			stats.addOneStat(STATS_ADD_PERDOM, lvl/2);
+			stats.addOneStat(STATS_ADD_RP_AIR, lvl/20);
+			stats.addOneStat(STATS_ADD_RP_EAU, lvl/20);
+			stats.addOneStat(STATS_ADD_RP_TER, lvl/20);
+			stats.addOneStat(STATS_ADD_RP_FEU, lvl/20);
+			stats.addOneStat(STATS_ADD_RP_NEU, lvl/20);
 			break;
 			//Montilier
 			case 89:
-			stats.addOneStat(STATS_ADD_PM, (int)(lvl/100));
-			stats.addOneStat(STATS_ADD_INTE, (int)(lvl/1));
-			stats.addOneStat(STATS_ADD_AGIL, (int)(lvl/1));
-			stats.addOneStat(STATS_ADD_FORC, (int)(lvl/1));
-			stats.addOneStat(STATS_ADD_CHAN, (int)(lvl/1));
-			stats.addOneStat(STATS_ADD_VITA, (int)(lvl/1));
+			stats.addOneStat(STATS_ADD_PM, lvl/100);
+			stats.addOneStat(STATS_ADD_INTE, lvl/1);
+			stats.addOneStat(STATS_ADD_AGIL, lvl/1);
+			stats.addOneStat(STATS_ADD_FORC, lvl/1);
+			stats.addOneStat(STATS_ADD_CHAN, lvl/1);
+			stats.addOneStat(STATS_ADD_VITA, lvl/1);
 		}
 		return stats;
 	}
 	public static ObjTemplate getParchoTemplateByMountColor(int color)
 	{
-		switch(color)
-		{
-			//Ammande sauvage
-			case 2: return Mundo.getObjTemplate(7807);
-			//Ebene | Page 1
-			case 3: return Mundo.getObjTemplate(7808);
-			//Rousse sauvage
-			case 4: return Mundo.getObjTemplate(7809);
-			//Ebene-ivoire
-			case 9: return Mundo.getObjTemplate(7810);
-			//Rousse
-			case 10: return Mundo.getObjTemplate(7811);
-			//Ivoire-Rousse
-			case 11: return Mundo.getObjTemplate(7812);
-			//Ebene-rousse
-			case 12: return Mundo.getObjTemplate(7813);
-			//Turquoise
-			case 15: return Mundo.getObjTemplate(7814);
-			//Ivoire
-			case 16: return Mundo.getObjTemplate(7815);
-			//Indigo
-			case 17: return Mundo.getObjTemplate(7816);
-			//Dorée
-			case 18: return Mundo.getObjTemplate(7817);
-			//Pourpre
-			case 19: return Mundo.getObjTemplate(7818);
-			//Amande
-			case 20: return Mundo.getObjTemplate(7819);
-			//Emeraude
-			case 21: return Mundo.getObjTemplate(7820);
-			//Orchidée
-			case 22: return Mundo.getObjTemplate(7821);
-			//Prune
-			case 23: return Mundo.getObjTemplate(7822);
-			//Amande-Dorée
-			case 33: return Mundo.getObjTemplate(7823);
-			//Amande-Ebene
-			case 34: return Mundo.getObjTemplate(7824);
-			//Amande-Emeraude
-			case 35: return Mundo.getObjTemplate(7825);
-			//Amande-Indigo
-			case 36: return Mundo.getObjTemplate(7826);
-			//Amande-Ivoire
-			case 37: return Mundo.getObjTemplate(7827);
-			//Amande-Rousse
-			case 38: return Mundo.getObjTemplate(7828);
-			//Amande-Turquoise
-			case 39: return Mundo.getObjTemplate(7829);
-			//Amande-Orchidée
-			case 40: return Mundo.getObjTemplate(7830);
-			//Amande-Pourpre
-			case 41: return Mundo.getObjTemplate(7831);
-			//Dorée-Ebène
-			case 42: return Mundo.getObjTemplate(7832);
-			//Dorée-Emeraude
-			case 43: return Mundo.getObjTemplate(7833);
-			//Dorée-Indigo
-			case 44: return Mundo.getObjTemplate(7834);
-			//Dorée-Ivoire
-			case 45: return Mundo.getObjTemplate(7835);
-			//Dorée-Rousse | Page 2
-			case 46: return Mundo.getObjTemplate(7836);
-			//Dorée-Turquoise
-			case 47: return Mundo.getObjTemplate(7837);
-			//Dorée-Orchidée
-			case 48: return Mundo.getObjTemplate(7838);
-			//Dorée-Pourpre
-			case 49: return Mundo.getObjTemplate(7839);
-			//Ebène-Emeraude
-			case 50: return Mundo.getObjTemplate(7840);
-			//Ebène-Indigo
-			case 51: return Mundo.getObjTemplate(7841);
-			//Ebène-Turquoise
-			case 52: return Mundo.getObjTemplate(7842);
-			//Ebène-Orchidée
-			case 53: return Mundo.getObjTemplate(7843);
-			//Ebène-Pourpre
-			case 54: return Mundo.getObjTemplate(7844);
-			//Emeraude-Indigo
-			case 55: return Mundo.getObjTemplate(7845);
-			//Emeraude-Ivoire
-			case 56: return Mundo.getObjTemplate(7846);
-			//Emeraude-Rousse
-			case 57: return Mundo.getObjTemplate(7847);
-			//Emeraude-Turquoise
-			case 58: return Mundo.getObjTemplate(7848);
-			//Emeraude-Orchidée
-			case 59: return Mundo.getObjTemplate(7849);
-			//Emeraude-Pourpre
-			case 60: return Mundo.getObjTemplate(7850);
-			//Indigo-Ivoire
-			case 61: return Mundo.getObjTemplate(7851);
-			//Indigo-Rousse
-			case 62: return Mundo.getObjTemplate(7852);
-			//Indigo-Turquoise
-			case 63: return Mundo.getObjTemplate(7853);
-			//Indigo-Orchidée
-			case 64: return Mundo.getObjTemplate(7854);
-			//Indigo-Pourpre
-			case 65: return Mundo.getObjTemplate(7855);
-			//Ivoire-Turquoise
-			case 66: return Mundo.getObjTemplate(7856);
-			//Ivoire-Ochidée
-			case 67: return Mundo.getObjTemplate(7857);
-			//Ivoire-Pourpre
-			case 68: return Mundo.getObjTemplate(7858);
-			//Turquoise-Rousse
-			case 69: return Mundo.getObjTemplate(7859);
-			//Ochidée-Rousse
-			case 70: return Mundo.getObjTemplate(7860);
-			//Pourpre-Rousse
-			case 71: return Mundo.getObjTemplate(7861);
-			//Turquoise-Orchidée
-			case 72: return Mundo.getObjTemplate(7862);
-			//Turquoise-Pourpre
-			case 73: return Mundo.getObjTemplate(7863);
-			//Dorée sauvage
-			case 74: return Mundo.getObjTemplate(7864);
-			//Squelette
-			case 75: return Mundo.getObjTemplate(7865);
-			//Orchidée-Pourpre
-			case 76: return Mundo.getObjTemplate(7866);
-			//Prune-Amande
-			case 77: return Mundo.getObjTemplate(7867);
-			//Prune-Dorée
-			case 78: return Mundo.getObjTemplate(7868);
-			//Prune-Ebène
-			case 79: return Mundo.getObjTemplate(7869);
-			//Prune-Emeraude
-			case 80: return Mundo.getObjTemplate(7870);
-			//Prune et Indigo
-			case 82: return Mundo.getObjTemplate(7871);
-			//Prune-Ivoire
-			case 83: return Mundo.getObjTemplate(7872);
-			//Prune-Rousse
-			case 84: return Mundo.getObjTemplate(7873);
-			//Prune-Turquoise
-			case 85: return Mundo.getObjTemplate(7874);
-			//Prune-Orchidée
-			case 86: return Mundo.getObjTemplate(7875);
-			//Prune-Pourpre
-			case 87: return Mundo.getObjTemplate(7876);
-			//Armure
-			case 88: return Mundo.getObjTemplate(9582);
-			//Montilier
-			case 89: return Mundo.getObjTemplate(MainServidor.CONFIG_MONTILIER_ID);
-		}
-		return null;
+		//Ammande sauvage
+		//Ebene | Page 1
+		//Rousse sauvage
+		//Ebene-ivoire
+		//Rousse
+		//Ivoire-Rousse
+		//Ebene-rousse
+		//Turquoise
+		//Ivoire
+		//Indigo
+		//Dorée
+		//Pourpre
+		//Amande
+		//Emeraude
+		//Orchidée
+		//Prune
+		//Amande-Dorée
+		//Amande-Ebene
+		//Amande-Emeraude
+		//Amande-Indigo
+		//Amande-Ivoire
+		//Amande-Rousse
+		//Amande-Turquoise
+		//Amande-Orchidée
+		//Amande-Pourpre
+		//Dorée-Ebène
+		//Dorée-Emeraude
+		//Dorée-Indigo
+		//Dorée-Ivoire
+		//Dorée-Rousse | Page 2
+		//Dorée-Turquoise
+		//Dorée-Orchidée
+		//Dorée-Pourpre
+		//Ebène-Emeraude
+		//Ebène-Indigo
+		//Ebène-Turquoise
+		//Ebène-Orchidée
+		//Ebène-Pourpre
+		//Emeraude-Indigo
+		//Emeraude-Ivoire
+		//Emeraude-Rousse
+		//Emeraude-Turquoise
+		//Emeraude-Orchidée
+		//Emeraude-Pourpre
+		//Indigo-Ivoire
+		//Indigo-Rousse
+		//Indigo-Turquoise
+		//Indigo-Orchidée
+		//Indigo-Pourpre
+		//Ivoire-Turquoise
+		//Ivoire-Ochidée
+		//Ivoire-Pourpre
+		//Turquoise-Rousse
+		//Ochidée-Rousse
+		//Pourpre-Rousse
+		//Turquoise-Orchidée
+		//Turquoise-Pourpre
+		//Dorée sauvage
+		//Squelette
+		//Orchidée-Pourpre
+		//Prune-Amande
+		//Prune-Dorée
+		//Prune-Ebène
+		//Prune-Emeraude
+		//Prune et Indigo
+		//Prune-Ivoire
+		//Prune-Rousse
+		//Prune-Turquoise
+		//Prune-Orchidée
+		//Prune-Pourpre
+		//Armure
+		//Montilier
+		return switch (color) {
+			case 2 -> Mundo.getObjTemplate(7807);
+			case 3 -> Mundo.getObjTemplate(7808);
+			case 4 -> Mundo.getObjTemplate(7809);
+			case 9 -> Mundo.getObjTemplate(7810);
+			case 10 -> Mundo.getObjTemplate(7811);
+			case 11 -> Mundo.getObjTemplate(7812);
+			case 12 -> Mundo.getObjTemplate(7813);
+			case 15 -> Mundo.getObjTemplate(7814);
+			case 16 -> Mundo.getObjTemplate(7815);
+			case 17 -> Mundo.getObjTemplate(7816);
+			case 18 -> Mundo.getObjTemplate(7817);
+			case 19 -> Mundo.getObjTemplate(7818);
+			case 20 -> Mundo.getObjTemplate(7819);
+			case 21 -> Mundo.getObjTemplate(7820);
+			case 22 -> Mundo.getObjTemplate(7821);
+			case 23 -> Mundo.getObjTemplate(7822);
+			case 33 -> Mundo.getObjTemplate(7823);
+			case 34 -> Mundo.getObjTemplate(7824);
+			case 35 -> Mundo.getObjTemplate(7825);
+			case 36 -> Mundo.getObjTemplate(7826);
+			case 37 -> Mundo.getObjTemplate(7827);
+			case 38 -> Mundo.getObjTemplate(7828);
+			case 39 -> Mundo.getObjTemplate(7829);
+			case 40 -> Mundo.getObjTemplate(7830);
+			case 41 -> Mundo.getObjTemplate(7831);
+			case 42 -> Mundo.getObjTemplate(7832);
+			case 43 -> Mundo.getObjTemplate(7833);
+			case 44 -> Mundo.getObjTemplate(7834);
+			case 45 -> Mundo.getObjTemplate(7835);
+			case 46 -> Mundo.getObjTemplate(7836);
+			case 47 -> Mundo.getObjTemplate(7837);
+			case 48 -> Mundo.getObjTemplate(7838);
+			case 49 -> Mundo.getObjTemplate(7839);
+			case 50 -> Mundo.getObjTemplate(7840);
+			case 51 -> Mundo.getObjTemplate(7841);
+			case 52 -> Mundo.getObjTemplate(7842);
+			case 53 -> Mundo.getObjTemplate(7843);
+			case 54 -> Mundo.getObjTemplate(7844);
+			case 55 -> Mundo.getObjTemplate(7845);
+			case 56 -> Mundo.getObjTemplate(7846);
+			case 57 -> Mundo.getObjTemplate(7847);
+			case 58 -> Mundo.getObjTemplate(7848);
+			case 59 -> Mundo.getObjTemplate(7849);
+			case 60 -> Mundo.getObjTemplate(7850);
+			case 61 -> Mundo.getObjTemplate(7851);
+			case 62 -> Mundo.getObjTemplate(7852);
+			case 63 -> Mundo.getObjTemplate(7853);
+			case 64 -> Mundo.getObjTemplate(7854);
+			case 65 -> Mundo.getObjTemplate(7855);
+			case 66 -> Mundo.getObjTemplate(7856);
+			case 67 -> Mundo.getObjTemplate(7857);
+			case 68 -> Mundo.getObjTemplate(7858);
+			case 69 -> Mundo.getObjTemplate(7859);
+			case 70 -> Mundo.getObjTemplate(7860);
+			case 71 -> Mundo.getObjTemplate(7861);
+			case 72 -> Mundo.getObjTemplate(7862);
+			case 73 -> Mundo.getObjTemplate(7863);
+			case 74 -> Mundo.getObjTemplate(7864);
+			case 75 -> Mundo.getObjTemplate(7865);
+			case 76 -> Mundo.getObjTemplate(7866);
+			case 77 -> Mundo.getObjTemplate(7867);
+			case 78 -> Mundo.getObjTemplate(7868);
+			case 79 -> Mundo.getObjTemplate(7869);
+			case 80 -> Mundo.getObjTemplate(7870);
+			case 82 -> Mundo.getObjTemplate(7871);
+			case 83 -> Mundo.getObjTemplate(7872);
+			case 84 -> Mundo.getObjTemplate(7873);
+			case 85 -> Mundo.getObjTemplate(7874);
+			case 86 -> Mundo.getObjTemplate(7875);
+			case 87 -> Mundo.getObjTemplate(7876);
+			case 88 -> Mundo.getObjTemplate(9582);
+			case 89 -> Mundo.getObjTemplate(MainServidor.CONFIG_MONTILIER_ID);
+			default -> null;
+		};
 	}
 	public static int getMountColorByParchoTemplate(int tID)
 	{
@@ -2876,23 +2557,19 @@ public class Constantes
 	public static void applyPlotIOAction(Personaje perso, int mID, int cID)
 	{
 		//Gère les differentes actions des "bornes" (IO des émotes)
-		switch(mID)
-		{
-		case 2196://Création de guilde
-			if(perso.is_away())return;
-			if(perso.get_guild() != null || perso.getGuildMember() != null)
-			{
+		if (mID == 2196) {//Création de guilde
+			if (perso.is_away()) return;
+			if (perso.get_guild() != null || perso.getGuildMember() != null) {
 				GestorSalida.GAME_SEND_gC_PACKET(perso, "Ea");
 				return;
 			}
-			if(!perso.hasItemTemplate(1575,1))//Guildalogemme
+			if (!perso.hasItemTemplate(1575, 1))//Guildalogemme
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "14");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "14");
 			}
 			GestorSalida.GAME_SEND_gn_PACKET(perso);
-		break;
-		default:
-			JuegoServidor.addToLog("PlotIOAction non gere pour la map "+mID+" cell="+cID);
+		} else {
+			JuegoServidor.addToLog("PlotIOAction non gere pour la map " + mID + " cell=" + cID);
 		}
 	}
 	

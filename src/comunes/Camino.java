@@ -12,7 +12,7 @@ import objetos.Pelea.Piege;
 
 public class Camino {
 
-	private static Integer _nSteps = new Integer(0);
+	private static Integer _nSteps = 0;
 
 	public static int isValidPath(Mapa map, int cellID, AtomicReference<String> pathRef, Pelea fight)
 	{
@@ -167,26 +167,17 @@ public class Camino {
 
 	public static int GetCaseIDFromDirrection(int CaseID, char Direction, Mapa map, boolean Combat)
 	{
-		switch (Direction)
-        {
-            case 'a':
-                return Combat ? -1 : CaseID + 1;
-            case 'b':
-                return CaseID + map.get_w();
-            case 'c':
-                return Combat ? -1 : CaseID + (map.get_w() * 2 - 1);
-            case 'd':
-                return  CaseID + (map.get_w() - 1);
-            case 'e':
-                return Combat ? -1 : CaseID - 1;
-            case 'f':
-                return CaseID - map.get_w();
-            case 'g':
-                return Combat ? -1 : CaseID - (map.get_w() * 2 - 1);
-            case 'h':
-                return  CaseID - map.get_w() + 1;
-        }
-        return -1; 
+		return switch (Direction) {
+			case 'a' -> Combat ? -1 : CaseID + 1;
+			case 'b' -> CaseID + map.get_w();
+			case 'c' -> Combat ? -1 : CaseID + (map.get_w() * 2 - 1);
+			case 'd' -> CaseID + (map.get_w() - 1);
+			case 'e' -> Combat ? -1 : CaseID - 1;
+			case 'f' -> CaseID - map.get_w();
+			case 'g' -> Combat ? -1 : CaseID - (map.get_w() * 2 - 1);
+			case 'h' -> CaseID - map.get_w() + 1;
+			default -> -1;
+		};
 	}
 	
 	public static int getDistanceBetween(Mapa map, int id1, int id2)
@@ -241,26 +232,17 @@ public class Camino {
 	
 	private static char getOpositeDirection(char c)
 	{
-		switch(c)
-		{
-			case 'a':
-				return 'e';
-			case 'b':
-				return 'f';
-			case 'c':
-				return 'g';
-			case 'd':
-				return 'h';
-			case 'e':
-				return 'a';
-			case 'f':
-				return 'b';
-			case 'g':
-				return 'c';
-			case 'h':
-				return 'd';
-		}
-		return 0x00;
+		return switch (c) {
+			case 'a' -> 'e';
+			case 'b' -> 'f';
+			case 'c' -> 'g';
+			case 'd' -> 'h';
+			case 'e' -> 'a';
+			case 'f' -> 'b';
+			case 'g' -> 'c';
+			case 'h' -> 'd';
+			default -> (char) 0x00;
+		};
 	}
 
 	public static boolean casesAreInSameLine(Mapa map, int c1, int c2, char dir)
@@ -306,48 +288,39 @@ public class Camino {
 				cibles.add(cell.getFirstFighter());
 			return cibles;
 		}
-		
-		switch(type)
-		{
-			//Cases devant celle ou l'on vise
-			case Constantes.ITEM_TYPE_MARTEAU:
-				Fighter f = getFighter2CellBefore(castCellID,c,fight.get_map());
-				if(f != null)
+
+		//Cases devant celle ou l'on vise
+		switch (type) {
+			case Constantes.ITEM_TYPE_MARTEAU -> {
+				Fighter f = getFighter2CellBefore(castCellID, c, fight.get_map());
+				if (f != null)
 					cibles.add(f);
-				Fighter g = get1StFighterOnCellFromDirection(fight.get_map(),castCellID,(char)(c-1)); 
-				if(g != null)
+				Fighter g = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c - 1));
+				if (g != null)
 					cibles.add(g);//Ajoute case a gauche
-				Fighter h = get1StFighterOnCellFromDirection(fight.get_map(),castCellID,(char)(c+1)); 
-				if(h != null)
+				Fighter h = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c + 1));
+				if (h != null)
 					cibles.add(h);//Ajoute case a droite
 				Fighter i = cell.getFirstFighter();
-				if(i != null)
+				if (i != null)
 					cibles.add(i);
-			break;
-			case Constantes.ITEM_TYPE_BATON:
-				Fighter j = get1StFighterOnCellFromDirection(fight.get_map(),castCellID,(char)(c-1)); 
-				if(j != null)
+			}
+			case Constantes.ITEM_TYPE_BATON -> {
+				Fighter j = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c - 1));
+				if (j != null)
 					cibles.add(j);//Ajoute case a gauche
-				Fighter k = get1StFighterOnCellFromDirection(fight.get_map(),castCellID,(char)(c+1)); 
-				if(k != null)
+				Fighter k = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c + 1));
+				if (k != null)
 					cibles.add(k);//Ajoute case a droite
-				
 				Fighter l = cell.getFirstFighter();
-				if(l != null)
+				if (l != null)
 					cibles.add(l);//Ajoute case cible
-			break;
-			case Constantes.ITEM_TYPE_PIOCHE:
-			case Constantes.ITEM_TYPE_EPEE:
-			case Constantes.ITEM_TYPE_FAUX:
-			case Constantes.ITEM_TYPE_DAGUES:
-			case Constantes.ITEM_TYPE_BAGUETTE:
-			case Constantes.ITEM_TYPE_PELLE:
-			case Constantes.ITEM_TYPE_ARC:
-			case Constantes.ITEM_TYPE_HACHE:
+			}
+			case Constantes.ITEM_TYPE_PIOCHE, Constantes.ITEM_TYPE_EPEE, Constantes.ITEM_TYPE_FAUX, Constantes.ITEM_TYPE_DAGUES, Constantes.ITEM_TYPE_BAGUETTE, Constantes.ITEM_TYPE_PELLE, Constantes.ITEM_TYPE_ARC, Constantes.ITEM_TYPE_HACHE -> {
 				Fighter m = cell.getFirstFighter();
-				if(m != null)
+				if (m != null)
 					cibles.add(m);
-			break;	
+			}
 		}
 		return cibles;
 	}
@@ -492,7 +465,7 @@ public class Camino {
 	public static int getCellYCoord(Mapa map, int cellID)
 	{
 		int w = map.get_w();
-		int loc5 = (int)(cellID/ ((w*2) -1));
+		int loc5 = cellID/ ((w*2) -1);
 		int loc6 = cellID - loc5 * ((w * 2) -1);
 		int loc7 = loc6 % w;
 		return (loc5 - loc7);

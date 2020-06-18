@@ -21,11 +21,11 @@ import objetos.Personaje;
 
 public class Cofres {
 	
-	private int _id;
-	private int _house_id;
-	private short _mapid;
-	private int _cellid;
-	private Map<Integer, Objeto> _object = new TreeMap<>();
+	private final int _id;
+	private final int _house_id;
+	private final short _mapid;
+	private final int _cellid;
+	private final Map<Integer, Objeto> _object = new TreeMap<>();
 	private long _kamas;
 	private String _key;
 	private int _owner_id;

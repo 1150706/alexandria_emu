@@ -8,62 +8,57 @@ import com.singularsys.jep.JepException;
 
 import objetos.*;
 
-public class Condiciones
-{
-	public static boolean validConditions(Personaje perso, String req)
-	{
-		if(req == null || req.equals(""))return true;
-		if(req.contains("BI"))return false;
-		
+public class Condiciones {
+
+	public static boolean ValidarCondicion(Personaje personaje, String requiere) {
+		if(requiere == null || requiere.equals(""))return true;
+		if(requiere.contains("BI"))return false;
 		Jep jep = new Jep();
+		requiere = requiere.replace("&", "&&").replace("=", "==").replace("|", "||").replace("!", "!=").replace("~", "==");
 		
-		req = req.replace("&", "&&").replace("=", "==").replace("|", "||").replace("!", "!=").replace("~", "==");
-		
-		if(req.contains("PO"))
-			req = havePO(req, perso);
-		if(req.contains("PN"))
-			req = canPN(req, perso);
+		if(requiere.contains("PO"))
+			requiere = havePO(requiere, personaje);
+		if(requiere.contains("PN"))
+			requiere = canPN(requiere, personaje);
 	 	//TODO : Gérer PJ Pj
-		try
-		{
+		try {
 				//Stats stuff compris
-				jep.addVariable("CI", perso.getTotalStats().getEffect(Constantes.STATS_ADD_INTE));
-			 	jep.addVariable("CV", perso.getTotalStats().getEffect(Constantes.STATS_ADD_VITA));
-			 	jep.addVariable("CA", perso.getTotalStats().getEffect(Constantes.STATS_ADD_AGIL));
-			 	jep.addVariable("CW", perso.getTotalStats().getEffect(Constantes.STATS_ADD_SAGE));
-			 	jep.addVariable("CC", perso.getTotalStats().getEffect(Constantes.STATS_ADD_CHAN));
-			 	jep.addVariable("CS", perso.getTotalStats().getEffect(Constantes.STATS_ADD_FORC));
+				jep.addVariable("CI", personaje.getTotalStats().getEffect(Constantes.STATS_ADD_INTE));
+			 	jep.addVariable("CV", personaje.getTotalStats().getEffect(Constantes.STATS_ADD_VITA));
+			 	jep.addVariable("CA", personaje.getTotalStats().getEffect(Constantes.STATS_ADD_AGIL));
+			 	jep.addVariable("CW", personaje.getTotalStats().getEffect(Constantes.STATS_ADD_SAGE));
+			 	jep.addVariable("CC", personaje.getTotalStats().getEffect(Constantes.STATS_ADD_CHAN));
+			 	jep.addVariable("CS", personaje.getTotalStats().getEffect(Constantes.STATS_ADD_FORC));
 			 	//Stats de bases
-			 	jep.addVariable("Ci", perso.get_baseStats().getEffect(Constantes.STATS_ADD_INTE));
-			 	jep.addVariable("Cs", perso.get_baseStats().getEffect(Constantes.STATS_ADD_FORC));
-			 	jep.addVariable("Cv", perso.get_baseStats().getEffect(Constantes.STATS_ADD_VITA));
-			 	jep.addVariable("Ca", perso.get_baseStats().getEffect(Constantes.STATS_ADD_AGIL));
-			 	jep.addVariable("Cw", perso.get_baseStats().getEffect(Constantes.STATS_ADD_SAGE));
-			 	jep.addVariable("Cc", perso.get_baseStats().getEffect(Constantes.STATS_ADD_CHAN));
+			 	jep.addVariable("Ci", personaje.get_baseStats().getEffect(Constantes.STATS_ADD_INTE));
+			 	jep.addVariable("Cs", personaje.get_baseStats().getEffect(Constantes.STATS_ADD_FORC));
+			 	jep.addVariable("Cv", personaje.get_baseStats().getEffect(Constantes.STATS_ADD_VITA));
+			 	jep.addVariable("Ca", personaje.get_baseStats().getEffect(Constantes.STATS_ADD_AGIL));
+			 	jep.addVariable("Cw", personaje.get_baseStats().getEffect(Constantes.STATS_ADD_SAGE));
+			 	jep.addVariable("Cc", personaje.get_baseStats().getEffect(Constantes.STATS_ADD_CHAN));
 			 	//Autre
-			 	jep.addVariable("Ps", perso.get_align());
-			 	jep.addVariable("Pa", perso.getALvl());
-			 	jep.addVariable("PP", perso.getGrade());
-			 	jep.addVariable("PL", perso.get_lvl());
-			 	jep.addVariable("PK", perso.get_kamas());
-			 	jep.addVariable("PG", perso.get_classe());
-			 	jep.addVariable("PS", perso.get_sexe());
-			 	jep.addVariable("PZ", 1);//Abonnement
-			 	jep.addVariable("PX", perso.get_compte().get_gmLvl());
-			 	jep.addVariable("PW", perso.getMaxPod());
-			 	jep.addVariable("PB", perso.getActualMapa().getSubArea().get_id());
-			 	jep.addVariable("PR", (perso.getWife()>0?1:0));
-			 	jep.addVariable("SI", perso.getActualMapa().get_id());
+			 	jep.addVariable("Ps", personaje.get_align());
+			 	jep.addVariable("Pa", personaje.getALvl());
+			 	jep.addVariable("PP", personaje.getGrade());
+			 	jep.addVariable("PL", personaje.get_lvl());
+			 	jep.addVariable("PK", personaje.get_kamas());
+			 	jep.addVariable("PG", personaje.get_classe());
+			 	jep.addVariable("PS", personaje.get_sexe());
+			 	jep.addVariable("PZ", 1);//Abonado
+			 	jep.addVariable("PX", personaje.get_compte().get_gmLvl());
+			 	jep.addVariable("PW", personaje.getMaxPod());
+			 	jep.addVariable("PB", personaje.getActualMapa().getSubArea().get_id());
+			 	jep.addVariable("PR", (personaje.getWife()>0?1:0));
+			 	jep.addVariable("SI", personaje.getActualMapa().get_id());
 			 	//Les pierres d'ames sont lancables uniquement par le lanceur.
-			 	jep.addVariable("MiS",perso.get_GUID());
+			 	jep.addVariable("MiS",personaje.get_GUID());
 			 	
-			 	jep.parse(req);
+			 	jep.parse(requiere);
 			 	Object result = jep.evaluate();
 			 	boolean ok = false;
-			 	if(result != null)ok = Boolean.valueOf(result.toString());
+			 	if(result != null)ok = Boolean.parseBoolean(result.toString());
 			 	return ok;
-		} catch (JepException e)
-		{
+		} catch (JepException e) {
 			System.out.println("An error occurred: " + e.getMessage());
 		}
 		return true;
@@ -74,218 +69,170 @@ public class Condiciones
 		boolean Jump = false;
 		boolean ContainsPO = false;
 		boolean CutFinalLenght = true;
-		String copyCond = "";
+		StringBuilder copyCond = new StringBuilder();
 		int finalLength = 0;
 		
 		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Entered Cond : "+cond);
 		
-		if(cond.contains("&&"))
-		{
-			for(String cur : cond.split("&&"))
-			{
-				if(cond.contains("=="))
-				{
-					for(String cur2 : cur.split("=="))
-					{
-						if(cur2.contains("PO")) 
-						{
+		if(cond.contains("&&")) {
+			for(String cur : cond.split("&&")) {
+				if(cond.contains("==")) {
+					for(String cur2 : cur.split("==")) {
+						if(cur2.contains("PO")) {
 							ContainsPO = true;
 							continue;
 						}
-						if(Jump)
-						{
-							copyCond += cur2;
+						if(Jump) {
+							copyCond.append(cur2);
 							Jump = false;
 							continue;
 						}
-						if(!cur2.contains("PO") && !ContainsPO)
-						{
-							copyCond += cur2+"==";
+						if(!cur2.contains("PO") && !ContainsPO) {
+							copyCond.append(cur2).append("==");
 							Jump = true;
 							continue;
 						}
 						if(cur2.contains("!=")) continue;
 						ContainsPO = false;
-						if(perso.hasItemTemplate(Integer.parseInt(cur2), 1))
-						{
-							copyCond += Integer.parseInt(cur2)+"=="+Integer.parseInt(cur2);
-						}else
-						{
-							copyCond += Integer.parseInt(cur2)+"=="+0;
+						if(perso.hasItemTemplate(Integer.parseInt(cur2), 1)) {
+							copyCond.append(Integer.parseInt(cur2)).append("==").append(Integer.parseInt(cur2));
+						}else {
+							copyCond.append(Integer.parseInt(cur2)).append("==").append(0);
 						}
 					}
 				}
-				if(cond.contains("!="))
-				{
-					for(String cur2 : cur.split("!="))
-					{
-						if(cur2.contains("PO")) 
-						{
+				if(cond.contains("!=")) {
+					for(String cur2 : cur.split("!=")) {
+						if(cur2.contains("PO")) {
 							ContainsPO = true;
 							continue;
 						}
-						if(Jump)
-						{
-							copyCond += cur2;
+						if(Jump) {
+							copyCond.append(cur2);
 							Jump = false;
 							continue;
 						}
-						if(!cur2.contains("PO") && !ContainsPO)
-						{
-							copyCond += cur2+"!=";
+						if(!cur2.contains("PO") && !ContainsPO) {
+							copyCond.append(cur2).append("!=");
 							Jump = true;
 							continue;
 						}
 						if(cur2.contains("==")) continue;
 						ContainsPO = false;
-						if(perso.hasItemTemplate(Integer.parseInt(cur2), 1))
-						{
-							copyCond += Integer.parseInt(cur2)+"!="+Integer.parseInt(cur2);
-						}else
-						{
-							copyCond += Integer.parseInt(cur2)+"!="+0;
+						if(perso.hasItemTemplate(Integer.parseInt(cur2), 1)) {
+							copyCond.append(Integer.parseInt(cur2)).append("!=").append(Integer.parseInt(cur2));
+						}else {
+							copyCond.append(Integer.parseInt(cur2)).append("!=").append(0);
 						}
 					}
 				}
-				copyCond += "&&";
+				copyCond.append("&&");
 			}
-		}else if(cond.contains("||"))
-		{
-			for(String cur : cond.split("\\|\\|"))
-			{
-				if(cond.contains("=="))
-				{
-					for(String cur2 : cur.split("=="))
-					{
-						if(cur2.contains("PO")) 
-						{
+		}else if(cond.contains("||")) {
+			for(String cur : cond.split("\\|\\|")) {
+				if(cond.contains("==")) {
+					for(String cur2 : cur.split("==")) {
+						if(cur2.contains("PO")) {
 							ContainsPO = true;
 							continue;
 						}
-						if(Jump)
-						{
-							copyCond += cur2;
+						if(Jump) {
+							copyCond.append(cur2);
 							Jump = false;
 							continue;
 						}
-						if(!cur2.contains("PO") && !ContainsPO)
-						{
-							copyCond += cur2+"==";
+						if(!cur2.contains("PO") && !ContainsPO) {
+							copyCond.append(cur2).append("==");
 							Jump = true;
 							continue;
 						}
 						if(cur2.contains("!=")) continue;
 						ContainsPO = false;
-						if(perso.hasItemTemplate(Integer.parseInt(cur2), 1))
-						{
-							copyCond += Integer.parseInt(cur2)+"=="+Integer.parseInt(cur2);
-						}else
-						{
-							copyCond += Integer.parseInt(cur2)+"=="+0;
+						if(perso.hasItemTemplate(Integer.parseInt(cur2), 1)) {
+							copyCond.append(Integer.parseInt(cur2)).append("==").append(Integer.parseInt(cur2));
+						}else {
+							copyCond.append(Integer.parseInt(cur2)).append("==").append(0);
 						}
 					}
 				}
-				if(cond.contains("!="))
-				{
-					for(String cur2 : cur.split("!="))
-					{
-						if(cur2.contains("PO")) 
-						{
+				if(cond.contains("!=")) {
+					for(String cur2 : cur.split("!=")) {
+						if(cur2.contains("PO")) {
 							ContainsPO = true;
 							continue;
 						}
-						if(Jump)
-						{
-							copyCond += cur2;
+						if(Jump) {
+							copyCond.append(cur2);
 							Jump = false;
 							continue;
 						}
-						if(!cur2.contains("PO") && !ContainsPO)
-						{
-							copyCond += cur2+"!=";
+						if(!cur2.contains("PO") && !ContainsPO) {
+							copyCond.append(cur2).append("!=");
 							Jump = true;
 							continue;
 						}
 						if(cur2.contains("==")) continue;
 						ContainsPO = false;
-						if(perso.hasItemTemplate(Integer.parseInt(cur2), 1))
-						{
-							copyCond += Integer.parseInt(cur2)+"!="+Integer.parseInt(cur2);
-						}else
-						{
-							copyCond += Integer.parseInt(cur2)+"!="+0;
+						if(perso.hasItemTemplate(Integer.parseInt(cur2), 1)) {
+							copyCond.append(Integer.parseInt(cur2)).append("!=").append(Integer.parseInt(cur2));
+						}else {
+							copyCond.append(Integer.parseInt(cur2)).append("!=").append(0);
 						}
 					}
 				}
-					copyCond += "||";
+					copyCond.append("||");
 			}
-		}else
-		{
+		}else {
 			CutFinalLenght = false;
-			if(cond.contains("=="))
-			{
-				for(String cur : cond.split("=="))
-				{
-					if(cur.contains("PO")) 
-					{
+			if(cond.contains("==")) {
+				for(String cur : cond.split("==")) {
+					if(cur.contains("PO")) {
 						continue;
 					}
 					if(cur.contains("!=")) continue;
-					if(perso.hasItemTemplate(Integer.parseInt(cur), 1))
-					{
-						copyCond += Integer.parseInt(cur)+"=="+Integer.parseInt(cur);
-					}else
-					{
-						copyCond += Integer.parseInt(cur)+"=="+0;
+					if(perso.hasItemTemplate(Integer.parseInt(cur), 1)) {
+						copyCond.append(Integer.parseInt(cur)).append("==").append(Integer.parseInt(cur));
+					}else {
+						copyCond.append(Integer.parseInt(cur)).append("==").append(0);
 					}
 				}
 			}
-			if(cond.contains("!="))
-			{
-				for(String cur : cond.split("!="))
-				{
-					if(cur.contains("PO")) 
-					{
+			if(cond.contains("!=")) {
+				for(String cur : cond.split("!=")) {
+					if(cur.contains("PO")) {
 						continue;
 					}
 					if(cur.contains("==")) continue;
-					if(perso.hasItemTemplate(Integer.parseInt(cur), 1))
-					{
-						copyCond += Integer.parseInt(cur)+"!="+Integer.parseInt(cur);
-					}else
-					{
-						copyCond += Integer.parseInt(cur)+"!="+0;
+					if(perso.hasItemTemplate(Integer.parseInt(cur), 1)) {
+						copyCond.append(Integer.parseInt(cur)).append("!=").append(Integer.parseInt(cur));
+					}else {
+						copyCond.append(Integer.parseInt(cur)).append("!=").append(0);
 					}
 				}
 			}
 		}
-		if(CutFinalLenght)
-		{
+		if(CutFinalLenght) {
 			finalLength = (copyCond.length()-2);//On retire les deux derniers carractères (|| ou &&)
-			copyCond = copyCond.substring(0, finalLength);
+			copyCond = new StringBuilder(copyCond.substring(0, finalLength));
 		}
 		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Returned Cond : "+copyCond);
-		return copyCond;
+		return copyCond.toString();
 	}
 	
 	public static String canPN(String cond, Personaje perso)//On remplace le PN par 1 et si le nom correspond == 1 sinon == 0
 	{
-		String copyCond = "";
-		for(String cur : cond.split("=="))
-		{
-			if(cur.contains("PN")) 
-			{
-				copyCond += "1==";
+		StringBuilder copyCond = new StringBuilder();
+		for(String cur : cond.split("==")) {
+			if(cur.contains("PN")) {
+				copyCond.append("1==");
 				continue;
 			}
-			if(perso.get_name().toLowerCase().compareTo(cur) == 0)
-			{
-				copyCond += "1";
-			}else
-			{
-				copyCond += "0";
+			if(perso.get_name().toLowerCase().compareTo(cur) == 0) {
+				copyCond.append("1");
+			}else {
+				copyCond.append("0");
 			}
 		}
-		return copyCond;
+		return copyCond.toString();
 	}
 }

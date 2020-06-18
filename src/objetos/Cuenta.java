@@ -34,18 +34,17 @@ public class Cuenta {
 	private RealmThread _realmThread;
 	private Personaje _curPerso;
 	private long _bankKamas = 0;
-	private Map<Integer, Objeto> _bank = new TreeMap<>();
-	private ArrayList<Integer> _friendGuids = new ArrayList<>();
-	private ArrayList<Integer> _EnemyGuids = new ArrayList<>();
+	private final Map<Integer, Objeto> _bank = new TreeMap<>();
+	private final ArrayList<Integer> _friendGuids = new ArrayList<>();
+	private final ArrayList<Integer> _EnemyGuids = new ArrayList<>();
 	private boolean _mute = false;
 	public Timer _muteTimer;
 	public int _position = -1;//Position du joueur
-	private Map<Integer,ArrayList<HdvEntry>> _hdvsItems;// Contient les items des HDV format : <hdvID,<cheapestID>>
+	private final Map<Integer,ArrayList<HdvEntry>> _hdvsItems;// Contient les items des HDV format : <hdvID,<cheapestID>>
 	
-	private Map<Integer, Personaje> _persos = new TreeMap<>();
+	private final Map<Integer, Personaje> _persos = new TreeMap<>();
 	
-	public Cuenta(int aGUID, String aName, String aPass, String aPseudo, String aQuestion, String aReponse, int aGmLvl, int vip, boolean aBanned, String aLastIp, String aLastConnectionDate, String bank, int bankKamas, String friends, String enemy)
-	{
+	public Cuenta(int aGUID, String aName, String aPass, String aPseudo, String aQuestion, String aReponse, int aGmLvl, int vip, boolean aBanned, String aLastIp, String aLastConnectionDate, String bank, int bankKamas, String friends, String enemy) {
 		this._GUID 		= aGUID;
 		this._name 		= aName;
 		this._pass		= aPass;
@@ -59,9 +58,8 @@ public class Cuenta {
 		this._lastConnectionDate = aLastConnectionDate;
 		this._bankKamas = bankKamas;
 		this._hdvsItems = Mundo.getMyItems(_GUID);
-		//Chargement de la banque
-		for(String item : bank.split("\\|"))
-		{
+		//Cargando los bancos
+		for(String item : bank.split("\\|")) {
 			if(item.equals(""))continue;
 			String[] infos = item.split(":");
 			int guid = Integer.parseInt(infos[0]);
@@ -71,54 +69,46 @@ public class Cuenta {
 			_bank.put(obj.getGuid(), obj);
 		}
 		//Chargement de la liste d'amie
-		for(String f : friends.split(";"))
-		{
-			try
-			{
+		for(String f : friends.split(";")) {
+			try {
 				_friendGuids.add(Integer.parseInt(f));
-			}catch(Exception E){};
+			}catch(Exception ignored){}
 		}
 		//Chargement de la liste d'Enemy
-		for(String f : enemy.split(";"))
-		{
-			try
-			{
+		for(String f : enemy.split(";")) {
+			try {
 				_EnemyGuids.add(Integer.parseInt(f));
-			}catch(Exception E){};
+			}catch(Exception ignored){}
 		}
 	}
 	
-	public void setBankKamas(long i)
-	{
+	public void setBankKamas(long i) {
 		_bankKamas = i;
 		GestorSQL.actualizar_datos_cuenta(this);
 	}
+
 	public boolean isMuted()
 	{
 		return _mute;
 	}
 
-	public void mute(boolean b, int time)
-	{
+	public void mute(boolean b, int time) {
 		_mute = b;
 		String msg = "";
 		if(_mute)msg = "Vous avez ete mute";
 		else msg = "Vous n'etes plus mute";
 		GestorSalida.GAME_SEND_MESSAGE(_curPerso, msg, MainServidor.CONFIG_MOTD_COLOR);
 		if(time == 0)return;
-		if(_muteTimer == null && time >0)
-		{
+		if(_muteTimer == null && time >0) {
 			_muteTimer = new Timer(time*1000, arg0 -> {
                 mute(false,0);
                 _muteTimer.stop();
             });
 			_muteTimer.start();
-		}else if(time ==0)
-		{
+		}else if(time ==0) {
 			//SI 0 on désactive le Timer (Infinie)
 			_muteTimer = null;
-		}else
-		{
+		}else {
 			if (_muteTimer.isRunning()) _muteTimer.stop(); 
 			_muteTimer.setInitialDelay(time*1000); 
 			_muteTimer.start(); 
@@ -252,15 +242,9 @@ public class Cuenta {
 	{
 		return _persos.size();
 	}
-	public static boolean COMPTE_LOGIN(String name, String pass, String key)
-	{
-		if(Mundo.getCompteByName(name) != null && Mundo.getCompteByName(name).isValidPass(pass,key))
-		{
-			return true;
-		}else
-		{
-			return false;
-		}
+
+	public static boolean COMPTE_LOGIN(String name, String pass, String key) {
+		return Mundo.getCompteByName(name) != null && Mundo.getCompteByName(name).isValidPass(pass, key);
 	}
 
 	public void addPerso(Personaje perso)
@@ -268,20 +252,16 @@ public class Cuenta {
 		_persos.put(perso.get_GUID(),perso);
 	}
 	
-	public boolean createPerso(String name, int sexe, int classe,int color1, int color2, int color3)
-	{
-		
+	public boolean createPerso(String name, int sexe, int classe,int color1, int color2, int color3) {
 		Personaje perso = Personaje.CREATE_PERSONNAGE(name, sexe, classe, color1, color2, color3, this);
-		if(perso==null)
-		{
+		if(perso==null) {
 			return false;
 		}
 		_persos.put(perso.get_GUID(), perso);
 		return true;
 	}
 
-	public void deletePerso(int guid)
-	{
+	public void deletePerso(int guid) {
 		if(!_persos.containsKey(guid))return;
 		Mundo.deletePerso(_persos.get(guid));
 		_persos.remove(guid);
@@ -297,8 +277,7 @@ public class Cuenta {
 		_curPerso = perso;
 	}
 
-	public void updateInfos(int aGUID,String aName,String aPass, String aPseudo,String aQuestion,String aReponse,int aGmLvl, boolean aBanned)
-	{
+	public void updateInfos(int aGUID,String aName,String aPass, String aPseudo,String aQuestion,String aReponse,int aGmLvl, boolean aBanned) {
 		this._GUID 		= aGUID;
 		this._name 		= aName;
 		this._pass		= aPass;
@@ -309,8 +288,7 @@ public class Cuenta {
 		this._banned	= aBanned;
 	}
 
-	public void deconnexion()
-	{
+	public void deconnexion() {
 		_curPerso = null;
 		_gameThread = null;
 		_realmThread = null;
@@ -320,10 +298,8 @@ public class Cuenta {
 		GestorSQL.actualizar_datos_cuenta(this);
 	}
 
-	public void resetAllChars(boolean save)
-	{
-		for(Personaje P : _persos.values())
-		{
+	public void resetAllChars(boolean save) {
+		for(Personaje P : _persos.values()) {
 			//Si Echange avec un joueur
 			if(P.get_curExchange() != null)P.get_curExchange().cancel();
 			//Si en groupe
@@ -344,12 +320,11 @@ public class Cuenta {
 		}
 		_persos.clear();
 	}
-	public String parseFriendList()
-	{
+
+	public String parseFriendList() {
 		StringBuilder str = new StringBuilder();
 		if(_friendGuids.isEmpty())return "";
-		for(int i : _friendGuids)
-		{
+		for(int i : _friendGuids) {
 			Cuenta C = Mundo.getCompte(i);
 			if(C == null)continue;
 			str.append("|").append(C.get_pseudo());
@@ -362,12 +337,9 @@ public class Cuenta {
 		return str.toString();
 	}
 	
-	public void SendOnline()
-	{
-		for (int i : _friendGuids)
-		{
-			if (this.isFriendWith(i))
-			{
+	public void SendOnline() {
+		for (int i : _friendGuids) {
+			if (this.isFriendWith(i)) {
 				Personaje perso = Mundo.getPersonnage(i);
 				if (perso != null && perso.is_showFriendConnection() && perso.isOnline())
 				GestorSalida.GAME_SEND_FRIEND_ONLINE(this._curPerso, perso);
@@ -375,15 +347,12 @@ public class Cuenta {
 		}
 	}
 
-	public void addFriend(int guid)
-	{
-		if(_GUID == guid)
-		{
+	public void addFriend(int guid) {
+		if(_GUID == guid) {
 			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"Ey");
 			return;
 		}
-		if(!_friendGuids.contains(guid))
-		{
+		if(!_friendGuids.contains(guid)) {
 			_friendGuids.add(guid);
 			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"K"+ Mundo.getCompte(guid).get_pseudo()+ Mundo.getCompte(guid).get_curPerso().parseToFriendList(_GUID));
 			GestorSQL.actualizar_datos_cuenta(this);
@@ -391,8 +360,7 @@ public class Cuenta {
 		else GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"Ea");
 	}
 	
-	public void removeFriend(int guid)
-	{
+	public void removeFriend(int guid) {
 		if(_friendGuids.remove((Object)guid)) GestorSQL.actualizar_datos_cuenta(this);
 		GestorSalida.GAME_SEND_FD_PACKET(_curPerso,"K");
 	}
@@ -402,26 +370,21 @@ public class Cuenta {
 		return _friendGuids.contains(guid);
 	}
 	
-	public String parseFriendListToDB()
-	{
-		String str = "";
-		for(int i : _friendGuids)
-		{
-			if(!str.equalsIgnoreCase(""))str += ";";
-			str += i+"";
+	public String parseFriendListToDB() {
+		StringBuilder str = new StringBuilder();
+		for(int i : _friendGuids) {
+			if(!str.toString().equalsIgnoreCase("")) str.append(";");
+			str.append(i);
 		}
-		return str;
+		return str.toString();
 	}
 	
-	public void addEnemy(String packet, int guid)
-	{
-		if(_GUID == guid)
-		{
+	public void addEnemy(String packet, int guid) {
+		if(_GUID == guid) {
 			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"Ey");
 			return;
 		}
-		if(!_EnemyGuids.contains(guid))
-		{
+		if(!_EnemyGuids.contains(guid)) {
 			_EnemyGuids.add(guid);
 			Personaje Pr = Mundo.getPersoByName(packet);
 			GestorSalida.GAME_SEND_ADD_ENEMY(_curPerso, Pr);
@@ -430,8 +393,7 @@ public class Cuenta {
 		else GestorSalida.GAME_SEND_iAEA_PACKET(_curPerso);
 	}
 	
-	public void removeEnemy(int guid)
-	{
+	public void removeEnemy(int guid) {
 		if(_EnemyGuids.remove((Object)guid)) GestorSQL.actualizar_datos_cuenta(this);
 		GestorSalida.GAME_SEND_iD_COMMANDE(_curPerso,"K");
 	}
@@ -441,23 +403,19 @@ public class Cuenta {
 		return _EnemyGuids.contains(guid);
 	}
 	
-	public String parseEnemyListToDB()
-	{
-		String str = "";
-		for(int i : _EnemyGuids)
-		{
-			if(!str.equalsIgnoreCase(""))str += ";";
-			str += i+"";
+	public String parseEnemyListToDB() {
+		StringBuilder str = new StringBuilder();
+		for(int i : _EnemyGuids) {
+			if(!str.toString().equalsIgnoreCase("")) str.append(";");
+			str.append(i);
 		}
-		return str;
+		return str.toString();
 	}
 	
-	public String parseEnemyList() 
-	{
+	public String parseEnemyList() {
 		StringBuilder str = new StringBuilder();
 		if(_EnemyGuids.isEmpty())return "";
-		for(int i : _EnemyGuids)
-		{
+		for(int i : _EnemyGuids) {
 			Cuenta C = Mundo.getCompte(i);
 			if(C == null)continue;
 			str.append("|").append(C.get_pseudo());
@@ -479,8 +437,7 @@ public class Cuenta {
 		return _vip;
 	}
 	
-	public boolean recoverItem(int ligneID, int amount)
-	{
+	public boolean recoverItem(int ligneID, int amount) {
 		if(_curPerso == null)
 			return false;
 		if(_curPerso.get_isTradingWith() >= 0)
@@ -505,33 +462,27 @@ public class Cuenta {
 		Objeto obj = entry.getObjet();
 		
 		boolean OBJ = _curPerso.addObjet(obj,true);//False = Meme item dans l'inventaire donc augmente la qua
-		if(!OBJ)
-		{
+		if(!OBJ) {
 			Mundo.removeItem(obj.getGuid());
 		}
 		
 		Mundo.getHdv(hdvID).delEntry(entry);//Retire l'item de l'HDV
-			
 		return true;
 		//Hdv curHdv = World.getHdv(hdvID);
-		
 	}
 	
-	public HdvEntry[] getHdvItems(int hdvID)
-	{
+	public HdvEntry[] getHdvItems(int hdvID) {
 		if(_hdvsItems.get(hdvID) == null)
 			return new HdvEntry[1];
 		
 		HdvEntry[] toReturn = new HdvEntry[20];
-		for (int i = 0; i < _hdvsItems.get(hdvID).size(); i++)
-		{
+		for (int i = 0; i < _hdvsItems.get(hdvID).size(); i++) {
 			toReturn[i] = _hdvsItems.get(hdvID).get(i);
 		}
 		return toReturn;
 	}
 	
-	public int countHdvItems(int hdvID)
-	{
+	public int countHdvItems(int hdvID) {
 		if(_hdvsItems.get(hdvID) == null)
 			return 0;
 		

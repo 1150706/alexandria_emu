@@ -54,7 +54,7 @@ public class EfectoHechizo
 				chance= Integer.parseInt(args.split(";")[4]);
 				jet = args.split(";")[5];
 				
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 		}
 				
 		public EfectoHechizo(int id, int value2, int aduration, int turns2, boolean debuff, Fighter aCaster, String args2, int aspell)
@@ -70,7 +70,7 @@ public class EfectoHechizo
 			try
 			{
 				jet = args.split(";")[5];
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 		}
 
 		public boolean getSpell2(int id)
@@ -179,7 +179,7 @@ public class EfectoHechizo
 							try
 							{
 								nbrCase = Integer.parseInt(buff.getArgs().split(";")[1]);	
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(nbrCase == 0)continue;
 							int exCase = target.get_fightCell().getID();
 							int newCellID = Camino.newCaseAfterPush(fight, caster.get_fightCell(), target.get_fightCell(), nbrCase);
@@ -226,8 +226,8 @@ public class EfectoHechizo
 									if(-finalDommage > (target.getPDVMAX() - target.getPDV()))finalDommage = -(target.getPDVMAX() - target.getPDV());
 								}else//Dommage
 									finalDommage = finalDommage*coefDom;
-							}catch(Exception e){};
-						break;
+							}catch(Exception ignored){}
+							break;
 						
 						case 107://renvoie Dom
 							String[] args = buff.getArgs().split(";");
@@ -242,7 +242,7 @@ public class EfectoHechizo
 								{
 									renvoie = (int)(coef * Integer.parseInt(args[0]));
 								}
-							}catch(Exception e){return finalDommage;};
+							}catch(Exception e){return finalDommage;}
 							if(renvoie > finalDommage)renvoie = finalDommage;
 							finalDommage -= renvoie;
 							GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 107, "-1", target.getGUID()+","+renvoie);
@@ -260,7 +260,7 @@ public class EfectoHechizo
 							try
 							{
 								max = Integer.parseInt(buff.getArgs().split(";")[1]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(max == 0)continue;
 							if(stat == 108)
 							{
@@ -309,7 +309,7 @@ public class EfectoHechizo
 			{
 				if(turns != -1)//Si ce n'est pas un buff qu'on applique en début de tour
 					turns = Integer.parseInt(args.split(";")[3]);
-			}catch(NumberFormatException e){}
+			}catch(NumberFormatException ignored){}
 			caster = acaster;
 			
 			try
@@ -480,6 +480,8 @@ public class EfectoHechizo
 					applyEffect_124(cibles,fight);
 				break;
 				case 125://+Vitalité
+
+				case 610:
 					applyEffect_125(cibles,fight);
 				break;
 				case 126://+Intelligence
@@ -678,11 +680,7 @@ public class EfectoHechizo
 				case 402://Glyphe des Blop
 					applyEffect_402(fight);
 				break;
-				
-				case 610://+Vitalité
-					applyEffect_125(cibles,fight);
-				break;
-				
+
 				case 666://Pas d'effet complémentaire
 				break;
 				
@@ -738,7 +736,7 @@ public class EfectoHechizo
 			try {
 				SpellID = Integer.parseInt(args.split(";")[0]);
 				SpellLvl = Integer.parseInt(args.split(";")[1]);
-			}catch(Exception e){}
+			}catch(Exception ignored){}
 			System.out.println( );
 			if(turns > -1)
 				for(Fighter target : cibles)
@@ -805,7 +803,7 @@ public class EfectoHechizo
 			try
 			{
 				value = Integer.parseInt(args.split(";")[1]);
-			}catch(Exception e){}
+			}catch(Exception ignored){}
 			if(value == -1)return;
 			caster.addBuff(effectID, value, turns, 1, true, spell, args, caster);
 		}
@@ -840,7 +838,7 @@ public class EfectoHechizo
 			try
 			{
 				id = Integer.parseInt(args.split(";")[2]);
-			}catch(Exception e){}
+			}catch(Exception ignored){}
 			if(id == -1)return;
 
 			for(Fighter target : cibles)
@@ -868,7 +866,7 @@ public class EfectoHechizo
 			try
 			{
 				id = Integer.parseInt(args.split(";")[2]);
-			}catch(Exception e){}
+			}catch(Exception ignored){}
 			if(id == -1)return;
 			
 			for(Fighter target : cibles)
@@ -933,7 +931,7 @@ public class EfectoHechizo
 			{
 				mobID = Integer.parseInt(args.split(";")[0]);
 				level = Integer.parseInt(args.split(";")[1]);
-			}catch(Exception e){}
+			}catch(Exception ignored){}
 			MobGrade MG = null;
 			try{
 				
@@ -941,7 +939,7 @@ public class EfectoHechizo
 			}catch(Exception e1){
 				JuegoServidor.addToLog("Erreur sur le monstre id:"+mobID);
 				return;
-			};
+			}
 			if(mobID == -1 || level == -1 || MG == null)return;
 			int id = fight.getNextLowerFighterGuid();
 			MG.setInFightID(id);
@@ -1029,7 +1027,7 @@ public class EfectoHechizo
 			double val = ((double)Formulas.getRandomJet(jet)/(double)100);
 			int pdvMax = caster.getPdvMaxOutFight();
 			double pVie = (double)caster.getPDV() / (double)caster.getPDVMAX();
-			double rad = (double)2 * Math.PI * (double)(pVie - 0.5);
+			double rad = (double)2 * Math.PI * (pVie - 0.5);
 			double cos = Math.cos(rad);
 			double taux = (Math.pow((cos+1),2))/(double)4;
 			double dgtMax = val * pdvMax;
@@ -1407,7 +1405,7 @@ public class EfectoHechizo
 			try
 			{
 				val = Integer.parseInt(args.split(";")[1]);//Niveau de sort max
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(val == -1)return;
 			for(Fighter target : cibles)
 			{
@@ -1567,7 +1565,7 @@ public class EfectoHechizo
 			try
 			{
 				id = Integer.parseInt(args.split(";")[2]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			for(Fighter target : cibles)
 			{
 				if(id == -1)id = target.getDefaultGfx();
@@ -1949,7 +1947,7 @@ public class EfectoHechizo
 			{
 				mobID = Integer.parseInt(args.split(";")[0]);
 				level = Integer.parseInt(args.split(";")[1]);
-			}catch(Exception e){}
+			}catch(Exception ignored){}
 			
 			MobGrade MG = null;
 			try{
@@ -1958,8 +1956,8 @@ public class EfectoHechizo
 			}catch(Exception e1){
 				JuegoServidor.addToLog("Erreur sur le monstre id:"+mobID);
 				return;
-			};
-			
+			}
+
 			if(mobID == -1 || level == -1 || MG == null)return;
             int id = fight.getNextLowerFighterGuid()-caster._nbInvoc;
 			MG.setInFightID(id);
@@ -2195,7 +2193,7 @@ public class EfectoHechizo
 			try
 			{
 				value = Integer.parseInt(args.split(";")[0]);
-			}catch(NumberFormatException e){};
+			}catch(NumberFormatException ignored){}
 			int num = 0;
 			for(Fighter target : cibles)
 			{
@@ -2224,7 +2222,7 @@ public class EfectoHechizo
 			try
 			{
 				value = Integer.parseInt(args.split(";")[0]);
-			}catch(NumberFormatException e){};
+			}catch(NumberFormatException ignored){}
 			int num = 0;
 			for(Fighter target : cibles)
 			{
@@ -2538,7 +2536,7 @@ public class EfectoHechizo
 					finalDommage = -(finalDommage);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
 					//Vol de vie
-					int heal = (int)(-finalDommage)/2;
+					int heal = -finalDommage /2;
 					if((caster.getPDV()+heal) > caster.getPDVMAX())
 						heal = caster.getPDVMAX()-caster.getPDV();
 					caster.removePDV(-heal);
@@ -2639,7 +2637,7 @@ public class EfectoHechizo
 						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, caster.getGUID()+"", target.getGUID()+","+newCellID);
 					
 						int coef = Formulas.getRandomJet("1d8+8");
-						double b = (caster.get_lvl()/(double)(50.00));
+						double b = (caster.get_lvl()/ 50.00);
 						if(b<0.1)b= 0.1;
 						double c = b*a;//Calcule des dégats de poussé
 						int finalDommage = (int)(coef * c);
@@ -2711,7 +2709,7 @@ public class EfectoHechizo
 				target.removePDV(finalDommage);
 				finalDommage = -(finalDommage);
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
-				int heal = (int)(-finalDommage)/2;
+				int heal = -finalDommage /2;
 				if((caster.getPDV()+heal) > caster.getPDVMAX())
 					heal = caster.getPDVMAX()-caster.getPDV();
 				caster.removePDV(-heal);
@@ -2747,7 +2745,7 @@ public class EfectoHechizo
 					target.removePDV(finalDommage);
 					finalDommage = -(finalDommage);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
-					int heal = (int)(-finalDommage)/2;
+					int heal = -finalDommage /2;
 					if((caster.getPDV()+heal) > caster.getPDVMAX())
 						heal = caster.getPDVMAX()-caster.getPDV();
 					caster.removePDV(-heal);
@@ -2814,7 +2812,7 @@ public class EfectoHechizo
 				target.removePDV(finalDommage);
 				finalDommage = -(finalDommage);
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
-				int heal = (int)(-finalDommage)/2;
+				int heal = -finalDommage /2;
 				if((caster.getPDV()+heal) > caster.getPDVMAX())
 					heal = caster.getPDVMAX()-caster.getPDV();
 				caster.removePDV(-heal);
@@ -2850,7 +2848,7 @@ public class EfectoHechizo
 					finalDommage = -(finalDommage);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
 					
-					int heal = (int)(-finalDommage)/2;
+					int heal = -finalDommage /2;
 					if((caster.getPDV()+heal) > caster.getPDVMAX())
 						heal = caster.getPDVMAX()-caster.getPDV();
 					caster.removePDV(-heal);
@@ -2893,7 +2891,7 @@ public class EfectoHechizo
 				target.removePDV(finalDommage);
 				finalDommage = -(finalDommage);
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
-				int heal = (int)(-finalDommage)/2;
+				int heal = -finalDommage /2;
 				if((caster.getPDV()+heal) > caster.getPDVMAX())
 					heal = caster.getPDVMAX()-caster.getPDV();
 				caster.removePDV(-heal);
@@ -2929,7 +2927,7 @@ public class EfectoHechizo
 					finalDommage = -(finalDommage);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
 					
-					int heal = (int)(-finalDommage)/2;
+					int heal = -finalDommage /2;
 					if((caster.getPDV()+heal) > caster.getPDVMAX())
 						heal = caster.getPDVMAX()-caster.getPDV();
 					caster.removePDV(-heal);
@@ -2972,7 +2970,7 @@ public class EfectoHechizo
 				target.removePDV(finalDommage);
 				finalDommage = -(finalDommage);
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
-				int heal = (int)(-finalDommage)/2;
+				int heal = -finalDommage /2;
 				if((caster.getPDV()+heal) > caster.getPDVMAX())
 					heal = caster.getPDVMAX()-caster.getPDV();
 				caster.removePDV(-heal);
@@ -3007,7 +3005,7 @@ public class EfectoHechizo
 					target.removePDV(finalDommage);
 					finalDommage = -(finalDommage);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
-					int heal = (int)(-finalDommage)/2;
+					int heal = -finalDommage /2;
 					if((caster.getPDV()+heal) > caster.getPDVMAX())
 						heal = caster.getPDVMAX()-caster.getPDV();
 					caster.removePDV(-heal);
@@ -3050,7 +3048,7 @@ public class EfectoHechizo
 				target.removePDV(finalDommage);
 				finalDommage = -(finalDommage);
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
-				int heal = (int)(-finalDommage)/2;
+				int heal = -finalDommage /2;
 				if((caster.getPDV()+heal) > caster.getPDVMAX())
 					heal = caster.getPDVMAX()-caster.getPDV();
 				caster.removePDV(-heal);
@@ -3086,7 +3084,7 @@ public class EfectoHechizo
 					finalDommage = -(finalDommage);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
 
-					int heal = (int)(-finalDommage)/2;
+					int heal = -finalDommage /2;
 					if((caster.getPDV()+heal) > caster.getPDVMAX())
 						heal = caster.getPDVMAX()-caster.getPDV();
 					caster.removePDV(-heal);
@@ -3406,7 +3404,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3453,7 +3451,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3506,7 +3504,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3553,7 +3551,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3620,7 +3618,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3667,7 +3665,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3721,7 +3719,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3771,7 +3769,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3824,7 +3822,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -3870,7 +3868,7 @@ public class EfectoHechizo
 							try
 							{
 								add = Integer.parseInt(SE.getArgs().split(";")[2]);
-							}catch(Exception e){};
+							}catch(Exception ignored){}
 							if(add <= 0)continue;
 							dmg += add;
 						}
@@ -4026,7 +4024,7 @@ public class EfectoHechizo
 			try
 			{
 				value = Integer.parseInt(args.split(";")[0]);
-			}catch(NumberFormatException e){};
+			}catch(NumberFormatException ignored){}
 			int num = 0;
 			for(Fighter target : cibles)
 			{

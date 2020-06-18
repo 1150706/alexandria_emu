@@ -469,7 +469,7 @@ object MainServidor {
             println("Fermeture du serveur")
             exitProcess(1)
         }
-        if (CONFIG_DEBUG) Constantes.DEBUG_MAP_LIMIT = 20000
+        if (CONFIG_DEBUG)
         try {
             val date =
                 Calendar.getInstance()[Calendar.DAY_OF_MONTH].toString() + "-" + (Calendar.getInstance()[Calendar.MONTH] + 1) + "-" + Calendar.getInstance()[Calendar.YEAR]

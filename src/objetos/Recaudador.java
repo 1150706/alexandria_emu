@@ -15,23 +15,23 @@ import comunes.Mundo.Drop;
 
 public class Recaudador
 {
-	private int _guid;
-	private short _MapID;
-	private int _cellID;
-	private byte _orientation;
+	private final int _guid;
+	private final short _MapID;
+	private final int _cellID;
+	private final byte _orientation;
 	private int _GuildID = 0;
 	private short _N1 = 0;
 	private short _N2 = 0;
 	private byte _inFight = 0;
 	private int _inFightID = -1;
-	private Map<Integer, Objeto> _objets = new TreeMap<>();
+	private final Map<Integer, Objeto> _objets = new TreeMap<>();
 	private long _kamas = 0;
 	private long _xp = 0;
 	private boolean _inExchange = false;
 	//Timer
 	private long _timeTurn = 45000;
 	//Les logs
-	private Map<Integer, Objeto> _LogObjets = new TreeMap<>();
+	private final Map<Integer, Objeto> _LogObjets = new TreeMap<>();
 	private long _LogXP = 0;
 	
 	public Recaudador(int guid, short map, int cellID, byte orientation, int GuildID,
@@ -221,7 +221,7 @@ public class Recaudador
 		{
 			 if(perco.getValue().get_guildID() == GuildID)
     		 {
-				 	Mapa map = Mundo.getCarte((short)perco.getValue().get_mapID());
+				 	Mapa map = Mundo.getCarte(perco.getValue().get_mapID());
 				 	if(isFirst) 
 				 		packet.append("+");
 	    			if(!isFirst) packet.append("|");
@@ -523,7 +523,7 @@ public class Recaudador
 			if(perco.getValue().get_guildID() == GuildID)
 			{
 				Mundo.getPercos().remove(perco.getKey());
-				for(Personaje p : Mundo.getCarte((short) perco.getValue().get_mapID()).getPersos())
+				for(Personaje p : Mundo.getCarte(perco.getValue().get_mapID()).getPersos())
 				{
 					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(p.getActualMapa(), perco.getValue().getGuid());//Suppression visuelle
 				}

@@ -53,7 +53,7 @@ public class GestorSQL {
 	}
 
 	public synchronized static PreparedStatement newTransact(String baseQuery,Connection dbCon) throws SQLException {
-		PreparedStatement toReturn = (PreparedStatement) dbCon.prepareStatement(baseQuery);
+		PreparedStatement toReturn = dbCon.prepareStatement(baseQuery);
 		
 		needCommit = true;
 		return toReturn;
@@ -188,7 +188,7 @@ public class GestorSQL {
 				Mundo.addCraft
 				(RS.getInt("id"), m);
 			}
-			closeResultSet(RS);;
+			closeResultSet(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -199,15 +199,14 @@ public class GestorSQL {
 		try {
 			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM `datos_retos`;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
-				StringBuilder chal = new StringBuilder();
-				chal.append(RS.getInt("id")).append(",");
-				chal.append(RS.getInt("gananciaxp")).append(",");
-				chal.append(RS.getInt("gananciadrop")).append(",");
-				chal.append(RS.getInt("gananciapormob")).append(",");
-				chal.append(RS.getInt("condiciones"));
-				Mundo.addChallenge(chal.toString());
+				String chal = RS.getInt("id") + "," +
+						RS.getInt("gananciaxp") + "," +
+						RS.getInt("gananciadrop") + "," +
+						RS.getInt("gananciapormob") + "," +
+						RS.getInt("condiciones");
+				Mundo.addChallenge(chal);
 			}
-			closeResultSet(RS);;
+			closeResultSet(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -785,15 +784,11 @@ public class GestorSQL {
 			while(RS.next()) {
 				if(Mundo.getCarte(RS.getShort("mapa")) == null) continue;
 				if(Mundo.getCarte(RS.getShort("mapa")).getCase(RS.getInt("celda")) == null) continue;
-				
-				switch(RS.getInt("tipo")) {
-					case 1://Stop sur la case(triggers)
-						Mundo.getCarte(RS.getShort("mapa")).getCase(RS.getInt("celda")).addOnCellStopAction(RS.getInt("accion"), RS.getString("argumento"), RS.getString("condicion"));
-					break;
-						
-					default:
-						JuegoServidor.addToLog("Action Event "+RS.getInt("tipo")+" non implante");
-					break;
+
+				if (RS.getInt("tipo") == 1) {//Stop sur la case(triggers)
+					Mundo.getCarte(RS.getShort("mapa")).getCase(RS.getInt("celda")).addOnCellStopAction(RS.getInt("accion"), RS.getString("argumento"), RS.getString("condicion"));
+				} else {
+					JuegoServidor.addToLog("Action Event " + RS.getInt("tipo") + " non implante");
 				}
 				nbr++;
 			}
@@ -934,7 +929,7 @@ public class GestorSQL {
 			System.out.println("Requete: "+baseQuery);
 			System.out.println("Le personnage n'a pas ete sauvegarde");
 			System.exit(1);
-		};
+		}
 		if(saveItem) {
 			baseQuery = "UPDATE `datos_objetos` SET cantidad = ?, ubicacion = ?, caracteristicas = ? WHERE id = ?;";
 			try {
@@ -972,7 +967,7 @@ public class GestorSQL {
 					p.setInt(4, Integer.parseInt(idStr));
 					
 					p.execute();
-				}catch(Exception e){continue;};
+				}catch(Exception e){continue;}
 			}
 		}
 		closePreparedStatement(p);
@@ -1043,8 +1038,8 @@ public class GestorSQL {
 			int PACOST = 6;
 			try {
 				PACOST = Integer.parseInt(stat[2].trim());
-			}catch(NumberFormatException ignored){};
-			
+			}catch(NumberFormatException ignored){}
+
 			int POm = Integer.parseInt(stat[3].trim());
 			int POM = Integer.parseInt(stat[4].trim());
 			int TCC = Integer.parseInt(stat[5].trim());

@@ -6,7 +6,7 @@ import comunes.Mundo;
 import comunes.Mundo.Couple;
 
 public class PiedraAlma extends Objeto {
-	private ArrayList<Couple<Integer, Integer>> _monsters;
+	private final ArrayList<Couple<Integer, Integer>> _monsters;
 	
 	public PiedraAlma(int Guid, int qua, int template, int pos, String strStats)
 	{
@@ -31,7 +31,7 @@ public class PiedraAlma extends Objeto {
 				
 				_monsters.add(new Couple<>(monstre, level));
 				
-			}catch(Exception e){continue;};
+			}catch(Exception e){continue;}
 		}
 	}
 	
@@ -51,8 +51,8 @@ public class PiedraAlma extends Objeto {
 			{
 				e.printStackTrace();
 				continue;
-			};
-			
+			}
+
 			isFirst = false;
 		}
 		return stats.toString();

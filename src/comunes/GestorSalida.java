@@ -697,60 +697,59 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 
-	public static void GAME_SEND_FIGHT_PLACES_PACKET(PrintWriter out,String places, int team)
-	{
+	public static void GAME_SEND_FIGHT_PLACES_PACKET(PrintWriter out,String places, int team) {
 		String packet = "GP"+places+"|"+team;
 		send(out,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
-	public static void GAME_SEND_Im_PACKET_TO_ALL(String str)
-	{
+
+	public static void ENVIAR_MENSAJE_DESDE_LANG_A_TODOS(String str) {
 		String packet = "Im"+str; 
 		for(Personaje perso : Mundo.getOnlinePersos())
 			send(perso,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
-	public static void GAME_SEND_Im_PACKET(Personaje out, String str)
-	{
+
+	public static void ENVIAR_MENSAJE_DESDE_LANG(Personaje out, String str) {
 		String packet = "Im"+str;
 		send(out,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
-	public static void GAME_SEND_ILS_PACKET(Personaje out, int i)
-	{
+
+	public static void GAME_SEND_ILS_PACKET(Personaje out, int i) {
 		String packet = "ILS"+i;
 		send(out,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
-	}public static void GAME_SEND_ILF_PACKET(Personaje P, int i)
-	{
+	}
+
+	public static void GAME_SEND_ILF_PACKET(Personaje P, int i) {
 		String packet = "ILF"+i;
 		send(P,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
-	public static void GAME_SEND_Im_PACKET_TO_MAP(Mapa map, String id)
-	{
+
+	public static void ENVIAR_MENSAJE_DESDE_LANG_AL_MAPA(Mapa map, String id) {
 		String packet = "Im"+id;
 		for(Personaje z : map.getPersos()) send(z,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
-	public static void GAME_SEND_eUK_PACKET_TO_MAP(Mapa map, int guid, int emote)
-	{
+
+	public static void GAME_SEND_eUK_PACKET_TO_MAP(Mapa map, int guid, int emote) {
 		String packet = "eUK"+guid+"|"+emote;
 		for(Personaje z : map.getPersos()) send(z,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
-	public static void GAME_SEND_Im_PACKET_TO_FIGHT(Pelea fight, int teams, String id)
-	{
+
+	public static void ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(Pelea fight, int teams, String id) {
 		String packet = "Im"+id;
-		for(Fighter f : fight.getFighters(teams))
-		{
+		for(Fighter f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
@@ -759,8 +758,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_MESSAGE(Personaje out, String mess, String color)
-	{
+	public static void GAME_SEND_MESSAGE(Personaje out, String mess, String color) {
 		String packet = "cs<font color='#"+color+"'>"+mess+"</font>";
 		send(out,packet);
 		if(MainServidor.CONFIG_DEBUG)

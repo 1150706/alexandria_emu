@@ -10,18 +10,18 @@ import objetos.Pelea.Fighter;
 
 public class Retos
 {
-  private int _type;
-  private Pelea _fight;
+  private final int _type;
+  private final Pelea _fight;
   private boolean _challengeAlive = false;
   private boolean _challengeOk = false;
-  private int _gainXp;
-  private int _gainDrop;
+  private final int _gainXp;
+  private final int _gainDrop;
   private int _args = -1;
   private Fighter _cible;
   private String _lastActions;
   private String _arguments = new String();
   private long _lastActions_time;
-  private List<Pelea.Fighter> _ordreJeu = new ArrayList<>();
+  private final List<Pelea.Fighter> _ordreJeu = new ArrayList<>();
 
   public Retos(Pelea fight, int challengeType, int gainXp, int gainDrop)
   {
@@ -70,17 +70,13 @@ public class Retos
 	public void show_cibleToPerso(Personaje p) {
 		if (!_challengeAlive || _cible == null || _cible.get_fightCell() == null || p == null)
 			return;
-		StringBuilder packet = new StringBuilder();
-		packet.append("Gf").append(_cible.getGUID()).append("|").append(_cible.get_fightCell().getID());
-		GestorSalida.send(	p, packet.toString());
+		GestorSalida.send(	p, "Gf" + _cible.getGUID() + "|" + _cible.get_fightCell().getID());
 	}
 
 	public void show_cibleToFight() {
 		if (!_challengeAlive || _cible == null || _cible.get_fightCell() == null)
 			return;
-		StringBuilder packet = new StringBuilder();
-		packet.append("Gf").append(_cible.getGUID()).append("|").append(_cible.get_fightCell().getID());
-		GestorSalida.GAME_SEND_PACKET_TO_FIGHT(_fight, 7, packet.toString());
+		GestorSalida.GAME_SEND_PACKET_TO_FIGHT(_fight, 7, "Gf" + _cible.getGUID() + "|" + _cible.get_fightCell().getID());
 	}
 	
 	public String parseToPacket() {
@@ -109,7 +105,7 @@ public class Retos
 		String nom = "";
 		try {
 			nom = graceAqui.getPersonnage().get_name();
-		} catch (Exception exception) {}
+		} catch (Exception ignored) {}
 		_challengeAlive = false;
 		GestorSalida.GAME_SEND_PACKET_TO_FIGHT(_fight, 7, "GdKO" + _type);
 	    GestorSalida.GAME_SEND_PACKET_TO_FIGHT(_fight, 7, "Im0188;" + nom);
@@ -128,14 +124,14 @@ public class Retos
 	        int noBoucle = 0;
 	        while (_cible == null)
 	          if (_ordreJeu.size() > 0) {
-	            Pelea.Fighter f = (Pelea.Fighter)_ordreJeu.get(Formulas.getRandomValue(0, _ordreJeu.size() - 1));
+	            Pelea.Fighter f = _ordreJeu.get(Formulas.getRandomValue(0, _ordreJeu.size() - 1));
 	            if (f.getPersonnage() == null)
 	              _cible = f;
 	            noBoucle++;
 	            if (noBoucle > 30) return;
 	          }
 	        show_cibleToFight();
-	        } catch (Exception localException) {}
+	        } catch (Exception ignored) {}
 	      break;
 	    case 10 : // Cruel
 	    	try {
@@ -148,7 +144,7 @@ public class Retos
 	    		}
 	    		if(!(_cible == null))
 	    	        show_cibleToFight();
-	    	} catch (Exception localException) {}
+	    	} catch (Exception ignored) {}
 	    	break;
 	    case 25 : // Ordonné
 	    	try {
@@ -161,7 +157,7 @@ public class Retos
 	    		}
 	    		if(!(_cible == null))
 	    	        show_cibleToFight();
-	    	} catch (Exception localException) {}
+	    	} catch (Exception ignored) {}
 	    	break;
 	    }
 	  }
@@ -170,22 +166,19 @@ public class Retos
 		if(!_challengeAlive)
 			return;
 		switch (_type) {
-		case 33: // survivant
-			challenge_Foirer(_fight.getCurFighter());
-			break;			
-			
-		case 49: // Protégez vos mules
-			int lvlMin = 5000;
-			for(Fighter f : _fight.getFighters(1))
-				if(f.get_lvl() < lvlMin)
-					lvlMin = f.get_lvl();
-			if(fighter.get_lvl() <= lvlMin) {
-				challenge_Foirer(_fight.getCurFighter());
-				break;
+// survivant
+			case 33 -> challenge_Foirer(_fight.getCurFighter());
+// Protégez vos mules
+			case 49 -> {
+				int lvlMin = 5000;
+				for (Fighter f : _fight.getFighters(1))
+					if (f.get_lvl() < lvlMin)
+						lvlMin = f.get_lvl();
+				if (fighter.get_lvl() <= lvlMin) {
+					challenge_Foirer(_fight.getCurFighter());
+					break;
+				}
 			}
-							
-			
-			break;
 		}
 	}
 	
@@ -435,7 +428,7 @@ public class Retos
 						if (noBoucle > 150) return;
 					}
 				show_cibleToFight();
-	        	} catch (Exception localException) {}
+	        	} catch (Exception ignored) {}
 	        break;	    
 	    
 	    case 10 : // Cruel
@@ -457,7 +450,7 @@ public class Retos
 	    		}
 	    		if(!(_cible == null))
 	    	        show_cibleToFight();
-	    	} catch (Exception localException) {}
+	    	} catch (Exception ignored) {}
 	    	break;
 	    
 	    
@@ -481,7 +474,7 @@ public class Retos
 	    		}
 	    		if(!(_cible == null))
 	    	        show_cibleToFight();
-	    	} catch (Exception localException) {}
+	    	} catch (Exception ignored) {}
 	    	break;
 		}
 		return;
@@ -491,13 +484,10 @@ public class Retos
 	{
 		if(!_challengeAlive)
 			return;
-		
-		switch(_type)
-		{
-		case 1: // Zombie
-			if(fighter.getPM() - fighter.getCurPM(_fight) > 1)
+
+		if (_type == 1) { // Zombie
+			if (fighter.getPM() - fighter.getCurPM(_fight) > 1)
 				challenge_Foirer(_fight.getCurFighter());
-			break;
 		}
 		return;
 	}
@@ -513,20 +503,19 @@ public class Retos
 		StringBuilder action = new StringBuilder();
 		action.append(";").append(fighter.getGUID());
 		action.append(",").append(actionID).append(";");
-		switch(_type) {
-		case 6: // Versatile
-		case 5: // Econome
-			if(_lastActions.contains(action.toString())) 
-				challenge_Foirer(_fight.getCurFighter());
-			_lastActions += action.toString();
-			break;
-			
-		case 24: // Borné
-			if(!_lastActions.contains(action.toString()) && _lastActions.contains(";"+fighter.getGUID()+",")) 
-				challenge_Foirer(_fight.getCurFighter());
-			_lastActions += action.toString();
-			break;
-			
+		switch (_type) {
+// Econome
+			case 6, 5 -> {
+				if (_lastActions.contains(action.toString()))
+					challenge_Foirer(_fight.getCurFighter());
+				_lastActions += action.toString();
+			}
+// Borné
+			case 24 -> {
+				if (!_lastActions.contains(action.toString()) && _lastActions.contains(";" + fighter.getGUID() + ","))
+					challenge_Foirer(_fight.getCurFighter());
+				_lastActions += action.toString();
+			}
 		}
 		return;
 		
@@ -536,24 +525,22 @@ public class Retos
 		
 		if (!_challengeAlive)
 			return;
-		
+
 		switch (_type) {
-		case 11: // Mystique			
-			challenge_Foirer(_fight.getCurFighter());
-			break;
-		case 6: // Versatile
-		case 5: // Econome
-			if(System.currentTimeMillis() - _lastActions_time < 500)// on evite les doublons
-				return;
-			
-			_lastActions_time = System.currentTimeMillis();
-			StringBuilder action = new StringBuilder();
-			action.append(";").append(fighter.getGUID());
-			action.append(",").append("cac").append(";");
-			if(_lastActions.contains(action.toString())) 
-				challenge_Foirer(_fight.getCurFighter());
-			_lastActions += action.toString();
-			break;				
+// Mystique
+			case 11 -> challenge_Foirer(_fight.getCurFighter());
+// Econome
+			case 6, 5 -> {
+				if (System.currentTimeMillis() - _lastActions_time < 500)// on evite les doublons
+					return;
+				_lastActions_time = System.currentTimeMillis();
+				StringBuilder action = new StringBuilder();
+				action.append(";").append(fighter.getGUID());
+				action.append(",").append("cac").append(";");
+				if (_lastActions.contains(action.toString()))
+					challenge_Foirer(_fight.getCurFighter());
+				_lastActions += action.toString();
+			}
 		}
 		return;
 	}
@@ -562,11 +549,9 @@ public class Retos
 
 		if (!_challengeAlive)
 			return;
-		
-		switch (_type) {
-		case 9: // Barbare
+
+		if (_type == 9) { // Barbare
 			challenge_Foirer(_fight.getCurFighter());
-			break;
 		}
 		return;
 	}
@@ -602,7 +587,7 @@ public class Retos
 						if (noBoucle > 150) return;
 					}
 				show_cibleToFight();
-	        	} catch (Exception localException) {}
+	        	} catch (Exception ignored) {}
 	        break;
 	        
 		case 38: // Blitzkrieg
@@ -650,7 +635,7 @@ public class Retos
 		switch(_type) {
 			case 1: // Zombie
 				int diff = fighter.getPM() - fighter.getCurPM(_fight);
-				if(diff > 1 || diff < 1)
+				if(diff != 1)
 					challenge_Foirer(fighter);
 				break;
 				

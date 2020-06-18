@@ -23,9 +23,9 @@ import objetos.casas.House;
 
 public class Accion {
 
-	private int ID;
-	private String args;
-	private String cond;
+	private final int ID;
+	private final String args;
+	private final String cond;
 	
 	public Accion(int id, String args, String cond)
 	{
@@ -37,8 +37,8 @@ public class Accion {
 
 	public void apply(Personaje perso, Personaje target, int itemID, int cellid) {
 		if(perso == null)return;
-		if(!cond.equalsIgnoreCase("") && !cond.equalsIgnoreCase("-1")&& !Condiciones.validConditions(perso,cond)) {
-			GestorSalida.GAME_SEND_Im_PACKET(perso, "119");
+		if(!cond.equalsIgnoreCase("") && !cond.equalsIgnoreCase("-1")&& !Condiciones.ValidarCondicion(perso,cond)) {
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "119");
 			return;
 		}
 		if(perso.get_compte().getGameThread() == null) return;
@@ -59,7 +59,7 @@ public class Accion {
 				GestorSQL.guardar_personaje(perso,true);
 				//Si tiene deshonor no dejamos que abra el banco
 				if(perso.getDeshonor() >= 1) {
-					GestorSalida.GAME_SEND_Im_PACKET(perso, "183");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "183");
 					return;
 				}
 				//Sacamos la cantidad de kamas necesarias para abrir el banco
@@ -68,12 +68,12 @@ public class Accion {
 					long nKamas = perso.get_kamas() - cost;
 					//Si el jugador no tiene las suficientes kamas para abrir el banco
 					if(nKamas <0){
-						GestorSalida.GAME_SEND_Im_PACKET(perso, "1128;"+cost);
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1128;"+cost);
 						return;
 					}
 					perso.set_kamas(nKamas);
 					GestorSalida.GAME_SEND_STATS_PACKET(perso);
-					GestorSalida.GAME_SEND_Im_PACKET(perso, "020;"+cost);
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "020;"+cost);
 				}
 				GestorSalida.GAME_SEND_ECK_PACKET(perso.get_compte().getGameThread().get_out(), 5, "");
 				GestorSalida.GAME_SEND_EL_BANK_PACKET(perso);
@@ -86,8 +86,8 @@ public class Accion {
 					short nuevomapa = Short.parseShort(args.split(",",2)[0]);
 					int nuevacelda = Integer.parseInt(args.split(",",2)[1]);
 					perso.teletransportar(nuevomapa,nuevacelda);
-				}catch(Exception e ){return;};
-			break;
+				}catch(Exception e ){return;}
+				break;
 			
 			case 1://Discusion con un NPC
 				out = perso.get_compte().getGameThread().get_out();
@@ -98,8 +98,8 @@ public class Accion {
 					int qID = -1;
 					try {
 						qID = Integer.parseInt(args);
-					}catch(NumberFormatException ignored){};
-					
+					}catch(NumberFormatException ignored){}
+
 					NPC_question  quest = Mundo.getNPCQuestion(qID);
 					if(quest == null) {
 						GestorSalida.GAME_SEND_END_DIALOG_PACKET(out);
@@ -121,8 +121,8 @@ public class Accion {
 					if(perso.isOnline())
 						GestorSalida.GAME_SEND_STATS_PACKET(perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 
 			case 5://Objeto
 				try {
@@ -148,16 +148,16 @@ public class Accion {
 						GestorSalida.GAME_SEND_Ow_PACKET(perso);
 						if(send) {
 							if(count >= 0){
-								GestorSalida.GAME_SEND_Im_PACKET(perso, "021;"+count+"~"+tID);
+								GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "021;"+count+"~"+tID);
 							}
 							else if(count < 0){
-								GestorSalida.GAME_SEND_Im_PACKET(perso, "022;"+-count+"~"+tID);
+								GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "022;"+-count+"~"+tID);
 							}
 						}
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 
 			case 6://Aprender un oficio
 				try {
@@ -177,12 +177,12 @@ public class Accion {
 					   oficioid == 60 || oficioid == 65) {
 						if(perso.getMetierByID(oficioid) != null)//Métier déjà appris
 						{
-							GestorSalida.GAME_SEND_Im_PACKET(perso, "111");
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "111");
 						}
 						
 						if(perso.totalJobBasic() > 2)//On compte les métiers déja acquis si c'est supérieur a 2 on ignore
 						{
-							GestorSalida.GAME_SEND_Im_PACKET(perso, "19");
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "19");
 						}else//Si c'est < ou = à 2 on apprend
 						{
 							perso.learnJob(Mundo.getMetier(oficioid));
@@ -210,12 +210,12 @@ public class Accion {
 							//On compte les specialisations déja acquis si c'est supérieur a 2 on ignore
 							if(perso.getMetierByID(oficioid) != null)//Métier déjà appris
 							{
-								GestorSalida.GAME_SEND_Im_PACKET(perso, "111");
+								GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "111");
 							}
 							
 							if(perso.totalJobFM() > 2)//On compte les métiers déja acquis si c'est supérieur a 2 on ignore
 							{
-								GestorSalida.GAME_SEND_Im_PACKET(perso, "19");
+								GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "19");
 							}
 							else//Si c'est < ou = à 2 on apprend
 							{
@@ -223,12 +223,12 @@ public class Accion {
 								perso.getMetierByID(oficioid).addXp(perso, 582000);//Level 100 direct
 							}	
 						}else {
-							GestorSalida.GAME_SEND_Im_PACKET(perso, "12");
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "12");
 						}
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 
 			case 7://Devolver al punto de guardado
 				perso.warpToSavePos();
@@ -244,7 +244,7 @@ public class Accion {
 					messID = 14;
 				}
 		            if(messID > 0)
-		                GestorSalida.GAME_SEND_Im_PACKET(perso, "0" + messID + ";" + number);
+		                GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "0" + messID + ";" + number);
 		            return;
 
 			case 9://Aprender un hechizo
@@ -253,8 +253,8 @@ public class Accion {
 					if(Mundo.getSort(sID) == null)return;
 					perso.learnSpell(sID,1, true,true);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 
 			case 10://Pain/potion/viande/poisson
 				try {
@@ -272,8 +272,8 @@ public class Accion {
 						GestorSalida.GAME_SEND_STATS_PACKET(perso);
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 
 			case 11://Definir la alineacion
 				try {
@@ -283,8 +283,8 @@ public class Accion {
 					if(perso.get_align() != Constantes.ALIGNEMENT_NEUTRE && !replace)return;
 					perso.modifAlignement(newAlign);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 
 			case 12://Refrescar un grupo de monstruos
 				try {
@@ -299,8 +299,8 @@ public class Accion {
 						perso.removeItem(itemID, 1, true, true);
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 
 		    case 13://Reiniciar caracteristicas
 		        try {
@@ -313,8 +313,8 @@ public class Accion {
 		          perso.addCapital((perso.get_lvl() - 1) * 5 - perso.get_capital());
 		          GestorSalida.GAME_SEND_STATS_PACKET(perso);
 		        }catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-		    break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 
 		    case 14://Ouvrir l'interface d'oublie de sort
 		    	perso.setisForgetingSpell(true);
@@ -361,8 +361,8 @@ public class Accion {
 					}
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 16://Ajout d'honneur HonorValue
 				try
 				{
@@ -373,8 +373,8 @@ public class Accion {
 						perso.set_honor(ActualHonor+AddHonor);
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 17://Xp métier JobID,XpValue
 				try
 				{
@@ -385,8 +385,8 @@ public class Accion {
 						perso.getMetierByID(JobID).addXp(perso, XpValue);
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 18://Téléportation chez sois
 				if(House.AlreadyHaveHouse(perso))//Si il a une maison
 				{
@@ -411,8 +411,8 @@ public class Accion {
 					perso.addSpellPoint(pts);
 					GestorSalida.GAME_SEND_STATS_PACKET(perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 21://+Energie
 				try
 				{
@@ -425,8 +425,8 @@ public class Accion {
 					perso.set_energy(EnergyTotal);
 					GestorSalida.GAME_SEND_STATS_PACKET(perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 22://+Xp
 				try
 				{
@@ -437,8 +437,8 @@ public class Accion {
 					perso.set_curExp(TotalXp);
 					GestorSalida.GAME_SEND_STATS_PACKET(perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 23://UnlearnJob
 				try
 				{
@@ -450,8 +450,8 @@ public class Accion {
 					GestorSalida.GAME_SEND_STATS_PACKET(perso);
 					GestorSQL.guardar_personaje(perso, false);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 24://SimpleMorph
 				try
 				{
@@ -461,8 +461,8 @@ public class Accion {
 					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
 					GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(perso.getActualMapa(), perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 25://SimpleUnMorph
 				int UnMorphID = perso.get_classe()*10 + perso.get_sexe();
 				perso.set_gfxID(UnMorphID);
@@ -495,8 +495,8 @@ public class Accion {
 					MobGroup group  = new MobGroup(perso.getActualMapa()._nextObjectID,perso.getActualCelda().getID(),ValidMobGroup);
 					perso.getActualMapa().startFigthVersusMonstres(perso, group);
 		        }catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			case 50://Traque
 				if(perso.get_traque() == null)
 				{
@@ -636,7 +636,7 @@ public class Accion {
 				if((perso.get_sexe() == 0 && perso.getActualCelda().getID() == 282) || (perso.get_sexe() == 1 && perso.getActualCelda().getID() == 297)) {
 					Mundo.AddMarried(perso.get_sexe(), perso);
 				}else {
-					GestorSalida.GAME_SEND_Im_PACKET(perso, "1102");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1102");
 				}
 			break;
 
@@ -702,14 +702,14 @@ public class Accion {
 					}
 					GestorSalida.GAME_SEND_STATS_PACKET(perso);
 					GestorSQL.guardar_personaje(perso, false);
-				}catch(Exception e){JuegoServidor.addToLog(e.getMessage());};
+				}catch(Exception e){JuegoServidor.addToLog(e.getMessage());}
 				break;
 
 			case 105://Teletransportar a todos los miembros del grupo
 				Personaje.Grupo grupo = perso.getActualGrupo();
 				//Verificamos que el jugador este en un grupo
 				if (grupo == null) {
-					GestorSalida.GAME_SEND_Im_PACKET(perso, "1251;");
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1251;");
 					return;
 				}
 				//Vemos la ID del mapa y celda del jugador a crear la accion
@@ -731,8 +731,8 @@ public class Accion {
 					perso.changeOrientation(1);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "0", 228, perso.get_GUID()+";"+cellid+","+ Animaciones.PrepareToGA(animation), "");
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());};
-			break;
+					JuegoServidor.addToLog(e.getMessage());}
+				break;
 			default:
 				JuegoServidor.addToLog("Action ID="+ID+" non implantee");
 			break;

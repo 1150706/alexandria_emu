@@ -19,19 +19,15 @@ public class JuegoServidor implements Runnable{
 
 	private ServerSocket _SS;
 	private Thread _t;
-	private ArrayList<JuegoThread> _clients = new ArrayList<>();
-	private ArrayList<Cuenta> _waitings = new ArrayList<>();
-	private Timer _saveTimer;
-	private Timer _loadActionTimer;
-	private Timer _reloadMobTimer;
+	private final ArrayList<JuegoThread> _clients = new ArrayList<>();
+	private final ArrayList<Cuenta> _waitings = new ArrayList<>();
 	private Timer _reloadPubTimer;
-	private Timer _lastPacketTimer;
 	private long _startTime;
 	private int _maxPlayer = 0;
 	
 	public JuegoServidor(String Ip) {
 		try {
-			_saveTimer = new Timer();
+			Timer _saveTimer = new Timer();
 			_saveTimer.schedule(new TimerTask() {
 				public void run() {
 					if(!MainServidor.isSaving) {
@@ -40,24 +36,24 @@ public class JuegoServidor implements Runnable{
 					}
 				}
 			}, MainServidor.CONFIG_SAVE_TIME, MainServidor.CONFIG_SAVE_TIME);
-			
-			_loadActionTimer = new Timer();
+
+			Timer _loadActionTimer = new Timer();
 			_loadActionTimer.schedule(new TimerTask() {
 				public void run() {
 					GestorSQL.cargar_acciones();
 					JuegoServidor.addToLog("Les live actions ont ete appliquees");
 				}
 			}, MainServidor.CONFIG_LOAD_DELAY, MainServidor.CONFIG_LOAD_DELAY);
-			
-			_reloadMobTimer = new Timer();
+
+			Timer _reloadMobTimer = new Timer();
 			_reloadMobTimer.schedule(new TimerTask() {
 				public void run() {
 					Mundo.RefreshAllMob();
 					JuegoServidor.addToLog("La recharge des mobs est finie");
 				}
 			}, MainServidor.CONFIG_RELOAD_MOB_DELAY, MainServidor.CONFIG_RELOAD_MOB_DELAY);
-			
-			_lastPacketTimer = new Timer();
+
+			Timer _lastPacketTimer = new Timer();
 			_lastPacketTimer.schedule(new TimerTask() {
 				public void run() {
 					for(Personaje perso : Mundo.getOnlinePersos()) {
@@ -92,9 +88,9 @@ public class JuegoServidor implements Runnable{
 		{
 			if(!MainServidor.isSaving)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET_TO_ALL("1164");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("1164");
 				Mundo.saveAll(null);
-				GestorSalida.GAME_SEND_Im_PACKET_TO_ALL("1165");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("1165");
 			}
 		}
 	}
@@ -133,7 +129,7 @@ public class JuegoServidor implements Runnable{
 					if(!_SS.isClosed())_SS.close();
 					MainServidor.closeServers();
 				}
-				catch(IOException e1){}
+				catch(IOException ignored){}
 			}
 		}
 	}
@@ -142,7 +138,7 @@ public class JuegoServidor implements Runnable{
 	{
 		try {
 			_SS.close();
-		} catch (IOException e) {}
+		} catch (IOException ignored) {}
 		//Copie
 		ArrayList<JuegoThread> c = new ArrayList<>();
 		c.addAll(_clients);
@@ -151,7 +147,7 @@ public class JuegoServidor implements Runnable{
 			try
 			{
 				GT.closeSocket();
-			}catch(Exception e){};	
+			}catch(Exception ignored){}
 		}
 	}
 	
@@ -159,7 +155,7 @@ public class JuegoServidor implements Runnable{
 		System.out.println(str);
 		if(MainServidor.canLog) {
 			try {
-				String date = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":"+Calendar.getInstance().get(+Calendar.MINUTE)+":"+Calendar.getInstance().get(Calendar.SECOND);
+				String date = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":"+Calendar.getInstance().get(Calendar.MINUTE)+":"+Calendar.getInstance().get(Calendar.SECOND);
 				MainServidor.Log_Game.write(date+": "+str);
 				MainServidor.Log_Game.newLine();
 				MainServidor.Log_Game.flush();
@@ -171,11 +167,11 @@ public class JuegoServidor implements Runnable{
 		if(MainServidor.CONFIG_DEBUG)System.out.println(str);
 		if(MainServidor.canLog) {
 			try {
-				String date = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":"+Calendar.getInstance().get(+Calendar.MINUTE)+":"+Calendar.getInstance().get(Calendar.SECOND);
+				String date = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":"+Calendar.getInstance().get(Calendar.MINUTE)+":"+Calendar.getInstance().get(Calendar.SECOND);
 				MainServidor.Log_GameSock.write(date+": "+str);
 				MainServidor.Log_GameSock.newLine();
 				MainServidor.Log_GameSock.flush();
-			} catch (IOException e) {}//ne devrait pas avoir lieu
+			} catch (IOException ignored) {}//ne devrait pas avoir lieu
 		}
 	}
 	
@@ -263,7 +259,7 @@ public class JuegoServidor implements Runnable{
           }
         }
         , 1500L, 1500L);
-      } catch (Exception localException) {
+      } catch (Exception ignored) {
       }
     }
   }

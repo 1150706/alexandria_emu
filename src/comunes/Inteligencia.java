@@ -19,16 +19,15 @@ public class Inteligencia {
 
 	public static class IAThread implements Runnable
 	{
-		private Pelea _fight;
-		private Fighter _fighter;
+		private final Pelea _fight;
+		private final Fighter _fighter;
 		private static boolean stop = false;
-		private Thread _t;
-		
-		public IAThread(Fighter fighter, Pelea fight)
+
+        public IAThread(Fighter fighter, Pelea fight)
 		{
 			_fighter = fighter;
 			_fight = fight;
-			_t = new Thread(this);
+            Thread _t = new Thread(this);
 			_t.setDaemon(true);
 			_t.start();
 		}
@@ -42,22 +41,22 @@ public class Inteligencia {
                 	apply_type5(_fighter,_fight);
     				try {
     					Thread.sleep(2000);
-    				} catch (InterruptedException e) {};
-    				_fight.endTurn();
+    				} catch (InterruptedException ignored) {}
+					_fight.endTurn();
                 }
                 else if(_fighter.isPerco())
 				{
 					apply_typePerco(_fighter,_fight);
 					try {
 						Thread.sleep(2000);
-					} catch (InterruptedException e) {};
+					} catch (InterruptedException ignored) {}
 					_fight.endTurn();
 				}
 				else
 				{
 					try {
 						Thread.sleep(2000);
-					} catch (InterruptedException e) {};
+					} catch (InterruptedException ignored) {}
 					_fight.endTurn();
 				}
 			}else 
@@ -66,34 +65,26 @@ public class Inteligencia {
 				_fight.endTurn();
 			}else
 			{
-				switch(_fighter.getMob().getTemplate().getIAType())
-				{
-					case 0://Ne rien faire
-						apply_type0(_fighter,_fight);
-					break;
-					case 1://Attaque, Buff soi-même, Buff Alliés, Avancer vers ennemis. 
-						apply_type1(_fighter,_fight);//DV < 15% : Auto-Soin, Attaque, soin allié, buff allié, fuite
-					break;
-					case 2://Soutien
-						apply_type2(_fighter,_fight);
-					break;
-					case 3://Avancer vers Alliés, Buff Alliés, Buff sois même
-						apply_type3(_fighter,_fight);
-					break;
-					case 4://Attaque, Fuite, Buff Alliés, Buff sois même
-						apply_type4(_fighter,_fight);
-					break;
-					case 5://Avancer vers ennemis
-						apply_type5(_fighter,_fight);
-					break;
-					case 6://IA type invocations
-						apply_type6(_fighter,_fight);
-					break;
+				switch (_fighter.getMob().getTemplate().getIAType()) {
+//Ne rien faire
+					case 0 -> apply_type0(_fighter, _fight);
+//Attaque, Buff soi-même, Buff Alliés, Avancer vers ennemis.
+					case 1 -> apply_type1(_fighter, _fight);//DV < 15% : Auto-Soin, Attaque, soin allié, buff allié, fuite
+//Soutien
+					case 2 -> apply_type2(_fighter, _fight);
+//Avancer vers Alliés, Buff Alliés, Buff sois même
+					case 3 -> apply_type3(_fighter, _fight);
+//Attaque, Fuite, Buff Alliés, Buff sois même
+					case 4 -> apply_type4(_fighter, _fight);
+//Avancer vers ennemis
+					case 5 -> apply_type5(_fighter, _fight);
+//IA type invocations
+					case 6 -> apply_type6(_fighter, _fight);
 				}
 				try {
 					Thread.sleep(2000); // C'est si lent dofus =O
-				} catch (InterruptedException e) {};
-				
+				} catch (InterruptedException ignored) {}
+
 				if(!_fighter.isDead())//Mort d'une invocation pendant son tour de jeu : empeche de passer le tour du joueur suivant
 				{
 					_fight.endTurn();
@@ -342,7 +333,8 @@ public class Inteligencia {
 		
 		private static boolean moveFarIfPossible(Pelea fight, Fighter F)
 		{
-			int dist[] = {1000,1000,1000,1000,1000,1000,1000,1000,1000,1000}, cell[] = {0,0,0,0,0,0,0,0,0,0};
+			int[] dist = {1000,1000,1000,1000,1000,1000,1000,1000,1000,1000};
+			int[] cell = {0,0,0,0,0,0,0,0,0,0};
 			for(int i = 0; i < 10 ; i++)
 			{
 				for(Fighter f : fight.getFighters(3))
@@ -368,7 +360,7 @@ public class Inteligencia {
 				}
 			}
 			if(dist[0] == 0)return false;
-			int dist2[] = {0,0,0,0,0,0,0,0,0,0};
+			int[] dist2 = {0,0,0,0,0,0,0,0,0,0};
 			int PM = F.getCurPM(fight), caseDepart = F.get_fightCell().getID(), destCase = F.get_fightCell().getID();
 			for(int i = 0; i <= PM;i++)
 			{
@@ -476,14 +468,14 @@ public class Inteligencia {
 			}
 			if(curCaseID != F.get_fightCell().getID())
 				pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
-			}catch(Exception e){e.printStackTrace();};
+			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
 			GameAction GA = new GameAction(0,1, "");
 			GA._args = pathstr;
 			boolean result = fight.fighterDeplace(F, GA);
 			try {
 				Thread.sleep(100);
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException ignored) {}
 			return result;
 
 		}
@@ -771,14 +763,14 @@ public class Inteligencia {
 			}
 			if(curCaseID != F.get_fightCell().getID())
 				pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
-			}catch(Exception e){e.printStackTrace();};
+			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
 			GameAction GA = new GameAction(0,1, "");
 			GA._args = pathstr;
 			boolean result = fight.fighterDeplace(F, GA);
 			try {
 				Thread.sleep(100);
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException ignored) {}
 			return result;
 		}
 
@@ -1024,14 +1016,14 @@ public class Inteligencia {
 			}
 			if(curCaseID != fighter.get_fightCell().getID())
 				pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
-			}catch(Exception e){e.printStackTrace();};
+			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
 			GameAction GA = new GameAction(0,1, "");
 			GA._args = pathstr;
 			boolean result = fight.fighterDeplace(fighter, GA);
 			try {
 				Thread.sleep(100);
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException ignored) {}
 			return result;
 			
 		}
@@ -1126,7 +1118,7 @@ public class Inteligencia {
 			{
 				int curInfl = 0, Infl1 = 0, Infl2 = 0;
 				int PA = F.getMob().getPA();
-				int usedPA[] = {0,0};
+				int[] usedPA = {0,0};
 				if(!fight.CanCastSpell(F, SS.getValue(), T.get_fightCell(), -1))continue;
 				curInfl = calculInfluence(fight, SS.getValue(),F,T);
 				if(curInfl == 0)continue;
@@ -1177,7 +1169,7 @@ public class Inteligencia {
 				if(SS.getValue() == null) continue;
 				int curInfl = 0, Infl1 = 0, Infl2 = 0;
 				int PA = 6;
-				int usedPA[] = {0,0};
+				int[] usedPA = {0,0};
 				if(!fight.CanCastSpell(F, SS.getValue(), F.get_fightCell(), T.get_fightCell().getID()))continue;
 				curInfl = calculInfluence(fight, SS.getValue(),F,T);
 				if(curInfl == 0)continue;
@@ -1248,7 +1240,7 @@ public class Inteligencia {
 				{
 					arg2 = table[spell.getMaxPO()];
 				}
-				String args = Character.toString(arg1) + Character.toString(arg2);
+				String args = Character.toString(arg1) + arg2;
 				possibleLaunch = Camino.getCellListFromAreaString(fight.get_map(),launchCell,launchCell,args,0,false);
 			}
 			else
@@ -1287,7 +1279,7 @@ public class Inteligencia {
 								if(c.getFirstFighter().getTeam2() != fighter.getTeam2())
 									curTarget++;
 							}
-						}catch(Exception e){};
+						}catch(Exception ignored){}
 						num++;
 					}
 					if(curTarget > nbTarget)
@@ -1296,7 +1288,7 @@ public class Inteligencia {
 						CellF = cell.getID();
 					}
 				}
-				catch(Exception E){}
+				catch(Exception ignored){}
 			}
 			if(nbTarget > 0 && CellF != -1)	
 				return CellF + nbTarget * 1000;
@@ -1335,7 +1327,7 @@ public class Inteligencia {
 				Hechizos S = ss.getSpell();
 				//on prend le targetFlag corespondant au num de l'effet
 				//si on peut
-				if(S!= null?S.getEffectTargets().size()>num:false)
+				if(S != null && S.getEffectTargets().size() > num)
 					TE = S.getEffectTargets().get(num);
 				
 				for(Case C1 : cells)
@@ -1373,125 +1365,86 @@ public class Inteligencia {
 				/**Fin de la détermination**/
 				//System.out.println("SpellEffect : "+SE.getEffectID()+"   Nbr ennemis : "+ennemies+"   Nbr alliés : "+allies);
 				int inf = 0;
-				switch(SE.getEffectID())
-				{
-					case 5 ://repousse de X cases
+				switch (SE.getEffectID()) {
+//repousse de X cases
+					case 5 -> {
 						inf = 100;
 						fact += 0.3 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 89://dommages % vie neutre
-						inf = 500 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 91://Vol de Vie Eau
-						inf = 200 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 92://Vol de Vie Terre
-						inf = 200 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 93://Vol de Vie Air
-						inf = 200 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 94://Vol de Vie feu
-						inf = 200 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 95://Vol de Vie neutre
-						inf = 200 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 96://Dommage Eau
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 97://Dommage Terre
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 98://Dommage Air
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 99://Dommage feu
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 100://Dommage neutre
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 101://retrait PA
-						inf = 5000 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 127://retrait PM
-						inf = 3000 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 84://vol PA
-						inf = 8000 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 77://vol PM
-						inf = 4000 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 108:// soin
-						inf = -100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 111://+ PA
-						inf = -5000 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 128://+ PM
-						inf = -3000 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 121://+ Dom
-						inf = -500 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 131://poison X pdv par PA
-						inf = 300 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 132://désenvoute
-						inf = 6000;
-					break;
-					case 138://+ %Dom
-						inf = -150 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 150://invisibilité
-						inf = -5000;
-					break;
-					case 168://retrait PA non esquivable
-						inf = 10000 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 169://retrait PM non esquivable
-						inf = 8000 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 210://résistance
-						inf = -100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 211://résistance
-						inf = -100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 212://résistance
-						inf = -100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 213://résistance
-						inf = -100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 214://résistance
-						inf = -100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 215://faiblesse
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 216://faiblesse
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 217://faiblesse
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 218://faiblesse
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 219://faiblesse
-						inf = 100 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 265://réduction dommage
-						inf = -250 * Formulas.getMiddleJet(SE.getJet());
-					break;
-					case 765://sacrifice
-						inf = -50000;
-					break;
-						
-					
+					}
+//dommages % vie neutre
+					case 89 -> inf = 500 * Formulas.getMiddleJet(SE.getJet());
+//Vol de Vie Eau
+					case 91 -> inf = 200 * Formulas.getMiddleJet(SE.getJet());
+//Vol de Vie Terre
+					case 92 -> inf = 200 * Formulas.getMiddleJet(SE.getJet());
+//Vol de Vie Air
+					case 93 -> inf = 200 * Formulas.getMiddleJet(SE.getJet());
+//Vol de Vie feu
+					case 94 -> inf = 200 * Formulas.getMiddleJet(SE.getJet());
+//Vol de Vie neutre
+					case 95 -> inf = 200 * Formulas.getMiddleJet(SE.getJet());
+//Dommage Eau
+					case 96 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//Dommage Terre
+					case 97 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//Dommage Air
+					case 98 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//Dommage feu
+					case 99 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//Dommage neutre
+					case 100 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//retrait PA
+					case 101 -> inf = 5000 * Formulas.getMiddleJet(SE.getJet());
+//retrait PM
+					case 127 -> inf = 3000 * Formulas.getMiddleJet(SE.getJet());
+//vol PA
+					case 84 -> inf = 8000 * Formulas.getMiddleJet(SE.getJet());
+//vol PM
+					case 77 -> inf = 4000 * Formulas.getMiddleJet(SE.getJet());
+// soin
+					case 108 -> inf = -100 * Formulas.getMiddleJet(SE.getJet());
+//+ PA
+					case 111 -> inf = -5000 * Formulas.getMiddleJet(SE.getJet());
+//+ PM
+					case 128 -> inf = -3000 * Formulas.getMiddleJet(SE.getJet());
+//+ Dom
+					case 121 -> inf = -500 * Formulas.getMiddleJet(SE.getJet());
+//poison X pdv par PA
+					case 131 -> inf = 300 * Formulas.getMiddleJet(SE.getJet());
+//désenvoute
+					case 132 -> inf = 6000;
+//+ %Dom
+					case 138 -> inf = -150 * Formulas.getMiddleJet(SE.getJet());
+//invisibilité
+					case 150 -> inf = -5000;
+//retrait PA non esquivable
+					case 168 -> inf = 10000 * Formulas.getMiddleJet(SE.getJet());
+//retrait PM non esquivable
+					case 169 -> inf = 8000 * Formulas.getMiddleJet(SE.getJet());
+//résistance
+					case 210 -> inf = -100 * Formulas.getMiddleJet(SE.getJet());
+//résistance
+					case 211 -> inf = -100 * Formulas.getMiddleJet(SE.getJet());
+//résistance
+					case 212 -> inf = -100 * Formulas.getMiddleJet(SE.getJet());
+//résistance
+					case 213 -> inf = -100 * Formulas.getMiddleJet(SE.getJet());
+//résistance
+					case 214 -> inf = -100 * Formulas.getMiddleJet(SE.getJet());
+//faiblesse
+					case 215 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//faiblesse
+					case 216 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//faiblesse
+					case 217 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//faiblesse
+					case 218 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//faiblesse
+					case 219 -> inf = 100 * Formulas.getMiddleJet(SE.getJet());
+//réduction dommage
+					case 265 -> inf = -250 * Formulas.getMiddleJet(SE.getJet());
+//sacrifice
+					case 765 -> inf = -50000;
 				}
 				if(C.getTeam() == T.getTeam())//Si Amis
 					infTot -= inf*(allies-ennemies);

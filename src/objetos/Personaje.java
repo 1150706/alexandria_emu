@@ -33,13 +33,13 @@ import comunes.Mundo.ItemSet;
 
 public class Personaje {
 	
-	private int _GUID;
-	private String _name;
-	private int _sexe;
-	private int _classe;
-	private int _color1;
-	private int _color2;
-	private int _color3;
+	private final int _GUID;
+	private final String _name;
+	private final int _sexe;
+	private final int _classe;
+	private final int _color1;
+	private final int _color2;
+	private final int _color3;
 	private long _kamas;
 	private int _spellPts;
 	private int _capital;
@@ -52,8 +52,7 @@ public class Personaje {
 	private Cuenta _compte;
 	private int _accID;
 	private boolean _canAggro = true;
-	private String _emotes = "7667711";
-	
+
 	//Variables d'ali
 	private byte _align = 0;
 	private int _deshonor = 0;
@@ -65,7 +64,7 @@ public class Personaje {
 	private GuildMember _guildMember;
 	private boolean _showFriendConnection;
 	private String _canaux;
-	Stats _baseStats;
+	final Stats _baseStats;
 	private Pelea _fight;
 	private boolean _away;
 	private Mapa _curCarte;
@@ -75,8 +74,8 @@ public class Personaje {
 	private boolean _isOnline  = false;
 	private Grupo _group;
 	private int _duelID = -1;
-	private Map<Integer, EfectoHechizo> _buffs = new TreeMap<>();
-	private Map<Integer, Objeto> _items = new TreeMap<>();
+	private final Map<Integer, EfectoHechizo> _buffs = new TreeMap<>();
+	private final Map<Integer, Objeto> _items = new TreeMap<>();
 	private Timer _sitTimer;
 	private String _savePos;
 	private int _emoteActive = 0;
@@ -93,7 +92,7 @@ public class Personaje {
 	private int _inviting = 0;
 	//Job
 	private JobAction _curJobAction;
-	private Map<Integer,StatsMetier> _metiers = new TreeMap<>();
+	private final Map<Integer,StatsMetier> _metiers = new TreeMap<>();
 	//Enclos
 	private MountPark _inMountPark;
 	//Monture
@@ -104,12 +103,12 @@ public class Personaje {
 	private boolean _isInBank;
 	//Zaap
 	private boolean _isZaaping = false;
-	private ArrayList<Short> _zaaps = new ArrayList<>();
+	private final ArrayList<Short> _zaaps = new ArrayList<>();
 	//Disponibilité
 	public boolean _isAbsent = false;
 	public boolean _isInvisible = false;
 	//Sort
-	public boolean _seeSpell = false;
+	public final boolean _seeSpell = false;
 	private boolean _isForgetingSpell = false;
 	private Map<Integer,SortStats> _sorts = new TreeMap<>();
 	private Map<Integer,Character> _sortsPlaces = new TreeMap<>();
@@ -127,7 +126,7 @@ public class Personaje {
 	private int _wife = 0;
 	private int _isOK = 0;
 	//Suiveur - Suivi
-	public Map<Integer, Personaje> _Follower = new TreeMap<>();
+	public final Map<Integer, Personaje> _Follower = new TreeMap<>();
 	public Personaje _Follows = null;
 	//Fantome
 	public boolean _isGhosts = false;
@@ -138,7 +137,7 @@ public class Personaje {
 	private House _curHouse;
 	//Marchand
 	public boolean _seeSeller = false;
-	private Map<Integer , Integer> _storeItems = new TreeMap<>();//<ObjID, Prix>
+	private final Map<Integer , Integer> _storeItems = new TreeMap<>();//<ObjID, Prix>
 	//Quêtes
     private int savestat;
 	
@@ -173,8 +172,8 @@ public class Personaje {
 	}
 
 	public static class Grupo {
-		private ArrayList<Personaje> _persos = new ArrayList<>();
-		private Personaje _chief;
+		private final ArrayList<Personaje> _persos = new ArrayList<>();
+		private final Personaje _chief;
 		
 		public Grupo(Personaje p1, Personaje p2) {
 			_chief = p1;
@@ -276,13 +275,13 @@ public class Personaje {
 				//Si la stat n'existe pas dans l'autre map
 				if(other.getMap().get(entry.getKey()) == null)return false;
 				//Si la stat existe mais n'a pas la même valeur
-				if(other.getMap().get(entry.getKey()) != entry.getValue())return false;	
+				if(!other.getMap().get(entry.getKey()).equals(entry.getValue()))return false;
 			}
 			for(Entry<Integer,Integer> entry : other.getMap().entrySet()) {
 				//Si la stat n'existe pas dans l'autre map
 				if(Effects.get(entry.getKey()) == null)return false;
 				//Si la stat existe mais n'a pas la même valeur
-				if(Effects.get(entry.getKey()) != entry.getValue())return false;	
+				if(!Effects.get(entry.getKey()).equals(entry.getValue()))return false;
 			}
 			return true;
 		}
@@ -298,15 +297,15 @@ public class Personaje {
 			{
 				case Constantes.STATS_ADD_AFLEE:
 					if(Effects.get(Constantes.STATS_REM_AFLEE)!= null)
-						val -= (int)(getEffect(Constantes.STATS_REM_AFLEE));
+						val -= getEffect(Constantes.STATS_REM_AFLEE);
 					if(Effects.get(Constantes.STATS_ADD_SAGE) != null)
-						val += (int)(getEffect(Constantes.STATS_ADD_SAGE)/4);
+						val += getEffect(Constantes.STATS_ADD_SAGE)/4;
 				break;
 				case Constantes.STATS_ADD_MFLEE:
 					if(Effects.get(Constantes.STATS_REM_MFLEE)!= null)
-						val -= (int)(getEffect(Constantes.STATS_REM_MFLEE));
+						val -= getEffect(Constantes.STATS_REM_MFLEE);
 					if(Effects.get(Constantes.STATS_ADD_SAGE) != null)
-						val += (int)(getEffect(Constantes.STATS_ADD_SAGE)/4);
+						val += getEffect(Constantes.STATS_ADD_SAGE)/4;
 				break;
 				case Constantes.STATS_ADD_INIT:
 					if(Effects.get(Constantes.STATS_REM_INIT)!= null)
@@ -438,8 +437,8 @@ public class Personaje {
 		{
 			return Effects;
 		}
-		public String parseToItemSetStats()
-		{
+
+		public String parseToItemSetStats() {
 			StringBuilder str = new StringBuilder();
 			if(Effects.isEmpty())return "";
 			for(Entry<Integer,Integer> entry : Effects.entrySet())
@@ -484,86 +483,70 @@ public class Personaje {
 		this._compte = Mundo.getCompte(_compte);
 		this._showFriendConnection = seeFriend==1;
 		this._wife = wifeGuid; 
-		if(this.get_align() != 0)
-		{
+		if(this.get_align() != 0) {
 			this._showWings = seeAlign==1;
-		}else
-		{
+		}else {
 			this._showWings = false;
 		}
 		this._canaux = canaux;
 		this._curCarte = Mundo.getCarte(map);
 		this._savePos = savePos;
-		if(_curCarte == null && Mundo.getCarte(MainServidor.CONFIG_START_MAP) != null)
-		{
+		if(_curCarte == null && Mundo.getCarte(MainServidor.CONFIG_START_MAP) != null) {
 			this._curCarte = Mundo.getCarte(MainServidor.CONFIG_START_MAP);
 			this._curCell = _curCarte.getCase(MainServidor.CONFIG_START_CELL);
-		}else if (_curCarte == null && Mundo.getCarte(MainServidor.CONFIG_START_MAP) == null)
-		{
+		}else if (_curCarte == null && Mundo.getCarte(MainServidor.CONFIG_START_MAP) == null) {
 			JuegoServidor.addToLog("Personnage mal positione, et position de départ non valide. Fermeture du serveur.");
 			MainServidor.closeServers();
-		}
-		else if(_curCarte != null)
-		{
+		} else if(_curCarte != null) {
 			this._curCell = _curCarte.getCase(cell);
-			if(_curCell == null)
-			{
+			if(_curCell == null) {
 				this._curCarte = Mundo.getCarte(MainServidor.CONFIG_START_MAP);
 				this._curCell = _curCarte.getCase(MainServidor.CONFIG_START_CELL);
 			}
 		}
-		for(String str : z.split(","))
-		{
-			try
-			{
+		for(String str : z.split(",")) {
+			try {
 				_zaaps.add(Short.parseShort(str));
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 		}
-		if(_curCarte == null || _curCell == null)
-		{
+		if(_curCarte == null || _curCell == null) {
 			JuegoServidor.addToLog("Map ou case de départ du personnage "+_name+" invalide");
 			JuegoServidor.addToLog("Map ou case par défaut invalide");
 			JuegoServidor.addToLog("Le serveur ne peut se lancer");
 			try {
 				Thread.sleep(10000);
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException ignored) {}
 			MainServidor.closeServers();
 		}
 
-		if(!stuff.equals(""))
-		{
+		if(!stuff.equals("")) {
 			if(stuff.charAt(stuff.length()-1) == '|')
 				stuff = stuff.substring(0,stuff.length()-1);
 			GestorSQL.cargando_objetos(stuff.replace("|",","));
 		}
-		for(String item : stuff.split("\\|"))
-		{
+		for(String item : stuff.split("\\|")) {
 			if(item.equals(""))continue;
 			String[] infos = item.split(":");
 			
 			int guid = 0;
-			try
-			{
+			try {
 				guid = Integer.parseInt(infos[0]);
-			}catch(Exception e ){continue;};
-			
+			}catch(Exception e ){continue;}
+
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null)continue;
 			_items.put(obj.getGuid(), obj);
 		}
-		if(!storeObjets.equals(""))
-		{
-			for(String _storeObjets : storeObjets.split("\\|"))
-			{
+		if(!storeObjets.equals("")) {
+			for(String _storeObjets : storeObjets.split("\\|")) {
 				String[] infos = _storeObjets.split(",");
 				int guid = 0;
 				int price = 0;
-				try
-				{
+				try {
 					guid = Integer.parseInt(infos[0]);
 					price = Integer.parseInt(infos[1]);
-				}catch(Exception e ){continue;};
-				
+				}catch(Exception e ){continue;}
+
 				Objeto obj = Mundo.getObjet(guid);
 				if(obj == null)continue;
 				
@@ -579,13 +562,10 @@ public class Personaje {
 		_exPdv = _PDV;
 		
 		//Chargement des métiers
-		if(!jobs.equals(""))
-		{
-			for(String aJobData : jobs.split(";"))
-			{
+		if(!jobs.equals("")) {
+			for(String aJobData : jobs.split(";")) {
 				String[] infos = aJobData.split(",");
-				try
-				{
+				try {
 					int jobID = Integer.parseInt(infos[0]);
 					long xp = Long.parseLong(infos[1]);
 					Oficio m = Mundo.getMetier(jobID);
@@ -603,8 +583,7 @@ public class Personaje {
 	public Personaje(int _guid, String _name, int _sexe, int _classe,
 					 int _color1, int _color2, int _color3, int _lvl,
 					 int _size, int _gfxid, Map<Integer,Integer> stats,
-					 String stuff, int pdvPer, byte seeAlign, int mount, int alvl, byte alignement)
-	{
+					 String stuff, int pdvPer, byte seeAlign, int mount, int alvl, byte alignement) {
 		this._GUID = _guid;
 		this._name = _name;
 		this._sexe = _sexe;
@@ -617,14 +596,12 @@ public class Personaje {
 		this._size = _size;
 		this._gfxID = _gfxid;
 		this._baseStats = new Stats(stats,true,this);
-		if(!stuff.equals(""))
-		{
+		if(!stuff.equals("")) {
 			if(stuff.charAt(stuff.length()-1) == '|')
 				stuff = stuff.substring(0,stuff.length()-1);
 			GestorSQL.cargando_objetos(stuff.replace("|",","));
 		}
-		for(String item : stuff.split("\\|"))
-		{
+		for(String item : stuff.split("\\|")) {
 			if(item.equals(""))continue;
 			String[] infos = item.split(":");
 			int guid = Integer.parseInt(infos[0]);
@@ -639,18 +616,15 @@ public class Personaje {
 		_exPdv = _PDV;
 		
 		this._align = alignement;
-		if(this.get_align() != 0)
-		{
+		if(this.get_align() != 0) {
 			this._showWings = seeAlign==1;
-		}else
-		{
+		}else {
 			this._showWings = false;
 		}
 		if(mount != -1)this._mount = Mundo.getDragoByID(mount);
 	}
 
-	public void regenLife()
-	{
+	public void regenLife() {
 		//Joueur pas en jeu
 		if(_curCarte == null)return;
 		//Pas de regen en combat
@@ -662,13 +636,11 @@ public class Personaje {
 	
 	public static Personaje CREATE_PERSONNAGE(String name, int sexe, int classe, int color1, int color2, int color3, Cuenta compte)
 	{
-		String z = "";
-		if(MainServidor.CONFIG_ZAAP)
-		{
-			for(Entry<Integer, Integer> i : Constantes.ZAAPS.entrySet())
-			{
-				if(z.length() != 0)z+=",";
-				z += i.getKey();
+		StringBuilder z = new StringBuilder();
+		if(MainServidor.CONFIG_ZAAP) {
+			for(Entry<Integer, Integer> i : Constantes.ZAAPS.entrySet()) {
+				if(z.length() != 0) z.append(",");
+				z.append(i.getKey());
 			}
 		}
 		Personaje perso = new Personaje(
@@ -680,7 +652,7 @@ public class Personaje {
 				color2,
 				color3,
 				MainServidor.CONFIG_START_KAMAS,
-				((MainServidor.CONFIG_START_LEVEL-1)*1),
+				((MainServidor.CONFIG_START_LEVEL - 1)),
 				((MainServidor.CONFIG_START_LEVEL-1)*5),
 				10000,
 				MainServidor.CONFIG_START_LEVEL,
@@ -707,13 +679,12 @@ public class Personaje {
 				0,
 				0,
 				0,
-				z,
+				z.toString(),
 				(byte)0,
 				0
 				);
 		perso._sorts = Constantes.getStartSorts(classe);
-		for(int a = 1; a <= perso.get_lvl();a++)
-		{
+		for(int a = 1; a <= perso.get_lvl();a++) {
 			Constantes.onLevelUpSpells(perso, a);
 		}
 		perso._sortsPlaces = Constantes.getStartSortsPlaces(classe);
@@ -742,12 +713,10 @@ public class Personaje {
 
 	public Grupo getActualGrupo() { return _group; }
 	
-	public String parseSpellToDB()
-	{
+	public String parseSpellToDB() {
 		StringBuilder sorts = new StringBuilder();
 		if(_sorts.isEmpty())return "";
-		for(int key : _sorts.keySet())
-		{
+		for(int key : _sorts.keySet()) {
 			//3;1;a,4;3;b
 			SortStats SS = _sorts.get(key);
 			sorts.append(SS.getSpellID()).append(";").append(SS.getLevel()).append(";");
@@ -760,19 +729,16 @@ public class Personaje {
 		return sorts.substring(0, sorts.length()-1).toString();
 	}
 	
-	private void parseSpells(String str)
-	{
+	private void parseSpells(String str) {
 		String[] spells = str.split(",");
-		for(String e : spells)
-		{
-			try
-			{
+		for(String e : spells) {
+			try {
 				int id = Integer.parseInt(e.split(";")[0]);
 				int lvl = Integer.parseInt(e.split(";")[1]);
 				char place = e.split(";")[2].charAt(0);
 				learnSpell(id,lvl,false,false);
 				_sortsPlaces.put(id, place);
-			}catch(NumberFormatException e1){continue;};
+			}catch(NumberFormatException e1){continue;}
 		}
 	}
 	
@@ -825,8 +791,7 @@ public class Personaje {
 		_spellPts = pts;
 	}
 
-	public Gremio get_guild()
-	{
+	public Gremio get_guild() {
 		if(_guildMember == null)return null;
 		return _guildMember.getGuild();
 	}
@@ -979,42 +944,34 @@ public class Personaje {
 		return _capital;
 	}
 	
-	public boolean learnSpell(int spellID,int level,boolean save,boolean send)
-	{
-		if(Mundo.getSort(spellID).getStatsByLevel(level)==null)
-		{
+	public boolean learnSpell(int spellID,int level,boolean save,boolean send) {
+		if(Mundo.getSort(spellID).getStatsByLevel(level)==null) {
 			JuegoServidor.addToLog("[ERROR]Sort "+spellID+" lvl "+level+" non trouve.");
 			return false;
 		}
 		_sorts.put(spellID, Mundo.getSort(spellID).getStatsByLevel(level));
 		
-		if(send)
-		{
+		if(send) {
 			GestorSalida.GAME_SEND_SPELL_LIST(this);
-			GestorSalida.GAME_SEND_Im_PACKET(this, "03;"+spellID);
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "03;"+spellID);
 		}
 		if(save) GestorSQL.guardar_personaje(this,false);
 		return true;
 	}
 	
-	public boolean boostSpell(int spellID)
-	{
-		if(getSortStatBySortIfHas(spellID)== null)
-		{
+	public boolean boostSpell(int spellID) {
+		if(getSortStatBySortIfHas(spellID)== null) {
 			JuegoServidor.addToLog(_name+" n'a pas le sort "+spellID);
 			return false;
 		}
 		int AncLevel = getSortStatBySortIfHas(spellID).getLevel();
 		if(AncLevel == 6)return false;
-		if(_spellPts>=AncLevel && Mundo.getSort(spellID).getStatsByLevel(AncLevel+1).getReqLevel() <= _lvl)
-		{
-			if(learnSpell(spellID,AncLevel+1,true,false))
-			{
+		if(_spellPts>=AncLevel && Mundo.getSort(spellID).getStatsByLevel(AncLevel+1).getReqLevel() <= _lvl) {
+			if(learnSpell(spellID,AncLevel+1,true,false)) {
 				_spellPts -= AncLevel;
 				GestorSQL.guardar_personaje(this,false);
 				return true;
-			}else
-			{
+			}else {
 				JuegoServidor.addToLog(_name+" : Echec LearnSpell "+spellID);
 				return false;
 			}
@@ -1029,24 +986,20 @@ public class Personaje {
 		}
 	}
 	
-	public boolean forgetSpell(int spellID)
-	{
-		if(getSortStatBySortIfHas(spellID)== null)
-		{
+	public boolean forgetSpell(int spellID) {
+		if(getSortStatBySortIfHas(spellID)== null) {
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(_name+" n'a pas le sort "+spellID);
 			return false;
 		}
 		int AncLevel = getSortStatBySortIfHas(spellID).getLevel();
 		if(AncLevel <= 1)return false;
 		
-		if(learnSpell(spellID,1,true,false))
-		{
+		if(learnSpell(spellID,1,true,false)) {
 			_spellPts += Formulas.spellCost(AncLevel);
 			
 			GestorSQL.guardar_personaje(this,false);
 			return true;
-		}else
-		{
+		}else {
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(_name+" : Echec LearnSpell "+spellID);
 			return false;
 		}
@@ -1112,8 +1065,7 @@ public class Personaje {
 		GestorSQL.eliminar_personaje_db(this);
 	}
 	
-	public void OnJoinGame()
-	{
+	public void OnJoinGame() {
 		if(_compte.getGameThread() == null)return;
 		PrintWriter out = _compte.getGameThread().get_out();
 		_compte.setCurPerso(this);
@@ -1124,18 +1076,15 @@ public class Personaje {
 		
 		GestorSalida.GAME_SEND_ASK(out, this);
 		//Envoie des bonus pano si besoin
-		for(int a = 1; a< Mundo.getItemSetNumber(); a++)
-		{
+		for(int a = 1; a< Mundo.getItemSetNumber(); a++) {
 			int num =getNumbEquipedItemOfPanoplie(a);
 			if(num == 0)continue;
 			GestorSalida.GAME_SEND_OS_PACKET(this, a);
 		}
 		
 		//envoie des données de métier
-		if(_metiers.size() >0)
-		{
-			ArrayList<StatsMetier> list = new ArrayList<>();
-			list.addAll(_metiers.values());
+		if(_metiers.size() >0) {
+			ArrayList<StatsMetier> list = new ArrayList<>(_metiers.values());
 			//packet JS
 			GestorSalida.GAME_SEND_JS_PACKET(this, list);
 			//packet JX
@@ -1143,8 +1092,7 @@ public class Personaje {
 			//Packet JO (Job Option)
 			GestorSalida.GAME_SEND_JO_PACKET(this, list);
 			Objeto obj = getObjetByPos(Constantes.ITEM_POS_ARME);
-			if(obj != null)
-			{
+			if(obj != null) {
 				for(StatsMetier sm : list)
 					if(sm.getTemplate().isValidTool(obj.getTemplate().getID()))
 						GestorSalida.GAME_SEND_OT_PACKET(_compte.getGameThread().get_out(),sm.getTemplate().getId());
@@ -1156,17 +1104,18 @@ public class Personaje {
 		if(_guildMember != null) GestorSalida.GAME_SEND_gS_PACKET(this,_guildMember);
 		GestorSalida.GAME_SEND_ZONE_ALLIGN_STATUT(out);
 		GestorSalida.GAME_SEND_SPELL_LIST(this);
-		GestorSalida.GAME_SEND_EMOTE_LIST(this,_emotes,"0");
+		String _emotes = "7667711";
+		GestorSalida.GAME_SEND_EMOTE_LIST(this, _emotes,"0");
 		GestorSalida.GAME_SEND_RESTRICTIONS(out);
 		GestorSalida.GAME_SEND_Ow_PACKET(this);
 		GestorSalida.GAME_SEND_SEE_FRIEND_CONNEXION(out,_showFriendConnection);
 		this._compte.SendOnline();
 		
 		//Messages de bienvenue
-		GestorSalida.GAME_SEND_Im_PACKET(this, "189");
+		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "189");
 		if(!_compte.getLastConnectionDate().equals("") && !_compte.get_lastIP().equals(""))
-			GestorSalida.GAME_SEND_Im_PACKET(this, "0152;"+_compte.getLastConnectionDate()+"~"+_compte.get_lastIP());
-		GestorSalida.GAME_SEND_Im_PACKET(this, "0153;"+_compte.get_curIP());
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "0152;"+_compte.getLastConnectionDate()+"~"+_compte.get_lastIP());
+		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "0153;"+_compte.get_curIP());
 		//Fin messages
 		//Actualisation de l'ip
 		_compte.setLastIP(_compte.get_curIP());
@@ -1208,13 +1157,11 @@ public class Personaje {
 		_showFriendConnection = bool;
 	}
 	
-	public void sendGameCreate()
-	{
+	public void sendGameCreate() {
 		if(_compte.getGameThread() == null) return;
 		PrintWriter out = _compte.getGameThread().get_out();
 		
-		if(is_showSeller() == true && Mundo.getSeller(getActualMapa().get_id()) != null && Mundo.getSeller(getActualMapa().get_id()).contains(get_GUID()))
-		{
+		if(is_showSeller() == true && Mundo.getSeller(getActualMapa().get_id()) != null && Mundo.getSeller(getActualMapa().get_id()).contains(get_GUID())) {
 			Mundo.removeSeller(get_GUID(), getActualMapa().get_id());
 			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), get_GUID());
 			set_showSeller(false);
@@ -1229,15 +1176,11 @@ public class Personaje {
 		GestorSQL.guardar_personaje(this, true);
 	}
 	
-	public String parseToOa()
-	{
-		StringBuilder packetOa = new StringBuilder();
-		packetOa.append("Oa").append(_GUID).append("|").append(getGMStuffString());
-		return packetOa.toString();
+	public String parseToOa() {
+		return "Oa" + _GUID + "|" + getGMStuffString();
 	}
 	
-	public String parseToGM()
-	{
+	public String parseToGM() {
 		StringBuilder str = new StringBuilder();
 		if(_fight == null)// Hors combat
 		{
@@ -1254,11 +1197,9 @@ public class Personaje {
 			str.append((_color2==-1?"-1":Integer.toHexString(_color2))).append(";");
 			str.append((_color3==-1?"-1":Integer.toHexString(_color3))).append(";");
 			str.append(getGMStuffString()).append(";");
-			if(MainServidor.AURA_SYSTEM)
-			{
+			if(MainServidor.AURA_SYSTEM) {
 				str.append((_lvl>99?(_lvl>199?(2):(1)):(0))).append(";");
-			}else
-			{
+			}else {
 				str.append("0;");
 			}
 			str.append(";");//Emote
@@ -1279,8 +1220,7 @@ public class Personaje {
 		return (this._color1 == -1 ? "" : Integer.toHexString(this._color1)) + "," + (this._color2 == -1 ? "" : Integer.toHexString(this._color2)) + "," + (this._color3 == -1 ? "" : Integer.toHexString(this._color3));
 	}
 	
-    public String parseToMerchant() 
-    {
+    public String parseToMerchant() {
     	StringBuilder str = new StringBuilder();
     	str.append(_curCell.getID()).append(";");
     	str.append(_orientation).append(";");
@@ -1300,8 +1240,7 @@ public class Personaje {
         return str.toString();
     }
 	
-	public String getGMStuffString()
-	{
+	public String getGMStuffString() {
 		StringBuilder str = new StringBuilder();
 		// pour chaque place d'objet apparent, en Hexa, l'ID de l'objet
 		// 2411 pour la Cape Objivejan (9233)
@@ -1334,7 +1273,7 @@ public class Personaje {
         StringBuilder ASData = new StringBuilder();
         ASData.append("As").append(xpString(",")).append("|");
         ASData.append(_kamas).append("|").append(_capital).append("|").append(_spellPts).append("|");
-        ASData.append(_align).append("~").append(_align).append(",").append(_aLvl).append(",").append(getGrade()).append(",").append(_honor).append(",").append((new StringBuilder(String.valueOf(_deshonor))).append(",").toString()).append(_showWings ? "1" : "0").append("|");
+        ASData.append(_align).append("~").append(_align).append(",").append(_aLvl).append(",").append(getGrade()).append(",").append(_honor).append(",").append(String.valueOf(_deshonor) + ",").append(_showWings ? "1" : "0").append("|");
         int pdv = get_PDV();
         int pdvMax = get_PDVMAX();
         if(_fight != null) {
@@ -1361,7 +1300,7 @@ public class Personaje {
         ASData.append(_baseStats.getEffect(112)).append(",").append(getStuffStats().getEffect(112)).append(",").append(getDonsStats().getEffect(112)).append(",").append(getBuffsStats().getEffect(112)).append("|");
         ASData.append(_baseStats.getEffect(142)).append(",").append(getStuffStats().getEffect(142)).append(",").append(getDonsStats().getEffect(142)).append(",").append(getBuffsStats().getEffect(142)).append("|");
         ASData.append("0,0,0,0|");
-        ASData.append(_baseStats.getEffect(138)).append(",").append(getStuffStats().getEffect(138)).append((new StringBuilder(",")).append(getDonsStats().getEffect(138)).toString()).append(",").append(getBuffsStats().getEffect(138)).append("|");
+        ASData.append(_baseStats.getEffect(138)).append(",").append(getStuffStats().getEffect(138)).append("," + getDonsStats().getEffect(138)).append(",").append(getBuffsStats().getEffect(138)).append("|");
         ASData.append(_baseStats.getEffect(178)).append(",").append(getStuffStats().getEffect(178)).append(",").append(getDonsStats().getEffect(178)).append(",").append(getBuffsStats().getEffect(178)).append("|");
         ASData.append(_baseStats.getEffect(225)).append(",").append(getStuffStats().getEffect(225)).append(",").append(getDonsStats().getEffect(225)).append(",").append(getBuffsStats().getEffect(225)).append("|");
         ASData.append(_baseStats.getEffect(226)).append(",").append(getStuffStats().getEffect(226)).append(",").append(getDonsStats().getEffect(226)).append(",").append(getBuffsStats().getEffect(226)).append("|");
@@ -1457,8 +1396,7 @@ public class Personaje {
 		this._orientation = _orientation;
 	}
 
-	public int getInitiative()
-	{
+	public int getInitiative() {
 		int fact = 4;
 		int pvmax = _PDVMAX - Constantes.getBasePdv(_classe);
 		int pv = _PDV - Constantes.getBasePdv(_classe);
@@ -1480,8 +1418,7 @@ public class Personaje {
 		return init;
 	}
 
-	public Stats getTotalStats()
-	{
+	public Stats getTotalStats() {
 		Stats total = new Stats(false,null);
 		total = Stats.cumulStat(total,_baseStats);
 		total = Stats.cumulStat(total,getStuffStats());
@@ -1492,15 +1429,13 @@ public class Personaje {
 		return total;
 	}
 
-	private Stats getDonsStats()
-	{
+	private Stats getDonsStats() {
 		/* TODO*/
 		Stats stats = new Stats(false,null);
 		return stats;
 	}
 
-	public int getPodUsed()
-	{
+	public int getPodUsed() {
 		int pod = 0;
 		for(Entry<Integer, Objeto> entry : _items.entrySet())
 		{
@@ -1512,8 +1447,7 @@ public class Personaje {
 	public int getMaxPod() {
 		int pods = getTotalStats().getEffect(Constantes.STATS_ADD_PODS);
 		pods += getTotalStats().getEffect(Constantes.STATS_ADD_FORC)*5;
-		for(StatsMetier SM : _metiers.values())
-		{
+		for(StatsMetier SM : _metiers.values()) {
 			pods += SM.get_lvl()*5;
 			if(SM.get_lvl() == 100) pods += 1000;
 		}
@@ -1528,8 +1462,7 @@ public class Personaje {
 
 	public void set_PDV(int _pdv) {
 		_PDV = _pdv;
-		if(_group != null)
-		{
+		if(_group != null) {
 			GestorSalida.GAME_SEND_PM_MOD_PACKET_TO_GROUP(_group,this);
 		}
 	}
@@ -1540,14 +1473,12 @@ public class Personaje {
 
 	public void set_PDVMAX(int _pdvmax) {
 		_PDVMAX = _pdvmax;
-		if(_group != null)
-		{
+		if(_group != null) {
 			GestorSalida.GAME_SEND_PM_MOD_PACKET_TO_GROUP(_group,this);
 		}
 	}
 
-	public void setSitted(boolean b)
-	{
+	public void setSitted(boolean b) {
 		_sitted = b;
 		int diff = _PDV - _exPdv;
 		int time = (b?1000:2000);
@@ -1576,24 +1507,20 @@ public class Personaje {
 		return pdvper;
 	}
 
-	public void emoticone(String str) 
-	{
-		try
-		{
+	public void emoticone(String str) {
+		try {
 			int id = Integer.parseInt(str);
 			Mapa map = _curCarte;
 			if(_fight == null)
 				GestorSalida.GAME_SEND_EMOTICONE_TO_MAP(map,_GUID,id);
 			else
 				GestorSalida.GAME_SEND_EMOTICONE_TO_FIGHT(_fight,7,_GUID,id);
-		}catch(NumberFormatException e){return;};
+		}catch(NumberFormatException e){return;}
 	}
 
-	public void refreshMapAfterFight()
-	{
+	public void refreshMapAfterFight() {
 		_curCarte.addPlayer(this);
-		if(_compte.getGameThread() != null && _compte.getGameThread().get_out() != null)
-		{
+		if(_compte.getGameThread() != null && _compte.getGameThread().get_out() != null) {
 			GestorSalida.GAME_SEND_STATS_PACKET(this);
 			GestorSalida.GAME_SEND_ILS_PACKET(this, 1000);
 		}
@@ -1649,29 +1576,20 @@ public class Personaje {
 	}
 
     public void boostStat(int stat) {
-        int value = 0;
-        switch(stat) {
-        case 10: // '\n'
-            value = _baseStats.getEffect(118);
-            break;
-
-        case 13: // '\r'
-            value = _baseStats.getEffect(123);
-            break;
-
-        case 14: // '\016'
-            value = _baseStats.getEffect(119);
-            break;
-
-        case 15: // '\017'
-            value = _baseStats.getEffect(126);
-            break;
-        }
-        int cout = Constantes.getReqPtsToBoostStatsByClass(_classe, stat, value);
-        if(cout <= _capital)
-        {
-            switch(stat)
-            {
+        int value = switch (stat) {
+        	// '\n'
+			case 10 -> _baseStats.getEffect(118);
+			// '\r'
+			case 13 -> _baseStats.getEffect(123);
+			// '\016'
+			case 14 -> _baseStats.getEffect(119);
+			// '\017'
+			case 15 -> _baseStats.getEffect(126);
+			default -> 0;
+		};
+		int cout = Constantes.getReqPtsToBoostStatsByClass(_classe, stat, value);
+        if(cout <= _capital) {
+            switch(stat) {
             case 11: // '\013'
                 if(_classe != 11)
                     _baseStats.addOneStat(125, 1);
@@ -1717,22 +1635,18 @@ public class Personaje {
 		_curCarte = carte;
 	}
 
-	public String parseObjetsToDB()
-	{
+	public String parseObjetsToDB() {
 		StringBuilder str = new StringBuilder();
 		if(_items.isEmpty())return "";
-		for(Entry<Integer, Objeto> entry : _items.entrySet())
-		{
+		for(Entry<Integer, Objeto> entry : _items.entrySet()) {
 			Objeto obj = entry.getValue();
 			str.append(obj.getGuid()).append("|");
 		}
 		return str.toString();
 	}
 	
-	public boolean addObjet(Objeto newObj, boolean stackIfSimilar)
-	{
-		for(Entry<Integer, Objeto> entry : _items.entrySet())
-		{
+	public boolean addObjet(Objeto newObj, boolean stackIfSimilar) {
+		for(Entry<Integer, Objeto> entry : _items.entrySet()) {
 			Objeto obj = entry.getValue();
 			if(obj.getTemplate().getID() == newObj.getTemplate().getID()
 				&& obj.getStats().isSameStats(newObj.getStats())
@@ -1750,16 +1664,18 @@ public class Personaje {
 		GestorSalida.GAME_SEND_OAKO_PACKET(this,newObj);
 		return true;
 	}
+
 	public void addObjet(Objeto newObj)
 	{
 		_items.put(newObj.getGuid(), newObj);
 	}
+
 	public Map<Integer, Objeto> getItems()
 	{
 		return _items;
 	}
-	public String parseItemToASK()
-	{
+
+	public String parseItemToASK() {
 		StringBuilder str = new StringBuilder();
 		if(_items.isEmpty())return "";
 		for(Objeto obj : _items.values())
@@ -1769,35 +1685,29 @@ public class Personaje {
 		return str.toString();
 	}
 
-	public String getBankItemsIDSplitByChar(String splitter)
-	{
+	public String getBankItemsIDSplitByChar(String splitter) {
 		StringBuilder str = new StringBuilder();
 		if(_compte.getBank().isEmpty())return "";
-		for(int entry : _compte.getBank().keySet())
-		{
+		for(int entry : _compte.getBank().keySet()) {
 			str.append(entry).append(splitter);
 		}
 		return str.toString();
 	}
 	
-	public String getItemsIDSplitByChar(String splitter)
-	{
+	public String getItemsIDSplitByChar(String splitter) {
 		StringBuilder str = new StringBuilder();
 		if(_items.isEmpty())return "";
-		for(int entry : _items.keySet())
-		{
+		for(int entry : _items.keySet()) {
 			if(str.length() != 0) str.append(splitter);
 			str.append(entry);
 		}
 		return str.toString();
 	}
 	
-	public String getStoreItemsIDSplitByChar(String splitter)
-	{
+	public String getStoreItemsIDSplitByChar(String splitter) {
 		StringBuilder str = new StringBuilder();
 		if(_storeItems.isEmpty())return "";
-		for(int entry : _storeItems.keySet())
-		{
+		for(int entry : _storeItems.keySet()) {
 			if(str.length() != 0) str.append(splitter);
 			str.append(entry);
 		}
@@ -1806,11 +1716,10 @@ public class Personaje {
 
 	public boolean hasItemGuid(int guid)
 	{
-		return _items.get(guid) != null?_items.get(guid).getQuantity()>0:false;
+		return _items.get(guid) != null && _items.get(guid).getQuantity() > 0;
 	}
 	
-	public void sellItem(int guid,int qua)
-	{
+	public void sellItem(int guid,int qua) {
 		if(qua <= 0)
 			return;
 		if(_items.get(guid).getQuantity() < qua)//Si il a moins d'item que ce qu'on veut Del
@@ -1840,23 +1749,20 @@ public class Personaje {
 	{
 		_items.remove(guid);
 	}
-	public void removeItem(int guid, int nombre,boolean send,boolean deleteFromWorld)
-	{
+
+	public void removeItem(int guid, int nombre,boolean send,boolean deleteFromWorld) {
 		Objeto obj = _items.get(guid);
 		
 		if(nombre > obj.getQuantity())
 			nombre = obj.getQuantity();
 		
-		if(obj.getQuantity() >= nombre)
-		{
+		if(obj.getQuantity() >= nombre) {
 			int newQua = obj.getQuantity() - nombre;
-			if(newQua >0)
-			{
+			if(newQua >0) {
 				obj.setQuantity(newQua);
 				if(send && _isOnline)
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this, obj);
-			}else
-			{
+			}else {
 				//on supprime de l'inventaire et du Monde
 				_items.remove(obj.getGuid());
 				if(deleteFromWorld)
@@ -1867,17 +1773,16 @@ public class Personaje {
 			}
 		}
 	}
-	public void deleteItem(int guid)
-	{
+
+	public void deleteItem(int guid) {
 		_items.remove(guid);
 		Mundo.removeItem(guid);
 	}
-	public Objeto getObjetByPos(int pos)
-	{
+
+	public Objeto getObjetByPos(int pos) {
 		if(pos == Constantes.ITEM_POS_NO_EQUIPED)return null;
 		
-		for(Entry<Integer, Objeto> entry : _items.entrySet())
-		{
+		for(Entry<Integer, Objeto> entry : _items.entrySet()) {
 			Objeto obj = entry.getValue();
 			if(obj.getPosition() == pos)
 				return obj;
@@ -1885,8 +1790,7 @@ public class Personaje {
 		return null;
 	}
 
-	public void refreshStats()
-	{
+	public void refreshStats() {
 		double actPdvPer = (100*(double)_PDV)/(double)_PDVMAX;
 		_PDVMAX = (_lvl-1)*5+ Constantes.getBasePdv(_classe)+getTotalStats().getEffect(Constantes.STATS_ADD_VITA);
 		_PDV = (int) Math.round(_PDVMAX*actPdvPer/100);
@@ -1987,7 +1891,7 @@ public class Personaje {
 			ArrayList<StatsMetier> list = new ArrayList<>();
 			list.add(sm);
 			
-			GestorSalida.GAME_SEND_Im_PACKET(this, "02;"+m.getId());
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "02;"+m.getId());
 			//packet JS
 			GestorSalida.GAME_SEND_JS_PACKET(this, list);
 			//packet JX
@@ -2026,26 +1930,24 @@ public class Personaje {
 	}
 	
 	public String parseToPM() {
-		StringBuilder str = new StringBuilder();
-		str.append(_GUID).append(";");
-		str.append(_name).append(";");
-		str.append(_gfxID).append(";");
-		str.append(_color1).append(";");
-		str.append(_color2).append(";");
-		str.append(_color3).append(";");
-		str.append(getGMStuffString()).append(";");
-		str.append(_PDV).append(",").append(_PDVMAX).append(";");
-		str.append(_lvl).append(";");
-		str.append(getInitiative()).append(";");
-		str.append(getTotalStats().getEffect(Constantes.STATS_ADD_PROS)).append(";");
-		str.append("0");//Side = ?
-		return str.toString();
+		String str = _GUID + ";" +
+				_name + ";" +
+				_gfxID + ";" +
+				_color1 + ";" +
+				_color2 + ";" +
+				_color3 + ";" +
+				getGMStuffString() + ";" +
+				_PDV + "," + _PDVMAX + ";" +
+				_lvl + ";" +
+				getInitiative() + ";" +
+				getTotalStats().getEffect(Constantes.STATS_ADD_PROS) + ";" +
+				"0";//Side = ?
+		return str;
 	}
 	
 	public int getNumbEquipedItemOfPanoplie(int panID) {
 		int nb = 0;
-		for(Entry<Integer, Objeto> i : _items.entrySet())
-		{
+		for(Entry<Integer, Objeto> i : _items.entrySet()) {
 			//On ignore les objets non équipés
 			if(i.getValue().getPosition() == Constantes.ITEM_POS_NO_EQUIPED)continue;
 			//On prend que les items de la pano demandée, puis on augmente le nombre si besoin
@@ -2060,7 +1962,7 @@ public class Personaje {
 		try {
 			cellID = Integer.parseInt(GA._args.split(";")[0]);
 			action = Integer.parseInt(GA._args.split(";")[1]);
-		}catch(Exception ignored){};
+		}catch(Exception ignored){}
 		if(cellID == -1 || action == -1)return;
 		//Si case invalide
 		if(!_curCarte.getCase(cellID).canDoAction(action))return;
@@ -2071,7 +1973,7 @@ public class Personaje {
 		int cellID = -1;
 		try {
 			cellID = Integer.parseInt(GA._args.split(";")[0]);
-		}catch(Exception ignored){};
+		}catch(Exception ignored){}
 		if(cellID == -1)return;
 		_curCarte.getCase(cellID).finishAction(this,GA);
 	}
@@ -2137,8 +2039,7 @@ public class Personaje {
 	
 	public int getCostoAbrirBanco() { return _compte.getBank().size(); }
 	
-	public String getStringVar(String str)
-	{
+	public String getStringVar(String str) {
 		//TODO completer
 		if(str.equals("name"))return _name;
 		if(str.equals("bankCost"))
@@ -2148,8 +2049,7 @@ public class Personaje {
 		return "";
 	}
 
-	public void setBankKamas(long i)
-	{
+	public void setBankKamas(long i) {
 		_compte.setBankKamas(i);
 		GestorSQL.actualizar_datos_cuenta(_compte);
 	}
@@ -2168,8 +2068,7 @@ public class Personaje {
 		return _isInBank;
 	}
 
-	public String parseBankPacket()
-	{
+	public String parseBankPacket() {
 		StringBuilder packet = new StringBuilder();
 		for(Entry<Integer, Objeto> entry : _compte.getBank().entrySet())
 			packet.append("O").append(entry.getValue().parseItem()).append(";");
@@ -2188,12 +2087,10 @@ public class Personaje {
 		_spellPts += pts;
 	}
 
-	public void addInBank(int guid, int qua)
-	{
+	public void addInBank(int guid, int qua) {
 		Objeto PersoObj = Mundo.getObjet(guid);
 		//Si le joueur n'a pas l'item dans son sac ...
-		if(_items.get(guid) == null)
-		{
+		if(_items.get(guid) == null) {
 			JuegoServidor.addToLog("Le joueur "+_name+" a tenter d'ajouter un objet en banque qu'il n'avait pas.");
 			return;
 		}
@@ -2205,8 +2102,7 @@ public class Personaje {
 		if(BankObj == null)//S'il n'y pas d'item du meme Template
 		{
 			//S'il ne reste pas d'item dans le sac
-			if(newQua <= 0)
-			{
+			if(newQua <= 0) {
 				//On enleve l'objet du sac du joueur
 				removeItem(PersoObj.getGuid());
 				//On met l'objet du sac dans la banque, avec la meme quantité
@@ -2215,8 +2111,7 @@ public class Personaje {
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, guid);
 				
-			}
-			else//S'il reste des objets au joueur
+			} else//S'il reste des objets au joueur
 			{
 				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
@@ -2234,8 +2129,7 @@ public class Personaje {
 		}else // S'il y avait un item du meme template
 		{
 			//S'il ne reste pas d'item dans le sac
-			if(newQua <= 0)
-			{
+			if(newQua <= 0) {
 				//On enleve l'objet du sac du joueur
 				removeItem(PersoObj.getGuid());
 				//On enleve l'objet du monde
@@ -2263,10 +2157,8 @@ public class Personaje {
 		GestorSQL.actualizar_datos_cuenta(_compte);
 	}
 
-	private Objeto getSimilarBankItem(Objeto obj)
-	{
-		for(Objeto value : _compte.getBank().values())
-		{
+	private Objeto getSimilarBankItem(Objeto obj) {
+		for(Objeto value : _compte.getBank().values()) {
 			if(value.getTemplate().getType() == 85)
 				continue;
 			if(value.getTemplate().getID() == obj.getTemplate().getID() && value.getStats().isSameStats(obj.getStats()))
@@ -2275,12 +2167,10 @@ public class Personaje {
 		return null;
 	}
 
-	public void removeFromBank(int guid, int qua)
-	{
+	public void removeFromBank(int guid, int qua) {
 		Objeto BankObj = Mundo.getObjet(guid);
 		//Si le joueur n'a pas l'item dans sa banque ...
-		if(_compte.getBank().get(guid) == null)
-		{
+		if(_compte.getBank().get(guid) == null) {
 			JuegoServidor.addToLog("Le joueur "+_name+" a tenter de retirer un objet en banque qu'il n'avait pas.");
 			return;
 		}
@@ -2292,8 +2182,7 @@ public class Personaje {
 		if(PersoObj == null)//Si le joueur n'avait aucun item similaire
 		{
 			//S'il ne reste rien en banque
-			if(newQua <= 0)
-			{
+			if(newQua <= 0) {
 				//On retire l'item de la banque
 				_compte.getBank().remove(guid);
 				//On l'ajoute au joueur
@@ -2321,12 +2210,9 @@ public class Personaje {
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				
 			}
-		}
-		else
-		{
+		} else {
 			//S'il ne reste rien en banque
-			if(newQua <= 0)
-			{
+			if(newQua <= 0) {
 				//On retire l'item de la banque
 				_compte.getBank().remove(BankObj.getGuid());
 				Mundo.removeItem(BankObj.getGuid());
@@ -2338,8 +2224,7 @@ public class Personaje {
 				String str = "O-"+guid;
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				
-			}
-			else//S'il reste des objets en banque
+			} else//S'il reste des objets en banque
 			{
 				//On retire X objet de la banque
 				BankObj.setQuantity(newQua);
@@ -2357,17 +2242,15 @@ public class Personaje {
 		GestorSQL.actualizar_datos_cuenta(_compte);
 	}
 
-	public void openMountPark()
-	{
-		if(getDeshonor() >= 5) 
-		{
-			GestorSalida.GAME_SEND_Im_PACKET(this, "183");
+	public void openMountPark() {
+		if(getDeshonor() >= 5) {
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "183");
 			return;
 		}
 		
 		_inMountPark = _curCarte.getMountPark();
 		_away = true;
-		String str = _inMountPark.parseData(get_GUID(), (_inMountPark.get_owner()==-1?true:false));
+		String str = _inMountPark.parseData(get_GUID(), (_inMountPark.get_owner() == -1));
 		
 		if(_inMountPark.get_owner() == -1 || _inMountPark.get_owner() == this.get_GUID())//Public ou le proprio
 		{
@@ -2378,16 +2261,14 @@ public class Personaje {
 				getGuildMember().canDo(Constantes.G_USEENCLOS))//Meme guilde + droits
 		{
 			GestorSalida.GAME_SEND_ECK_PACKET(this, 16, str);
-		}else
-		{
-			GestorSalida.GAME_SEND_Im_PACKET(this, "1101");
+		}else {
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "1101");
 			_inMountPark = null;
 			_away = false;
 		}
 	}
 	
-	public void leftMountPark()
-	{
+	public void leftMountPark() {
 		if(_inMountPark == null)return;
 		_inMountPark = null;
 	}
@@ -2402,35 +2283,28 @@ public class Personaje {
 		_PDV = _PDVMAX;
 	}
 
-	public void warpToSavePos()
-	{
-		try
-		{
+	public void warpToSavePos() {
+		try {
 			String[] infos = _savePos.split(",");
 			teletransportar(Short.parseShort(infos[0]), Integer.parseInt(infos[1]));
-		}catch(Exception e){};
+		}catch(Exception ignored){}
 	}
 	
-	public void removeByTemplateID(int tID, int count)
-	{
+	public void removeByTemplateID(int tID, int count) {
 		//Copie de la liste pour eviter les modif concurrentes
-		ArrayList<Objeto> list = new ArrayList<>();
-		list.addAll(_items.values());
+		ArrayList<Objeto> list = new ArrayList<>(_items.values());
 		
 		ArrayList<Objeto> remove = new ArrayList<>();
 		int tempCount = count;
 		
 		//on verifie pour chaque objet
-		for(Objeto obj : list)
-		{
+		for(Objeto obj : list) {
 			//Si mauvais TemplateID, on passe
 			if(obj.getTemplate().getID() != tID)continue;
 			
-			if(obj.getQuantity() >= count)
-			{
+			if(obj.getQuantity() >= count) {
 				int newQua = obj.getQuantity() - count;
-				if(newQua >0)
-				{
+				if(newQua >0) {
 					obj.setQuantity(newQua);
 					if(_isOnline)
 						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this, obj);
@@ -2447,19 +2321,16 @@ public class Personaje {
 			}
 			else//Si pas assez d'objet
 			{
-				if(obj.getQuantity() >= tempCount)
-				{
+				if(obj.getQuantity() >= tempCount) {
 					int newQua = obj.getQuantity() - tempCount;
-					if(newQua > 0)
-					{
+					if(newQua > 0) {
 						obj.setQuantity(newQua);
 						if(_isOnline)
 							GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this, obj);
 					}
 					else remove.add(obj);
 					
-					for(Objeto o : remove)
-					{
+					for(Objeto o : remove) {
 						//on supprime de l'inventaire et du Monde
 						_items.remove(o.getGuid());
 						Mundo.removeItem(o.getGuid());
@@ -2467,8 +2338,7 @@ public class Personaje {
 						if(_isOnline)
 							GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, o.getGuid());
 					}
-				}else
-				{
+				}else {
 					// on réduit le compteur
 					tempCount -= obj.getQuantity();
 					remove.add(obj);
@@ -2482,37 +2352,31 @@ public class Personaje {
 		return _metiers;
 	}
 
-	public void doJobAction(int actionID, InteractiveObject object, GameAction GA,Case cell)
-	{
+	public void doJobAction(int actionID, InteractiveObject object, GameAction GA,Case cell) {
 		StatsMetier SM = getMetierBySkill(actionID);
 		if(SM == null)return;
 		SM.startAction(actionID,this, object,GA,cell);
 	}
-	public void finishJobAction(int actionID, InteractiveObject object, GameAction GA,Case cell)
-	{
+
+	public void finishJobAction(int actionID, InteractiveObject object, GameAction GA,Case cell) {
 		StatsMetier SM = getMetierBySkill(actionID);
 		if(SM == null)return;
 		SM.endAction(actionID,this, object,GA,cell);
 	}
 
-	public String parseJobData()
-	{
+	public String parseJobData() {
 		StringBuilder str = new StringBuilder();
 		if(_metiers.isEmpty())return "";
-		for(StatsMetier SM : _metiers.values())
-		{
+		for(StatsMetier SM : _metiers.values()) {
 			if(str.length() >0)str.append(";");
 			str.append(SM.getTemplate().getId()).append(",").append(SM.getXp());
 		}
 		return str.toString();
 	}
 	
-	public int totalJobBasic()
-	{
+	public int totalJobBasic() {
 		int i=0;
-
-		for(StatsMetier SM : _metiers.values())
-		{
+		for(StatsMetier SM : _metiers.values()) {
 			// Si c'est un métier 'basic' :
 			if(SM.getTemplate().getId() == 	2 || SM.getTemplate().getId() == 11 ||
 			   SM.getTemplate().getId() == 13 || SM.getTemplate().getId() == 14 ||
@@ -2524,28 +2388,23 @@ public class Personaje {
 			   SM.getTemplate().getId() == 28 || SM.getTemplate().getId() == 31 ||
 			   SM.getTemplate().getId() == 36 || SM.getTemplate().getId() == 41 ||
 			   SM.getTemplate().getId() == 56 || SM.getTemplate().getId() == 58 ||
-			   SM.getTemplate().getId() == 60 || SM.getTemplate().getId() == 65)
-			{
-			i++;
+			   SM.getTemplate().getId() == 60 || SM.getTemplate().getId() == 65) {
+				i++;
 			}
 		}
 		return i;
 	}
 	
-	public int totalJobFM()
-	{
+	public int totalJobFM() {
 		int i=0;
-
-		for(StatsMetier SM : _metiers.values())
-		{
+		for(StatsMetier SM : _metiers.values()) {
 			// Si c'est une spécialisation 'FM' :
 			if(SM.getTemplate().getId() == 	43 || SM.getTemplate().getId() == 44 ||
 			   SM.getTemplate().getId() == 45 || SM.getTemplate().getId() == 46 ||
 			   SM.getTemplate().getId() == 47 || SM.getTemplate().getId() == 48 ||
 			   SM.getTemplate().getId() == 49 || SM.getTemplate().getId() == 50 ||
 			   SM.getTemplate().getId() == 62 || SM.getTemplate().getId() == 63 ||
-			   SM.getTemplate().getId() == 64)
-			{
+			   SM.getTemplate().getId() == 64) {
 			i++;
 			}
 		}
@@ -2569,25 +2428,21 @@ public class Personaje {
 		return _curJobAction;
 	}
 
-	public StatsMetier getMetierBySkill(int skID)
-	{
+	public StatsMetier getMetierBySkill(int skID) {
 		for(StatsMetier SM : _metiers.values())
 			if(SM.isValidMapAction(skID))return SM;
 		return null;
 	}
 
-	public String parseToFriendList(int guid)
-	{
+	public String parseToFriendList(int guid) {
 		StringBuilder str = new StringBuilder();
 		str.append(";");
 		str.append("?;");//FIXME
 		str.append(_name).append(";");
-		if(_compte.isFriendWith(guid))
-		{
+		if(_compte.isFriendWith(guid)) {
 			str.append(_lvl).append(";");
 			str.append(_align).append(";");
-		}else
-		{
+		}else {
 			str.append("?;");
 			str.append("-1;");
 		}
@@ -2597,18 +2452,15 @@ public class Personaje {
 		return str.toString();
 	}
 	
-	public String parseToEnemyList(int guid)
-	{
+	public String parseToEnemyList(int guid) {
 		StringBuilder str = new StringBuilder();
 		str.append(";");
 		str.append("?;");//FIXME
 		str.append(_name).append(";");
-		if(_compte.isFriendWith(guid))
-		{
+		if(_compte.isFriendWith(guid)) {
 			str.append(_lvl).append(";");
 			str.append(_align).append(";");
-		}else
-		{
+		}else {
 			str.append("?;");
 			str.append("-1;");
 		}
@@ -2618,8 +2470,7 @@ public class Personaje {
 		return str.toString();
 	}
 
-	public StatsMetier getMetierByID(int job)
-	{
+	public StatsMetier getMetierByID(int job) {
 		for(StatsMetier SM : _metiers.values())if(SM.getTemplate().getId() == job)return SM;
 		return null;
 	}
@@ -2628,27 +2479,25 @@ public class Personaje {
 	{
 		return _onMount;
 	}
-	public void toogleOnMount()
-	{
+
+	public void toogleOnMount() {
 		_onMount = !_onMount;
 		Objeto obj = getObjetByPos(Constantes.ITEM_POS_FAMILIER);
-		if(_onMount && obj != null)
-		{
+		if(_onMount && obj != null) {
 			obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 			GestorSalida.GAME_SEND_OBJET_MOVE_PACKET(this, obj);
 		}
 		//on envoie les packets
-		if(get_fight() != null && get_fight().get_state() == 2)
-		{
+		if(get_fight() != null && get_fight().get_state() == 2) {
 			GestorSalida.GAME_SEND_ALTER_FIGHTER_MOUNT(get_fight(), get_fight().getFighterByPerso(this), get_GUID(), get_fight().getTeamID(get_GUID()), get_fight().getOtherTeamID(get_GUID()));
-		}else
-		{
+		}else {
 			GestorSalida.GAME_SEND_ALTER_GM_PACKET(_curCarte,this);
 		}
 		GestorSalida.GAME_SEND_Re_PACKET(this, "+", _mount);
 		GestorSalida.GAME_SEND_Rr_PACKET(this,_onMount?"+":"-");
 		GestorSalida.GAME_SEND_STATS_PACKET(this);
 	}
+
 	public int getMountXpGive()
 	{
 		return _mountXpGive;
@@ -2669,8 +2518,7 @@ public class Personaje {
 		_mountXpGive = parseInt;
 	}
 	
-	public void resetVars()
-	{
+	public void resetVars() {
 		_isTradingWith = 0;
 		_isTalkingWith = 0;
 		_away = false;
@@ -2699,21 +2547,18 @@ public class Personaje {
 		_isGhosts = false;
 	}
 	
-	public void addChanel(String chan)
-	{
+	public void addChanel(String chan) {
 		if(_canaux.contains(chan))return;
 		_canaux += chan;
 		GestorSalida.GAME_SEND_cC_PACKET(this, '+', chan);
 	}
 	
-	public void removeChanel(String chan)
-	{
+	public void removeChanel(String chan) {
 		_canaux = _canaux.replace(chan, "");
 		GestorSalida.GAME_SEND_cC_PACKET(this, '-', chan);
 	}
 
-	public void modifAlignement(byte a)
-	{
+	public void modifAlignement(byte a) {
 		//Reset Variables
 		_honor = 0;
 		_deshonor = 0;
@@ -2758,39 +2603,34 @@ public class Personaje {
 		return _aLvl;
 	}
 
-	public void toggleWings(char c)
-	{
+	public void toggleWings(char c) {
 		if(_align == Constantes.ALIGNEMENT_NEUTRE)return;
 		int hloose = _honor*5/100;//FIXME: perte de X% honneur
-		switch(c)
-		{
-		case '*':
-			GestorSalida.GAME_SEND_GIP_PACKET(this,hloose);
-		return;
-		case '+':
-			setShowWings(true);
-			GestorSalida.GAME_SEND_STATS_PACKET(this);
-			GestorSQL.guardar_personaje(this, false);
-		break;
-		case '-':
-			setShowWings(false);
-			_honor -= hloose;
-			GestorSalida.GAME_SEND_STATS_PACKET(this);
-			GestorSQL.guardar_personaje(this, false);
-		break;
+		switch (c) {
+			case '*' -> {
+				GestorSalida.GAME_SEND_GIP_PACKET(this, hloose);
+				return;
+			}
+			case '+' -> {
+				setShowWings(true);
+				GestorSalida.GAME_SEND_STATS_PACKET(this);
+				GestorSQL.guardar_personaje(this, false);
+			}
+			case '-' -> {
+				setShowWings(false);
+				_honor -= hloose;
+				GestorSalida.GAME_SEND_STATS_PACKET(this);
+				GestorSQL.guardar_personaje(this, false);
+			}
 		}
 		//SocketManager.GAME_SEND_ALTER_GM_PACKET(_curCarte, this);
 	}
 
-	public void addHonor(int winH)
-	{
+	public void addHonor(int winH) {
 		int g = getGrade();
 		_honor += winH;
 		//Changement de grade
-		if(getGrade() != g)
-		{
-			//TODO: Message IG
-		}
+		getGrade();//TODO: Message IG
 	}
 
 	public GuildMember getGuildMember()
@@ -2807,19 +2647,18 @@ public class Personaje {
 	{
 		_compte = c;
 	}
+
 	public String parseZaapList()//Pour le packet WC
 	{
 		String map = _curCarte.get_id()+"";
-		try
-		{
+		try {
 			map = _savePos.split(",")[0];
-		}catch(Exception e){};
-		
+		}catch(Exception ignored){}
+
 		StringBuilder str = new StringBuilder();
 		str.append(map);
 		int SubAreaID = _curCarte.getSubArea().get_area().get_superArea().get_id();
-		for(short i : _zaaps)
-		{
+		for(short i : _zaaps) {
 			if(Mundo.getCarte(i) == null)continue;
 			if(Mundo.getCarte(i).getSubArea().get_area().get_superArea().get_id() != SubAreaID)continue;
 			int cost = Formulas.calculZaapCost(_curCarte, Mundo.getCarte(i));
@@ -2828,33 +2667,31 @@ public class Personaje {
 		}
 		return str.toString();
 	}
-	public boolean hasZaap(int mapID)
-	{
+
+	public boolean hasZaap(int mapID) {
 		for(int i : _zaaps)if( i == mapID)return true;
 		return false;
 	}
 
-	public void openZaapMenu()
-	{
+	public void openZaapMenu() {
 		if(this._fight == null)//On ouvre si il n'est pas en combat
 		{
-			if(getDeshonor() >= 3) 
-			{
-				GestorSalida.GAME_SEND_Im_PACKET(this, "183");
+			if(getDeshonor() >= 3) {
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "183");
 				return;
 			}
 			_isZaaping = true;
 			if(!hasZaap(_curCarte.get_id()))//Si le joueur ne connaissait pas ce zaap
 			{
 				_zaaps.add(_curCarte.get_id());
-				GestorSalida.GAME_SEND_Im_PACKET(this, "024");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "024");
 				GestorSQL.guardar_personaje(this, false);
 			}
 			GestorSalida.GAME_SEND_WC_PACKET(this);
 		}
 	}
-	public void useZaap(short id)
-	{
+
+	public void useZaap(short id) {
 		if(!_isZaaping)return;//S'il n'a pas ouvert l'interface Zaap(hack?)
 		if(_fight != null) return;//Si il combat
 		if(!hasZaap(id))return;//S'il n'a pas le zaap demandé(ne devrais pas arriver)
@@ -2863,26 +2700,22 @@ public class Personaje {
 		short mapID = id;
 		int SubAreaID = _curCarte.getSubArea().get_area().get_superArea().get_id();
 		int cellID = Mundo.getZaapCellIdByMapId(id);
-		if(Mundo.getCarte(mapID) == null)
-		{
+		if(Mundo.getCarte(mapID) == null) {
 			JuegoServidor.addToLog("La map "+id+" n'est pas implantee, Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
-		if(Mundo.getCarte(mapID).getCase(cellID) == null)
-		{
+		if(Mundo.getCarte(mapID).getCase(cellID) == null) {
 			JuegoServidor.addToLog("La cellule associee au zaap "+id+" n'est pas implantee, Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
-		if(!Mundo.getCarte(mapID).getCase(cellID).isWalkable(true))
-		{
+		if(!Mundo.getCarte(mapID).getCase(cellID).isWalkable(true)) {
 			JuegoServidor.addToLog("La cellule associee au zaap "+id+" n'est pas 'walkable', Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
-		if(Mundo.getCarte(mapID).getSubArea().get_area().get_superArea().get_id() != SubAreaID)
-		{
+		if(Mundo.getCarte(mapID).getSubArea().get_area().get_superArea().get_id() != SubAreaID) {
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
@@ -2892,41 +2725,36 @@ public class Personaje {
 		GestorSalida.GAME_SEND_WV_PACKET(this);//On ferme l'interface Zaap
 		_isZaaping = false;
 	}
-	public String parseZaaps()
-	{
+
+	public String parseZaaps() {
 		StringBuilder str = new StringBuilder();
 		boolean first = true;
 		
 		if(_zaaps.isEmpty())return "";
-		for(int i : _zaaps)
-		{
+		for(int i : _zaaps) {
 			if(!first) str.append(",");
 			first = false;
 			str.append(i);
 		}
 		return str.toString();
 	}
-	public void stopZaaping()
-	{
+
+	public void stopZaaping() {
 		if(!_isZaaping)return;
 		_isZaaping = false;
 		GestorSalida.GAME_SEND_WV_PACKET(this);
 	}
 	
-	public void Zaapi_close()
-	{
+	public void Zaapi_close() {
 		if(!_isZaaping)return;
 		_isZaaping = false;
 		GestorSalida.GAME_SEND_CLOSE_ZAAPI_PACKET(this);
 	}
 	
-	public void Zaapi_use(String packet)
-	{
-		Mapa map = Mundo.getCarte(Short.valueOf(packet.substring(2)));
-	
+	public void Zaapi_use(String packet) {
+		Mapa map = Mundo.getCarte(Short.parseShort(packet.substring(2)));
 		short idcelula = 100;
-		if (map != null)
-		{
+		if (map != null) {
 			for (Entry<Integer, Case> entry  : map.GetCases().entrySet())
 			{
 			InteractiveObject obj = entry.getValue().getObject();
@@ -2946,15 +2774,13 @@ public class Personaje {
 		price = 10;
 		_kamas -= price;
 		GestorSalida.GAME_SEND_STATS_PACKET(this);
-		this.teletransportar(Short.valueOf(packet.substring(2)), idcelula);
+		this.teletransportar(Short.parseShort(packet.substring(2)), idcelula);
 		GestorSalida.GAME_SEND_CLOSE_ZAAPI_PACKET(this);
 		}
 	}
 		
-	public boolean hasItemTemplate(int i, int q)
-	{
-		for(Objeto obj : _items.values())
-		{
+	public boolean hasItemTemplate(int i, int q) {
+		for(Objeto obj : _items.values()) {
 			if(obj.getPosition() != Constantes.ITEM_POS_NO_EQUIPED)continue;
 			if(obj.getTemplate().getID() != i)continue;
 			if(obj.getQuantity() >= q)return true;
@@ -2964,7 +2790,6 @@ public class Personaje {
 
 	public void SetZaaping(boolean zaaping) {
 		_isZaaping = zaaping;
-		
 	}
 	
 	public void setisForgetingSpell(boolean isForgetingSpell) {
@@ -2975,13 +2800,11 @@ public class Personaje {
 		return _isForgetingSpell;
 	}
 	
-	public boolean isDispo(Personaje sender)
-	{
+	public boolean isDispo(Personaje sender) {
 		if(_isAbsent)
 			return false;
 		
-		if(_isInvisible)
-		{
+		if(_isInvisible) {
 			return _compte.isFriendWith(sender.get_compte().get_GUID());
 		}
 		
@@ -3028,8 +2851,7 @@ public class Personaje {
 		_lastPacketTime = System.currentTimeMillis();
 	}
 	
-	public static Personaje ClonePerso(Personaje P, int id)
-	{	
+	public static Personaje ClonePerso(Personaje P, int id) {
 		TreeMap<Integer,Integer> stats = new TreeMap<>();
 		stats.put(Constantes.STATS_ADD_VITA, P.get_baseStats().getEffect(Constantes.STATS_ADD_VITA));
 		stats.put(Constantes.STATS_ADD_FORC, P.get_baseStats().getEffect(Constantes.STATS_ADD_FORC));
@@ -3049,14 +2871,12 @@ public class Personaje {
 		
 		byte showWings = 0;
 		int alvl = 0;
-		if(P.get_align() != 0 && P._showWings)
-		{
+		if(P.get_align() != 0 && P._showWings) {
 			showWings = 1;
 			alvl = P.getGrade();
 		}
 		int mountID = -1;
-		if(P.getMount() != null)
-		{
+		if(P.getMount() != null) {
 			mountID = P.getMount().get_id();
 		}
 		
@@ -3081,15 +2901,13 @@ public class Personaje {
 				);
 		
 		Clone.set_isClone(true);
-		if(P._onMount)
-		{
+		if(P._onMount) {
 			Clone._onMount = true;
 		}
 		return Clone;
 	}
 	
-	public void VerifAndChangeItemPlace()
-	{
+	public void VerifAndChangeItemPlace() {
 		boolean isFirstAM = true;
 		boolean isFirstAN = true;
 		boolean isFirstANb = true;
@@ -3106,181 +2924,117 @@ public class Personaje {
 		boolean isFirstDe = true;
 		boolean isFirstDf = true;
 		boolean isFirstFA = true;
-		for(Objeto obj : _items.values())
-		{
+		for(Objeto obj : _items.values()) {
 			if(obj.getPosition() == Constantes.ITEM_POS_NO_EQUIPED)continue;
-			if(obj.getPosition() == Constantes.ITEM_POS_AMULETTE)
-			{
-				if(isFirstAM)
-				{
+			if(obj.getPosition() == Constantes.ITEM_POS_AMULETTE) {
+				if(isFirstAM) {
 					isFirstAM = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_ANNEAU1)
-			{
-				if(isFirstAN)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_ANNEAU1) {
+				if(isFirstAN) {
 					isFirstAN = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_ANNEAU2)
-			{
-				if(isFirstANb)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_ANNEAU2) {
+				if(isFirstANb) {
 					isFirstANb = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_ARME)
-			{
-				if(isFirstAR)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_ARME) {
+				if(isFirstAR) {
 					isFirstAR = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_BOTTES)
-			{
-				if(isFirstBO)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_BOTTES) {
+				if(isFirstBO) {
 					isFirstBO = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_BOUCLIER)
-			{
-				if(isFirstBOb)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_BOUCLIER) {
+				if(isFirstBOb) {
 					isFirstBOb = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_CAPE)
-			{
-				if(isFirstCA)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_CAPE) {
+				if(isFirstCA) {
 					isFirstCA = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_CEINTURE)
-			{
-				if(isFirstCE)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_CEINTURE) {
+				if(isFirstCE) {
 					isFirstCE = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_COIFFE)
-			{
-				if(isFirstCO)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_COIFFE) {
+				if(isFirstCO) {
 					isFirstCO = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS1)
-			{
-				if(isFirstDa)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS1) {
+				if(isFirstDa) {
 					isFirstDa = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS2)
-			{
-				if(isFirstDb)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS2) {
+				if(isFirstDb) {
 					isFirstDb = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS3)
-			{
-				if(isFirstDc)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS3) {
+				if(isFirstDc) {
 					isFirstDc = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS4)
-			{
-				if(isFirstDd)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS4) {
+				if(isFirstDd) {
 					isFirstDd = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS5)
-			{
-				if(isFirstDe)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS5) {
+				if(isFirstDe) {
 					isFirstDe = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS6)
-			{
-				if(isFirstDf)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_DOFUS6) {
+				if(isFirstDf) {
 					isFirstDf = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
-			}
-			else if(obj.getPosition() == Constantes.ITEM_POS_FAMILIER)
-			{
-				if(isFirstFA)
-				{
+			} else if(obj.getPosition() == Constantes.ITEM_POS_FAMILIER) {
+				if(isFirstFA) {
 					isFirstFA = false;
-				}else
-				{
+				}else {
 					obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 				}
 				continue;
@@ -3345,10 +3099,10 @@ public class Personaje {
 		{
 			if(p.get_sexe() == 0)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(this, "178");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "178");
 			}else
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(this, "179");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "179");
 			}
 			return;
 		}
@@ -3358,10 +3112,10 @@ public class Personaje {
 		{
 			if(p.get_sexe() == 0)
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(this, "141");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "141");
 			}else
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(this, "142");
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "142");
 			}
 			return;
 		}
@@ -3372,7 +3126,7 @@ public class Personaje {
 	public void Divorce()
 	{
 		if(isOnline())
-			GestorSalida.GAME_SEND_Im_PACKET(this, "047;"+ Mundo.getPersonnage(_wife).get_name());
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "047;"+ Mundo.getPersonnage(_wife).get_name());
 		
 		_wife = 0;
 		GestorSQL.guardar_personaje(this, true);

@@ -20,16 +20,16 @@ import comunes.Mundo.*;
 
 public class Monstruo
 {
-	private int ID;
-	private int gfxID;
-	private int align;
-	private String colors;
+	private final int ID;
+	private final int gfxID;
+	private final int align;
+	private final String colors;
 	private int IAType = 0;
-	private int minKamas;
-	private int maxKamas;
-	private Map<Integer,MobGrade> grades = new TreeMap<>();
-	private ArrayList<Drop> drops = new ArrayList<>();
-	private boolean isCapturable;
+	private final int minKamas;
+	private final int maxKamas;
+	private final Map<Integer,MobGrade> grades = new TreeMap<>();
+	private final ArrayList<Drop> drops = new ArrayList<>();
+	private final boolean isCapturable;
 	private boolean isApprivoisable;
 	private boolean ThereAreThree;
 	private boolean ThereAreAmandDore;
@@ -41,16 +41,16 @@ public class Monstruo
 	
 	public static class MobGroup
 	{
-		private int id;
+		private final int id;
 		private int cellID;
 		private int orientation = 2;
 		private int align = -1;
 		private int aggroDistance = 0;
 		private boolean isFix = false;
-		private Map<Integer,MobGrade> _Mobs = new TreeMap<>();
+		private final Map<Integer,MobGrade> _Mobs = new TreeMap<>();
 		private String condition = "";
 		private Timer _condTimer;
-		private long _creationDate;
+		private final long _creationDate;
 
 		public MobGroup(int Aid, int Aalign, ArrayList<MobGrade> possibles, Mapa Map, int cell, int maxSize)
 		{
@@ -217,7 +217,7 @@ public class Monstruo
 					//On prend un grade au hasard entre 0 et size -1 parmis les mobs possibles
 					_Mobs.put(guid, mgs.get(Formulas.getRandomValue(0, mgs.size()-1)));
 					guid--;
-				}catch(Exception e){continue;};
+				}catch(Exception e){continue;}
 			}
 			orientation = (Formulas.getRandomValue(0, 3)*2)+1;
 		}
@@ -333,7 +333,7 @@ public class Monstruo
 			try
 			{
 				this._condTimer.cancel();
-			}catch(Exception e)
+			}catch(Exception ignored)
 			{
 				
 			}
@@ -354,18 +354,18 @@ public class Monstruo
 	
 	public static class MobGrade
 	{
-		private Monstruo template;
-		private int grade;
-		private int level;
+		private final Monstruo template;
+		private final int grade;
+		private final int level;
 		private int PDV;
 		private int inFightID;
 		private int PDVMAX;
 		private int init;
-		private int PA;
-		private int PM;
+		private final int PA;
+		private final int PM;
 		private Case fightCell;
 		private int baseXp = 10;
-		private ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<>();
+		private final ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<>();
 		private Map<Integer,Integer> stats = new TreeMap<>();
 		private Map<Integer,SortStats> spells = new TreeMap<>();
 		
@@ -397,8 +397,8 @@ public class Monstruo
 				intell = Integer.parseInt(statsArray[2]);
 				chance = Integer.parseInt(statsArray[3]);
 				agilite = Integer.parseInt(statsArray[4]);
-			}catch(Exception e){e.printStackTrace();};
-			
+			}catch(Exception e){e.printStackTrace();}
+
 			stats.clear();
 			stats.put(Constantes.STATS_ADD_FORC, force);
 			stats.put(Constantes.STATS_ADD_SAGE, sagesse);
@@ -425,7 +425,7 @@ public class Monstruo
 				{
 					spellID = Integer.parseInt(spellInfo[0]);
 					spellLvl = Integer.parseInt(spellInfo[1]);
-				}catch(Exception e){continue;};
+				}catch(Exception e){continue;}
 				if(spellID == 0 || spellLvl == 0)continue;
 				
 				Hechizos sort = Mundo.getSort(spellID);
@@ -590,7 +590,7 @@ public class Monstruo
 				{
 					pdvmax = Integer.parseInt(aPdvs.split("\\|")[n]);
 					init = Integer.parseInt(aInit.split("\\|")[n]);
-				}catch(Exception e){};
+				}catch(Exception ignored){}
 				//PA / PM
 				int PA = 3;
 				int PM = 3;
@@ -601,16 +601,16 @@ public class Monstruo
 					try
 					{
 						PA = Integer.parseInt(pts[0]);
-					}catch(Exception e1){};
+					}catch(Exception ignored){}
 					try
 					{
 						PM = Integer.parseInt(pts[1]);
-					}catch(Exception e1){};
+					}catch(Exception ignored){}
 					try
 					{
 						xp = Integer.parseInt(xpstr.split("\\|")[n]);
-					}catch(Exception e1){e1.printStackTrace();};
-				}catch(Exception e){e.printStackTrace();};
+					}catch(Exception e1){e1.printStackTrace();}
+				}catch(Exception e){e.printStackTrace();}
 				grades.put
 					(G,
 						new MobGrade
@@ -629,7 +629,7 @@ public class Monstruo
 						)
 					);
 				G++;
-			}catch(Exception e){continue;};	
+			}catch(Exception e){continue;}
 		}	
 	}
 	

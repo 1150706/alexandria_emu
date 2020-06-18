@@ -2,12 +2,12 @@ package objetos;
 
 public class Animaciones {
 	
-	private int ID;
-	private int AnimationId;
-	private String AnimationName;
-	private int AnimationArea;
-	private int AnimationAction;
-	private int AnimationSize;
+	private final int ID;
+	private final int AnimationId;
+	private final String AnimationName;
+	private final int AnimationArea;
+	private final int AnimationAction;
+	private final int AnimationSize;
 	
 	public Animaciones(int Id, int AnimId, String Name, int Area, int Action, int Size)
 	{
@@ -51,9 +51,7 @@ public class Animaciones {
 	
 	public static String PrepareToGA(Animaciones animation)
 	{
-		StringBuilder Packet = new StringBuilder();
-		Packet.append(animation.getAnimationId()).append(",").append(animation.getArea()).append(",").append(animation.getAction()).append(",").append(animation.getSize());
-		return Packet.toString();
+		return animation.getAnimationId() + "," + animation.getArea() + "," + animation.getAction() + "," + animation.getSize();
 	}
 	
 }

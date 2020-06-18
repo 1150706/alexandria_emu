@@ -30,9 +30,9 @@ import objetos.Objeto.ObjTemplate;
 
 
 public class Comandos {
-	Cuenta _compte;
-	Personaje _perso;
-	PrintWriter _out;
+	final Cuenta _compte;
+	final Personaje _perso;
+	final PrintWriter _out;
 	//Guardado
 	private boolean _TimerStart = false;
 	Timer _timer;
@@ -47,10 +47,10 @@ public class Comandos {
 	        	Time = Time-1;
 	        	if(Time == 1)
 	        	{
-	        		GestorSalida.GAME_SEND_Im_PACKET_TO_ALL("115;"+Time+" minuto");
+	        		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("115;"+Time+" minuto");
 	        	}else
 	        	{
-		        	GestorSalida.GAME_SEND_Im_PACKET_TO_ALL("115;"+Time+" minutos");
+		        	GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("115;"+Time+" minutos");
 	        	}
 	        	if(Time <= 0)
 	        	{
@@ -157,7 +157,7 @@ public class Comandos {
                     GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Chargement terminé");
 
             }
-            catch(Exception exception) { }
+            catch(Exception ignored) { }
             return;
     }else if(command.equalsIgnoreCase("MAPINFO"))
 		{
@@ -192,46 +192,21 @@ public class Comandos {
 				Personaje P = GT.getPerso();
 				if(P == null)continue;
 				mess = P.get_name()+"("+P.get_GUID()+") ";
-				
-				switch(P.get_classe()) {
-					case Constantes.CLASS_FECA:
-						mess += "Fec";
-					break;
-					case Constantes.CLASS_OSAMODAS:
-						mess += "Osa";
-					break;
-					case Constantes.CLASS_ENUTROF:
-						mess += "Enu";
-					break;
-					case Constantes.CLASS_SRAM:
-						mess += "Sra";
-					break;
-					case Constantes.CLASS_XELOR:
-						mess += "Xel";
-					break;
-					case Constantes.CLASS_ECAFLIP:
-						mess += "Eca";
-					break;
-					case Constantes.CLASS_ENIRIPSA:
-						mess += "Eni";
-					break;
-					case Constantes.CLASS_IOP:
-						mess += "Iop";
-					break;
-					case Constantes.CLASS_CRA:
-						mess += "Cra";
-					break;
-					case Constantes.CLASS_SADIDA:
-						mess += "Sad";
-					break;
-					case Constantes.CLASS_SACRIEUR:
-						mess += "Sac";
-					break;
-					case Constantes.CLASS_PANDAWA:
-						mess += "Pan";
-					break;
-					default:
-						mess += "Unk";
+
+				switch (P.get_classe()) {
+					case Constantes.CLASS_FECA -> mess += "Fec";
+					case Constantes.CLASS_OSAMODAS -> mess += "Osa";
+					case Constantes.CLASS_ENUTROF -> mess += "Enu";
+					case Constantes.CLASS_SRAM -> mess += "Sra";
+					case Constantes.CLASS_XELOR -> mess += "Xel";
+					case Constantes.CLASS_ECAFLIP -> mess += "Eca";
+					case Constantes.CLASS_ENIRIPSA -> mess += "Eni";
+					case Constantes.CLASS_IOP -> mess += "Iop";
+					case Constantes.CLASS_CRA -> mess += "Cra";
+					case Constantes.CLASS_SADIDA -> mess += "Sad";
+					case Constantes.CLASS_SACRIEUR -> mess += "Sac";
+					case Constantes.CLASS_PANDAWA -> mess += "Pan";
+					default -> mess += "Unk";
 				}
 				mess += " ";
 				mess += (P.get_sexe()==0?"M":"F")+" ";
@@ -265,11 +240,11 @@ public class Comandos {
 			try
 			{
 				team0 = p[0];
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			try
 			{
 				team1 = p[1];
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			mess = "Team 0:\n";
 			for(int a = 0;a <= team0.length()-2; a+=2)
 			{
@@ -325,8 +300,8 @@ public class Comandos {
 			try
 			{
 				name = infos[1];
-			}catch(Exception e){};
-			
+			}catch(Exception ignored){}
+
 			perso = Mundo.getPersoByName(name);
 			
 			if(perso == null)
@@ -462,7 +437,7 @@ public class Comandos {
 			{
 				mapID = Short.parseShort(infos[1]);
 				cellID = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(mapID == -1 || cellID == -1 || Mundo.getCarte(mapID) == null)
 			{
 				String str = "MapID ou cellID invalide";
@@ -502,7 +477,7 @@ public class Comandos {
 				mapY = Integer.parseInt(infos[2]);
 				cellID = Integer.parseInt(infos[3]);
 				contID = Integer.parseInt(infos[4]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			Mapa map = Mundo.getCarteByPosAndCont(mapX,mapY,contID);
 			if(map == null)
 			{
@@ -588,13 +563,13 @@ public class Comandos {
 			try
 			{
 				name = infos[1];
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			int time = 0;
 			try
 			{
 				time = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
-			
+			}catch(Exception ignored){}
+
 			perso = Mundo.getPersoByName(name);
 			if(perso == null || time < 0)
 			{
@@ -618,7 +593,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 			}else
 			{
-				GestorSalida.GAME_SEND_Im_PACKET(perso, "1124;"+time);
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1124;"+time);
 			}
 			return;
 		}else
@@ -630,8 +605,8 @@ public class Comandos {
 			try
 			{
 				name = infos[1];
-			}catch(Exception e){};
-			
+			}catch(Exception ignored){}
+
 			perso = Mundo.getPersoByName(name);
 			if(perso == null)
 			{
@@ -657,7 +632,7 @@ public class Comandos {
 			try
 			{
 				name = infos[1];
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			perso = Mundo.getPersoByName(name);
 			if(perso == null)
 			{
@@ -683,7 +658,7 @@ public class Comandos {
 			try
 			{
 				pts = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(pts == -1)
 			{
 				String str = "Valeur invalide";
@@ -712,7 +687,7 @@ public class Comandos {
 			try
 			{
 				spell = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(spell == -1)
 			{
 				String str = "Valeur invalide";
@@ -742,7 +717,7 @@ public class Comandos {
 			try
 			{
 				align = Byte.parseByte(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(align < Constantes.ALIGNEMENT_NEUTRE || align > Constantes.ALIGNEMENT_MERCENAIRE)
 			{
 				String str = "Valeur invalide";
@@ -777,7 +752,7 @@ public class Comandos {
 			try
 			{
 				id = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			String reps = infos[2];
 			NPC_question Q = Mundo.getNPCQuestion(id);
 			String str = "";
@@ -800,7 +775,7 @@ public class Comandos {
 			try
 			{
 				id = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			NPC_question Q = Mundo.getNPCQuestion(id);
 			String str = "";
 			if(id == 0 || Q == null)
@@ -819,7 +794,7 @@ public class Comandos {
 			try
 			{
 				honor = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
@@ -850,7 +825,7 @@ public class Comandos {
 			{
 				job = Integer.parseInt(infos[1]);
 				xp = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(job == -1 || xp < 0)
 			{
 				String str = "Valeurs invalides";
@@ -887,7 +862,7 @@ public class Comandos {
 			try
 			{
 				job = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(job == -1 || Mundo.getMetier(job) == null)
 			{
 				String str = "Valeur invalide";
@@ -917,7 +892,7 @@ public class Comandos {
 			try
 			{
 				pts = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(pts == -1)
 			{
 				String str = "Valeur invalide";
@@ -946,7 +921,7 @@ public class Comandos {
 			try
 			{
 				size = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(size == -1)
 			{
 				String str = "Taille invalide";
@@ -976,7 +951,7 @@ public class Comandos {
 			try
 			{
 				morphID = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(morphID == -1)
 			{
 				String str = "MorphID invalide";
@@ -1005,7 +980,7 @@ public class Comandos {
 			try
 			{
 				id = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			NPC npc = _perso.getActualMapa().getNPC(id);
 			if(id == 0 || npc == null)
 			{
@@ -1044,7 +1019,7 @@ public class Comandos {
 				else if(infos.length > 1)
 					tID = Integer.parseInt(infos[1]);
 				
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			ItemSet IS = Mundo.getItemSet(tID);
 			if(tID == 0 || IS == null)
 			{
@@ -1060,7 +1035,7 @@ public class Comandos {
 			if(nom != null)
 				try {
 					perso = Mundo.getPersoByName(nom);
-				} catch(Exception e) {}
+				} catch(Exception ignored) {}
 			for(ObjTemplate t : IS.getItemTemplates())
 			{
 				Objeto obj = t.createNewItem(1,useMax);
@@ -1109,7 +1084,7 @@ public class Comandos {
 			{
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Valor incorrecto.");
 				return;
-			};
+			}
 		}else
 		if(command.equalsIgnoreCase("PDVPER"))
 		{
@@ -1137,7 +1112,7 @@ public class Comandos {
 			{
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Valeur incorecte");
 				return;
-			};
+			}
 		}else
 		if(command.equalsIgnoreCase("KAMAS"))
 		{
@@ -1149,7 +1124,7 @@ public class Comandos {
 			{
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Valeur incorecte");
 				return;
-			};
+			}
 			if(count == 0)return;
 			
 			Personaje perso = _perso;
@@ -1184,7 +1159,7 @@ public class Comandos {
 			try
 			{
 				tID = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(tID == 0)
 			{
 				String mess = "Le template "+tID+" n'existe pas ";
@@ -1197,7 +1172,7 @@ public class Comandos {
 				try
 				{
 					qua = Integer.parseInt(infos[2]);
-				}catch(Exception e){};
+				}catch(Exception ignored){}
 			}
 			boolean useMax = false;
 			if(infos.length == 4 && !isOffiCmd)//Si un jet est spécifié
@@ -1226,8 +1201,8 @@ public class Comandos {
 			try
 			{
 				Mob = infos[1];
-			}catch(Exception e){};
-            if(Mob == null) return;
+			}catch(Exception ignored){}
+			if(Mob == null) return;
 			_perso.getActualMapa().spawnGroupOnCommand(_perso.getActualCelda().getID(), Mob);
 		}else
 		if (command.equalsIgnoreCase("TITLE"))
@@ -1238,8 +1213,8 @@ public class Comandos {
 			{
 				target = Mundo.getPersoByName(infos[1]);
 				TitleID = Byte.parseByte(infos[2]);
-			}catch(Exception e){};
-			
+			}catch(Exception ignored){}
+
 			if(target == null)
 			{
 				String str = "Le personnage n'a pas ete trouve";
@@ -1305,7 +1280,7 @@ public class Comandos {
 			try
 			{
 				cell = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(cell < 0 || _perso.getActualMapa().getCase(cell) == null)
 			{
 				cell = _perso.getActualCelda().getID();
@@ -1317,12 +1292,12 @@ public class Comandos {
 			try
 			{
 				team0 = p[0];
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			try
 			{
 				team1 = p[1];
-			}catch(Exception e){};
-			
+			}catch(Exception ignored){}
+
 			for(int a = 0;a<=team0.length()-2;a+=2)
 			{
 				String c = p[0].substring(a,a+2);
@@ -1388,7 +1363,7 @@ public class Comandos {
 			{
 				team = Integer.parseInt(infos[1]);
 				cell = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if( team < 0 || team>1)
 			{
 				String str = "Team ou cellID incorects";
@@ -1406,12 +1381,12 @@ public class Comandos {
 			try
 			{
 				team0 = p[0];
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			try
 			{
 				team1 = p[1];
-			}catch(Exception e){};
-			
+			}catch(Exception ignored){}
+
 			//Si case déjà utilisée
 			System.out.println("0 => "+team0+"\n1 =>"+team1+"\nCell: "+ GestorEncriptador.cellID_To_Code(cell));
 			for(int a = 0; a <= team0.length()-2;a+=2)if(cell == GestorEncriptador.cellCode_To_ID(team0.substring(a,a+2)))already = true;
@@ -1438,7 +1413,7 @@ public class Comandos {
 			try
 			{
 				id = Byte.parseByte(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(id == -1)
 			{
 				String str = "Valeur invalide";
@@ -1461,7 +1436,7 @@ public class Comandos {
 			{
 				repID = Integer.parseInt(infos[1]);
 				id = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			NPC_reponse rep = Mundo.getNPCreponse(repID);
 			if(id == -30 || rep == null)
 			{
@@ -1485,7 +1460,7 @@ public class Comandos {
 			{
 				q = Integer.parseInt(infos[2]);
 				id = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(id == -30)
 			{
 				String str = "NpcID invalide";
@@ -1512,7 +1487,7 @@ public class Comandos {
 				type = Integer.parseInt(infos[1]);
 				id = Integer.parseInt(infos[2]);
 				
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(id == -30)
 			{
 				String str = "Au moins une des valeur est invalide";
@@ -1544,7 +1519,7 @@ public class Comandos {
 			try
 			{
 				id = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(id == 0 || Mundo.getNPCTemplate(id) == null)
 			{
 				String str = "NpcID invalide";
@@ -1571,7 +1546,7 @@ public class Comandos {
 			try
 			{
 				id = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			NPC npc = _perso.getActualMapa().getNPC(id);
 			if(id == 0 || npc == null)
 			{
@@ -1596,7 +1571,7 @@ public class Comandos {
 			try
 			{
 				cellID = Integer.parseInt(infos[1]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(cellID == -1 || _perso.getActualMapa().getCase(cellID) == null)
 			{
 				String str = "CellID invalide";
@@ -1620,7 +1595,7 @@ public class Comandos {
 				actionID = Integer.parseInt(infos[1]);
 				args = infos[2];
 				cond = infos[3];
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(args.equals("") || actionID <= -3)
 			{
 				String str = "Valeur invalide";
@@ -1644,7 +1619,7 @@ public class Comandos {
 			{
 				npcGUID = Integer.parseInt(infos[1]);
 				itmID = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			NPCModelo npc =  _perso.getActualMapa().getNPC(npcGUID).get_template();
 			if(npcGUID == 0 || itmID == -1 || npc == null)
 			{
@@ -1668,7 +1643,7 @@ public class Comandos {
 			{
 				npcGUID = Integer.parseInt(infos[1]);
 				itmID = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			NPCModelo npc =  _perso.getActualMapa().getNPC(npcGUID).get_template();
 			ObjTemplate item =  Mundo.getObjTemplate(itmID);
 			if(npcGUID == 0 || itmID == -1 || npc == null || item == null)
@@ -1696,7 +1671,7 @@ public class Comandos {
 				price = Integer.parseInt(infos[3]);
 				if(price > 20000000)price = 20000000;
 				if(price <0)price = 0;
-			}catch(Exception e){};
+			}catch(Exception ignored){}
 			if(size == -1 || owner == -2 || price == -1 || _perso.getActualMapa().getMountPark() != null)
 			{
 				String str = "Infos invalides ou map deja config.";
@@ -1716,8 +1691,8 @@ public class Comandos {
 			{
 				OffOn = Integer.parseInt(infos[1]);
 				time = Integer.parseInt(infos[2]);
-			}catch(Exception e){};
-			
+			}catch(Exception ignored){}
+
 			if(OffOn == 1 && _TimerStart)// demande de démarer le reboot
 			{
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Un shutdown est deja programmer.");
@@ -1731,7 +1706,7 @@ public class Comandos {
 				{
 					timeMSG = "minute";
 				}
-				GestorSalida.GAME_SEND_Im_PACKET_TO_ALL("115;"+time+" "+timeMSG);
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("115;"+time+" "+timeMSG);
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Shutdown lance.");
 			}else if(OffOn == 0 && _TimerStart)
 			{
@@ -1758,7 +1733,7 @@ public class Comandos {
 			int gmLvl = -100;
 			try {
 				gmLvl = Integer.parseInt(infos[1]);
-			}catch(Exception ignored){};
+			}catch(Exception ignored){}
 			if(gmLvl == -100) {
 				String str = "Valeur incorrecte";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
@@ -1782,11 +1757,11 @@ public class Comandos {
 			byte LockValue = 1;//Accessible
 			try {
 				LockValue = Byte.parseByte(infos[1]);
-			}catch(Exception ignored){};
-			
+			}catch(Exception ignored){}
+
 			if(LockValue > 2) LockValue = 2;
 			if(LockValue < 0) LockValue = 0;
-			Mundo.set_state((short)LockValue);
+			Mundo.set_state(LockValue);
 			if(LockValue == 1) {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Serveur accessible.");
 			}else if(LockValue == 0) {
@@ -1802,8 +1777,8 @@ public class Comandos {
 			{
 				GmAccess = Byte.parseByte(infos[1]);
 				KickPlayer = Byte.parseByte(infos[2]);
-			}catch(Exception ignored){};
-			
+			}catch(Exception ignored){}
+
 			Mundo.setGmAccess(GmAccess);
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Serveur bloque au GmLevel : "+GmAccess);
 			if(KickPlayer > 0) {
@@ -1818,7 +1793,7 @@ public class Comandos {
 			Personaje P = null;
 			try {
 				P = Mundo.getPersoByName(infos[1]);
-			}catch(Exception ignored){};
+			}catch(Exception ignored){}
 			if(P == null || !P.isOnline()) {
 				String str = "Le personnage n'a pas ete trouve.";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
@@ -1845,7 +1820,7 @@ public class Comandos {
 			int numb = 1;
 			try {
 				numb = Integer.parseInt(infos[1]);
-			}catch(Exception ignored){};
+			}catch(Exception ignored){}
 			fullHdv(numb);
 		}else {
 			this.commandGmThree(command, infos, msg);

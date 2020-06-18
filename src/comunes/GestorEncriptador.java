@@ -1,5 +1,6 @@
 package comunes;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class GestorEncriptador {
         String Chaine = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
         for(l1 = 0; l1<= (pass.length()-1);l1+=2)
         {
-        	l3 = (int)key.charAt((l1/2));
+        	l3 = key.charAt((l1/2));
             l2 = Chaine.indexOf(pass.charAt(l1));
             l4 = (64 + l2) - l3;
             int l11 = l1+1;
@@ -67,9 +68,9 @@ public class GestorEncriptador {
             {
                 if (((i & 15) << 4 | o & 15) == Integer.parseInt(Splitted[Count]))
                 {
-                    Character A = (char)(i+48);
-                    Character B = (char)(o + 48);
-                    Encrypted += A.toString() + B.toString();
+                    char A = (char)(i+48);
+                    char B = (char)(o + 48);
+                    Encrypted += Character.toString(A) + Character.toString(B);
                     i = 0;
                     o = 0;
                     Count++;
@@ -91,7 +92,7 @@ public class GestorEncriptador {
 		for(int a = 2;a>=0;a--)
 		{
 			nbr64 += HASH[(int)(P/(java.lang.Math.pow(64,a)))];
-			P = (int)(P%(int)(java.lang.Math.pow(64,a)));
+			P = P%(int)(Math.pow(64,a));
 		}
 		return nbr64;
 	}
@@ -195,7 +196,7 @@ public class GestorEncriptador {
 
 		try
 		{
-			_out = new String(_in.getBytes("UTF8"));
+			_out = new String(_in.getBytes(StandardCharsets.UTF_8));
 			
 		}catch(Exception e)
 		{
@@ -211,7 +212,7 @@ public class GestorEncriptador {
 
 		try
 		{
-			_out = new String(_in.getBytes(),"UTF8");
+			_out = new String(_in.getBytes(), StandardCharsets.UTF_8);
 			
 		}catch(Exception e)
 		{

@@ -15,20 +15,20 @@ import objetos.Personaje;
 
 public class House
 {
-	private int _id;
-	private short _map_id;
-	private int _cell_id;
+	private final int _id;
+	private final short _map_id;
+	private final int _cell_id;
 	private int _owner_id;
 	private int _sale;
 	private int _guild_id;
 	private int _guildRights;
 	private int _access;
 	private String _key;
-	private int _mapid;
-	private int _caseid;
+	private final int _mapid;
+	private final int _caseid;
 	
 	//Droits de chaques maisons
-	private Map<Integer,Boolean> haveRight = new TreeMap<>();
+	private final Map<Integer,Boolean> haveRight = new TreeMap<>();
 
 	
 	public House(int id, short map_id, int cell_id, int owner_id, int sale,
@@ -282,7 +282,7 @@ public class House
 
 		if(AlreadyHaveHouse(P))
 		{
-			GestorSalida.GAME_SEND_Im_PACKET(P, "132;1");
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "132;1");
 			return;
 		}
 		//On enleve les kamas
@@ -534,9 +534,9 @@ public class House
 		{
 			for (int i = haveRight.size()-1; i < haveRight.size(); i--)
 			{
-				if(mapKey[i].intValue() <= total)
+				if(mapKey[i] <= total)
 				{
-					total ^= mapKey[i].intValue();
+					total ^= mapKey[i];
 					haveRight.put(mapKey[i],true);
 					break;
 				}
@@ -552,7 +552,7 @@ public class House
 		Personaje Target = Mundo.getPersonnage(Pguid);
 		if(Target == null || !Target.isOnline() || Target.get_fight() != null || Target.getActualMapa().get_id() != P.getActualMapa().get_id()) return;
 		Target.teletransportar(h.get_map_id(), h.get_cell_id());
-		GestorSalida.GAME_SEND_Im_PACKET(Target, "018;"+P.get_name());
+		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(Target, "018;"+P.get_name());
 	}
 	
 	

@@ -24,7 +24,7 @@ public class Oficio {
 		private Oficio _template;
 		private int _lvl;
 		private long _xp;
-		private ArrayList<JobAction> _posActions = new ArrayList<JobAction>();
+		private ArrayList<JobAction> _posActions = new ArrayList<>();
 		private boolean _isCheap = false;
 		private boolean _freeOnFails = false;
 		private boolean _noRessource = false;
@@ -73,7 +73,7 @@ public class Oficio {
 			if(send)
 			{
 				//on créer la listes des statsMetier a envoyer (Seulement celle ci)
-				ArrayList<StatsMetier> list = new ArrayList<StatsMetier>();
+				ArrayList<StatsMetier> list = new ArrayList<>();
 				list.add(this);
 				GestorSalida.GAME_SEND_JS_PACKET(P, list);
 				GestorSalida.GAME_SEND_STATS_PACKET(P);
@@ -122,7 +122,7 @@ public class Oficio {
 			addXp(P,_curAction.getXpWin()* MainServidor.XP_METIER);
 			//Packet JX
 			//on créer la listes des statsMetier a envoyer (Seulement celle ci)
-			ArrayList<StatsMetier> list = new ArrayList<StatsMetier>();
+			ArrayList<StatsMetier> list = new ArrayList<>();
 			list.add(this);
 			GestorSalida.GAME_SEND_JX_PACKET(P, list);
 		}
@@ -141,7 +141,7 @@ public class Oficio {
 			if(_lvl > exLvl && P.isOnline())
 			{
 				//on créer la listes des statsMetier a envoyer (Seulement celle ci)
-				ArrayList<StatsMetier> list = new ArrayList<StatsMetier>();
+				ArrayList<StatsMetier> list = new ArrayList<>();
 				list.add(this);
 				//on envoie le packet
 				GestorSalida.GAME_SEND_JS_PACKET(P, list);
@@ -219,8 +219,8 @@ public class Oficio {
 		private int _time = 0;
 		private int _xpWin = 0;
 		private long _startTime;
-		private Map<Integer,Integer> _ingredients = new TreeMap<Integer,Integer>();
-		private Map<Integer,Integer> _lastCraft = new TreeMap<Integer,Integer>();
+		private Map<Integer,Integer> _ingredients = new TreeMap<>();
+		private Map<Integer,Integer> _lastCraft = new TreeMap<>();
 		private Timer _craftTimer;
 		private Jugador _P;
 		
@@ -234,14 +234,10 @@ public class Oficio {
 			else _time = arg;
 			_xpWin = xpWin;
 			
-			_craftTimer = new Timer(100,new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-					craft();
-					_craftTimer.stop();
-				}
-			});
+			_craftTimer = new Timer(100, e -> {
+                craft();
+                _craftTimer.stop();
+            });
 		}
 		
 		public void endAction(Jugador P, InteractiveObject IO, GameAction GA, Case cell)
@@ -359,7 +355,7 @@ public class Oficio {
 				return;
 			}
 			
-			Map<Integer,Integer> items = new TreeMap<Integer,Integer>();
+			Map<Integer,Integer> items = new TreeMap<>();
 			//on retire les items mis en ingrédients
 			for(Entry<Integer,Integer> e : _ingredients.entrySet())
 			{
@@ -473,7 +469,7 @@ public class Oficio {
 			if(success)
 			{
 				SM.addXp(_P,winXP);
-				ArrayList<StatsMetier> SMs = new ArrayList<StatsMetier>();
+				ArrayList<StatsMetier> SMs = new ArrayList<>();
 				SMs.add(SM);
 				GestorSalida.GAME_SEND_JX_PACKET(_P, SMs);
 			}
@@ -1303,8 +1299,8 @@ public class Oficio {
 	}
 	//Classe Metier
 	private int _id;
-	private ArrayList<Integer> _tools = new ArrayList<Integer>();
-	private Map<Integer,ArrayList<Integer>> _crafts = new TreeMap<Integer,ArrayList<Integer>>();
+	private ArrayList<Integer> _tools = new ArrayList<>();
+	private Map<Integer,ArrayList<Integer>> _crafts = new TreeMap<>();
 	
 	public Oficio(int id, String tools, String crafts)
 	{
@@ -1328,7 +1324,7 @@ public class Oficio {
 				try
 				{
 					int skID = Integer.parseInt(str.split(";")[0]);
-					ArrayList<Integer> list = new ArrayList<Integer>();
+					ArrayList<Integer> list = new ArrayList<>();
 					for(String str2 : str.split(";")[1].split(","))list.add(Integer.parseInt(str2));
 					_crafts.put(skID, list);
 				}catch(Exception e){continue;};

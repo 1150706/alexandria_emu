@@ -25,7 +25,7 @@ public class House
 	private int _caseid;
 	
 	//Droits de chaques maisons
-	private Map<Integer,Boolean> haveRight = new TreeMap<Integer,Boolean>();
+	private Map<Integer,Boolean> haveRight = new TreeMap<>();
 
 	
 	public House(int id, short map_id, int cell_id, int owner_id, int sale,

@@ -450,7 +450,7 @@ public class Inteligencia {
 				System.out.println("Passage par cellID: "+c.getID()+" walk: "+c.isWalkable(true));
 			}*/
 			
-			ArrayList<Case> finalPath = new ArrayList<Case>();
+			ArrayList<Case> finalPath = new ArrayList<>();
 			for(int a = 0; a<F.getPM();a++)
 			{
 				if(path.size() == a)break;
@@ -745,7 +745,7 @@ public class Inteligencia {
 				System.out.println("Passage par cellID: "+c.getID()+" walk: "+c.isWalkable(true));
 			}*/
 			
-			ArrayList<Case> finalPath = new ArrayList<Case>();
+			ArrayList<Case> finalPath = new ArrayList<>();
 			for(int a = 0; a<F.getCurPM(fight);a++)
 			{
 				if(path.size() == a)break;
@@ -823,8 +823,8 @@ public class Inteligencia {
 		
 		private static Map<Integer,Fighter> getLowHpEnnemyList(Pelea fight, Fighter fighter)
 		{
-			Map<Integer,Fighter> list = new TreeMap<Integer,Fighter>();
-			Map<Integer,Fighter> ennemy = new TreeMap<Integer,Fighter>();
+			Map<Integer,Fighter> list = new TreeMap<>();
+			Map<Integer,Fighter> ennemy = new TreeMap<>();
 			for(Fighter f : fight.getFighters(3))
 			{
 				if(f.isDead())continue;
@@ -1036,7 +1036,7 @@ public class Inteligencia {
 		
 		private static ArrayList <SortStats> getLaunchableSort(Fighter fighter, Pelea fight, int distMin)
 		{
-			ArrayList <SortStats> sorts = new ArrayList <SortStats>();
+			ArrayList <SortStats> sorts = new ArrayList<>();
 			if(fighter.getMob() == null)
 				return null;
 			for(Entry<Integer, SortStats> S : fighter.getMob().getSpells().entrySet())
@@ -1063,8 +1063,8 @@ public class Inteligencia {
 			if(sorts == null)
 				return null;
 			
-			ArrayList <SortStats> finalSorts = new ArrayList <SortStats>();
-			Map <Integer,SortStats> copie = new TreeMap <Integer,SortStats>();
+			ArrayList <SortStats> finalSorts = new ArrayList<>();
+			Map <Integer,SortStats> copie = new TreeMap<>();
 			for(SortStats S : sorts)
 			{
 				copie.put(S.getSpellID(), S);
@@ -1097,7 +1097,7 @@ public class Inteligencia {
 		
 		private static ArrayList <Fighter> getPotentialTarget(Pelea fight, Fighter fighter, ArrayList<SortStats> sorts)
 		{
-			ArrayList <Fighter> targets = new ArrayList <Fighter>();
+			ArrayList <Fighter> targets = new ArrayList<>();
 			int distMax = 0;
 			for(SortStats S : sorts)
 			{
@@ -1223,7 +1223,7 @@ public class Inteligencia {
 			{
 				return 0;
 			}
-			ArrayList<Case> possibleLaunch = new ArrayList<Case>();
+			ArrayList<Case> possibleLaunch = new ArrayList<>();
 			int CellF = -1;
 			if(spell.getMaxPO() != 0)
 			{
@@ -1266,7 +1266,7 @@ public class Inteligencia {
 						continue;
 					int num = 0;
 					int curTarget = 0;
-					ArrayList<EfectoHechizo> test = new ArrayList<EfectoHechizo>();
+					ArrayList<EfectoHechizo> test = new ArrayList<>();
 					test.addAll(spell.getEffects());
 					
 					for(EfectoHechizo SE : test)
@@ -1328,7 +1328,7 @@ public class Inteligencia {
 				POnum = 2*num;
 				/**Détermine à qui s'applique l'effet**/
 				ArrayList<Case> cells = Camino.getCellListFromAreaString(fight.get_map(),T.get_fightCell().getID(),C.get_fightCell().getID(),ss.getPorteeType(),POnum,false);
-				ArrayList<Case> finalCells = new ArrayList<Case>();
+				ArrayList<Case> finalCells = new ArrayList<>();
 				int TE = 0;
 				Hechizos S = ss.getSpell();
 				//on prend le targetFlag corespondant au num de l'effet

@@ -24,19 +24,19 @@ public class Mapa {
 	private byte _h;
 	private String _key;
 	private String _placesStr;
-	private Map<Integer,Case> 		_cases 			= new TreeMap<Integer,Case>();
-	private Map<Integer, Pelea> 		_fights 		= new TreeMap<Integer, Pelea>();
-	private ArrayList<MobGrade> 	_mobPossibles 	= new ArrayList<MobGrade>();
-	private Map<Integer,MobGroup> 	_mobGroups 		= new TreeMap<Integer,MobGroup>();
-	private Map<Integer,MobGroup> 	_fixMobGroups 	= new TreeMap<Integer,MobGroup>();
-	private Map<Integer,NPC>		_npcs	 		= new TreeMap<Integer, NPC>();
+	private Map<Integer,Case> 		_cases 			= new TreeMap<>();
+	private Map<Integer, Pelea> 		_fights 		= new TreeMap<>();
+	private ArrayList<MobGrade> 	_mobPossibles 	= new ArrayList<>();
+	private Map<Integer,MobGroup> 	_mobGroups 		= new TreeMap<>();
+	private Map<Integer,MobGroup> 	_fixMobGroups 	= new TreeMap<>();
+	private Map<Integer,NPC>		_npcs	 		= new TreeMap<>();
 	int _nextObjectID = -1;
 	private byte _X = 0;
 	private byte _Y = 0;
 	private SubArea _subArea;
 	private MountPark _mountPark;
 	private byte _maxGroup = 3;
-	private Map<Integer,ArrayList<Accion>> _endFightAction = new TreeMap<Integer,ArrayList<Accion>>();
+	private Map<Integer,ArrayList<Accion>> _endFightAction = new TreeMap<>();
 	private byte _maxSize;
 	
 	public static class MountPark
@@ -44,12 +44,12 @@ public class Mapa {
 		private int _owner;
 		private InteractiveObject _door;
 		private int _size;
-		private ArrayList<Case> _cases = new ArrayList<Case>();
+		private ArrayList<Case> _cases = new ArrayList<>();
 		private Gremio _guild;
 		private Mapa _map;
 		private int _cellid = -1;
 		private int _price;
-		private Map<Integer,Integer> MountParkDATA = new TreeMap<Integer,Integer>();//DragoID, IDperso
+		private Map<Integer,Integer> MountParkDATA = new TreeMap<>();//DragoID, IDperso
 		
 		public MountPark(int owner, Mapa map, int cellid, int size, String data, int guild, int price)
 		{
@@ -222,18 +222,14 @@ public class Mapa {
 			if(_template != null)respawnTime = _template.getRespawnTime();
 			//définition du timer
 			_respawnTimer = new Timer(respawnTime,
-					new ActionListener()
-					{
-						public void actionPerformed(ActionEvent e)
-						{
-							_respawnTimer.stop();
-							_state = Constantes.IOBJECT_STATE_FULLING;
-							_interactive = true;
-							GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(_map, _cell);
-							_state = Constantes.IOBJECT_STATE_FULL;
-						}
-					}
-			);
+                    e -> {
+                        _respawnTimer.stop();
+                        _state = Constantes.IOBJECT_STATE_FULLING;
+                        _interactive = true;
+                        GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(_map, _cell);
+                        _state = Constantes.IOBJECT_STATE_FULL;
+                    }
+            );
 		}
 		
 		public int getID()
@@ -935,7 +931,7 @@ public class Mapa {
 		
 		public void addOnCellStopAction(int id, String args, String cond)
 		{
-			if(_onCellStop == null) _onCellStop = new ArrayList<Accion>();
+			if(_onCellStop == null) _onCellStop = new ArrayList<>();
 			
 			_onCellStop.add(new Accion(id,args,cond));
 		}
@@ -951,13 +947,13 @@ public class Mapa {
 		}
 		public void addPerso(Jugador perso)
 		{
-			if(_persos == null) _persos = new TreeMap<Integer, Jugador>();
+			if(_persos == null) _persos = new TreeMap<>();
 			_persos.put(perso.get_GUID(),perso);
 			
 		}
 		public void addFighter(Fighter fighter)
 		{
-			if(_fighters == null) _fighters = new TreeMap<Integer, Fighter>();
+			if(_fighters == null) _fighters = new TreeMap<>();
 			_fighters.put(fighter.getGUID(),fighter);
 		}
 		public void removeFighter(Fighter fighter)
@@ -992,12 +988,12 @@ public class Mapa {
 		}
 		public Map<Integer, Jugador> getPersos()
 		{
-			if(_persos == null) return new TreeMap<Integer, Jugador>();
+			if(_persos == null) return new TreeMap<>();
 			return _persos;
 		}
 		public Map<Integer, Fighter> getFighters()
 		{
-			if(_fighters == null) return new TreeMap<Integer, Fighter>();
+			if(_fighters == null) return new TreeMap<>();
 			return _fighters;
 		}
 		public Fighter getFirstFighter()
@@ -1346,7 +1342,7 @@ public class Mapa {
 	}
 	public void addEndFightAction(int type, Accion A)
 	{
-		if(_endFightAction.get(type) == null)_endFightAction.put(type, new ArrayList<Accion>());
+		_endFightAction.computeIfAbsent(type, k -> new ArrayList<>());
 		//On retire l'action si elle existait déjà
 		delEndFightAction(type,A.getID());
 		_endFightAction.get(type).add(A);
@@ -1354,7 +1350,7 @@ public class Mapa {
 	public void delEndFightAction(int type,int aType)
 	{
 		if(_endFightAction.get(type) == null)return;
-		ArrayList<Accion> copy = new ArrayList<Accion>();
+		ArrayList<Accion> copy = new ArrayList<>();
 		copy.addAll(_endFightAction.get(type));
 		for(Accion A : copy)if(A.getID() == aType)_endFightAction.get(type).remove(A);
 	}
@@ -1374,7 +1370,7 @@ public class Mapa {
 		_h = h;
 		_key = key;
 		_placesStr = places;
-		_cases = new TreeMap<Integer,Case>();
+		_cases = new TreeMap<>();
 	}
 	
 	public SubArea getSubArea()
@@ -1489,7 +1485,7 @@ public class Mapa {
 	
 	public ArrayList<Jugador> getPersos()
 	{
-		ArrayList<Jugador> persos = new ArrayList<Jugador>();
+		ArrayList<Jugador> persos = new ArrayList<>();
 		for(Case c : _cases.values())
 			for(Jugador entry : c.getPersos().values())
 				persos.add(entry);
@@ -1627,7 +1623,7 @@ public class Mapa {
 	
 	public int getRandomFreeCellID()
 	{
-		ArrayList<Integer> freecell = new ArrayList<Integer>();
+		ArrayList<Integer> freecell = new ArrayList<>();
 		for(Entry<Integer,Case> entry : _cases.entrySet())
 		{
 			//Si la case n'est pas marchable
@@ -1769,7 +1765,7 @@ public class Mapa {
 
 	public Mapa getMapCopy()
 	{
-		Map<Integer,Case> cases = new TreeMap<Integer,Case>();
+		Map<Integer,Case> cases = new TreeMap<>();
 		
 		Mapa map = new Mapa(_id,_date,_w,_h,_key,_placesStr);
 		

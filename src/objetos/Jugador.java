@@ -75,8 +75,8 @@ public class Jugador {
 	private boolean _isOnline  = false;
 	private Group _group;
 	private int _duelID = -1;
-	private Map<Integer, EfectoHechizo> _buffs = new TreeMap<Integer, EfectoHechizo>();
-	private Map<Integer, Objeto> _items = new TreeMap<Integer, Objeto>();
+	private Map<Integer, EfectoHechizo> _buffs = new TreeMap<>();
+	private Map<Integer, Objeto> _items = new TreeMap<>();
 	private Timer _sitTimer;
 	private String _savePos;
 	private int _emoteActive = 0;
@@ -93,7 +93,7 @@ public class Jugador {
 	private int _inviting = 0;
 	//Job
 	private JobAction _curJobAction;
-	private Map<Integer,StatsMetier> _metiers = new TreeMap<Integer,StatsMetier>();
+	private Map<Integer,StatsMetier> _metiers = new TreeMap<>();
 	//Enclos
 	private MountPark _inMountPark;
 	//Monture
@@ -104,15 +104,15 @@ public class Jugador {
 	private boolean _isInBank;
 	//Zaap
 	private boolean _isZaaping = false;
-	private ArrayList<Short> _zaaps = new ArrayList<Short>();
+	private ArrayList<Short> _zaaps = new ArrayList<>();
 	//Disponibilité
 	public boolean _isAbsent = false;
 	public boolean _isInvisible = false;
 	//Sort
 	public boolean _seeSpell = false;
 	private boolean _isForgetingSpell = false;
-	private Map<Integer,SortStats> _sorts = new TreeMap<Integer,SortStats>();
-	private Map<Integer,Character> _sortsPlaces = new TreeMap<Integer,Character>();
+	private Map<Integer,SortStats> _sorts = new TreeMap<>();
+	private Map<Integer,Character> _sortsPlaces = new TreeMap<>();
 	//Double
 	public boolean _isClone = false;
 	//Percepteurs
@@ -127,7 +127,7 @@ public class Jugador {
 	private int _wife = 0;
 	private int _isOK = 0;
 	//Suiveur - Suivi
-	public Map<Integer, Jugador> _Follower = new TreeMap<Integer, Jugador>();
+	public Map<Integer, Jugador> _Follower = new TreeMap<>();
 	public Jugador _Follows = null;
 	//Fantome
 	public boolean _isGhosts = false;
@@ -138,7 +138,7 @@ public class Jugador {
 	private House _curHouse;
 	//Marchand
 	public boolean _seeSeller = false;
-	private Map<Integer , Integer> _storeItems = new TreeMap<Integer, Integer>();//<ObjID, Prix>
+	private Map<Integer , Integer> _storeItems = new TreeMap<>();//<ObjID, Prix>
 	//Quêtes
     private int savestat;
 	
@@ -175,7 +175,7 @@ public class Jugador {
 	}
 	public static class Group
 	{
-		private ArrayList<Jugador> _persos = new ArrayList<Jugador>();
+		private ArrayList<Jugador> _persos = new ArrayList<>();
 		private Jugador _chief;
 		
 		public Group(Jugador p1, Jugador p2)
@@ -237,11 +237,11 @@ public class Jugador {
 	}
 	public static class Stats
 	{
-		private Map<Integer,Integer> Effects = new TreeMap<Integer,Integer>();
+		private Map<Integer,Integer> Effects = new TreeMap<>();
 		
 		public Stats(boolean addBases, Jugador perso)
 		{
-			Effects = new TreeMap<Integer,Integer>();
+			Effects = new TreeMap<>();
 			if(!addBases)return;
 			Effects.put(Constantes.STATS_ADD_PA,  perso.get_lvl()<100?6:7);
 			Effects.put(Constantes.STATS_ADD_PM, 3);
@@ -269,7 +269,7 @@ public class Jugador {
 		
 		public Stats()
 		{
-			Effects = new TreeMap<Integer,Integer>();
+			Effects = new TreeMap<>();
 		}
 		
 		public int addOneStat(int id, int val)
@@ -435,7 +435,7 @@ public class Jugador {
 
 		public static Stats cumulStat(Stats s1,Stats s2)
 		{
-			TreeMap<Integer,Integer> effets = new TreeMap<Integer,Integer>();
+			TreeMap<Integer,Integer> effets = new TreeMap<>();
 			for(int a = 0; a <= Constantes.MAX_EFFECTS_ID; a++)
 			{
 				if((s1.Effects.get(a) == null  || s1.Effects.get(a) == 0) && (s2.Effects.get(a) == null || s2.Effects.get(a) == 0))
@@ -592,13 +592,7 @@ public class Jugador {
 		this._PDV = (_PDVMAX*pdvPer)/100;
 		parseSpells(spells);
 		
-		_sitTimer = new Timer(2000,new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				regenLife();
-			}
-		});
+		_sitTimer = new Timer(2000, e -> regenLife());
 		
 		_exPdv = _PDV;
 		
@@ -713,7 +707,7 @@ public class Jugador {
 				classe * 10 + sexe,
 				(byte)0,
 				compte.get_GUID(),
-				new TreeMap<Integer,Integer>(),
+				new TreeMap<>(),
 				(byte)1,
 				(byte)0,
 				(byte)0,
@@ -1088,10 +1082,8 @@ public class Jugador {
 	{
 		StringBuilder packet = new StringBuilder();
 		packet.append("SL");
-		for (Iterator<SortStats> i = _sorts.values().iterator() ; i.hasNext();)
-		{
-		    SortStats SS = i.next();
-		    packet.append(SS.getSpellID()).append("~").append(SS.getLevel()).append("~").append(_sortsPlaces.get(SS.getSpellID())).append(";");
+		for (SortStats SS : _sorts.values()) {
+			packet.append(SS.getSpellID()).append("~").append(SS.getLevel()).append("~").append(_sortsPlaces.get(SS.getSpellID())).append(";");
 		}
 		return packet.toString();
 	}
@@ -1174,7 +1166,7 @@ public class Jugador {
 		//envoie des données de métier
 		if(_metiers.size() >0)
 		{
-			ArrayList<StatsMetier> list = new ArrayList<StatsMetier>();
+			ArrayList<StatsMetier> list = new ArrayList<>();
 			list.addAll(_metiers.values());
 			//packet JS
 			GestorSalida.GAME_SEND_JS_PACKET(this, list);
@@ -1463,7 +1455,7 @@ public class Jugador {
 	private Stats getStuffStats()
 	{
 		Stats stats = new Stats(false,null);
-		ArrayList<Integer> itemSetApplied = new ArrayList<Integer>();
+		ArrayList<Integer> itemSetApplied = new ArrayList<>();
 		
 		for(Entry<Integer, Objeto> entry : _items.entrySet())
 		{
@@ -1992,7 +1984,7 @@ public class Jugador {
 		_metiers.put(pos, sm);//On apprend le métier lvl 1 avec 0 xp
 		if(_isOnline) {
 			//on créer la listes des statsMetier a envoyer (Seulement celle ci)
-			ArrayList<StatsMetier> list = new ArrayList<StatsMetier>();
+			ArrayList<StatsMetier> list = new ArrayList<>();
 			list.add(sm);
 			
 			GestorSalida.GAME_SEND_Im_PACKET(this, "02;"+m.getId());
@@ -2425,10 +2417,10 @@ public class Jugador {
 	public void removeByTemplateID(int tID, int count)
 	{
 		//Copie de la liste pour eviter les modif concurrentes
-		ArrayList<Objeto> list = new ArrayList<Objeto>();
+		ArrayList<Objeto> list = new ArrayList<>();
 		list.addAll(_items.values());
 		
-		ArrayList<Objeto> remove = new ArrayList<Objeto>();
+		ArrayList<Objeto> remove = new ArrayList<>();
 		int tempCount = count;
 		
 		//on verifie pour chaque objet
@@ -2712,7 +2704,7 @@ public class Jugador {
 	
 	public void addChanel(String chan)
 	{
-		if(_canaux.indexOf(chan) >=0)return;
+		if(_canaux.contains(chan))return;
 		_canaux += chan;
 		GestorSalida.GAME_SEND_cC_PACKET(this, '+', chan);
 	}
@@ -3041,7 +3033,7 @@ public class Jugador {
 	
 	public static Jugador ClonePerso(Jugador P, int id)
 	{	
-		TreeMap<Integer,Integer> stats = new TreeMap<Integer,Integer>();
+		TreeMap<Integer,Integer> stats = new TreeMap<>();
 		stats.put(Constantes.STATS_ADD_VITA, P.get_baseStats().getEffect(Constantes.STATS_ADD_VITA));
 		stats.put(Constantes.STATS_ADD_FORC, P.get_baseStats().getEffect(Constantes.STATS_ADD_FORC));
 		stats.put(Constantes.STATS_ADD_SAGE, P.get_baseStats().getEffect(Constantes.STATS_ADD_SAGE));

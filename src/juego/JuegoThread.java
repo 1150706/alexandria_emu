@@ -34,7 +34,7 @@ public class JuegoThread implements Runnable
 	private Socket _s;
 	private Cuenta _compte;
 	private Jugador _perso;
-	private Map<Integer,GameAction> _actions = new TreeMap<Integer,GameAction>();
+	private Map<Integer,GameAction> _actions = new TreeMap<>();
 	private long _timeLastTradeMsg = 0, _timeLastRecrutmentMsg = 0, _timeLastsave = 0, _timeLastAlignMsg = 0;
 	private long _timeLastIncarnamMsg = 0;
 	private Comandos command;
@@ -4363,7 +4363,7 @@ public class JuegoThread implements Runnable
 				removeAction(GA);
 				return;
 			}
-			AtomicReference<String> pathRef = new AtomicReference<String>(path);
+			AtomicReference<String> pathRef = new AtomicReference<>(path);
 			int result = Camino.isValidPath(_perso.get_curCarte(),_perso.get_curCell().getID(),pathRef, null);
 			
 			//Si d�placement inutile

@@ -169,14 +169,14 @@ public class GestorSQL {
 		try {
 			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM `datos_recetas`;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
-				ArrayList<Couple<Integer,Integer>> m = new ArrayList<Couple<Integer,Integer>>();
+				ArrayList<Couple<Integer,Integer>> m = new ArrayList<>();
 				
 				boolean cont = true;
 				for(String str : RS.getString("recetas").split(";")) {
 					try {
 							int tID = Integer.parseInt(str.split("\\*")[0]);
 							int qua =  Integer.parseInt(str.split("\\*")[1]);
-							m.add(new Couple<Integer,Integer>(tID,qua));
+							m.add(new Couple<>(tID, qua));
 					}catch(Exception e){e.printStackTrace();cont = false;}
 				}
 				//s'il y a eu une erreur de parsing, on ignore cette recette
@@ -555,7 +555,7 @@ public class GestorSQL {
 		try {
 			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_personajes WHERE cuenta = '"+accID+"';", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
-				TreeMap<Integer,Integer> stats = new TreeMap<Integer,Integer>();
+				TreeMap<Integer,Integer> stats = new TreeMap<>();
 				stats.put(Constantes.STATS_ADD_VITA, RS.getInt("vitalidad"));
 				stats.put(Constantes.STATS_ADD_FORC, RS.getInt("fuerza"));
 				stats.put(Constantes.STATS_ADD_SAGE, RS.getInt("sabiduria"));
@@ -624,7 +624,7 @@ public class GestorSQL {
 		try {
 			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_personajes;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
-				TreeMap<Integer,Integer> stats = new TreeMap<Integer,Integer>();
+				TreeMap<Integer,Integer> stats = new TreeMap<>();
 				stats.put(Constantes.STATS_ADD_VITA, RS.getInt("vitalidad"));
 				stats.put(Constantes.STATS_ADD_FORC, RS.getInt("fuerza"));
 				stats.put(Constantes.STATS_ADD_SAGE, RS.getInt("sabiduria"));
@@ -1246,8 +1246,7 @@ public class GestorSQL {
 				int qua 	= RS.getInt("cantidad");
 				int pos		= RS.getInt("ubicacion");
 				String stats= RS.getString("caracteristicas");
-				int dueño	= RS.getInt("dueño");
-				Mundo.addObjet(Mundo.newObjet(guid, tempID, qua, pos, stats, dueño), false);
+				Mundo.addObjet(Mundo.newObjet(guid, tempID, qua, pos, stats), false);
 			}
 			closeResultSet(RS);
 		}catch(SQLException e) {
@@ -2071,7 +2070,6 @@ public class GestorSQL {
 		        int qua = RS.getInt("cantidad");
 		        int pos = RS.getInt("ubicacion");
 		        String stats = RS.getString("caracteristicas");
-		        int dueño = RS.getInt("dueño");
 		        Mundo.addObjet(new Objeto(guid, tempID, qua, pos, stats), false);
 		      }
 		      closeResultSet(RS);
@@ -2388,7 +2386,6 @@ public class GestorSQL {
 			try {
 				long time1 = System.currentTimeMillis();	//TIME
 				ResultSet RS = executeQuery("SELECT i.* FROM `datos_objetos` AS i,`datos_objetos_mercadillo` AS h WHERE i.id = h.objeto", MainServidor.OTHER_DB_NAME);
-				
 				//Load items
 				while(RS.next()) {
 					int guid 	= RS.getInt("id");
@@ -2396,8 +2393,7 @@ public class GestorSQL {
 					int qua 	= RS.getInt("cantidad");
 					int pos		= RS.getInt("ubicacion");
 					String stats= RS.getString("caracteristicas");
-					int dueño	= RS.getInt("dueño");
-					Mundo.addObjet(Mundo.newObjet(guid, tempID, qua, pos, stats, dueño), false);
+					Mundo.addObjet(Mundo.newObjet(guid, tempID, qua, pos, stats), false);
 				}
 				
 				//Load HDV entry

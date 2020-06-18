@@ -21,39 +21,39 @@ import objetos.Jugador.Stats;
 
 public class Mundo {
 
-	private static Map<Integer, Cuenta> 	Comptes	= new TreeMap<Integer, Cuenta>();
-	private static Map<String,Integer> 	ComptebyName	= new TreeMap<String,Integer>();
+	private static Map<Integer, Cuenta> 	Comptes	= new TreeMap<>();
+	private static Map<String,Integer> 	ComptebyName	= new TreeMap<>();
 	private static StringBuilder Challenges = new StringBuilder();
-	private static Map<Integer, Jugador> 	Persos	= new TreeMap<Integer, Jugador>();
-	private static Map<Short, Mapa> 	Cartes	= new TreeMap<Short, Mapa>();
-	private static Map<Integer, Objeto> 	Objets	= new TreeMap<Integer, Objeto>();
-	private static Map<Integer,ExpLevel> ExpLevels = new TreeMap<Integer, ExpLevel>();
-	private static Map<Integer, Hechizos>	Sorts = new TreeMap<Integer, Hechizos>();
-	private static Map<Integer,ObjTemplate> ObjTemplates = new TreeMap<Integer,ObjTemplate>();
-	private static Map<Integer, Monstruo> MobTemplates = new TreeMap<Integer, Monstruo>();
-	private static Map<Integer, NPCModelo> NPCTemplates = new TreeMap<Integer, NPCModelo>();
-	private static Map<Integer,NPC_question> NPCQuestions = new TreeMap<Integer,NPC_question>();
-	private static Map<Integer,NPC_reponse> NPCReponses = new TreeMap<Integer,NPC_reponse>();
-	private static Map<Integer,IOTemplate> IOTemplate = new TreeMap<Integer,IOTemplate>();
-	private static Map<Integer, Dragopavo> Dragodindes = new TreeMap<Integer, Dragopavo>();
-	private static Map<Integer,SuperArea> SuperAreas = new TreeMap<Integer,SuperArea>();
-	private static Map<Integer,Area> Areas = new TreeMap<Integer,Area>();
-	private static Map<Integer,SubArea> SubAreas = new TreeMap<Integer,SubArea>();
-	private static Map<Integer, Oficio> Jobs = new TreeMap<Integer, Oficio>();
-	private static Map<Integer,ArrayList<Couple<Integer,Integer>>> Crafts = new TreeMap<Integer,ArrayList<Couple<Integer,Integer>>>();
-	private static Map<Integer,ItemSet> ItemSets = new TreeMap<Integer,ItemSet>();
-	private static Map<Integer, Gremio> Guildes = new TreeMap<Integer, Gremio>();
-	private static Map<Integer, Mercadillo> Hdvs = new TreeMap<Integer, Mercadillo>();
-	private static Map<Integer,Map<Integer,ArrayList<HdvEntry>>> _hdvsItems = new HashMap<Integer,Map<Integer,ArrayList<HdvEntry>>>();	//Contient tout les items en ventes des comptes dans le format<compteID,<hdvID,items<>>>
-	private static Map<Integer, Jugador> Married = new TreeMap<Integer, Jugador>();
-	private static Map<Integer, Animaciones> Animations = new TreeMap<Integer, Animaciones>();
-	private static Map<Short, Mapa.MountPark> MountPark = new TreeMap<Short, Mapa.MountPark>();
-	private static Map<Integer, Cofres> Trunks = new TreeMap<Integer, Cofres>();
-	private static Map<Integer, Recaudador> Percepteurs = new TreeMap<Integer, Recaudador>();
-	private static Map<Integer,House> Houses = new TreeMap<Integer,House>();
-	private static Map<Short,Collection<Integer>> Seller	= new TreeMap<Short,Collection<Integer>>();
-	public static Map<Integer, Quest.Step> Steps = new TreeMap<Integer, Quest.Step>();
-	public static Map<Integer, Quest> Quests = new TreeMap<Integer, Quest>(); 
+	private static Map<Integer, Jugador> 	Persos	= new TreeMap<>();
+	private static Map<Short, Mapa> 	Cartes	= new TreeMap<>();
+	private static Map<Integer, Objeto> 	Objets	= new TreeMap<>();
+	private static Map<Integer,ExpLevel> ExpLevels = new TreeMap<>();
+	private static Map<Integer, Hechizos>	Sorts = new TreeMap<>();
+	private static Map<Integer,ObjTemplate> ObjTemplates = new TreeMap<>();
+	private static Map<Integer, Monstruo> MobTemplates = new TreeMap<>();
+	private static Map<Integer, NPCModelo> NPCTemplates = new TreeMap<>();
+	private static Map<Integer,NPC_question> NPCQuestions = new TreeMap<>();
+	private static Map<Integer,NPC_reponse> NPCReponses = new TreeMap<>();
+	private static Map<Integer,IOTemplate> IOTemplate = new TreeMap<>();
+	private static Map<Integer, Dragopavo> Dragodindes = new TreeMap<>();
+	private static Map<Integer,SuperArea> SuperAreas = new TreeMap<>();
+	private static Map<Integer,Area> Areas = new TreeMap<>();
+	private static Map<Integer,SubArea> SubAreas = new TreeMap<>();
+	private static Map<Integer, Oficio> Jobs = new TreeMap<>();
+	private static Map<Integer,ArrayList<Couple<Integer,Integer>>> Crafts = new TreeMap<>();
+	private static Map<Integer,ItemSet> ItemSets = new TreeMap<>();
+	private static Map<Integer, Gremio> Guildes = new TreeMap<>();
+	private static Map<Integer, Mercadillo> Hdvs = new TreeMap<>();
+	private static Map<Integer,Map<Integer,ArrayList<HdvEntry>>> _hdvsItems = new HashMap<>();	//Contient tout les items en ventes des comptes dans le format<compteID,<hdvID,items<>>>
+	private static Map<Integer, Jugador> Married = new TreeMap<>();
+	private static Map<Integer, Animaciones> Animations = new TreeMap<>();
+	private static Map<Short, Mapa.MountPark> MountPark = new TreeMap<>();
+	private static Map<Integer, Cofres> Trunks = new TreeMap<>();
+	private static Map<Integer, Recaudador> Percepteurs = new TreeMap<>();
+	private static Map<Integer,House> Houses = new TreeMap<>();
+	private static Map<Short,Collection<Integer>> Seller	= new TreeMap<>();
+	public static Map<Integer, Quest.Step> Steps = new TreeMap<>();
+	public static Map<Integer, Quest> Quests = new TreeMap<>();
 	
 	 
 	private static int nextHdvID;	//Contient le derniere ID utilis? pour cr?e un HDV, pour obtenir un ID non utilis? il faut imp?rativement l'incr?menter
@@ -147,8 +147,8 @@ public class Mundo {
 	public static class ItemSet
 	{
 		private int _id;
-		private ArrayList<ObjTemplate> _itemTemplates = new ArrayList<ObjTemplate>();
-		private ArrayList<Stats> _bonuses = new ArrayList<Stats>();
+		private ArrayList<ObjTemplate> _itemTemplates = new ArrayList<>();
+		private ArrayList<Stats> _bonuses = new ArrayList<>();
 		
 		public ItemSet (int id,String items, String bonuses)
 		{
@@ -207,7 +207,7 @@ public class Mundo {
 	public static class SuperArea
 	{
 		private int _id;
-		private ArrayList<Area> _areas = new ArrayList<Area>();
+		private ArrayList<Area> _areas = new ArrayList<>();
 		
 		public SuperArea(int a_id)
 		{
@@ -230,7 +230,7 @@ public class Mundo {
 		private int _id;
 		private SuperArea _superArea;
 		private String _name;
-		private ArrayList<SubArea> _subAreas = new ArrayList<SubArea>();
+		private ArrayList<SubArea> _subAreas = new ArrayList<>();
 		
 		public Area(int id, int superArea,String name)
 		{
@@ -265,7 +265,7 @@ public class Mundo {
 		
 		public ArrayList<Mapa> getMaps()
 		{
-			ArrayList<Mapa> maps = new ArrayList<Mapa>();
+			ArrayList<Mapa> maps = new ArrayList<>();
 			for(SubArea SA : _subAreas)maps.addAll(SA.getMaps());
 			return maps;
 		}
@@ -277,7 +277,7 @@ public class Mundo {
 		private Area _area;
 		private int _alignement;
 		private String _name;
-		private ArrayList<Mapa> _maps = new ArrayList<Mapa>();
+		private ArrayList<Mapa> _maps = new ArrayList<>();
 		
 		public SubArea(int id, int areaID, int alignement,String name)
 		{
@@ -364,8 +364,8 @@ public class Mundo {
 		private Jugador perso2;
 		private long kamas1 = 0;
 		private long kamas2 = 0;
-		private ArrayList<Couple<Integer,Integer>> items1 = new ArrayList<Couple<Integer,Integer>>();
-		private ArrayList<Couple<Integer,Integer>> items2 = new ArrayList<Couple<Integer,Integer>>();
+		private ArrayList<Couple<Integer,Integer>> items1 = new ArrayList<>();
+		private ArrayList<Couple<Integer,Integer>> items2 = new ArrayList<>();
 		private boolean ok1;
 		private boolean ok2;
 		
@@ -557,7 +557,7 @@ public class Mundo {
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", str);
 				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.get_compte().getGameThread().get_out(), 'O', "+", str+add);
-				items1.add(new Couple<Integer,Integer>(guid,qua));
+				items1.add(new Couple<>(guid, qua));
 			}else if(i == 2)
 			{
 				Couple<Integer,Integer> couple = getCoupleInList(items2,guid);
@@ -570,7 +570,7 @@ public class Mundo {
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", str);
 				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.get_compte().getGameThread().get_out(), 'O', "+", str+add);
-				items2.add(new Couple<Integer,Integer>(guid,qua));
+				items2.add(new Couple<>(guid, qua));
 			}
 		}
 
@@ -972,7 +972,7 @@ public class Mundo {
 		boolean hasHealChal = false;
 		
 		int compteur = 0, i = 0;
-		ArrayList<String> toReturn = new ArrayList<String>();
+		ArrayList<String> toReturn = new ArrayList<>();
 		String chal = new String();
 		while(compteur < 100 && toReturn.size() < nombreChal) {
 			
@@ -1032,7 +1032,7 @@ public class Mundo {
 
 	public static Jugador getPersoByName(String name)
 	{
-		ArrayList<Jugador> Ps = new ArrayList<Jugador>();
+		ArrayList<Jugador> Ps = new ArrayList<>();
 		Ps.addAll(Persos.values());
 		for(Jugador P : Ps)if(P.get_name().equalsIgnoreCase(name))return P;
 		return null;
@@ -1125,7 +1125,7 @@ public class Mundo {
 
 	public static List<Jugador> getOnlinePersos()
 	{
-		List<Jugador> online = new ArrayList<Jugador>();
+		List<Jugador> online = new ArrayList<>();
 		for(Entry<Integer, Jugador> perso : Persos.entrySet())
 		{
 			if(perso.getValue().isOnline() && perso.getValue().get_compte().getGameThread() != null)
@@ -1256,7 +1256,7 @@ public class Mundo {
 			//Thread.sleep(2500);
 			
 			JuegoServidor.addToLog("Sauvegarde des Hdvs...");
-			ArrayList<HdvEntry> toSave = new ArrayList<HdvEntry>();
+			ArrayList<HdvEntry> toSave = new ArrayList<>();
 			for(Mercadillo curHdv : Hdvs.values())
 			{
 				toSave.addAll(curHdv.getAllEntry());
@@ -1510,7 +1510,7 @@ public class Mundo {
 		return false;
 	}
 
-	public static Objeto newObjet(int Guid, int template, int qua, int pos, String strStats, int dueño) {
+	public static Objeto newObjet(int Guid, int template, int qua, int pos, String strStats) {
 		if(Mundo.getObjTemplate(template) == null) {
 			System.out.println("ItemTemplate "+template+" inexistant, GUID dans la table `items`:"+Guid);
 			MainServidor.closeServers();
@@ -1569,11 +1569,10 @@ public class Mundo {
 	
 	public static void addHdvItem(int compteID, int hdvID, HdvEntry toAdd)
 	{
-		if(_hdvsItems.get(compteID) == null)	//Si le compte n'est pas dans la memoire
-			_hdvsItems.put(compteID,new HashMap<Integer,ArrayList<HdvEntry>>());	//Ajout du compte cl?:compteID et un nouveau map<hdvID,items<>>
-			
-		if(_hdvsItems.get(compteID).get(hdvID) == null)
-			_hdvsItems.get(compteID).put(hdvID,new ArrayList<HdvEntry>());
+        //Si le compte n'est pas dans la memoire
+        _hdvsItems.computeIfAbsent(compteID, k -> new HashMap<>());    //Ajout du compte cl?:compteID et un nouveau map<hdvID,items<>>
+
+        _hdvsItems.get(compteID).computeIfAbsent(hdvID, k -> new ArrayList<>());
 			
 		_hdvsItems.get(compteID).get(hdvID).add(toAdd);
 	}
@@ -1606,8 +1605,8 @@ public class Mundo {
 	}
 	public static Map<Integer, ArrayList<HdvEntry>> getMyItems(int compteID)
 	{
-		if(_hdvsItems.get(compteID) == null)//Si le compte n'est pas dans la memoire
-			_hdvsItems.put(compteID,new HashMap<Integer,ArrayList<HdvEntry>>());//Ajout du compte cl?:compteID et un nouveau map<hdvID,items
+        //Si le compte n'est pas dans la memoire
+        _hdvsItems.computeIfAbsent(compteID, k -> new HashMap<>());//Ajout du compte cl?:compteID et un nouveau map<hdvID,items
 			
 		return _hdvsItems.get(compteID);
 	}
@@ -1793,12 +1792,12 @@ public class Mundo {
 	{
 		if(Seller.get(p.get_curCarte().get_id()) == null)
 		{
-			ArrayList<Integer> PersoID = new ArrayList<Integer>();
+			ArrayList<Integer> PersoID = new ArrayList<>();
 			PersoID.add(p.get_GUID());
 			Seller.put(p.get_curCarte().get_id(), PersoID);
 		}else
 		{
-			ArrayList<Integer> PersoID = new ArrayList<Integer>();
+			ArrayList<Integer> PersoID = new ArrayList<>();
 			PersoID.addAll(Seller.get(p.get_curCarte().get_id()));
 			PersoID.add(p.get_GUID());
 			Seller.remove(p.get_curCarte().get_id());

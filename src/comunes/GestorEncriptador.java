@@ -159,7 +159,7 @@ public class GestorEncriptador {
 		{
 			infos = map.get_placesStr().split("\\|")[num];
 			int a=0;
-			list = new ArrayList<Case>();
+			list = new ArrayList<>();
 			while( a < infos.length())
 			{
 				list.add(map.getCase( (getIntByHashedValue(infos.charAt(a))<<6) + getIntByHashedValue( infos.charAt (a+1) ) ) );
@@ -171,11 +171,11 @@ public class GestorEncriptador {
 
 	public static Map<Integer, Case> DecompileMapData(Mapa map, String dData)
 	{
-		Map<Integer, Case> cells = new TreeMap<Integer,Case>();
+		Map<Integer, Case> cells = new TreeMap<>();
 		for (int f = 0; f < dData.length(); f += 10)
 	    {
 			String CellData = dData.substring(f, f+10);
-			List<Byte> CellInfo = new ArrayList<Byte>();
+			List<Byte> CellInfo = new ArrayList<>();
 		    for (int i = 0; i < CellData.length(); i++)
 		    	CellInfo.add((byte)getIntByHashedValue(CellData.charAt(i)));
 		    int Type = (CellInfo.get(2) & 56) >> 3;

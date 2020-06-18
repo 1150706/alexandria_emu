@@ -18,9 +18,9 @@ public class Hechizos {
 	private int spellID;
 	private int spriteID;
 	private String spriteInfos;
-	private Map<Integer,SortStats> sortStats = new TreeMap<Integer,SortStats>();
-	private ArrayList<Integer> effectTargets = new ArrayList<Integer>();
-	private ArrayList<Integer> CCeffectTargets = new ArrayList<Integer>();
+	private Map<Integer,SortStats> sortStats = new TreeMap<>();
+	private ArrayList<Integer> effectTargets = new ArrayList<>();
+	private ArrayList<Integer> CCeffectTargets = new ArrayList<>();
 	
 	public static class SortStats
 	{
@@ -71,7 +71,7 @@ public class Hechizos {
 		
 		private ArrayList<EfectoHechizo> parseEffect(String e)
 		{
-			ArrayList<EfectoHechizo> effets = new ArrayList<EfectoHechizo>();
+			ArrayList<EfectoHechizo> effets = new ArrayList<>();
 			String[] splt = e.split("\\|");
 			for(String a : splt)
 			{
@@ -242,7 +242,7 @@ public class Hechizos {
 				} 
 				ArrayList<Case> cells = Camino.getCellListFromAreaString(fight.get_map(),cell.getID(),perso.get_fightCell().getID(),porteeType,POnum,isCC);
 				
-				ArrayList<Case> finalCells = new ArrayList<Case>();
+				ArrayList<Case> finalCells = new ArrayList<>();
 				
 				int TE = 0;
 				Hechizos S = Mundo.getSort(spellID);

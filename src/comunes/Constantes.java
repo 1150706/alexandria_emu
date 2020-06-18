@@ -24,9 +24,9 @@ public class Constantes
 	public static final	String CLIENT_VERSION	=	"1.29.1";
 	public static final boolean IGNORE_VERSION 		= false;
 	//ZAAPI <alignID,{mapID,mapID,...,mapID}>
-	public static Map<Integer, String> ZAAPI = new TreeMap<Integer, String>();
+	public static Map<Integer, String> ZAAPI = new TreeMap<>();
 	//ZAAP <mapID,cellID>
-	public static Map<Integer, Integer> ZAAPS = new TreeMap<Integer, Integer>();
+	public static Map<Integer, Integer> ZAAPS = new TreeMap<>();
 	//BANIP
 	public static String BAN_IP = "";
 	
@@ -516,7 +516,7 @@ public class Constantes
 
 	public static TreeMap<Integer, Character> getStartSortsPlaces(int classID)
 	{
-		TreeMap<Integer,Character> start = new TreeMap<Integer,Character>();
+		TreeMap<Integer,Character> start = new TreeMap<>();
 		switch(classID)
 		{
 			case CLASS_FECA:
@@ -586,7 +586,7 @@ public class Constantes
 	
 	public static TreeMap<Integer,SortStats> getStartSorts(int classID)
 	{
-		TreeMap<Integer,SortStats> start = new TreeMap<Integer,SortStats>();
+		TreeMap<Integer,SortStats> start = new TreeMap<>();
 		switch(classID)
 		{
 			case CLASS_FECA:
@@ -1863,7 +1863,7 @@ public class Constantes
 	
 	public static ArrayList<JobAction> getPosActionsToJob(int tID, int lvl)
 	{
-		ArrayList<JobAction> list = new ArrayList<JobAction>();
+		ArrayList<JobAction> list = new ArrayList<>();
 		int timeWin = lvl*100;
 		int dropWin = lvl / 5;
 		switch(tID)
@@ -2294,16 +2294,15 @@ public class Constantes
 
 	public static boolean isJobAction(int a)
 	{
-		for(int v = 0;v < JOB_ACTION.length;v++)
-		{
-			if(JOB_ACTION[v][0] == a)return true;
+		for (int[] ints : JOB_ACTION) {
+			if (ints[0] == a) return true;
 		}
 		return false;
 	}
 
 	public static int getObjectByJobSkill(int skID,boolean special)
 	{
-		for(int v = 0;v < JOB_ACTION.length;v++)if(JOB_ACTION[v][0] == skID)return (JOB_ACTION[v].length>1 && special?JOB_ACTION[v][2]:JOB_ACTION[v][1]);
+		for (int[] ints : JOB_ACTION) if (ints[0] == skID) return (ints.length > 1 && special ? ints[2] : ints[1]);
 		return -1;
 	}
 

@@ -20,7 +20,7 @@ public class Mercadillo {
 	 */
 	private class Categorie
 	{
-		Map<Integer,Template> _templates = new HashMap<Integer, Template>();//Dans le format <templateID,Template>
+		Map<Integer,Template> _templates = new HashMap<>();//Dans le format <templateID,Template>
 		
 		@SuppressWarnings("unused")
 		int categID;
@@ -61,7 +61,7 @@ public class Mercadillo {
 		
 		public ArrayList<HdvEntry> getAllEntry()
 		{
-			ArrayList<HdvEntry> toReturn = new ArrayList<HdvEntry>();
+			ArrayList<HdvEntry> toReturn = new ArrayList<>();
 			
 			for(Template curTemp : _templates.values())
 			{
@@ -102,7 +102,7 @@ public class Mercadillo {
 	private class Template
 	{
 		int templateID;
-		Map<Integer, Ligne> _lignes = new HashMap<Integer, Ligne>();
+		Map<Integer, Ligne> _lignes = new HashMap<>();
 		
 		public Template(int templateID, HdvEntry toAdd)
 		{
@@ -142,7 +142,7 @@ public class Mercadillo {
 		
 		public ArrayList<HdvEntry> getAllEntry()
 		{
-			ArrayList<HdvEntry> toReturn = new ArrayList<HdvEntry>();
+			ArrayList<HdvEntry> toReturn = new ArrayList<>();
 			
 			for(Ligne curLine : _lignes.values())
 			{
@@ -182,10 +182,10 @@ public class Mercadillo {
 	 * @author Mathieu
 	 *
 	 */
-	public class Ligne
+	public static class Ligne
 	{
 		private int ligneID;
-		private ArrayList<ArrayList<HdvEntry>> _entries = new ArrayList<ArrayList<HdvEntry>>(3);//La première ArrayList est un tableau de 3 (0=1 1=10 2=100 de quantité)
+		private ArrayList<ArrayList<HdvEntry>> _entries = new ArrayList<>(3);//La première ArrayList est un tableau de 3 (0=1 1=10 2=100 de quantité)
 		private String _strStats;
 		private int templateID;
 		
@@ -197,7 +197,7 @@ public class Mercadillo {
 			
 			for (int i = 0; i < 3; i++)
 			{
-				_entries.add(new ArrayList<HdvEntry>());//Boucle 3 fois pour ajouter 3 List vide dans la SuperList
+				_entries.add(new ArrayList<>());//Boucle 3 fois pour ajouter 3 List vide dans la SuperList
 			}
 			addEntry(toAdd);
 		}
@@ -261,11 +261,11 @@ public class Mercadillo {
 		{
 			//Additionne le nombre d'objet de chaque quantité
 			int totalSize = _entries.get(0).size() + _entries.get(1).size() + _entries.get(2).size();
-			ArrayList<HdvEntry> toReturn = new ArrayList<HdvEntry>(totalSize);
-			
-			for (int qte = 0; qte < _entries.size(); qte++)//Boucler dans les quantité
-			{
-				toReturn.addAll(_entries.get(qte));
+			ArrayList<HdvEntry> toReturn = new ArrayList<>(totalSize);
+
+			//Boucler dans les quantité
+			for (ArrayList<HdvEntry> entry : _entries) {
+				toReturn.addAll(entry);
 			}
 			
 			return toReturn;
@@ -314,13 +314,12 @@ public class Mercadillo {
 		
 		public boolean isEmpty()
 		{
-			for (int i = 0; i < _entries.size(); i++) 
-			{
-				try
-				{
-					if(_entries.get(i).get(0) != null)//Vérifie s'il existe un objet dans chacune des 3 quantité
+			for (ArrayList<HdvEntry> entry : _entries) {
+				try {
+					if (entry.get(0) != null)//Vérifie s'il existe un objet dans chacune des 3 quantité
 						return false;
-				}catch(IndexOutOfBoundsException e){}
+				} catch (IndexOutOfBoundsException e) {
+				}
 			}
 			
 			return true;
@@ -436,8 +435,8 @@ public class Mercadillo {
 	private String _strCategories;
 	private short _lvlMax;
 	
-	private Map<Integer,Categorie> _categories = new HashMap<Integer, Categorie>();
-	private Map<Integer,Couple<Integer, Integer>> _path = new HashMap<Integer, Couple<Integer,Integer>>();	//<LigneID,<CategID,TemplateID>>
+	private Map<Integer,Categorie> _categories = new HashMap<>();
+	private Map<Integer,Couple<Integer, Integer>> _path = new HashMap<>();	//<LigneID,<CategID,TemplateID>>
 	
 	private DecimalFormat pattern = new DecimalFormat("0.0"); 
 	
@@ -513,7 +512,7 @@ public class Mercadillo {
 	
 	public ArrayList<HdvEntry> getAllEntry()
 	{
-		ArrayList<HdvEntry> toReturn = new ArrayList<HdvEntry>();
+		ArrayList<HdvEntry> toReturn = new ArrayList<>();
 		for(Categorie curCat : _categories.values())
 		{
 			toReturn.addAll(curCat.getAllEntry());
@@ -528,7 +527,7 @@ public class Mercadillo {
 		int categ = toAdd.getObjet().getTemplate().getType();
 		int template = toAdd.getObjet().getTemplate().getID();
 		_categories.get(categ).addEntry(toAdd);
-		_path.put(toAdd.getLigneID(), new Couple<Integer, Integer>(categ, template));
+		_path.put(toAdd.getLigneID(), new Couple<>(categ, template));
 		
 		Mundo.addHdvItem(toAdd.getOwner(), _hdvID, toAdd);
 	}

@@ -792,18 +792,16 @@ public class Formulas {
 	  public static long XPDefie(Pelea.Fighter perso, ArrayList winners, ArrayList looser)
 	  {
 	      int lvlLoosers = 0;
-	      for(Iterator iterator = looser.iterator(); iterator.hasNext();)
-	      {
-	          Pelea.Fighter entry = (Pelea.Fighter)iterator.next();
-	          lvlLoosers += entry.get_lvl();
-	      }
+		  for (Object o : looser) {
+			  Fighter entry = (Fighter) o;
+			  lvlLoosers += entry.get_lvl();
+		  }
 
 	      int lvlWinners = 0;
-	      for(Iterator iterator1 = winners.iterator(); iterator1.hasNext();)
-	      {
-	          Pelea.Fighter entry = (Pelea.Fighter)iterator1.next();
-	          lvlWinners += entry.get_lvl();
-	      }
+		  for (Object winner : winners) {
+			  Fighter entry = (Fighter) winner;
+			  lvlWinners += entry.get_lvl();
+		  }
 
 	      int taux = MainServidor.XP_PVP;
 	      float rapport = (float)lvlLoosers / (float)lvlWinners;
@@ -956,7 +954,7 @@ public class Formulas {
 		String[] stats = toDecomp.parseStatsString().split("#");
 		int lvlMax = Integer.parseInt(stats[3],16);
 		int chance = Integer.parseInt(stats[1],16);
-		toReturn = new Couple<Integer,Integer>(chance,lvlMax);
+		toReturn = new Couple<>(chance, lvlMax);
 		
 		return toReturn;
 	}

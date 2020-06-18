@@ -121,7 +121,7 @@ public class EfectoHechizo
 
 		public static ArrayList<Fighter> getTargets(EfectoHechizo SE, Pelea fight, ArrayList<Case> cells)
 		{
-			ArrayList<Fighter> cibles = new ArrayList<Fighter>(); 
+			ArrayList<Fighter> cibles = new ArrayList<>();
 			for(Case aCell : cells)
 			{
 				if(aCell == null)continue;
@@ -145,7 +145,7 @@ public class EfectoHechizo
 
 		public void applyBeginingBuff(Pelea _fight, Fighter fighter)
 		{
-			ArrayList<Fighter> cible = new ArrayList<Fighter>();
+			ArrayList<Fighter> cible = new ArrayList<>();
 			cible.add(fighter);
 			turns = -1;
 			applyToFight(_fight,caster,cible,false);
@@ -195,7 +195,7 @@ public class EfectoHechizo
 							target.get_fightCell().addFighter(target);
 							GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, target.getGUID()+"", target.getGUID()+","+newCellID);
 							
-							ArrayList<Piege> P = (new ArrayList<Piege>());
+							ArrayList<Piege> P = (new ArrayList<>());
 							P.addAll(fight.get_traps());
 							for(Piege p : P)
 							{
@@ -748,10 +748,10 @@ public class EfectoHechizo
 		}
 
 		private void applyEffect_784(ArrayList<Fighter> cibles, Pelea fight) {
-			Map<Integer, Case> origPos = new TreeMap<Integer, Case>(); 
+			Map<Integer, Case> origPos = new TreeMap<>();
 			origPos = fight.get_raulebaque(); // les positions de début de combat
 			
-			ArrayList<Fighter> list = new ArrayList<Pelea.Fighter>();
+			ArrayList<Fighter> list = new ArrayList<>();
 			list = fight.getFighters(3); // on copie la liste des fighters
 			for(int i = 1 ; i < list.size() ; i++)   // on boucle si tout le monde est à la place
 				if(!list.isEmpty()) 				 // d'un autre
@@ -1090,7 +1090,7 @@ public class EfectoHechizo
 			
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, caster.getGUID()+"", target.getGUID()+","+tcase.getID());
 
-			ArrayList<Piege> P = (new ArrayList<Piege>());
+			ArrayList<Piege> P = (new ArrayList<>());
 			P.addAll(fight.get_traps());
 			for(Piege p : P)
 			{
@@ -1142,7 +1142,7 @@ public class EfectoHechizo
 			//on ajoute les fighters aux cases
 			target.get_fightCell().addFighter(target);
 			caster.get_fightCell().addFighter(caster);
-			ArrayList<Piege> P = (new ArrayList<Piege>());
+			ArrayList<Piege> P = (new ArrayList<>());
 			P.addAll(fight.get_traps());
 			for(Piege p : P)
 			{
@@ -1927,7 +1927,7 @@ public class EfectoHechizo
 			String gtl = fight.getGTL();
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 180, caster.getGUID() + "", gm);
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 999, caster.getGUID()+"", gtl);
-			ArrayList<Piege> P = (new ArrayList<Piege>());
+			ArrayList<Piege> P = (new ArrayList<>());
 			P.addAll(fight.get_traps());
 			for(Piege p : P)
 			{
@@ -1973,7 +1973,7 @@ public class EfectoHechizo
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 181, caster.getGUID() + "", gm);
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 999, caster.getGUID()+"", gtl);
 			caster._nbInvoc++;
-			ArrayList<Piege> P = (new ArrayList<Piege>());
+			ArrayList<Piege> P = (new ArrayList<>());
 			P.addAll(fight.get_traps());
 			for(Piege p : P)
 			{
@@ -2449,7 +2449,7 @@ public class EfectoHechizo
 				caster.set_fightCell(cell);
 				caster.get_fightCell().addFighter(caster);
 				
-				ArrayList<Piege> P = (new ArrayList<Piege>());
+				ArrayList<Piege> P = (new ArrayList<>());
 				P.addAll(fight.get_traps());
 				for(Piege p : P)
 				{
@@ -2586,7 +2586,7 @@ public class EfectoHechizo
 					target.get_fightCell().addFighter(target);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, caster.getGUID()+"", target.getGUID()+","+newCellID);
 					
-					ArrayList<Piege> P = (new ArrayList<Piege>());
+					ArrayList<Piege> P = (new ArrayList<>());
 					P.addAll(fight.get_traps());
 					for(Piege p : P)
 					{
@@ -2672,7 +2672,7 @@ public class EfectoHechizo
 						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, caster.getGUID()+"", target.getGUID()+","+newCellID);
 					}
 					
-					ArrayList<Piege> P = (new ArrayList<Piege>());
+					ArrayList<Piege> P = (new ArrayList<>());
 					P.addAll(fight.get_traps());
 					for(Piege p : P)
 					{

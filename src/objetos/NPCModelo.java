@@ -21,7 +21,7 @@ public class NPCModelo {
 	private int _extraClip;
 	private int _customArtWork;
 	private int _initQuestionID;
-	private ArrayList<ObjTemplate> _ventes = new ArrayList<ObjTemplate>();
+	private ArrayList<ObjTemplate> _ventes = new ArrayList<>();
 	private Quest _quest;
 
 	public static class NPC_question
@@ -179,7 +179,7 @@ public class NPCModelo {
 	public static class NPC_reponse
 	{
 		private int _id;
-		private ArrayList<Accion> _actions = new ArrayList<Accion>();
+		private ArrayList<Accion> _actions = new ArrayList<>();
 		
 		public NPC_reponse(int id)
 		{
@@ -193,7 +193,7 @@ public class NPCModelo {
 		
 		public void addAction(Accion act)
 		{
-			ArrayList<Accion> c = new ArrayList<Accion>();
+			ArrayList<Accion> c = new ArrayList<>();
 			c.addAll(_actions);
 			for(Accion a : c)if(a.getID() == act.getID())_actions.remove(a);
 			_actions.add(act);
@@ -324,7 +324,7 @@ public class NPCModelo {
 	}
 	public boolean delItemVendor(int tID)
 	{
-		ArrayList<ObjTemplate> newVentes = new ArrayList<ObjTemplate>();
+		ArrayList<ObjTemplate> newVentes = new ArrayList<>();
 		boolean remove = false;
 		for(ObjTemplate T : _ventes)
 		{

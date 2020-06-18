@@ -15,7 +15,7 @@ public class PiedraAlma extends Objeto {
 		this.quantity = 1;
 		this.position = Constantes.ITEM_POS_NO_EQUIPED;
 		
-		_monsters = new ArrayList<Couple<Integer, Integer>>();	//Couple<MonstreID,Level>
+		_monsters = new ArrayList<>();	//Couple<MonstreID,Level>
 		parseStringToStats(strStats);
 	}
 	
@@ -29,7 +29,7 @@ public class PiedraAlma extends Objeto {
 				int monstre = Integer.parseInt(s.split(",")[0]);
 				int level = Integer.parseInt(s.split(",")[1]);
 				
-				_monsters.add(new Couple<Integer, Integer>(monstre, level));
+				_monsters.add(new Couple<>(monstre, level));
 				
 			}catch(Exception e){continue;};
 		}

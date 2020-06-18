@@ -18,17 +18,17 @@ public class Gremio {
 	private int _id;
 	private String _name = "";
 	private String _emblem = "";
-	private Map<Integer,GuildMember> _members = new TreeMap<Integer,GuildMember>();
+	private Map<Integer,GuildMember> _members = new TreeMap<>();
 	private int _lvl;
 	private long _xp;
 	
 	//Percepteur
 	private int _capital = 0;
 	private int _nbrPerco = 0;
-	private Map<Integer, SortStats> Spells = new TreeMap<Integer, SortStats>();	//<ID, Level>
-	private Map<Integer, Integer> stats = new TreeMap<Integer, Integer>(); //<Effet, Quantité>
+	private Map<Integer, SortStats> Spells = new TreeMap<>();	//<ID, Level>
+	private Map<Integer, Integer> stats = new TreeMap<>(); //<Effet, Quantité>
 	//Stats en combat
-	private Map<Integer,Integer> statsFight = new TreeMap<Integer,Integer>();
+	private Map<Integer,Integer> statsFight = new TreeMap<>();
 	
 	public static class GuildMember {
 		private int _guid;
@@ -315,7 +315,7 @@ public class Gremio {
 	}
 
 	public ArrayList<Jugador> getMembers() {
-		ArrayList<Jugador> a = new ArrayList<Jugador>();
+		ArrayList<Jugador> a = new ArrayList<>();
 		for(GuildMember GM : _members.values())a.add(GM.getPerso());
 		return a;
 	}

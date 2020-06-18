@@ -36,15 +36,15 @@ public class Cuenta {
 	private RealmThread _realmThread;
 	private Jugador _curPerso;
 	private long _bankKamas = 0;
-	private Map<Integer, Objeto> _bank = new TreeMap<Integer, Objeto>();
-	private ArrayList<Integer> _friendGuids = new ArrayList<Integer>();
-	private ArrayList<Integer> _EnemyGuids = new ArrayList<Integer>();
+	private Map<Integer, Objeto> _bank = new TreeMap<>();
+	private ArrayList<Integer> _friendGuids = new ArrayList<>();
+	private ArrayList<Integer> _EnemyGuids = new ArrayList<>();
 	private boolean _mute = false;
 	public Timer _muteTimer;
 	public int _position = -1;//Position du joueur
 	private Map<Integer,ArrayList<HdvEntry>> _hdvsItems;// Contient les items des HDV format : <hdvID,<cheapestID>>
 	
-	private Map<Integer, Jugador> _persos = new TreeMap<Integer, Jugador>();
+	private Map<Integer, Jugador> _persos = new TreeMap<>();
 	
 	public Cuenta(int aGUID, String aName, String aPass, String aPseudo, String aQuestion, String aReponse, int aGmLvl, int vip, boolean aBanned, String aLastIp, String aLastConnectionDate, String bank, int bankKamas, String friends, String enemy)
 	{
@@ -110,14 +110,10 @@ public class Cuenta {
 		if(time == 0)return;
 		if(_muteTimer == null && time >0)
 		{
-			_muteTimer = new Timer(time*1000,new ActionListener()
-			{
-				public void actionPerformed(ActionEvent arg0)
-				{
-					mute(false,0);
-					_muteTimer.stop();
-				}
-			});
+			_muteTimer = new Timer(time*1000, arg0 -> {
+                mute(false,0);
+                _muteTimer.stop();
+            });
 			_muteTimer.start();
 		}else if(time ==0)
 		{

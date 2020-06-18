@@ -24,14 +24,14 @@ public class Recaudador
 	private short _N2 = 0;
 	private byte _inFight = 0;
 	private int _inFightID = -1;
-	private Map<Integer, Objeto> _objets = new TreeMap<Integer, Objeto>();
+	private Map<Integer, Objeto> _objets = new TreeMap<>();
 	private long _kamas = 0;
 	private long _xp = 0;
 	private boolean _inExchange = false;
 	//Timer
 	private long _timeTurn = 45000;
 	//Les logs
-	private Map<Integer, Objeto> _LogObjets = new TreeMap<Integer, Objeto>();
+	private Map<Integer, Objeto> _LogObjets = new TreeMap<>();
 	private long _LogXP = 0;
 	
 	public Recaudador(int guid, short map, int cellID, byte orientation, int GuildID,
@@ -59,7 +59,7 @@ public class Recaudador
 	}
 	
 	public ArrayList<Drop> getDrops() {
-		ArrayList<Drop> toReturn = new ArrayList<Mundo.Drop>();
+		ArrayList<Drop> toReturn = new ArrayList<>();
 		for(Objeto obj : _objets.values()) {
 			toReturn.add(new Drop(obj.getTemplate().getID(),0, 100, obj.getQuantity()));
 		}

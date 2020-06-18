@@ -78,7 +78,7 @@ public class Camino {
 	public static ArrayList<Fighter> getEnemyFighterArround(int cellID, Mapa map, Pelea fight)
 	{
 		char[] dirs = {'b','d','f','h'};
-		ArrayList<Fighter> enemy = new ArrayList<Fighter>();
+		ArrayList<Fighter> enemy = new ArrayList<>();
 		
 		for(char dir : dirs)
 		{
@@ -106,7 +106,7 @@ public class Camino {
 	public static ArrayList<Fighter> getFightersAround(int cellID, Mapa map, Pelea fight)
 	{
 		char[] dirs = {'b','d','f','h'};
-		ArrayList<Fighter> fighters = new ArrayList<Fighter>();
+		ArrayList<Fighter> fighters = new ArrayList<>();
 		
 		for(char dir : dirs)
 		{
@@ -297,7 +297,7 @@ public class Camino {
 
 	public static ArrayList<Fighter> getCiblesByZoneByWeapon(Pelea fight, int type, Case cell, int castCellID)
 	{
-		ArrayList<Fighter> cibles = new ArrayList<Fighter>();
+		ArrayList<Fighter> cibles = new ArrayList<>();
 		char c = getDirBetweenTwoCase(castCellID,cell.getID(),fight.get_map(),true);
 		if(c == 0)
 		{
@@ -370,7 +370,7 @@ public class Camino {
 	public static char getDirBetweenTwoCase(int cell1ID, int cell2ID, Mapa map, boolean Combat)
 	{
 		// ne permet d'avoir que les directions uniques (pas de composition de direction)
-		ArrayList<Character> dirs = new ArrayList<Character>();
+		ArrayList<Character> dirs = new ArrayList<>();
 		dirs.add('b');
 		dirs.add('d');
 		dirs.add('f');
@@ -397,7 +397,7 @@ public class Camino {
 
 	public static ArrayList<Case> getCellListFromAreaString(Mapa map, int cellID, int castCellID, String zoneStr, int PONum, boolean isCC)
 	{
-		ArrayList<Case> cases = new ArrayList<Case>();
+		ArrayList<Case> cases = new ArrayList<>();
 		int c = PONum;
 		if(map.getCase(cellID) == null)return cases;
 		cases.add(map.getCase(cellID));
@@ -409,7 +409,7 @@ public class Camino {
 				for(int a = 0; a < taille;a++)
 				{
 					char[] dirs = {'b','d','f','h'};
-					ArrayList<Case> cases2 = new ArrayList<Case>();//on évite les modifications concurrentes
+					ArrayList<Case> cases2 = new ArrayList<>();//on évite les modifications concurrentes
 					cases2.addAll(cases);
 					for(Case aCell : cases2)
 					{
@@ -502,7 +502,7 @@ public class Camino {
 	{
 		if(fighter != null && fighter.getPersonnage() != null) // on ne revérifie pas (en plus du client) pour les joueurs
 			return true;
-		ArrayList<Integer> CellsToConsider = new ArrayList<Integer>();
+		ArrayList<Integer> CellsToConsider = new ArrayList<>();
 		CellsToConsider = getLoSBotheringIDCases(map, cell1, cell2, true);
 		if(CellsToConsider == null) {
 			System.out.println("Liste des cases pouvant gener NULL");
@@ -540,14 +540,14 @@ public class Camino {
 	}
 	
 	private static ArrayList<Integer> getLoSBotheringIDCases(Mapa map, int cellID1, int cellID2, boolean Combat) {
-		ArrayList<Integer> toReturn = new ArrayList<Integer>();
+		ArrayList<Integer> toReturn = new ArrayList<>();
 		int consideredCell1 = cellID1;
 		int consideredCell2 = cellID2;
 		char dir = 'b';
 		int diffX = 0;
 		int diffY = 0;
 		int compteur = 0;
-		ArrayList<Character> dirs = new ArrayList<Character>();
+		ArrayList<Character> dirs = new ArrayList<>();
 		dirs.add('b');
 		dirs.add('d');
 		dirs.add('f');
@@ -609,7 +609,7 @@ public class Camino {
 	}
 	
 	private static ArrayList<Integer> getLoSBotheringCasesInDiagonal(Mapa map, int cellID1, int cellID2, int diffX, int diffY) {
-		ArrayList<Integer> toReturn = new ArrayList<Integer>();
+		ArrayList<Integer> toReturn = new ArrayList<>();
 		char dir = 'a';
 		if(diffX > 0 && diffY > 0)
 				dir = 'g';
@@ -635,7 +635,7 @@ public class Camino {
 		//On prend la cellule autour de la cible, la plus proche
 		int dist = 1000;
 		int cellID = startCell;
-		if(forbidens == null)forbidens = new ArrayList<Case>();
+		if(forbidens == null)forbidens = new ArrayList<>();
 		char[] dirs = {'b','d','f','h'};
 		for(char d : dirs)
 		{
@@ -655,9 +655,9 @@ public class Camino {
 	}
 	public static ArrayList<Case> getShortestPathBetween(Mapa map, int start, int dest, int distMax)
 	{	
-		ArrayList<Case> curPath = new ArrayList<Case>();
-		ArrayList<Case> curPath2 = new ArrayList<Case>();
-		ArrayList<Case> closeCells = new ArrayList<Case>();
+		ArrayList<Case> curPath = new ArrayList<>();
+		ArrayList<Case> curPath2 = new ArrayList<>();
+		ArrayList<Case> closeCells = new ArrayList<>();
 		int limit = 1000;
 		//int oldCaseID = start;
 		Case curCase = map.getCase(start);
@@ -743,7 +743,7 @@ public class Camino {
 	
 	public static ArrayList<Integer> getListCaseFromFighter(Pelea fight, Fighter fighter)
 	{
-		ArrayList<Integer> cells = new ArrayList<Integer>();
+		ArrayList<Integer> cells = new ArrayList<>();
 		int start = fighter.get_fightCell().getID();
 		int[] curPath;
 		int i = 0;
@@ -799,7 +799,7 @@ public class Camino {
 	
 	public static ArrayList<Integer> triCellList(Pelea fight, Fighter fighter, ArrayList<Integer> cells)
 	{
-		ArrayList<Integer> Fcells = new ArrayList<Integer>();
+		ArrayList<Integer> Fcells = new ArrayList<>();
 		ArrayList<Integer> copie = cells;
 		int dist = 100;
 		int curCell = 0;
@@ -827,7 +827,7 @@ public class Camino {
 	public static boolean isBord1(int id)
 	{
 		int[] bords = {1,30,59,88,117,146,175,204,233,262,291,320,349,378,407,436,465,15,44,73,102,131,160,189,218,247,276,305,334,363,392,421,450,479};
-		ArrayList <Integer> test = new ArrayList <Integer>();
+		ArrayList <Integer> test = new ArrayList<>();
 		for(int i : bords)
 		{
 			test.add(i);
@@ -842,7 +842,7 @@ public class Camino {
 	public static boolean isBord2(int id)
 	{
 		int[] bords = {16,45,74,103,132,161,190,219,248,277,306,335,364,393,422,451,29,58,87,116,145,174,203,232,261,290,319,348,377,406,435,464};
-		ArrayList <Integer> test = new ArrayList <Integer>();
+		ArrayList <Integer> test = new ArrayList<>();
 		for(int i : bords)
 		{
 			test.add(i);
@@ -856,7 +856,7 @@ public class Camino {
 	
 	public static ArrayList<Integer> getLoS (int cell1, int cell2)
 	{
-		ArrayList<Integer> Los = new ArrayList<Integer>();
+		ArrayList<Integer> Los = new ArrayList<>();
 		int cell = cell1;
 		boolean next = false;
 		int[] dir1 = {1,-1,29,-29,15,14,-15,-14}; // viable uniquement pour les maps de taille moyenne

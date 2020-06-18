@@ -29,7 +29,7 @@ public class Objeto {
 		private String conditions;
 		private int PACost,POmin,POmax,TauxCC,TauxEC,BonusCC;
 		private boolean isTwoHanded;
-		private ArrayList<Accion> onUseActions = new ArrayList<Accion>();
+		private ArrayList<Accion> onUseActions = new ArrayList<>();
 		private long sold;
 		private int avgPrice;
 		
@@ -201,7 +201,7 @@ public class Objeto {
 		
 		private ArrayList<EfectoHechizo> getEffectTemplate(String statsTemplate)
 		{
-			ArrayList<EfectoHechizo> Effets = new ArrayList<EfectoHechizo>();
+			ArrayList<EfectoHechizo> Effets = new ArrayList<>();
 			if(statsTemplate.equals("") || statsTemplate == null) return Effets;
 			
 			String[] splitted = statsTemplate.split(",");
@@ -261,8 +261,8 @@ public class Objeto {
 	protected int obvijevanLook;
 	private Jugador.Stats Stats = new Stats();
 	protected int dueño;
-	private ArrayList<EfectoHechizo> Effects = new ArrayList<EfectoHechizo>();
-	private Map<Integer,String> txtStats = new TreeMap<Integer,String>();
+	private ArrayList<EfectoHechizo> Effects = new ArrayList<>();
+	private Map<Integer,String> txtStats = new TreeMap<>();
 	//Speaking Item
 	//private boolean isExchangeable = true;
 	protected boolean isSpeaking = false;
@@ -975,7 +975,7 @@ public class Objeto {
 	}
 
 	public ArrayList<EfectoHechizo> getCritEffects() {
-		ArrayList<EfectoHechizo> effets = new ArrayList<EfectoHechizo>();
+		ArrayList<EfectoHechizo> effets = new ArrayList<>();
 		for(EfectoHechizo SE : Effects) {
 			try {
 				boolean boost = true;

@@ -25,8 +25,8 @@ public class Monstruo
 	private int IAType = 0;
 	private int minKamas;
 	private int maxKamas;
-	private Map<Integer,MobGrade> grades = new TreeMap<Integer,MobGrade>();
-	private ArrayList<Drop> drops = new ArrayList<Drop>();
+	private Map<Integer,MobGrade> grades = new TreeMap<>();
+	private ArrayList<Drop> drops = new ArrayList<>();
 	private boolean isCapturable;
 	private boolean isApprivoisable;
 	private boolean ThereAreThree;
@@ -45,7 +45,7 @@ public class Monstruo
 		private int align = -1;
 		private int aggroDistance = 0;
 		private boolean isFix = false;
-		private Map<Integer,MobGrade> _Mobs = new TreeMap<Integer,MobGrade>();
+		private Map<Integer,MobGrade> _Mobs = new TreeMap<>();
 		private String condition = "";
 		private Timer _condTimer;
 		private long _creationDate;
@@ -208,7 +208,7 @@ public class Monstruo
 					int min = Integer.parseInt(infos[1]);
 					int max = Integer.parseInt(infos[2]);
 					Monstruo m = Mundo.getMonstre(id);
-					List<MobGrade> mgs = new ArrayList<MobGrade>();
+					List<MobGrade> mgs = new ArrayList<>();
 					//on ajoute a la liste les grades possibles
 					for(MobGrade MG : m.getGrades().values())if(MG.level >=min && MG.level<=max)mgs.add(MG);
 					if(mgs.isEmpty())continue;
@@ -363,9 +363,9 @@ public class Monstruo
 		private int PM;
 		private Case fightCell;
 		private int baseXp = 10;
-		private ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<EfectoHechizo>();
-		private Map<Integer,Integer> stats = new TreeMap<Integer,Integer>();
-		private Map<Integer,SortStats> spells = new TreeMap<Integer,SortStats>();
+		private ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<>();
+		private Map<Integer,Integer> stats = new TreeMap<>();
+		private Map<Integer,SortStats> spells = new TreeMap<>();
 		
 		public MobGrade(Monstruo aTemp, int Agrade, int Alevel, int aPA, int aPM, String Aresist, String Astats, String Aspells, int pdvMax, int aInit, int xp)
 		{
@@ -463,7 +463,7 @@ public class Monstruo
 
 		public MobGrade getCopy()
 		{
-			Map<Integer,Integer> newStats = new TreeMap<Integer,Integer>();
+			Map<Integer,Integer> newStats = new TreeMap<>();
 			newStats.putAll(stats);
 			return new MobGrade(template,grade,level,PDV,PDVMAX,PA,PM,newStats,spells,baseXp);
 		}

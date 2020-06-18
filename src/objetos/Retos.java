@@ -21,7 +21,7 @@ public class Retos
   private String _lastActions;
   private String _arguments = new String();
   private long _lastActions_time;
-  private List<Pelea.Fighter> _ordreJeu = new ArrayList<Fighter>();
+  private List<Pelea.Fighter> _ordreJeu = new ArrayList<>();
 
   public Retos(Pelea fight, int challengeType, int gainXp, int gainDrop)
   {
@@ -645,7 +645,7 @@ public class Retos
 		boolean hasFailed = false;
 		if(!_challengeAlive)
 			return;
-		ArrayList<Fighter> Neighbours = new ArrayList<Fighter>();
+		ArrayList<Fighter> Neighbours = new ArrayList<>();
 		Neighbours = Camino.getFightersAround(fighter.get_fightCell().getID(), _fight.get_map(),_fight);
 		switch(_type) {
 			case 1: // Zombie

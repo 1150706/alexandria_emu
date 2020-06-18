@@ -11,12 +11,12 @@ import objetos.Objeto.ObjTemplate;
 	public class Quest
 	{
 		private int _ID;
-		private Map<Integer, Step> _step = new TreeMap<Integer, Step>();
+		private Map<Integer, Step> _step = new TreeMap<>();
 		private int _lvl;
 		private long _xp;
 		private int _ali;
-		private ArrayList<Objeto.ObjTemplate> _gainob = new ArrayList<ObjTemplate>();
-		private Map<Objeto.ObjTemplate, Integer> _gain = new TreeMap<ObjTemplate, Integer>();
+		private ArrayList<Objeto.ObjTemplate> _gainob = new ArrayList<>();
+		private Map<Objeto.ObjTemplate, Integer> _gain = new TreeMap<>();
 		private int _kamas;
 		private String _name;
 		//private int _lastquestrequired;

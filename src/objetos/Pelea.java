@@ -125,13 +125,13 @@ public class Pelea
 			String str = _spell+","+_cell.getID()+",0,1,1,"+_caster.getGUID();
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 307, target.getGUID()+"", str);
 			
-			ArrayList<Case> cells = new ArrayList<Case>();
+			ArrayList<Case> cells = new ArrayList<>();
 			cells.add(_cell);
 			//on ajoute les autres cases que couvre le pi�ge
 			for(int a = 0; a < _size;a++)
 			{
 				char[] dirs = {'b','d','f','h'};
-				ArrayList<Case> cases2 = new ArrayList<Case>();//on �vite les modifications concurrentes
+				ArrayList<Case> cases2 = new ArrayList<>();//on �vite les modifications concurrentes
 				cases2.addAll(cells); 
 				for(Case aCell : cases2)
 				{
@@ -174,8 +174,8 @@ public class Pelea
 		private Jugador _double = null;
 		private int _team = -2;
 		private Case _cell;
-		private ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<EfectoHechizo>();
-		private Map<Integer,Integer> _chatiValue = new TreeMap<Integer,Integer>();
+		private ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<>();
+		private Map<Integer,Integer> _chatiValue = new TreeMap<>();
 		private int _orientation; 
 		private Fighter _invocator;
 		public int _nbInvoc = 0;
@@ -184,10 +184,10 @@ public class Pelea
 		private boolean _isDead;
 		private boolean _hasLeft;
 		private int _gfxID;
-		private Map<Integer,Integer> _state = new TreeMap<Integer,Integer>();
+		private Map<Integer,Integer> _state = new TreeMap<>();
 		private Fighter _isHolding;
 		private Fighter _holdedBy;
-		private ArrayList<LaunchedSort> _launchedSort = new ArrayList<LaunchedSort>();
+		private ArrayList<LaunchedSort> _launchedSort = new ArrayList<>();
 		private Fighter _oldCible = null;
 		
 		public Fighter get_oldCible() {
@@ -244,7 +244,7 @@ public class Pelea
 		
 		public void ActualiseLaunchedSort()
 		{
-			ArrayList<LaunchedSort> copie = new ArrayList<LaunchedSort>();
+			ArrayList<LaunchedSort> copie = new ArrayList<>();
 			copie.addAll(_launchedSort);
 			int i = 0;
 			for(LaunchedSort S : copie)
@@ -356,7 +356,7 @@ public class Pelea
 		
 		public Stats getTotalStats()
 		{
-			Stats stats = new Stats(new TreeMap<Integer,Integer>());
+			Stats stats = new Stats(new TreeMap<>());
 			if(_type == 1)//Personnage
 				stats = _perso.getTotalStats();
 			if(_type == 2)//Mob
@@ -504,7 +504,7 @@ public class Pelea
 		public void decrementStates()
 		{
 			//Copie pour �vident les modif concurrentes
-			ArrayList<Entry<Integer,Integer>> entries = new ArrayList<Entry<Integer, Integer>>();
+			ArrayList<Entry<Integer,Integer>> entries = new ArrayList<>();
 			entries.addAll(_state.entrySet());
 			for(Entry<Integer,Integer> e : entries)
 			{
@@ -543,7 +543,7 @@ public class Pelea
 				for(int effectID : Constantes.BEGIN_TURN_BUFF)
 				{
 					//On �vite les modifications concurrentes
-					ArrayList<EfectoHechizo> buffs = new ArrayList<EfectoHechizo>();
+					ArrayList<EfectoHechizo> buffs = new ArrayList<>();
 					buffs.addAll(_fightBuffs);
 					for(EfectoHechizo entry : buffs)
 					{
@@ -617,7 +617,7 @@ public class Pelea
 		public void refreshfightBuff()
 		{
 			//Copie pour contrer les modifications Concurentes
-			ArrayList<EfectoHechizo> b = new ArrayList<EfectoHechizo>();
+			ArrayList<EfectoHechizo> b = new ArrayList<>();
 			for(EfectoHechizo entry : _fightBuffs)
 			{
 				if(entry.decrementDuration() > 0)//Si pas fin du buff
@@ -838,7 +838,7 @@ public class Pelea
 		}
 		public ArrayList<EfectoHechizo> getBuffsByEffectID(int effectID)
 		{
-			ArrayList<EfectoHechizo> buffs = new ArrayList<EfectoHechizo>();
+			ArrayList<EfectoHechizo> buffs = new ArrayList<>();
 			for(EfectoHechizo buff : _fightBuffs)
 			{
 				if(buff.getEffectID() == effectID)
@@ -848,7 +848,7 @@ public class Pelea
 		}
 		public Stats getTotalStatsLessBuff()
 		{
-			Stats stats = new Stats(new TreeMap<Integer,Integer>());
+			Stats stats = new Stats(new TreeMap<>());
 			if(_type == 1)
 				stats = _perso.getTotalStats();
 			if(_type == 2)
@@ -933,7 +933,7 @@ public class Pelea
 
 		public void debuff()
 		{
-			ArrayList<EfectoHechizo> newBuffs = new ArrayList<EfectoHechizo>();
+			ArrayList<EfectoHechizo> newBuffs = new ArrayList<>();
 			//on v�rifie chaque buff en cours, si pas d�buffable, on l'ajout a la nouvelle liste
 			for(EfectoHechizo SE : _fightBuffs)
 			{
@@ -984,7 +984,7 @@ public class Pelea
 				return; 
 				}
 			}
-			ArrayList<EfectoHechizo> buffs = new ArrayList<EfectoHechizo>();
+			ArrayList<EfectoHechizo> buffs = new ArrayList<>();
 			buffs.addAll(get_fightBuff());
 			for(EfectoHechizo SE : buffs)
 			{
@@ -1168,16 +1168,16 @@ public class Pelea
 	}
 	
 	private int _id;
-	private Map<Integer,Fighter> _team0 = new TreeMap<Integer,Fighter>();
-	private Map<Integer,Fighter> _team1 = new TreeMap<Integer,Fighter>();
-	private Map<Integer,Fighter> deadList = new TreeMap<Integer,Fighter>();
-	private Map<Integer, Jugador> _spec  = new TreeMap<Integer, Jugador>();
+	private Map<Integer,Fighter> _team0 = new TreeMap<>();
+	private Map<Integer,Fighter> _team1 = new TreeMap<>();
+	private Map<Integer,Fighter> deadList = new TreeMap<>();
+	private Map<Integer, Jugador> _spec  = new TreeMap<>();
 	private Mapa _map;
 	private Mapa _mapOld;
 	private Fighter _init0;
 	private Fighter _init1;
-	private ArrayList<Case> _start0 = new ArrayList<Case>();
-	private ArrayList<Case> _start1 = new ArrayList<Case>();
+	private ArrayList<Case> _start0 = new ArrayList<>();
+	private ArrayList<Case> _start1 = new ArrayList<>();
 	private int _state = 0;
 	private int _guildID = -1;
 	private int _type = -1;
@@ -1197,19 +1197,19 @@ public class Pelea
 	private int _curFighterUsedPA;
 	private int _curFighterUsedPM;
 	private String _curAction = "";
-	private List<Fighter> _ordreJeu = new ArrayList<Fighter>();
+	private List<Fighter> _ordreJeu = new ArrayList<>();
 	private Timer _turnTimer;
-	private List<Glyphe> _glyphs = new ArrayList<Glyphe>();
-	private List<Piege> _traps = new ArrayList<Piege>();
+	private List<Glyphe> _glyphs = new ArrayList<>();
+	private List<Piege> _traps = new ArrayList<>();
 	private MobGroup _mobGroup;
 	private Recaudador _perco;
 	
-	private ArrayList<Fighter> _captureur = new ArrayList<Fighter>(8);	//Cr�ation d'une liste de longueur 8. Les combats contiennent un max de 8 Attaquant
+	private ArrayList<Fighter> _captureur = new ArrayList<>(8);	//Cr�ation d'une liste de longueur 8. Les combats contiennent un max de 8 Attaquant
 	private boolean isCapturable = false;
 	private int captWinner = -1;
 	private PiedraAlma pierrePleine;
-	private Map<Integer, Retos> _challenges = new TreeMap<Integer, Retos>();
-	private Map<Integer, Case> _raulebaque = new TreeMap<Integer, Case>();
+	private Map<Integer, Retos> _challenges = new TreeMap<>();
+	private Map<Integer, Case> _raulebaque = new TreeMap<>();
 	private long _ticMyTimer_startTime = 0L;
 	private boolean _ticMyTimer_endTurn = false;
 	  
@@ -1403,7 +1403,7 @@ public class Pelea
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.get_GUID()+"", init1.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.get_GUID()+"", init1.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
 		
-		List<Entry<Integer, Fighter>> e = new ArrayList<Entry<Integer,Fighter>>();
+		List<Entry<Integer, Fighter>> e = new ArrayList<>();
 		e.addAll(_team1.entrySet());
 		for(Entry<Integer,Fighter> entry : e)
 		{
@@ -1494,7 +1494,7 @@ public class Pelea
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
 		
-		List<Entry<Integer, Fighter>> e = new ArrayList<Entry<Integer,Fighter>>();
+		List<Entry<Integer, Fighter>> e = new ArrayList<>();
 		e.addAll(_team1.entrySet());
 		for(Entry<Integer,Fighter> entry : e)
 		{
@@ -1593,7 +1593,7 @@ public class Pelea
 
 	public ArrayList<Fighter> getFighters(int teams)//teams entre 0 et 7, binaire([spec][t2][t1]);
 	{
-		ArrayList<Fighter> fighters = new ArrayList<Fighter>();
+		ArrayList<Fighter> fighters = new ArrayList<>();
 		
 		if(teams - 4 >= 0)
 		{
@@ -1656,9 +1656,8 @@ public class Pelea
 
 	private boolean groupCellContains(ArrayList<Case> cells, int cell)
 	{
-		for(int a = 0; a<cells.size();a++)
-		{
-			if(cells.get(a).getID() == cell)
+		for (Case aCase : cells) {
+			if (aCase.getID() == cell)
 				return true;
 		}
 		return false;
@@ -1730,13 +1729,7 @@ public class Pelea
 		GestorSalida.GAME_SEND_GTM_PACKET_TO_FIGHT(this, 7);
 		if(_turnTimer  != null)_turnTimer.stop();
 		_turnTimer = null;
-		_turnTimer = new Timer(Constantes.TIME_BY_TURN,new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-					endTurn();
-				}
-			});
+		_turnTimer = new Timer(Constantes.TIME_BY_TURN, e -> endTurn());
 		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Debut du combat");
 		for(Fighter F : getFighters(3))
 		{
@@ -1870,7 +1863,7 @@ public class Pelea
 		//reset des Max des Chatis
 		_ordreJeu.get(_curPlayer).get_chatiValue().clear();
 		//Gestion des glyphes
-		ArrayList<Glyphe> glyphs = new ArrayList<Glyphe>();//Copie du tableau
+		ArrayList<Glyphe> glyphs = new ArrayList<>();//Copie du tableau
 		glyphs.addAll(_glyphs);
 		
 		for(Glyphe g : glyphs)
@@ -2016,7 +2009,7 @@ public class Pelea
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 100, SE.getCaster().getGUID()+"", _ordreJeu.get(_curPlayer).getGUID()+","+dgt);
 				
 			}
-			ArrayList<Glyphe> glyphs = new ArrayList<Glyphe>();//Copie du tableau
+			ArrayList<Glyphe> glyphs = new ArrayList<>();//Copie du tableau
 			glyphs.addAll(_glyphs);
 			for(Glyphe g : glyphs)
 			{
@@ -2407,13 +2400,8 @@ public class Pelea
 		ArrayList<Fighter> tacle = Camino.getEnemyFighterArround(f.get_fightCell().getID(), _map, this);
 		if(tacle != null && !f.isState(6))//Tentative de Tacle : Si stabilisation alors pas de tacle possible
 		{
-			for(Fighter T : tacle)//Les stabilis�s ne taclent pas
-			{ 
-				if(T.isState(6)) 
-				{ 
-					tacle.remove(T); 
-				} 
-			}
+			//Les stabilis�s ne taclent pas
+			tacle.removeIf(T -> T.isState(6));
 			if(!tacle.isEmpty())//Si tous les tacleur ne sont pas stabilis�s
 			{
 				if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Le personnage est a cote de ("+tacle.size()+") ennemi(s)");// ("+tacle.getPacketsName()+","+tacle.get_fightCell().getID()+") => Tentative de tacle:");
@@ -2438,7 +2426,7 @@ public class Pelea
 		}
 		
 		//*
-		AtomicReference<String> pathRef = new AtomicReference<String>(path);
+		AtomicReference<String> pathRef = new AtomicReference<>(path);
 		int nStep = Camino.isValidPath(_map, f.get_fightCell().getID(), pathRef, this);
 		String newPath = pathRef.get();
 		if( nStep > _curFighterPM || nStep == -1000)
@@ -2523,7 +2511,7 @@ public class Pelea
     		} catch (InterruptedException e) {};
         	GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
     		_curAction = "";
-    		ArrayList<Piege> P = new ArrayList<Piege>();
+    		ArrayList<Piege> P = new ArrayList<>();
     		P.addAll(_traps);
     		for(Piege p : P)
     		{
@@ -2555,7 +2543,7 @@ public class Pelea
 		GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
 		GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this,7,2,_ordreJeu.get(_curPlayer).getGUID());
 		//copie
-		ArrayList<Piege> P = (new ArrayList<Piege>());
+		ArrayList<Piege> P = (new ArrayList<>());
 		P.addAll(_traps);
 		for(Piege p : P)
 		{
@@ -2818,8 +2806,8 @@ public class Pelea
 		if(_type == Constantes.FIGHT_TYPE_PVM && _mobGroup != null)
 			Packet.append(";").append(_mobGroup.get_bonusValue());
 		Packet.append("|").append(initGUID).append("|").append(type).append("|");
-	    ArrayList<Fighter> TEAM1 = new ArrayList<Fighter>();
-        ArrayList<Fighter> TEAM2 = new ArrayList<Fighter>();
+	    ArrayList<Fighter> TEAM1 = new ArrayList<>();
+        ArrayList<Fighter> TEAM2 = new ArrayList<>();
         if(win == 1)
         {
         	TEAM1.addAll(_team0.values());
@@ -2885,7 +2873,7 @@ public class Pelea
 	        if(groupPP <0)groupPP =0;
 	        groupPP *= factChalDrop;
         	//Calcul des drops possibles
-	        ArrayList<Drop> possibleDrops = new ArrayList<Drop>();
+	        ArrayList<Drop> possibleDrops = new ArrayList<>();
 	        for(Fighter F : TEAM2)
 	        {
 	        	//Evaluation de l'argent � gagner
@@ -2908,7 +2896,7 @@ public class Pelea
 	        	possibleDrops = _perco.getDrops();
 	        }
 	        //On R�ordonne la liste des combattants en fonction de la PP
-	        ArrayList<Fighter> Temp = new ArrayList<Fighter>();
+	        ArrayList<Fighter> Temp = new ArrayList<>();
 	        Fighter curMax = null;
 	        while(Temp.size() < TEAM1.size())
 	        {
@@ -3053,7 +3041,7 @@ public class Pelea
         	{
         		if(i.isInvocation() && i.getMob() != null && i.getMob().getTemplate().getID() != 285)continue;
         		long winxp 	= Formulas.getXpWinPvm3(i, TEAM1, TEAM2, totalXP, _mobGroup != null ? _mobGroup.get_bonusValue() : 0);
-        		AtomicReference<Long> XP = new AtomicReference<Long>();
+        		AtomicReference<Long> XP = new AtomicReference<>();
         		XP.set(winxp);
         		long guildxp = Formulas.getGuildXpWin(i,XP);
         		long mountxp = 0;
@@ -3083,9 +3071,9 @@ public class Pelea
         		String drops = "";
         		//Drop system
         		
-        		ArrayList<Drop> temp = new ArrayList<Drop>();
+        		ArrayList<Drop> temp = new ArrayList<>();
         		temp.addAll(possibleDrops);
-        		Map<Integer,Integer> itemWon = new TreeMap<Integer,Integer>();        		
+        		Map<Integer,Integer> itemWon = new TreeMap<>();
     			int PP = i.getTotalStats().getEffect(Constantes.STATS_ADD_PROS);
         		boolean allIsDropped = false;
     			while(!allIsDropped) {
@@ -3243,9 +3231,9 @@ public class Pelea
 			Packet.append(";");//Monture
 			
 			String drops = "";
-    		ArrayList<Drop> temp = new ArrayList<Drop>();
+    		ArrayList<Drop> temp = new ArrayList<>();
     		temp.addAll(possibleDrops);
-    		Map<Integer,Integer> itemWon = new TreeMap<Integer,Integer>();
+    		Map<Integer,Integer> itemWon = new TreeMap<>();
     		
     		for(Drop D : temp)
     		{
@@ -3389,8 +3377,8 @@ public class Pelea
 			GestorSalida.GAME_SEND_MAP_FIGHT_COUNT_TO_MAP(Mundo.getCarte(_map.get_id()));
 			_map = null;
 			_ordreJeu = null;
-			ArrayList<Fighter> winTeam = new ArrayList<Fighter>();
-			ArrayList<Fighter> looseTeam = new ArrayList<Fighter>();
+			ArrayList<Fighter> winTeam = new ArrayList<>();
+			ArrayList<Fighter> looseTeam = new ArrayList<>();
 			if(team0)
 			{
 				looseTeam.addAll(_team0.values());
@@ -3537,7 +3525,7 @@ public class Pelea
 		
 		if(target.getTeam() == 0)
 		{
-			TreeMap<Integer,Fighter> team = new TreeMap<Integer,Fighter>();
+			TreeMap<Integer,Fighter> team = new TreeMap<>();
 			team.putAll(_team0);
 			for(Entry<Integer,Fighter> entry : team.entrySet())
 			{
@@ -3566,7 +3554,7 @@ public class Pelea
 			}
 		}else if(target.getTeam() == 1)
 		{
-			TreeMap<Integer,Fighter> team = new TreeMap<Integer,Fighter>();
+			TreeMap<Integer,Fighter> team = new TreeMap<>();
 			team.putAll(_team1);
 			for(Entry<Integer,Fighter> entry : team.entrySet())
 			{
@@ -3631,7 +3619,7 @@ public class Pelea
 		}
 		
 		//on supprime les glyphes du joueur
-		ArrayList<Glyphe> glyphs = new ArrayList<Glyphe>();//Copie du tableau
+		ArrayList<Glyphe> glyphs = new ArrayList<>();//Copie du tableau
 		glyphs.addAll(_glyphs);
 		for(Glyphe g : glyphs)
 		{
@@ -3645,7 +3633,7 @@ public class Pelea
 		}
 		
 		//on supprime les pieges du joueur
-		ArrayList<Piege> Ps = new ArrayList<Piege>();
+		ArrayList<Piege> Ps = new ArrayList<>();
 		Ps.addAll(_traps);
 		for(Piege p : Ps)
 		{
@@ -4304,7 +4292,7 @@ public class Pelea
 	{
 		int teams = getTeamID(guid)-1;
 		if(teams == 4)return;//Les spectateurs ne montrent pas
-		ArrayList<PrintWriter> PWs = new ArrayList<PrintWriter>();
+		ArrayList<PrintWriter> PWs = new ArrayList<>();
 		if(teams == 0)
 		{
 			for(Entry<Integer,Fighter> e : _team0.entrySet())
@@ -4326,7 +4314,7 @@ public class Pelea
 	
 	public void showCaseToAll(int guid, int cellID)
 	{
-		ArrayList<PrintWriter> PWs = new ArrayList<PrintWriter>();
+		ArrayList<PrintWriter> PWs = new ArrayList<>();
 		for(Entry<Integer,Fighter> e : _team0.entrySet())
 		{
 			if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().get_compte().getGameThread() != null)

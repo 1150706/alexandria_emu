@@ -28,8 +28,8 @@ public class Dragopavo {
 	private int _serenite;
 	private Stats _stats = new Stats();
 	private String _ancetres = ",,,,,,,,,,,,,";
-	private ArrayList<Objeto> _items = new ArrayList<Objeto>();
-	private List<Integer> capacite = new ArrayList<Integer>();
+	private ArrayList<Objeto> _items = new ArrayList<>();
+	private List<Integer> capacite = new ArrayList<>();
 	private String _ability = ",";
 	
 	public Dragopavo(int color)

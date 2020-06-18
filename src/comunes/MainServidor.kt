@@ -6,6 +6,7 @@ import realm.RealmServer
 import java.io.*
 import java.net.InetAddress
 import java.util.*
+import kotlin.system.exitProcess
 
 object MainServidor {
     private const val CONFIG_FILE = "config.txt"
@@ -37,7 +38,7 @@ object MainServidor {
     var CONFIG_PUB_COLOR: String? = ""
     @JvmField
     var CONFIG_DEBUG = false
-    var PS: PrintStream? = null
+    private var PS: PrintStream? = null
     @JvmField
     var CONFIG_POLICY = false
     @JvmField
@@ -226,7 +227,7 @@ object MainServidor {
         if (GestorSQL.setUpConnexion()) println("Connexion Ok !") else {
             println("Connexion invalide")
             closeServers()
-            System.exit(0)
+            exitProcess(0)
         }
         println("Creation du Monde :")
         val startTime = System.currentTimeMillis()
@@ -249,7 +250,7 @@ object MainServidor {
                 Thread.sleep(10000)
             } catch (e1: InterruptedException) {
             }
-            System.exit(1)
+            exitProcess(1)
         }
         Ip = IP
         gameServer = JuegoServidor(Ip)
@@ -466,7 +467,7 @@ object MainServidor {
             println(e.message)
             println("Fichier de configuration non existant ou illisible")
             println("Fermeture du serveur")
-            System.exit(1)
+            exitProcess(1)
         }
         if (CONFIG_DEBUG) Constantes.DEBUG_MAP_LIMIT = 20000
         try {
@@ -508,7 +509,7 @@ object MainServidor {
             File("Gms_logs").mkdir()
             File("Error_logs").mkdir()
             println(e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 

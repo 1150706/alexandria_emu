@@ -19,8 +19,8 @@ public class JuegoServidor implements Runnable{
 
 	private ServerSocket _SS;
 	private Thread _t;
-	private ArrayList<JuegoThread> _clients = new ArrayList<JuegoThread>();
-	private ArrayList<Cuenta> _waitings = new ArrayList<Cuenta>();
+	private ArrayList<JuegoThread> _clients = new ArrayList<>();
+	private ArrayList<Cuenta> _waitings = new ArrayList<>();
 	private Timer _saveTimer;
 	private Timer _loadActionTimer;
 	private Timer _reloadMobTimer;
@@ -157,7 +157,7 @@ public class JuegoServidor implements Runnable{
 			_SS.close();
 		} catch (IOException e) {}
 		//Copie
-		ArrayList<JuegoThread> c = new ArrayList<JuegoThread>();
+		ArrayList<JuegoThread> c = new ArrayList<>();
 		c.addAll(_clients);
 		for(JuegoThread GT : c)
 		{
@@ -204,10 +204,9 @@ public class JuegoServidor implements Runnable{
 
 	public synchronized Cuenta getWaitingCompte(int guid)
 	{
-		for (int i = 0; i < _waitings.size(); i++)
-		{
-			if(_waitings.get(i).get_GUID() == guid)
-				return _waitings.get(i);
+		for (Cuenta waiting : _waitings) {
+			if (waiting.get_GUID() == guid)
+				return waiting;
 		}
 		return null;
 	}

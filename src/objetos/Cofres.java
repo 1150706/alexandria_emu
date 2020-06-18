@@ -22,7 +22,7 @@ public class Cofres {
 	private int _house_id;
 	private short _mapid;
 	private int _cellid;
-	private Map<Integer, Objeto> _object = new TreeMap<Integer, Objeto>();
+	private Map<Integer, Objeto> _object = new TreeMap<>();
 	private long _kamas;
 	private String _key;
 	private int _owner_id;
@@ -210,7 +210,7 @@ public class Cofres {
 	
     public static ArrayList<Cofres> getTrunksByHouse(House h)
     {
-            ArrayList<Cofres> trunks = new ArrayList<Cofres>();
+            ArrayList<Cofres> trunks = new ArrayList<>();
             for(Entry<Integer, Cofres> trunk : Mundo.getTrunks().entrySet())
             {
                     if(trunk.getValue().get_house_id() == h.get_id())

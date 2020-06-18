@@ -29,16 +29,12 @@ public class JuegoServidor implements Runnable{
 	private long _startTime;
 	private int _maxPlayer = 0;
 	
-	public JuegoServidor(String Ip)
-	{
+	public JuegoServidor(String Ip) {
 		try {
 			_saveTimer = new Timer();
-			_saveTimer.schedule(new TimerTask()
-			{
-				public void run()
-				{
-					if(!MainServidor.isSaving)
-					{
+			_saveTimer.schedule(new TimerTask() {
+				public void run() {
+					if(!MainServidor.isSaving) {
 						Thread t = new Thread(new SaveThread());
 						t.start();
 					}
@@ -46,37 +42,28 @@ public class JuegoServidor implements Runnable{
 			}, MainServidor.CONFIG_SAVE_TIME, MainServidor.CONFIG_SAVE_TIME);
 			
 			_loadActionTimer = new Timer();
-			_loadActionTimer.schedule(new TimerTask()
-			{
-				public void run()
-				{
+			_loadActionTimer.schedule(new TimerTask() {
+				public void run() {
 					GestorSQL.cargar_acciones();
 					JuegoServidor.addToLog("Les live actions ont ete appliquees");
 				}
 			}, MainServidor.CONFIG_LOAD_DELAY, MainServidor.CONFIG_LOAD_DELAY);
 			
 			_reloadMobTimer = new Timer();
-			_reloadMobTimer.schedule(new TimerTask()
-			{
-				public void run()
-				{
+			_reloadMobTimer.schedule(new TimerTask() {
+				public void run() {
 					Mundo.RefreshAllMob();
 					JuegoServidor.addToLog("La recharge des mobs est finie");
 				}
 			}, MainServidor.CONFIG_RELOAD_MOB_DELAY, MainServidor.CONFIG_RELOAD_MOB_DELAY);
 			
 			_lastPacketTimer = new Timer();
-			_lastPacketTimer.schedule(new TimerTask()
-			{
-				public void run()
-				{
-					for(Jugador perso : Mundo.getOnlinePersos())
-					{ 
-						if (perso.getLastPacketTime() + MainServidor.CONFIG_MAX_IDLE_TIME < System.currentTimeMillis())
-						{
+			_lastPacketTimer.schedule(new TimerTask() {
+				public void run() {
+					for(Jugador perso : Mundo.getOnlinePersos()) {
+						if (perso.getLastPacketTime() + MainServidor.CONFIG_MAX_IDLE_TIME < System.currentTimeMillis()) {
 							
-							if(perso != null && perso.get_compte().getGameThread() != null && perso.isOnline())
-							{
+							if(perso != null && perso.get_compte().getGameThread() != null && perso.isOnline()) {
 								JuegoServidor.addToLog("Kick pour inactiviter de : "+perso.get_name());
 								GestorSalida.REALM_SEND_MESSAGE(perso.get_compte().getGameThread().get_out(),"01|");
 								perso.get_compte().getGameThread().closeSocket();
@@ -168,11 +155,9 @@ public class JuegoServidor implements Runnable{
 		}
 	}
 	
-	public synchronized static void addToLog(String str)
-	{
+	public synchronized static void addToLog(String str) {
 		System.out.println(str);
-		if(MainServidor.canLog)
-		{
+		if(MainServidor.canLog) {
 			try {
 				String date = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":"+Calendar.getInstance().get(+Calendar.MINUTE)+":"+Calendar.getInstance().get(Calendar.SECOND);
 				MainServidor.Log_Game.write(date+": "+str);
@@ -182,11 +167,9 @@ public class JuegoServidor implements Runnable{
 		}
 	}
 	
-	public synchronized static void addToSockLog(String str)
-	{
+	public synchronized static void addToSockLog(String str) {
 		if(MainServidor.CONFIG_DEBUG)System.out.println(str);
-		if(MainServidor.canLog)
-		{
+		if(MainServidor.canLog) {
 			try {
 				String date = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":"+Calendar.getInstance().get(+Calendar.MINUTE)+":"+Calendar.getInstance().get(Calendar.SECOND);
 				MainServidor.Log_GameSock.write(date+": "+str);
@@ -196,14 +179,12 @@ public class JuegoServidor implements Runnable{
 		}
 	}
 	
-	public void delClient(JuegoThread gameThread)
-	{
+	public void delClient(JuegoThread gameThread) {
 		_clients.remove(gameThread);
 		if(_clients.size() > _maxPlayer)_maxPlayer = _clients.size();
 	}
 
-	public synchronized Cuenta getWaitingCompte(int guid)
-	{
+	public synchronized Cuenta getWaitingCompte(int guid) {
 		for (Cuenta waiting : _waitings) {
 			if (waiting.get_GUID() == guid)
 				return waiting;
@@ -221,25 +202,22 @@ public class JuegoServidor implements Runnable{
 		_waitings.add(_compte);
 	}
 	
-	public static String getServerTime()
-	{
+	public static String getServerTime() {
 		Date actDate = new Date();
 		return "BT"+(actDate.getTime()+3600000);
 	}
-	public static String getServerDate()
-	{
+
+	public static String getServerDate() {
 		Date actDate = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("dd");
-		String jour = Integer.parseInt(dateFormat.format(actDate))+"";
-		while(jour.length() <2)
-		{
-			jour = "0"+jour;
+		StringBuilder jour = new StringBuilder(Integer.parseInt(dateFormat.format(actDate)) + "");
+		while(jour.length() <2) {
+			jour.insert(0, "0");
 		}
 		dateFormat = new SimpleDateFormat("MM");
-		String mois = (Integer.parseInt(dateFormat.format(actDate))-1)+"";
-		while(mois.length() <2)
-		{
-			mois = "0"+mois;
+		StringBuilder mois = new StringBuilder((Integer.parseInt(dateFormat.format(actDate)) - 1) + "");
+		while(mois.length() <2) {
+			mois.insert(0, "0");
 		}
 		dateFormat = new SimpleDateFormat("yyyy");
 		String annee = (Integer.parseInt(dateFormat.format(actDate))-1370)+"";
@@ -251,28 +229,22 @@ public class JuegoServidor implements Runnable{
 		return _t;
 	}
 	public static class AllFightsTurns
-    implements Runnable
-  {
+    implements Runnable {
     Timer _allFightsTurns;
     long _lastFightsTurns;
 
-    public void run()
-    {
-      try
-      {
+    public void run() {
+      try {
         _allFightsTurns = new Timer();
-        _allFightsTurns.scheduleAtFixedRate(new TimerTask()
-        {
-          public void run()
-          {
+        _allFightsTurns.scheduleAtFixedRate(new TimerTask() {
+          public void run() {
             try {
               /*if (System.currentTimeMillis() - _lastFightsTurns > 3500L) {
                 SocketManager.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", "ERREUR TIMER-LAG Dans: _allFightsTurns; " + (System.currentTimeMillis() - _lastFightsTurns));
               }*/
               //long t = System.currentTimeMillis();
               
-              try
-              {
+              try {
                 Mundo.ticAllFightersTurns();
               } catch (Exception e) {
                 GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", "ERREUR FATAL ------ No2 ---- (rar) Dans: ticAllFightersTurns(); " + e.getMessage());
@@ -291,9 +263,7 @@ public class JuegoServidor implements Runnable{
           }
         }
         , 1500L, 1500L);
-      }
-      catch (Exception localException)
-      {
+      } catch (Exception localException) {
       }
     }
   }

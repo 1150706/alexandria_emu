@@ -142,13 +142,11 @@ public class Jugador {
 	//Quêtes
     private int savestat;
 	
-	public static class traque 
-	{
+	public static class traque {
 		private long _time;
 		private Jugador _traqued;
 		
-		public traque(long time, Jugador p)
-		{
+		public traque(long time, Jugador p) {
 			this._time = time;
 			this._traqued = p;
 		}
@@ -173,13 +171,11 @@ public class Jugador {
 			_time = time;
 		}
 	}
-	public static class Group
-	{
+	public static class Group {
 		private ArrayList<Jugador> _persos = new ArrayList<>();
 		private Jugador _chief;
 		
-		public Group(Jugador p1, Jugador p2)
-		{
+		public Group(Jugador p1, Jugador p2) {
 			_chief = p1;
 			_persos.add(p1);
 			_persos.add(p2);
@@ -200,8 +196,7 @@ public class Jugador {
 			return _persos.size();
 		}
 		
-		public int getGroupLevel()
-		{
+		public int getGroupLevel() {
 			int lvls = 0;
 			for(Jugador p : _persos)
 			{
@@ -220,27 +215,23 @@ public class Jugador {
 			return _chief;
 		}
 
-		public void leave(Jugador p)
-		{
+		public void leave(Jugador p) {
 			if(!_persos.contains(p))return;
 			p.setGroup(null);
 			_persos.remove(p);
-			if(_persos.size() == 1)
-			{
+			if(_persos.size() == 1) {
 				_persos.get(0).setGroup(null);
 				if(_persos.get(0).get_compte() == null || _persos.get(0).get_compte().getGameThread() == null)return;
 				GestorSalida.GAME_SEND_PV_PACKET(_persos.get(0).get_compte().getGameThread().get_out(),"");
-			}
-			else
+			} else
 				GestorSalida.GAME_SEND_PM_DEL_PACKET_TO_GROUP(this,p.get_GUID());
 		}
 	}
-	public static class Stats
-	{
+
+	public static class Stats {
 		private Map<Integer,Integer> Effects = new TreeMap<>();
 		
-		public Stats(boolean addBases, Jugador perso)
-		{
+		public Stats(boolean addBases, Jugador perso) {
 			Effects = new TreeMap<>();
 			if(!addBases)return;
 			Effects.put(Constantes.STATS_ADD_PA,  perso.get_lvl()<100?6:7);
@@ -250,8 +241,8 @@ public class Jugador {
 			Effects.put(Constantes.STATS_CREATURE, 1);
 			Effects.put(Constantes.STATS_ADD_INIT, 1);
 		}
-		public Stats(Map<Integer, Integer> stats, boolean addBases, Jugador perso)
-		{
+
+		public Stats(Map<Integer, Integer> stats, boolean addBases, Jugador perso) {
 			Effects = stats;
 			if(!addBases)return;
 			Effects.put(Constantes.STATS_ADD_PA,  perso.get_lvl()<100?6:7);
@@ -272,29 +263,24 @@ public class Jugador {
 			Effects = new TreeMap<>();
 		}
 		
-		public int addOneStat(int id, int val)
-		{
+		public int addOneStat(int id, int val) {
 			if(Effects.get(id) == null || Effects.get(id) == 0)
 				Effects.put(id,val);
-			else
-			{
+			else {
 				int newVal = (Effects.get(id)+val);
 				Effects.put(id, newVal);
 			}
 			return Effects.get(id);
 		}
 		
-		public boolean isSameStats(Stats other)
-		{
-			for(Entry<Integer,Integer> entry : Effects.entrySet())
-			{
+		public boolean isSameStats(Stats other) {
+			for(Entry<Integer,Integer> entry : Effects.entrySet()) {
 				//Si la stat n'existe pas dans l'autre map
 				if(other.getMap().get(entry.getKey()) == null)return false;
 				//Si la stat existe mais n'a pas la même valeur
 				if(other.getMap().get(entry.getKey()) != entry.getValue())return false;	
 			}
-			for(Entry<Integer,Integer> entry : other.getMap().entrySet())
-			{
+			for(Entry<Integer,Integer> entry : other.getMap().entrySet()) {
 				//Si la stat n'existe pas dans l'autre map
 				if(Effects.get(entry.getKey()) == null)return false;
 				//Si la stat existe mais n'a pas la même valeur
@@ -303,8 +289,7 @@ public class Jugador {
 			return true;
 		}
 		
-		public int getEffect(int id)
-		{
+		public int getEffect(int id) {
 			int val;
 			if(Effects.get(id) == null)
 				 val=0;
@@ -433,8 +418,7 @@ public class Jugador {
 			Effects.clear();
 		}
 
-		public static Stats cumulStat(Stats s1,Stats s2)
-		{
+		public static Stats cumulStat(Stats s1,Stats s2) {
 			TreeMap<Integer,Integer> effets = new TreeMap<>();
 			for(int a = 0; a <= Constantes.MAX_EFFECTS_ID; a++)
 			{
@@ -1078,8 +1062,7 @@ public class Jugador {
 		
 	}
 	
-	public String parseSpellList()
-	{
+	public String parseSpellList() {
 		StringBuilder packet = new StringBuilder();
 		packet.append("SL");
 		for (SortStats SS : _sorts.values()) {
@@ -1088,22 +1071,17 @@ public class Jugador {
 		return packet.toString();
 	}
 
-	public void set_SpellPlace(int SpellID, char Place)
-	{
+	public void set_SpellPlace(int SpellID, char Place) {
 			replace_SpellInBook(Place);
 			_sortsPlaces.remove(SpellID);	
 			_sortsPlaces.put(SpellID, Place);
 			GestorSQL.guardar_personaje(this,false);//On sauvegarde les changements
 	}
 
-	private void replace_SpellInBook(char Place)
-	{
-		for(int key : _sorts.keySet())
-		{
-			if(_sortsPlaces.get(key)!=null)
-			{
-				if (_sortsPlaces.get(key).equals(Place))
-				{
+	private void replace_SpellInBook(char Place) {
+		for(int key : _sorts.keySet()) {
+			if(_sortsPlaces.get(key)!=null) {
+				if (_sortsPlaces.get(key).equals(Place)) {
 					_sortsPlaces.remove(key);
 				}
 			}
@@ -1117,11 +1095,10 @@ public class Jugador {
 	
 	public boolean hasSpell(int spellID)
 	{
-		return (getSortStatBySortIfHas(spellID) == null ? false : true);
+		return (getSortStatBySortIfHas(spellID) != null);
 	}
 	
-	public String parseALK()
-	{
+	public String parseALK() {
 		StringBuilder perso = new StringBuilder();
 		perso.append("|");
 		perso.append(this._GUID).append(";");
@@ -1361,8 +1338,7 @@ public class Jugador {
 		return str.toString();
 	}
 
-    public String getAsPacket()
-    {
+    public String getAsPacket() {
         refreshStats();
         StringBuilder ASData = new StringBuilder();
         ASData.append("As").append(xpString(",")).append("|");
@@ -1370,11 +1346,9 @@ public class Jugador {
         ASData.append(_align).append("~").append(_align).append(",").append(_aLvl).append(",").append(getGrade()).append(",").append(_honor).append(",").append((new StringBuilder(String.valueOf(_deshonor))).append(",").toString()).append(_showWings ? "1" : "0").append("|");
         int pdv = get_PDV();
         int pdvMax = get_PDVMAX();
-        if(_fight != null)
-        {
+        if(_fight != null) {
             Pelea.Fighter f = _fight.getFighterByPerso(this);
-            if(f != null)
-            {
+            if(f != null) {
                 pdv = f.getPDV();
                 pdvMax = f.getPDVMAX();
             }
@@ -1428,12 +1402,10 @@ public class Jugador {
         return ASData.toString();
     }
 	
-	public int getGrade()
-	{
+	public int getGrade() {
 		if(_align == Constantes.ALIGNEMENT_NEUTRE)return 0;
 		if(_honor >= 17500)return 10;
-		for(int n = 1; n <=10; n++)
-		{
+		for(int n = 1; n <=10; n++) {
 			if(_honor < Mundo.getExpLevel(n).pvp)return n-1;
 		}
 		return 0;
@@ -1452,43 +1424,35 @@ public class Jugador {
 		this._emoteActive = emoteActive;
 	}
 
-	private Stats getStuffStats()
-	{
+	private Stats getStuffStats() {
 		Stats stats = new Stats(false,null);
 		ArrayList<Integer> itemSetApplied = new ArrayList<>();
 		
-		for(Entry<Integer, Objeto> entry : _items.entrySet())
-		{
-			if(entry.getValue().getPosition() != Constantes.ITEM_POS_NO_EQUIPED)
-			{
+		for(Entry<Integer, Objeto> entry : _items.entrySet()) {
+			if(entry.getValue().getPosition() != Constantes.ITEM_POS_NO_EQUIPED) {
 				stats = Stats.cumulStat(stats,entry.getValue().getStats());
 				int panID = entry.getValue().getTemplate().getPanopID();
 				//Si panoplie, et si l'effet de pano n'a pas encore été ajouté
-				if(panID>0 && !itemSetApplied.contains(panID))
-				{
+				if(panID>0 && !itemSetApplied.contains(panID)) {
 					itemSetApplied.add(panID);
 					ItemSet IS = Mundo.getItemSet(panID);
 					//Si la pano existe
-					if(IS != null)
-					{
+					if(IS != null) {
 						//on ajoute le bonus de pano en fonction du nombre d'item
 						stats = Stats.cumulStat(stats,IS.getBonusStatByItemNumb(this.getNumbEquipedItemOfPanoplie(panID)));
 					}
 				}
 			}
 		}
-		if(_onMount && _mount != null)
-		{
+		if(_onMount && _mount != null) {
 			stats = Stats.cumulStat(stats, _mount.get_stats());
 		}
 		return stats;
 	}
 
-	private Stats getBuffsStats()
-	{
+	private Stats getBuffsStats() {
 		Stats stats = new Stats(false,null);
-		for(Map.Entry<Integer, EfectoHechizo> entry : _buffs.entrySet())
-		{
+		for(Map.Entry<Integer, EfectoHechizo> entry : _buffs.entrySet()) {
 			stats.addOneStat(entry.getValue().getEffectID(), entry.getValue().getValue());
 		}
 		return stats;
@@ -1646,11 +1610,56 @@ public class Jugador {
 		_away = false;
 	}
 
-    public void boostStat(int stat)
-    {
+	public void boostStatFixedCount(int stat, int countVal) {
+		for (int i = 0; i < countVal; i++) {
+			int value = switch (stat) {
+				//Fuerza
+				case 10 -> this.get_baseStats().getEffect(Constantes.STATS_ADD_FORC);
+				//Suerte
+				case 13 -> this.get_baseStats().getEffect(Constantes.STATS_ADD_CHAN);
+				//Agilidad
+				case 14 -> this.get_baseStats().getEffect(Constantes.STATS_ADD_AGIL);
+				//Inteligencia
+				case 15 -> this.get_baseStats().getEffect(Constantes.STATS_ADD_INTE);
+				default -> 0;
+			};
+			int cout = Constantes.getReqPtsToBoostStatsByClass(this.get_classe(), stat, value);
+			if (cout <= this.get_capital()) {
+				switch (stat) {
+					case 11://Vita
+						if (this.get_classe() != Constantes.CLASS_SACRIEUR)
+							this.get_baseStats().addOneStat(Constantes.STATS_ADD_VITA, 1);
+						else
+							this.get_baseStats().addOneStat(Constantes.STATS_ADD_VITA, 2);
+						break;
+					case 12://Sage
+						this.get_baseStats().addOneStat(Constantes.STATS_ADD_SAGE, 1);
+						break;
+					case 10://Force
+						this.get_baseStats().addOneStat(Constantes.STATS_ADD_FORC, 1);
+						break;
+					case 13://Chance
+						this.get_baseStats().addOneStat(Constantes.STATS_ADD_CHAN, 1);
+						break;
+					case 14://Agilit�
+						this.get_baseStats().addOneStat(Constantes.STATS_ADD_AGIL, 1);
+						break;
+					case 15://Intelligence
+						this.get_baseStats().addOneStat(Constantes.STATS_ADD_INTE, 1);
+						break;
+					default:
+						return;
+				}
+				this.addCapital(cout);
+			}
+		}
+		GestorSalida.GAME_SEND_STATS_PACKET(this);
+		GestorSQL.guardar_personaje(this, false);
+	}
+
+    public void boostStat(int stat) {
         int value = 0;
-        switch(stat)
-        {
+        switch(stat) {
         case 10: // '\n'
             value = _baseStats.getEffect(118);
             break;

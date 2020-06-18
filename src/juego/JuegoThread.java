@@ -26,8 +26,7 @@ import objetos.Jugador.Group;
 import objetos.Hechizos.SortStats;
 import comunes.*;
 
-public class JuegoThread implements Runnable
-{
+public class JuegoThread implements Runnable {
 	private BufferedReader _in;
 	private Thread _t;
 	private PrintWriter _out;
@@ -39,34 +38,28 @@ public class JuegoThread implements Runnable
 	private long _timeLastIncarnamMsg = 0;
 	private Comandos command;
 	
-	public static class GameAction
-	{
+	public static class GameAction {
 		public int _id;
 		public int _actionID;
 		public String _packet;
 		public String _args;
 		
-		public GameAction(int aId, int aActionId,String aPacket)
-		{
+		public GameAction(int aId, int aActionId,String aPacket) {
 			_id = aId;
 			_actionID = aActionId;
 			_packet = aPacket;
 		}
 	}
 	
-	public JuegoThread(Socket sock)
-	{
-		try
-		{
+	public JuegoThread(Socket sock) {
+		try {
 			_s = sock;
 			_in = new BufferedReader(new InputStreamReader(_s.getInputStream()));
 			_out = new PrintWriter(_s.getOutputStream());
 			_t = new Thread(this);
 			_t.setDaemon(true);
 			_t.start();
-		}
-		catch(IOException e)
-		{
+		} catch(IOException e) {
 			try {
 				JuegoServidor.addToLog(e.getMessage());
 				if(!_s.isClosed())_s.close();
@@ -74,20 +67,15 @@ public class JuegoThread implements Runnable
 		}
 	}
 	
-	public void run()
-	{
-		try
-    	{
+	public void run() {
+		try {
 			String packet = "";
-			char charCur[] = new char[1];
+			char[] charCur = new char[1];
 			GestorSalida.GAME_SEND_HELLOGAME_PACKET(_out);
-	    	while(_in.read(charCur, 0, 1)!=-1 && MainServidor.isRunning)
-	    	{
-	    		if (charCur[0] != '\u0000' && charCur[0] != '\n' && charCur[0] != '\r')
-		    	{
+	    	while(_in.read(charCur, 0, 1)!=-1 && MainServidor.isRunning) {
+	    		if (charCur[0] != '\u0000' && charCur[0] != '\n' && charCur[0] != '\r') {
 	    			packet += charCur[0];
-		    	}else if(!packet.isEmpty())
-		    	{
+		    	}else if(!packet.isEmpty()) {
 		    		packet = GestorEncriptador.toUnicode(packet);
 		    		JuegoServidor.addToSockLog("Game: Recv << "+packet);
 		    		parsePacket(packet);
@@ -95,68 +83,54 @@ public class JuegoThread implements Runnable
 		    		packet = "";
 		    	}
 	    	}
-    	}catch(IOException e)
-    	{
-    		try
-    		{
+    	}catch(IOException e) {
+    		try {
     			JuegoServidor.addToLog(e.getMessage());
 	    		_in.close();
 	    		_out.close();
-	    		if(_compte != null)
-	    		{
+	    		if(_compte != null) {
 	    			_compte.setCurPerso(null);
 	    			_compte.setGameThread(null);
 	    			_compte.setRealmThread(null);
 	    		}
 	    		if(!_s.isClosed())_s.close();
 	    	}catch(IOException e1){e1.printStackTrace();};
-    	}catch(Exception e)
-    	{
+    	}catch(Exception e) {
     		e.printStackTrace();
     		JuegoServidor.addToLog(e.getMessage());
-    	}
-    	finally
-    	{
+    	} finally {
     		kick();
     	}
 	}
 
-	private void parsePacket(String packet)
-	{
+	private void parsePacket(String packet) {
 		if(_perso != null) {
 			_perso.refreshLastPacketTime();
 		}
 		
-		if(packet.length()>3 && packet.substring(0,4).equalsIgnoreCase("ping"))
-		{
+		if(packet.length()>3 && packet.substring(0,4).equalsIgnoreCase("ping")) {
 			GestorSalida.GAME_SEND_PONG(_out);
 			return;
 		}
-		if(packet.length()>4 && packet.substring(0,5).equalsIgnoreCase("qping"))
-		{
+		if(packet.length()>4 && packet.substring(0,5).equalsIgnoreCase("qping")) {
 			GestorSalida.GAME_SEND_QPONG(_out);
 			return;
 		}
 		
-		switch(packet.charAt(0))
-		{
+		switch(packet.charAt(0)) {
 			case 'p': // 'p'
-				if(packet.equals("ping"))
-				{
+				if(packet.equals("ping")) {
 					GestorSalida.GAME_SEND_PONG(_out);
 				}
 				break;				
 			case 'q': // 'q'
-				if(!packet.equals("qping"))
-				{
+				if(!packet.equals("qping")) {
 					return;
 				}
-				if(_perso == null)
-				{
+				if(_perso == null) {
 					return;
 				}
-				if(_perso.get_fight() == null)
-				{
+				if(_perso.get_fight() == null) {
 					return;
 				}
 				_perso.get_fight().ticMyTimer();
@@ -4421,172 +4395,139 @@ public class JuegoThread implements Runnable
 		}catch(IOException e1){e1.printStackTrace();};
 	}
 
-	private void parseAccountPacket(String packet)
-	{
-		switch(packet.charAt(1))
-		{
-			case 'A':
+	private void parseAccountPacket(String packet) {
+		//Validation du nom du personnage
+		//V�rifie d'abord si il contient des termes d�finit
+		//Si le nom passe le test, on v�rifie que les caract�re entr� sont correct.
+		//Si le nom est invalide
+		//SocketManager.GAME_SEND_HIDE_GENERATE_NAME(_out);
+		switch (packet.charAt(1)) {
+			case 'A' -> {
 				String[] infos = packet.substring(2).split("\\|");
-				if(GestorSQL.persoExist(infos[0]))
-				{
+				if (GestorSQL.persoExist(infos[0])) {
 					GestorSalida.GAME_SEND_NAME_ALREADY_EXIST(_out);
 					return;
 				}
-				//Validation du nom du personnage
 				boolean isValid = true;
 				String name = infos[0].toLowerCase();
-				//V�rifie d'abord si il contient des termes d�finit
-				if(name.length() > 20
+				if (name.length() > 20
 						|| name.contains("mj")
 						|| name.contains("modo")
-						|| name.contains("admin"))
-				{
+						|| name.contains("admin")) {
 					isValid = false;
 				}
-				//Si le nom passe le test, on v�rifie que les caract�re entr� sont correct.
-				if(isValid)
-				{
+				if (isValid) {
 					int tiretCount = 0;
 					char exLetterA = ' ';
 					char exLetterB = ' ';
-					for(char curLetter : name.toCharArray())
-					{
-						if(!((curLetter >= 'a' && curLetter <= 'z') || curLetter == '-'))
-						{
+					for (char curLetter : name.toCharArray()) {
+						if (!((curLetter >= 'a' && curLetter <= 'z') || curLetter == '-')) {
 							isValid = false;
 							break;
 						}
-						if(curLetter == exLetterA && curLetter == exLetterB)
-						{
+						if (curLetter == exLetterA && curLetter == exLetterB) {
 							isValid = false;
 							break;
 						}
-						if(curLetter >= 'a' && curLetter <= 'z')
-						{
+						if (curLetter >= 'a') {
 							exLetterA = exLetterB;
 							exLetterB = curLetter;
 						}
-						if(curLetter == '-')
-						{
-							if(tiretCount >= 1)
-							{
+						if (curLetter == '-') {
+							if (tiretCount >= 1) {
 								isValid = false;
 								break;
-							}
-							else
-							{
+							} else {
 								tiretCount++;
 							}
 						}
 					}
 				}
-				//Si le nom est invalide
-				if(!isValid)
-				{
+				if (!isValid) {
 					GestorSalida.GAME_SEND_NAME_ALREADY_EXIST(_out);
 					return;
 				}
-				if(_compte.GET_PERSO_NUMBER() >= MainServidor.CONFIG_MAX_PERSOS)
-				{
+				if (_compte.GET_PERSO_NUMBER() >= MainServidor.CONFIG_MAX_PERSOS) {
 					GestorSalida.GAME_SEND_CREATE_PERSO_FULL(_out);
 					return;
 				}
-				if(_compte.createPerso(infos[0], Integer.parseInt(infos[2]), Integer.parseInt(infos[1]), Integer.parseInt(infos[3]),Integer.parseInt(infos[4]), Integer.parseInt(infos[5])))
-				{
+				if (_compte.createPerso(infos[0], Integer.parseInt(infos[2]), Integer.parseInt(infos[1]), Integer.parseInt(infos[3]), Integer.parseInt(infos[4]), Integer.parseInt(infos[5]))) {
 					GestorSalida.GAME_SEND_CREATE_OK(_out);
 					GestorSalida.GAME_SEND_PERSO_LIST(_out, _compte.get_persos());
-				}else
-				{
+				} else {
 					GestorSalida.GAME_SEND_CREATE_FAILED(_out);
 				}
-				
-			break;
-			
-			case 'B':
-	            int stat = -1;
-	            try
-	            {
-	                stat = Integer.parseInt(packet.substring(2).split("/u000A")[0]);
-	                _perso.set_savestat(stat);
-	                GestorSalida.GAME_SEND_KODE(_perso, "CK0|3");
-	            }
-	            catch(NumberFormatException e)
-	            {
-	                return;
-	            }
-	            break;
-			case 'D':
+			}
+			case 'B' -> {
+				int stat = -1;
+				try {
+					if (packet.substring(2).contains(";")) {
+						stat = Integer.parseInt(packet.substring(2).split(";")[0]);
+						if (stat > 0) {
+							int code = 0;
+							code = Integer.parseInt(packet.substring(2).split(";")[1]);
+							if (code < 0)
+								return;
+							if (this._perso.get_capital() < code)
+								code = this._perso.get_capital();
+							_perso.boostStatFixedCount(stat, code);
+						}
+					} else {
+						stat = Integer.parseInt(packet.substring(2).split("/u000A")[0]);
+						this._perso.boostStat(stat);
+					}
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				}
+			}
+			case 'D' -> {
 				String[] split = packet.substring(2).split("\\|");
 				int GUID = Integer.parseInt(split[0]);
-				String reponse = split.length>1?split[1]:"";
-				
-				if(_compte.get_persos().containsKey(GUID))
-				{
-					if(_compte.get_persos().get(GUID).get_lvl() <20 ||(_compte.get_persos().get(GUID).get_lvl() >=20 && reponse.equals(_compte.get_reponse())))
-					{
+				String reponse = split.length > 1 ? split[1] : "";
+				if (_compte.get_persos().containsKey(GUID)) {
+					if (_compte.get_persos().get(GUID).get_lvl() < 20 || (_compte.get_persos().get(GUID).get_lvl() >= 20 && reponse.equals(_compte.get_reponse()))) {
 						_compte.deletePerso(GUID);
 						GestorSalida.GAME_SEND_PERSO_LIST(_out, _compte.get_persos());
-					}
-					else
+					} else
 						GestorSalida.GAME_SEND_DELETE_PERSO_FAILED(_out);
-				}else
+				} else
 					GestorSalida.GAME_SEND_DELETE_PERSO_FAILED(_out);
-			break;
-			
-			case 'f':
+			}
+			case 'f' -> {
 				int queueID = 1;
 				int position = 1;
-				GestorSalida.MULTI_SEND_Af_PACKET(_out,position,1,1,""+1,queueID);
-			break;
-			
-			case 'i':
-				_compte.setClientKey(packet.substring(2));
-			break;
-			
-			case 'L':
-				GestorSalida.GAME_SEND_PERSO_LIST(_out, _compte.get_persos());
-				//SocketManager.GAME_SEND_HIDE_GENERATE_NAME(_out);
-			break;
-			
-			case 'S':
+				GestorSalida.MULTI_SEND_Af_PACKET(_out, position, 1, 1, "" + 1, queueID);
+			}
+			case 'i' -> _compte.setClientKey(packet.substring(2));
+			case 'L' -> GestorSalida.GAME_SEND_PERSO_LIST(_out, _compte.get_persos());
+			case 'S' -> {
 				int charID = Integer.parseInt(packet.substring(2));
-				if(_compte.get_persos().get(charID) != null)
-				{
+				if (_compte.get_persos().get(charID) != null) {
 					_compte.setGameThread(this);
 					_perso = _compte.get_persos().get(charID);
-					if(_perso != null)
-					{
+					if (_perso != null) {
 						_perso.OnJoinGame();
 						return;
 					}
 				}
 				GestorSalida.GAME_SEND_PERSO_SELECTION_FAILED(_out);
-			break;
-				
-			case 'T':
+			}
+			case 'T' -> {
 				int guid = Integer.parseInt(packet.substring(2));
 				_compte = MainServidor.gameServer.getWaitingCompte(guid);
-				if(_compte != null)
-				{
+				if (_compte != null) {
 					String ip = _s.getInetAddress().getHostAddress();
-					
+
 					_compte.setGameThread(this);
 					_compte.setCurIP(ip);
 					MainServidor.gameServer.delWaitingCompte(_compte);
 					GestorSalida.GAME_SEND_ATTRIBUTE_SUCCESS(_out);
-				}else
-				{
+				} else {
 					GestorSalida.GAME_SEND_ATTRIBUTE_FAILED(_out);
 				}
-			break;
-			
-			case 'V':
-				GestorSalida.GAME_SEND_AV0(_out);
-			break;
-			
-			case 'P':
-				GestorSalida.REALM_SEND_REQUIRED_APK(_out);
-				break;
+			}
+			case 'V' -> GestorSalida.GAME_SEND_AV0(_out);
+			case 'P' -> GestorSalida.REALM_SEND_REQUIRED_APK(_out);
 		}
 	}
 

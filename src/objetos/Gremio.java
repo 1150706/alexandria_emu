@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
-import objetos.Jugador.Stats;
+import objetos.Personaje.Stats;
 import objetos.Hechizos.SortStats;
 
 import org.joda.time.LocalDate;
@@ -92,7 +92,7 @@ public class Gremio {
 			return Days.daysBetween(lastCo,now).getDays()*24;
 		}
 
-		public Jugador getPerso()
+		public Personaje getPerso()
 		{
 			return Mundo.getPersonnage(_guid);
 		}
@@ -178,7 +178,7 @@ public class Gremio {
 		}
 	}
 
-	public Gremio(Jugador owner, String name, String emblem) {
+	public Gremio(Personaje owner, String name, String emblem) {
 		_id = Mundo.getNextHighestGuildID();
 		_name = name;
 		_emblem = emblem;
@@ -220,7 +220,7 @@ public class Gremio {
 		return GM;
 	}
 
-	public GuildMember addNewMember(Jugador p) {
+	public GuildMember addNewMember(Personaje p) {
 		GuildMember GM = new GuildMember(p.get_GUID(),this,0,0,(byte) 0,0);
 		_members.put(p.get_GUID(),GM);
 		return GM;
@@ -314,8 +314,8 @@ public class Gremio {
 		return str.toString();
 	}
 
-	public ArrayList<Jugador> getMembers() {
-		ArrayList<Jugador> a = new ArrayList<>();
+	public ArrayList<Personaje> getMembers() {
+		ArrayList<Personaje> a = new ArrayList<>();
 		for(GuildMember GM : _members.values())a.add(GM.getPerso());
 		return a;
 	}
@@ -325,7 +325,7 @@ public class Gremio {
 		return _members.get(guid);
 	}
 
-	public void removeMember(Jugador perso) {
+	public void removeMember(Personaje perso) {
 		House h = House.get_HouseByPerso(perso);//On prend ça maison
 		if(h != null) {
 			if(House.HouseOnGuild(_id) > 0) {

@@ -142,7 +142,7 @@ public class House
 		return null;
 	}
 	
-	public static void LoadHouse(Jugador P, int newMapID)//Affichage des maison + Blason
+	public static void LoadHouse(Personaje P, int newMapID)//Affichage des maison + Blason
 	{
 		
 		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
@@ -217,7 +217,7 @@ public class House
 		}
 	}
 
-    public void HopIn(Jugador P)
+    public void HopIn(Personaje P)
     {
         if(P.get_fight() != null || P.get_isTalkingWith() != 0 || P.get_isTradingWith() != 0 || P.getCurJobAction() != null || P.get_curExchange() != null)
             return;
@@ -236,7 +236,7 @@ public class House
             return;
     }
 
-    public static void OpenHouse(Jugador P, String packet, boolean isHome)
+    public static void OpenHouse(Personaje P, String packet, boolean isHome)
     {
         if(P.get_savestat() == 0)
         {
@@ -266,14 +266,14 @@ public class House
         }
     }
 	
-	public void BuyIt(Jugador P)//Acheter une maison
+	public void BuyIt(Personaje P)//Acheter une maison
 	{
 		House h = P.getInHouse();
 		String str = "CK"+h.get_id()+"|"+h.get_sale();//ID + Prix
 		GestorSalida.GAME_SEND_hOUSE(P, str);
 	}
 
-	public static void HouseAchat(Jugador P)//Acheter une maison
+	public static void HouseAchat(Personaje P)//Acheter une maison
 	{
 		House h = P.getInHouse();
 
@@ -325,13 +325,13 @@ public class House
 		GestorSQL.comprar_casa(P, h);
 
 		//Rafraichir la map après l'achat
-		for(Jugador z:P.get_curCarte().getPersos())
+		for(Personaje z:P.get_curCarte().getPersos())
 		{
 			LoadHouse(z, z.get_curCarte().get_id());
 		}
 	}
 	
-	public void SellIt(Jugador P)//Vendre une maison
+	public void SellIt(Personaje P)//Vendre une maison
 	{
 		House h = P.getInHouse();
 		if(isHouse(P, h))
@@ -345,7 +345,7 @@ public class House
 		}
 	}
 	
-	public static void SellPrice(Jugador P, String packet)//Vendre une maison
+	public static void SellPrice(Personaje P, String packet)//Vendre une maison
 	{
 		House h = P.getInHouse();
 		int price = Integer.parseInt(packet);	
@@ -358,7 +358,7 @@ public class House
 			GestorSQL.vender_casa(h, price);
 
 			//Rafraichir la map après la mise en vente
-			for(Jugador z:P.get_curCarte().getPersos())
+			for(Personaje z:P.get_curCarte().getPersos())
 			{
 				LoadHouse(z, z.get_curCarte().get_id());
 			}
@@ -370,28 +370,28 @@ public class House
 		}
 	}
 
-	public boolean isHouse(Jugador P, House h)//Savoir si c'est sa maison
+	public boolean isHouse(Personaje P, House h)//Savoir si c'est sa maison
 	{
 		if(h.get_owner_id() == P.getAccID()) return true;
 		else return false;
 	}
 	
-	public static void closeCode(Jugador P)
+	public static void closeCode(Personaje P)
 	{
 		GestorSalida.GAME_SEND_KODE(P, "V");
 	}
 	
-	public static void closeBuy(Jugador P)
+	public static void closeBuy(Personaje P)
 	{
 		GestorSalida.GAME_SEND_hOUSE(P, "V");
 	}
 	
-	public void Lock(Jugador P)
+	public void Lock(Personaje P)
 	{
 		GestorSalida.GAME_SEND_KODE(P, "CK1|8");
 	}
 	
-	public static void LockHouse(Jugador P, String packet)
+	public static void LockHouse(Personaje P, String packet)
 	{
 		House h = P.getInHouse();
 		if(h.isHouse(P, h))
@@ -406,7 +406,7 @@ public class House
 		}
 	}
 	
-	public static String parseHouseToGuild(Jugador P)
+	public static String parseHouseToGuild(Personaje P)
 	{
 		boolean isFirst = true;
 		StringBuilder packet = new StringBuilder();
@@ -428,7 +428,7 @@ public class House
 			return packet.toString();
 	}
 	
-	public static boolean AlreadyHaveHouse(Jugador P)
+	public static boolean AlreadyHaveHouse(Personaje P)
 	{
 		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
 		{
@@ -440,7 +440,7 @@ public class House
 		return false;
 	}
 	
-	public static void parseHG(Jugador P, String packet)
+	public static void parseHG(Personaje P, String packet)
 	{
 		House h = P.getInHouse();
 		
@@ -541,19 +541,19 @@ public class House
 		}
 	}
 	
-	public static void Leave(Jugador P, String packet)
+	public static void Leave(Personaje P, String packet)
 	{
 		House h = P.getInHouse();
 		if(!h.isHouse(P, h)) return;
 		int Pguid = Integer.parseInt(packet);
-		Jugador Target = Mundo.getPersonnage(Pguid);
+		Personaje Target = Mundo.getPersonnage(Pguid);
 		if(Target == null || !Target.isOnline() || Target.get_fight() != null || Target.get_curCarte().get_id() != P.get_curCarte().get_id()) return;
 		Target.teleport(h.get_map_id(), h.get_cell_id());
 		GestorSalida.GAME_SEND_Im_PACKET(Target, "018;"+P.get_name());
 	}
 	
 	
-	public static House get_HouseByPerso(Jugador P)//Connaitre la MAPID + CELLID de sa maison
+	public static House get_HouseByPerso(Personaje P)//Connaitre la MAPID + CELLID de sa maison
 	{
 		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
 		{

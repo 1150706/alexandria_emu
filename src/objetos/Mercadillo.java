@@ -543,7 +543,7 @@ public class Mercadillo {
 		return toReturn;
 	}
 	
-	public synchronized boolean buyItem(int ligneID,byte amount, int price, Jugador newOwner)
+	public synchronized boolean buyItem(int ligneID,byte amount, int price, Personaje newOwner)
 	{
 		boolean toReturn = true;
 		

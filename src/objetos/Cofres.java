@@ -105,7 +105,7 @@ public class Cofres {
 		_owner_id = owner_id;
 	}
 	
-	public void Lock(Jugador P)
+	public void Lock(Personaje P)
 	{
 		GestorSalida.GAME_SEND_KODE(P, "CK1|8");
 	}
@@ -122,7 +122,7 @@ public class Cofres {
 		return null;
 	}
 	
-	public static void LockTrunk(Jugador P, String packet)
+	public static void LockTrunk(Personaje P, String packet)
 	{
 		Cofres t = P.getInTrunk();
 		if(t == null) return;
@@ -139,7 +139,7 @@ public class Cofres {
 		return;
 	}
 	
-	public void HopIn(Jugador P)//Ouvrir coffre
+	public void HopIn(Personaje P)//Ouvrir coffre
 	{
 		// En gros si il fait quelque chose :)
 		if(P.get_fight() != null ||
@@ -177,7 +177,7 @@ public class Cofres {
 		}
 	}
 	
-	public static void OpenTrunk(Jugador P, String packet, boolean isTrunk)//Ouvrir un coffre
+	public static void OpenTrunk(Personaje P, String packet, boolean isTrunk)//Ouvrir un coffre
 	{	
 		Cofres t = P.getInTrunk();
 		if(t == null) return;
@@ -197,12 +197,12 @@ public class Cofres {
 		}
 	}
 	
-	public static void closeCode(Jugador P)
+	public static void closeCode(Personaje P)
 	{
 		GestorSalida.GAME_SEND_KODE(P, "V");
 	}
 	
-	public boolean isTrunk(Jugador P, Cofres t)//Savoir si c'est son coffre
+	public boolean isTrunk(Personaje P, Cofres t)//Savoir si c'est son coffre
 	{
 		if(t.get_owner_id() == P.getAccID()) return true;
 		else return false;
@@ -232,7 +232,7 @@ public class Cofres {
 		return packet.toString();
 	}
 	
-	public void addInTrunk(int guid, int qua, Jugador P)
+	public void addInTrunk(int guid, int qua, Personaje P)
 	{
 		if(P.getInTrunk().get_id() != get_id()) return;
 		
@@ -312,7 +312,7 @@ public class Cofres {
 			}
 		}
 		
-		for(Jugador perso : P.get_curCarte().getPersos())
+		for(Personaje perso : P.get_curCarte().getPersos())
 		{
 			if(perso.getInTrunk() != null && get_id() == perso.getInTrunk().get_id())
 			{
@@ -324,7 +324,7 @@ public class Cofres {
 		GestorSQL.actualizar_cofre(this);
 	}
 	
-	public void removeFromTrunk(int guid, int qua, Jugador P)
+	public void removeFromTrunk(int guid, int qua, Personaje P)
 	{
 		if(P.getInTrunk().get_id() != get_id()) return;
 		
@@ -403,7 +403,7 @@ public class Cofres {
 			}
 		}
 		
-		for(Jugador perso : P.get_curCarte().getPersos())
+		for(Personaje perso : P.get_curCarte().getPersos())
 		{
 			if(perso.getInTrunk() != null && get_id() == perso.getInTrunk().get_id())
 			{

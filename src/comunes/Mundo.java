@@ -17,14 +17,14 @@ import objetos.*;
 import objetos.Mercadillo.HdvEntry;
 import objetos.NPCModelo.*;
 import objetos.Objeto.ObjTemplate;
-import objetos.Jugador.Stats;
+import objetos.Personaje.Stats;
 
 public class Mundo {
 
 	private static Map<Integer, Cuenta> 	Comptes	= new TreeMap<>();
 	private static Map<String,Integer> 	ComptebyName	= new TreeMap<>();
 	private static StringBuilder Challenges = new StringBuilder();
-	private static Map<Integer, Jugador> 	Persos	= new TreeMap<>();
+	private static Map<Integer, Personaje> 	Persos	= new TreeMap<>();
 	private static Map<Short, Mapa> 	Cartes	= new TreeMap<>();
 	private static Map<Integer, Objeto> 	Objets	= new TreeMap<>();
 	private static Map<Integer,ExpLevel> ExpLevels = new TreeMap<>();
@@ -45,7 +45,7 @@ public class Mundo {
 	private static Map<Integer, Gremio> Guildes = new TreeMap<>();
 	private static Map<Integer, Mercadillo> Hdvs = new TreeMap<>();
 	private static Map<Integer,Map<Integer,ArrayList<HdvEntry>>> _hdvsItems = new HashMap<>();	//Contient tout les items en ventes des comptes dans le format<compteID,<hdvID,items<>>>
-	private static Map<Integer, Jugador> Married = new TreeMap<>();
+	private static Map<Integer, Personaje> Married = new TreeMap<>();
 	private static Map<Integer, Animaciones> Animations = new TreeMap<>();
 	private static Map<Short, Mapa.MountPark> MountPark = new TreeMap<>();
 	private static Map<Integer, Cofres> Trunks = new TreeMap<>();
@@ -360,8 +360,8 @@ public class Mundo {
 	
 	public static class Exchange
 	{
-		private Jugador perso1;
-		private Jugador perso2;
+		private Personaje perso1;
+		private Personaje perso2;
 		private long kamas1 = 0;
 		private long kamas2 = 0;
 		private ArrayList<Couple<Integer,Integer>> items1 = new ArrayList<>();
@@ -369,7 +369,7 @@ public class Mundo {
 		private boolean ok1;
 		private boolean ok2;
 		
-		public Exchange(Jugador p1, Jugador p2)
+		public Exchange(Personaje p1, Personaje p2)
 		{
 			perso1 = p1;
 			perso2 = p2;
@@ -890,7 +890,7 @@ public class Mundo {
 		return (ComptebyName.get(name.toLowerCase())!=null?Comptes.get(ComptebyName.get(name.toLowerCase())):null);
 	}
 	
-	public static Jugador getPersonnage(int guid)
+	public static Personaje getPersonnage(int guid)
 	{
 		return Persos.get(guid);
 	}
@@ -1025,20 +1025,20 @@ public class Mundo {
 		ComptebyName.put(compte.get_name(), compte.get_GUID());
 	}
 
-	public static void addPersonnage(Jugador perso)
+	public static void addPersonnage(Personaje perso)
 	{
 		Persos.put(perso.get_GUID(), perso);
 	}
 
-	public static Jugador getPersoByName(String name)
+	public static Personaje getPersoByName(String name)
 	{
-		ArrayList<Jugador> Ps = new ArrayList<>();
+		ArrayList<Personaje> Ps = new ArrayList<>();
 		Ps.addAll(Persos.values());
-		for(Jugador P : Ps)if(P.get_name().equalsIgnoreCase(name))return P;
+		for(Personaje P : Ps)if(P.get_name().equalsIgnoreCase(name))return P;
 		return null;
 	}
 
-	public static void deletePerso(Jugador perso)
+	public static void deletePerso(Personaje perso)
 	{
 		if(perso.get_guild() != null)
 		{
@@ -1048,8 +1048,8 @@ public class Mundo {
 			}else if(perso.getGuildMember().getRank() == 1)//On passe les pouvoir a celui qui a le plus de droits si il est meneur
 			{
 				int curMaxRight = 0;
-				Jugador Meneur = null;
-				for(Jugador newMeneur : perso.get_guild().getMembers())
+				Personaje Meneur = null;
+				for(Personaje newMeneur : perso.get_guild().getMembers())
 				{
 					if(newMeneur == perso) continue;
 					if(newMeneur.getGuildMember().getRights() < curMaxRight)
@@ -1123,10 +1123,10 @@ public class Mundo {
 		return MobTemplates.get(id);
 	}
 
-	public static List<Jugador> getOnlinePersos()
+	public static List<Personaje> getOnlinePersos()
 	{
-		List<Jugador> online = new ArrayList<>();
-		for(Entry<Integer, Jugador> perso : Persos.entrySet())
+		List<Personaje> online = new ArrayList<>();
+		for(Entry<Integer, Personaje> perso : Persos.entrySet())
 		{
 			if(perso.getValue().isOnline() && perso.getValue().get_compte().getGameThread() != null)
 			{
@@ -1173,7 +1173,7 @@ public class Mundo {
 	{
 		Dragodindes.remove(DID);
 	}
-	public static void saveAll(Jugador saver)
+	public static void saveAll(Personaje saver)
 	{
 		PrintWriter _out = null;
 		if(saver != null)
@@ -1191,7 +1191,7 @@ public class Mundo {
 			//Thread.sleep(10000);
 			
 			JuegoServidor.addToLog("Sauvegarde des personnages...");
-			for(Jugador perso : Persos.values())
+			for(Personaje perso : Persos.values())
 			{
 				if(!perso.isOnline())continue;
 				Thread.sleep(100);//0.1 sec. pour 1 objets
@@ -1442,7 +1442,7 @@ public class Mundo {
 	{
 		C.get_persos().clear();
 		GestorSQL.cargar_personaje_por_cuenta(C.get_GUID());
-		for(Jugador P : Persos.values())
+		for(Personaje P : Persos.values())
 		{
 			if(P.getAccID() == C.get_GUID())
 			{
@@ -1492,7 +1492,7 @@ public class Mundo {
 	}
 
 	public static void unloadPerso(int g) {
-		Jugador toRem = Persos.get(g);
+		Personaje toRem = Persos.get(g);
 		if(!toRem.getItems().isEmpty()) {
 			for(Entry<Integer, Objeto> curObj : toRem.getItems().entrySet()) {
 				Objets.remove(curObj.getKey());
@@ -1628,14 +1628,14 @@ public class Mundo {
 		return false;
 	}
 	
-	public static Jugador getMarried(int ordre)
+	public static Personaje getMarried(int ordre)
 	{
 		return Married.get(ordre);
 	}
 	
-	public static void AddMarried(int ordre, Jugador perso)
+	public static void AddMarried(int ordre, Personaje perso)
 	{
-		Jugador Perso = Married.get(ordre);
+		Personaje Perso = Married.get(ordre);
 		if(Perso != null)
 		{
 			if(perso.get_GUID() == Perso.get_GUID()) // Si c'est le meme joueur...
@@ -1655,10 +1655,10 @@ public class Mundo {
 		}
 	}
 	
-	public static void PriestRequest(Jugador perso, Mapa carte, int IdPretre)
+	public static void PriestRequest(Personaje perso, Mapa carte, int IdPretre)
 	{
-		Jugador Homme = Married.get(0);
-		Jugador Femme = Married.get(1);
+		Personaje Homme = Married.get(0);
+		Personaje Femme = Married.get(1);
 		if(Homme.getWife() != 0){
 			GestorSalida.GAME_SEND_MESSAGE_TO_MAP(carte, Homme.get_name()+" est deja marier!", MainServidor.CONFIG_MOTD_COLOR);
 			return;
@@ -1671,7 +1671,7 @@ public class Mundo {
 		GestorSalida.GAME_SEND_WEDDING(carte, 617, (Homme==perso?Homme.get_GUID():Femme.get_GUID()), (Homme==perso?Femme.get_GUID():Homme.get_GUID()), IdPretre);
 	}
 	
-	public static void Wedding(Jugador Homme, Jugador Femme, int isOK)
+	public static void Wedding(Personaje Homme, Personaje Femme, int isOK)
 	{
 		if(isOK > 0)
 		{
@@ -1788,7 +1788,7 @@ public class Mundo {
 		return i;
 	}
 	
-	public static void addSeller(Jugador p)
+	public static void addSeller(Personaje p)
 	{
 		if(Seller.get(p.get_curCarte().get_id()) == null)
 		{

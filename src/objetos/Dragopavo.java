@@ -9,7 +9,7 @@ import comunes.Constantes;
 import comunes.GestorSQL;
 import comunes.Mundo;
 
-import objetos.Jugador.Stats;
+import objetos.Personaje.Stats;
 
 public class Dragopavo {
 

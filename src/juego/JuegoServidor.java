@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import objetos.Cuenta;
-import objetos.Jugador;
+import objetos.Personaje;
 
 import comunes.*;
 
@@ -60,7 +60,7 @@ public class JuegoServidor implements Runnable{
 			_lastPacketTimer = new Timer();
 			_lastPacketTimer.schedule(new TimerTask() {
 				public void run() {
-					for(Jugador perso : Mundo.getOnlinePersos()) {
+					for(Personaje perso : Mundo.getOnlinePersos()) {
 						if (perso.getLastPacketTime() + MainServidor.CONFIG_MAX_IDLE_TIME < System.currentTimeMillis()) {
 							
 							if(perso != null && perso.get_compte().getGameThread() != null && perso.isOnline()) {

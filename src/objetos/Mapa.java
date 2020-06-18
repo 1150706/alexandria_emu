@@ -3,8 +3,6 @@ package objetos;
 import juego.*;
 import juego.JuegoThread.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.Timer;
@@ -192,7 +190,7 @@ public class Mapa {
 					mp.getValue().set_guild(null);
 					mp.getValue().set_price(3000000);
 					GestorSQL.guardar_cercados(mp.getValue());
-					for(Jugador p : mp.getValue().get_map().getPersos())
+					for(Personaje p : mp.getValue().get_map().getPersos())
 					{
 						GestorSalida.GAME_SEND_Rp_PACKET(p, mp.getValue());
 					}
@@ -294,7 +292,7 @@ public class Mapa {
 	public static class Case
 	{
 		private int _id;
-		private Map<Integer, Jugador>	_persos;		//= new TreeMap<Integer, Personnage>();
+		private Map<Integer, Personaje>	_persos;		//= new TreeMap<Integer, Personnage>();
 		private Map<Integer, Fighter> 		_fighters;	//= new TreeMap<Integer, Fighter>();
 		private boolean _Walkable = true;
 		private boolean _LoS = true;
@@ -936,7 +934,7 @@ public class Mapa {
 			_onCellStop.add(new Accion(id,args,cond));
 		}
 		
-		public void applyOnCellStopActions(Jugador perso)
+		public void applyOnCellStopActions(Personaje perso)
 		{
 			if(_onCellStop == null) return;
 			
@@ -945,7 +943,7 @@ public class Mapa {
 				act.apply(perso, null, -1, -1);
 			}
 		}
-		public void addPerso(Jugador perso)
+		public void addPerso(Personaje perso)
 		{
 			if(_persos == null) _persos = new TreeMap<>();
 			_persos.put(perso.get_GUID(),perso);
@@ -986,7 +984,7 @@ public class Mapa {
 			_persos.remove(_guid);
 			if(_persos.isEmpty()) _persos = null;
 		}
-		public Map<Integer, Jugador> getPersos()
+		public Map<Integer, Personaje> getPersos()
 		{
 			if(_persos == null) return new TreeMap<>();
 			return _persos;
@@ -1005,7 +1003,7 @@ public class Mapa {
 			return null;
 		}
 
-		public void startAction(Jugador perso, GameAction GA)
+		public void startAction(Personaje perso, GameAction GA)
 		{
 			int actionID = -1;
 			short CcellID = -1;
@@ -1184,7 +1182,7 @@ public class Mapa {
 				break;
 			}
 		}
-		public void finishAction(Jugador perso, GameAction GA)
+		public void finishAction(Personaje perso, GameAction GA)
 		{
 			int actionID = -1;
 			try
@@ -1329,7 +1327,7 @@ public class Mapa {
 		}
 	}
 
-	public void applyEndFightAction(int type, Jugador perso)
+	public void applyEndFightAction(int type, Personaje perso)
 	{
 		if(_endFightAction.get(type) == null)
 			return;
@@ -1483,11 +1481,11 @@ public class Mapa {
 		return _cases.get(id);
 	}
 	
-	public ArrayList<Jugador> getPersos()
+	public ArrayList<Personaje> getPersos()
 	{
-		ArrayList<Jugador> persos = new ArrayList<>();
+		ArrayList<Personaje> persos = new ArrayList<>();
 		for(Case c : _cases.values())
-			for(Jugador entry : c.getPersos().values())
+			for(Personaje entry : c.getPersos().values())
 				persos.add(entry);
 		return persos;
 	}
@@ -1515,7 +1513,7 @@ public class Mapa {
 		return _placesStr;
 	}
 
-	public void addPlayer(Jugador perso)
+	public void addPlayer(Personaje perso)
 	{
 		GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(this,perso);
 		perso.get_curCell().addPerso(perso);
@@ -1524,7 +1522,7 @@ public class Mapa {
 	public String getGMsPackets()
 	{
 		StringBuilder packet = new StringBuilder();
-		for(Case cell : _cases.values())for(Jugador perso : cell.getPersos().values())packet.append("GM|+").append(perso.parseToGM()).append('\u0000');
+		for(Case cell : _cases.values())for(Personaje perso : cell.getPersos().values())packet.append("GM|+").append(perso.parseToGM()).append('\u0000');
 		return packet.toString();
 	}
 	public String getFightersGMsPackets()
@@ -1561,7 +1559,7 @@ public class Mapa {
 		return packet.toString();
 	}
 	
-	public String getNpcsGMsPackets(Jugador p)
+	public String getNpcsGMsPackets(Personaje p)
 	{
 		if(_npcs.isEmpty())return "";
 		
@@ -1609,7 +1607,7 @@ public class Mapa {
 		return _fights;
 	}
 
-	public Pelea newFight(Jugador init1, Jugador init2, int type)
+	public Pelea newFight(Personaje init1, Personaje init2, int type)
 	{
 		int id = 1;
 		if(!_fights.isEmpty())
@@ -1709,7 +1707,7 @@ public class Mapa {
 		spawnGroup(Constantes.ALIGNEMENT_BRAKMARIEN,1,true,-1);//Spawn du groupe de gardes brakmarien s'il y a
 	}
 	
-	public void onPlayerArriveOnCell(Jugador perso, int caseID)
+	public void onPlayerArriveOnCell(Personaje perso, int caseID)
 	{
 		if(_cases.get(caseID) == null)return;
 		Objeto obj = _cases.get(caseID).getDroppedItem();
@@ -1741,7 +1739,7 @@ public class Mapa {
 		}
 	}
 	
-	public void startFigthVersusMonstres(Jugador perso, MobGroup group)
+	public void startFigthVersusMonstres(Personaje perso, MobGroup group)
 	{
 		int id = 1;
 		if(!_fights.isEmpty())
@@ -1753,7 +1751,7 @@ public class Mapa {
 		GestorSalida.GAME_SEND_MAP_FIGHT_COUNT_TO_MAP(this);
 	}
 	
-	public void startFigthVersusPercepteur(Jugador perso, Recaudador perco)
+	public void startFigthVersusPercepteur(Personaje perso, Recaudador perco)
 	{
 		int id = 1;
 		if(!_fights.isEmpty())
@@ -1830,7 +1828,7 @@ public class Mapa {
 		return _fights.get(id);
 	}
 
-	public void sendFloorItems(Jugador perso)
+	public void sendFloorItems(Personaje perso)
 	{
 		for(Case c : _cases.values())
 		{

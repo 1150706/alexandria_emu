@@ -3,14 +3,11 @@ package objetos;
 import juego.JuegoServidor;
 import juego.JuegoThread.GameAction;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
@@ -31,7 +28,7 @@ import comunes.Mundo;
 import comunes.Mundo.Exchange;
 import comunes.Mundo.ItemSet;
 
-public class Jugador {
+public class Personaje {
 	
 	private int _GUID;
 	private String _name;
@@ -127,8 +124,8 @@ public class Jugador {
 	private int _wife = 0;
 	private int _isOK = 0;
 	//Suiveur - Suivi
-	public Map<Integer, Jugador> _Follower = new TreeMap<>();
-	public Jugador _Follows = null;
+	public Map<Integer, Personaje> _Follower = new TreeMap<>();
+	public Personaje _Follows = null;
 	//Fantome
 	public boolean _isGhosts = false;
 	private int _Speed = 0;
@@ -144,19 +141,19 @@ public class Jugador {
 	
 	public static class traque {
 		private long _time;
-		private Jugador _traqued;
+		private Personaje _traqued;
 		
-		public traque(long time, Jugador p) {
+		public traque(long time, Personaje p) {
 			this._time = time;
 			this._traqued = p;
 		}
 		
-		public void set_traqued(Jugador tempP)
+		public void set_traqued(Personaje tempP)
 		{
 			_traqued = tempP;
 		}
 		
-		public Jugador get_traqued()
+		public Personaje get_traqued()
 		{
 			return _traqued;
 		}
@@ -172,10 +169,10 @@ public class Jugador {
 		}
 	}
 	public static class Group {
-		private ArrayList<Jugador> _persos = new ArrayList<>();
-		private Jugador _chief;
+		private ArrayList<Personaje> _persos = new ArrayList<>();
+		private Personaje _chief;
 		
-		public Group(Jugador p1, Jugador p2) {
+		public Group(Personaje p1, Personaje p2) {
 			_chief = p1;
 			_persos.add(p1);
 			_persos.add(p2);
@@ -186,7 +183,7 @@ public class Jugador {
 			return _chief.get_GUID() == guid;
 		}
 		
-		public void addPerso(Jugador p)
+		public void addPerso(Personaje p)
 		{
 			_persos.add(p);
 		}
@@ -198,24 +195,24 @@ public class Jugador {
 		
 		public int getGroupLevel() {
 			int lvls = 0;
-			for(Jugador p : _persos)
+			for(Personaje p : _persos)
 			{
 				lvls += p.get_lvl();
 			}
 			return lvls;
 		}
 		
-		public ArrayList<Jugador> getPersos()
+		public ArrayList<Personaje> getPersos()
 		{
 			return _persos;
 		}
 
-		public Jugador getChief()
+		public Personaje getChief()
 		{
 			return _chief;
 		}
 
-		public void leave(Jugador p) {
+		public void leave(Personaje p) {
 			if(!_persos.contains(p))return;
 			p.setGroup(null);
 			_persos.remove(p);
@@ -231,7 +228,7 @@ public class Jugador {
 	public static class Stats {
 		private Map<Integer,Integer> Effects = new TreeMap<>();
 		
-		public Stats(boolean addBases, Jugador perso) {
+		public Stats(boolean addBases, Personaje perso) {
 			Effects = new TreeMap<>();
 			if(!addBases)return;
 			Effects.put(Constantes.STATS_ADD_PA,  perso.get_lvl()<100?6:7);
@@ -242,7 +239,7 @@ public class Jugador {
 			Effects.put(Constantes.STATS_ADD_INIT, 1);
 		}
 
-		public Stats(Map<Integer, Integer> stats, boolean addBases, Jugador perso) {
+		public Stats(Map<Integer, Integer> stats, boolean addBases, Personaje perso) {
 			Effects = stats;
 			if(!addBases)return;
 			Effects.put(Constantes.STATS_ADD_PA,  perso.get_lvl()<100?6:7);
@@ -453,11 +450,11 @@ public class Jugador {
 		}
 	}
 	
-	public Jugador(int _guid, String _name, int _sexe, int _classe,
-				   int _color1, int _color2, int _color3, long _kamas, int pts, int _capital, int _energy, int _lvl, long exp,
-				   int _size, int _gfxid, byte alignement, int _compte, Map<Integer,Integer> stats,
-				   byte seeFriend, byte seeAlign, byte seeSeller, String canaux, short map, int cell, String stuff, String storeObjets, int pdvPer, String spells, String savePos, String jobs,
-				   int mountXp, int mount, int honor, int deshonor, int alvl, String z, byte title, int wifeGuid)
+	public Personaje(int _guid, String _name, int _sexe, int _classe,
+					 int _color1, int _color2, int _color3, long _kamas, int pts, int _capital, int _energy, int _lvl, long exp,
+					 int _size, int _gfxid, byte alignement, int _compte, Map<Integer,Integer> stats,
+					 byte seeFriend, byte seeAlign, byte seeSeller, String canaux, short map, int cell, String stuff, String storeObjets, int pdvPer, String spells, String savePos, String jobs,
+					 int mountXp, int mount, int honor, int deshonor, int alvl, String z, byte title, int wifeGuid)
 	{
 		this._GUID = _guid;
 		this._name = _name;
@@ -602,10 +599,10 @@ public class Jugador {
 	}
 	
 	//Clone double
-	public Jugador(int _guid, String _name, int _sexe, int _classe,
-				   int _color1, int _color2, int _color3, int _lvl,
-				   int _size, int _gfxid, Map<Integer,Integer> stats,
-				   String stuff, int pdvPer, byte seeAlign, int mount, int alvl, byte alignement)
+	public Personaje(int _guid, String _name, int _sexe, int _classe,
+					 int _color1, int _color2, int _color3, int _lvl,
+					 int _size, int _gfxid, Map<Integer,Integer> stats,
+					 String stuff, int pdvPer, byte seeAlign, int mount, int alvl, byte alignement)
 	{
 		this._GUID = _guid;
 		this._name = _name;
@@ -662,7 +659,7 @@ public class Jugador {
 		_PDV++;
 	}
 	
-	public static Jugador CREATE_PERSONNAGE(String name, int sexe, int classe, int color1, int color2, int color3, Cuenta compte)
+	public static Personaje CREATE_PERSONNAGE(String name, int sexe, int classe, int color1, int color2, int color3, Cuenta compte)
 	{
 		String z = "";
 		if(MainServidor.CONFIG_ZAAP)
@@ -673,7 +670,7 @@ public class Jugador {
 				z += i.getKey();
 			}
 		}
-		Jugador perso = new Jugador(
+		Personaje perso = new Personaje(
 				GestorSQL.getSiguienteIDPersonaje(),
 				name,
 				sexe,
@@ -2134,7 +2131,7 @@ public class Jugador {
 		
 		if(!_Follower.isEmpty())//On met a jour la carte des personnages qui nous suivent
 		{
-			for(Jugador t : _Follower.values()) {
+			for(Personaje t : _Follower.values()) {
 				if(t.isOnline())
 					GestorSalida.GAME_SEND_FLAG_PACKET(t, this);
 				else
@@ -2144,10 +2141,7 @@ public class Jugador {
 
 	}
 	
-	public int getBankCost()
-	{
-		return _compte.getBank().size();
-	}
+	public int getCostoAbrirBanco() { return _compte.getBank().size(); }
 	
 	public String getStringVar(String str)
 	{
@@ -2155,7 +2149,7 @@ public class Jugador {
 		if(str.equals("name"))return _name;
 		if(str.equals("bankCost"))
 		{
-			return getBankCost()+"";
+			return getCostoAbrirBanco()+"";
 		}
 		return "";
 	}
@@ -2987,7 +2981,7 @@ public class Jugador {
 		return _isForgetingSpell;
 	}
 	
-	public boolean isDispo(Jugador sender)
+	public boolean isDispo(Personaje sender)
 	{
 		if(_isAbsent)
 			return false;
@@ -3040,7 +3034,7 @@ public class Jugador {
 		_lastPacketTime = System.currentTimeMillis();
 	}
 	
-	public static Jugador ClonePerso(Jugador P, int id)
+	public static Personaje ClonePerso(Personaje P, int id)
 	{	
 		TreeMap<Integer,Integer> stats = new TreeMap<>();
 		stats.put(Constantes.STATS_ADD_VITA, P.get_baseStats().getEffect(Constantes.STATS_ADD_VITA));
@@ -3072,7 +3066,7 @@ public class Jugador {
 			mountID = P.getMount().get_id();
 		}
 		
-		Jugador Clone = new Jugador(
+		Personaje Clone = new Personaje(
 				id, 
 				P.get_name(), 
 				P.get_sexe(), 
@@ -3313,7 +3307,7 @@ public class Jugador {
 	
 	//Mariage
 	
-	public void MarryTo(Jugador wife)
+	public void MarryTo(Personaje wife)
 	{
 		_wife = wife.get_GUID();
 		GestorSQL.guardar_personaje(this,true);
@@ -3321,7 +3315,7 @@ public class Jugador {
 	
 	public String get_wife_friendlist()
 	{
-		Jugador wife = Mundo.getPersonnage(_wife);
+		Personaje wife = Mundo.getPersonnage(_wife);
 		StringBuilder str = new StringBuilder();
 		if(wife != null)
 		{
@@ -3347,7 +3341,7 @@ public class Jugador {
 		return _curCarte.get_id() + "|" + _lvl + "|" + f;
 	}
 	
-	public void meetWife(Jugador p)// Se teleporter selon les sacro-saintes autorisations du mariage.
+	public void meetWife(Personaje p)// Se teleporter selon les sacro-saintes autorisations du mariage.
 	{
 		if(p == null)return; // Ne devrait theoriquement jamais se produire.
 		

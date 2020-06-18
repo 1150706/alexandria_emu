@@ -2,7 +2,6 @@ package comunes;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -100,7 +99,7 @@ public class Formulas {
           return 0; //Si perdant pas de xp gagn�
   }
 
-	public static int calculFinalHeal(Jugador caster, int jet)
+	public static int calculFinalHeal(Personaje caster, int jet)
 	{
 		int statC = caster.getTotalStats().getEffect(Constantes.STATS_ADD_INTE);
 		int soins = caster.getTotalStats().getEffect(Constantes.STATS_ADD_SOIN);
@@ -959,7 +958,7 @@ public class Formulas {
 		return toReturn;
 	}
 	
-	public static int totalCaptChance(int pierreChance, Jugador p)
+	public static int totalCaptChance(int pierreChance, Personaje p)
 	{
 		int sortChance = 0;
 

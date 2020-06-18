@@ -18,7 +18,7 @@ import objetos.Mapa;
 import objetos.Cuenta;
 import objetos.NPCModelo;
 import objetos.Objeto;
-import objetos.Jugador;
+import objetos.Personaje;
 import objetos.Mapa.MountPark;
 import objetos.Mercadillo.HdvEntry;
 import objetos.Oficio.StatsMetier;
@@ -31,7 +31,7 @@ import objetos.Objeto.ObjTemplate;
 
 public class Comandos {
 	Cuenta _compte;
-	Jugador _perso;
+	Personaje _perso;
 	PrintWriter _out;
 	//Guardado
 	private boolean _TimerStart = false;
@@ -54,7 +54,7 @@ public class Comandos {
 	        	}
 	        	if(Time <= 0)
 	        	{
-	        		for(Jugador perso : Mundo.getOnlinePersos())
+	        		for(Personaje perso : Mundo.getOnlinePersos())
 	        		{
 	        			perso.get_compte().getGameThread().kick();
 	        		}
@@ -66,7 +66,7 @@ public class Comandos {
 	    return new Timer (60000, action);//60000
 	}
 	
-	public Comandos(Jugador perso)
+	public Comandos(Personaje perso)
 	{
 		this._compte = perso.get_compte();
 		this._perso = perso;
@@ -189,7 +189,7 @@ public class Comandos {
 			for(byte b = 0; b < 30; b++) {
 				if(b == MainServidor.gameServer.getClients().size())break;
 				JuegoThread GT = MainServidor.gameServer.getClients().get(b);
-				Jugador P = GT.getPerso();
+				Personaje P = GT.getPerso();
 				if(P == null)continue;
 				mess = P.get_name()+"("+P.get_GUID()+") ";
 				
@@ -288,7 +288,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("CREATEGUILD"))
 		{
-			Jugador perso = _perso;
+			Personaje perso = _perso;
 			if(infos.length >1)
 			{
 				perso = Mundo.getPersoByName(infos[1]);
@@ -319,7 +319,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("TOOGLEAGGRO"))
 		{
-			Jugador perso = _perso;
+			Personaje perso = _perso;
 			
 			String name = null;
 			try
@@ -356,7 +356,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("DEMORPH"))
 		{
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 1)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[1]);
@@ -377,7 +377,7 @@ public class Comandos {
 		else
 		if(command.equalsIgnoreCase("GONAME") || command.equalsIgnoreCase("JOIN"))
 		{
-			Jugador P = Mundo.getPersoByName(infos[1]);
+			Personaje P = Mundo.getPersoByName(infos[1]);
 			if(P == null)
 			{
 				String str = "Le personnage n'existe pas";
@@ -387,7 +387,7 @@ public class Comandos {
 			short mapID = P.get_curCarte().get_id();
 			int cellID = P.get_curCell().getID();
 			
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -410,7 +410,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("NAMEGO"))
 		{
-			Jugador target = Mundo.getPersoByName(infos[1]);
+			Personaje target = Mundo.getPersoByName(infos[1]);
 			if(target == null)
 			{
 				String str = "Le personnage n'existe pas";
@@ -423,7 +423,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador P = _perso;
+			Personaje P = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				P = Mundo.getPersoByName(infos[2]);
@@ -475,7 +475,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 3)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[3]);
@@ -516,7 +516,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 5)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[5]);
@@ -548,7 +548,7 @@ public class Comandos {
 			}
 			int type = -100;
 			String args = "",cond = "";
-			Jugador perso = _perso;
+			Personaje perso = _perso;
 			try
 			{
 				perso = Mundo.getPersoByName(infos[1]);
@@ -583,7 +583,7 @@ public class Comandos {
 		
 		if(command.equalsIgnoreCase("MUTE"))
 		{
-			Jugador perso = _perso;
+			Personaje perso = _perso;
 			String name = null;
 			try
 			{
@@ -624,7 +624,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("UNMUTE"))
 		{
-			Jugador perso = _perso;
+			Personaje perso = _perso;
 			
 			String name = null;
 			try
@@ -652,7 +652,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("KICK"))
 		{
-			Jugador perso = _perso;
+			Personaje perso = _perso;
 			String name = null;
 			try
 			{
@@ -690,7 +690,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -719,7 +719,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -749,7 +749,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -820,7 +820,7 @@ public class Comandos {
 			{
 				honor = Integer.parseInt(infos[1]);
 			}catch(Exception e){};
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -857,7 +857,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-				Jugador target = _perso;
+				Personaje target = _perso;
 			if(infos.length > 3)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[3]);
@@ -894,7 +894,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -924,7 +924,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -953,7 +953,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -983,7 +983,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
@@ -1056,7 +1056,7 @@ public class Comandos {
 			if(infos.length > 2)
 				useMax = infos[2].equals("MAX");//Si un jet est spécifié
 
-			Jugador perso = _perso;
+			Personaje perso = _perso;
 			if(nom != null)
 				try {
 					perso = Mundo.getPersoByName(nom);
@@ -1082,7 +1082,7 @@ public class Comandos {
 				count = Integer.parseInt(infos[1]);
 				if(count < 1)	count = 1;
 				if(count > Mundo.getExpLevelSize())	count = Mundo.getExpLevelSize();
-				Jugador perso = _perso;
+				Personaje perso = _perso;
 				if(infos.length == 3)//Si le nom du perso est spécifié
 				{
 					String name = infos[2];
@@ -1119,7 +1119,7 @@ public class Comandos {
 				count = Integer.parseInt(infos[1]);
 				if(count < 0)	count = 0;
 				if(count > 100)	count = 100;
-				Jugador perso = _perso;
+				Personaje perso = _perso;
 				if(infos.length == 3)//Si le nom du perso est spécifié
 				{
 					String name = infos[2];
@@ -1152,7 +1152,7 @@ public class Comandos {
 			};
 			if(count == 0)return;
 			
-			Jugador perso = _perso;
+			Personaje perso = _perso;
 			if(infos.length == 3)//Si le nom du perso est spécifié
 			{
 				String name = infos[2];
@@ -1232,7 +1232,7 @@ public class Comandos {
 		}else
 		if (command.equalsIgnoreCase("TITLE"))
 		{
-			Jugador target = null;
+			Personaje target = null;
 			byte TitleID = 0;
 			try
 			{
@@ -1343,7 +1343,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("BAN"))
 		{
-			Jugador P = Mundo.getPersoByName(infos[1]);
+			Personaje P = Mundo.getPersoByName(infos[1]);
 			if(P == null)
 			{
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Personnage non trouve");
@@ -1363,7 +1363,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("UNBAN"))
 		{
-			Jugador P = Mundo.getPersoByName(infos[1]);
+			Personaje P = Mundo.getPersoByName(infos[1]);
 			if(P == null)
 			{
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Personnage non trouve");
@@ -1764,7 +1764,7 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			Jugador target = _perso;
+			Personaje target = _perso;
 			if(infos.length > 2){ //Si un nom de perso est spécifié
 				target = Mundo.getPersoByName(infos[2]);
 				if(target == null) {
@@ -1807,7 +1807,7 @@ public class Comandos {
 			Mundo.setGmAccess(GmAccess);
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Serveur bloque au GmLevel : "+GmAccess);
 			if(KickPlayer > 0) {
-				for(Jugador z : Mundo.getOnlinePersos()) {
+				for(Personaje z : Mundo.getOnlinePersos()) {
 					if(z.get_compte().get_gmLvl() < GmAccess)
 						z.get_compte().getGameThread().closeSocket();
 				}
@@ -1815,7 +1815,7 @@ public class Comandos {
 			}
 		}else
 		if(command.equalsIgnoreCase("BANIP")) {
-			Jugador P = null;
+			Personaje P = null;
 			try {
 				P = Mundo.getPersoByName(infos[1]);
 			}catch(Exception ignored){};

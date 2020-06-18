@@ -67,7 +67,7 @@ public class Retos
 		challenge_Gagner();
 	}
 
-	public void show_cibleToPerso(Jugador p) {
+	public void show_cibleToPerso(Personaje p) {
 		if (!_challengeAlive || _cible == null || _cible.get_fightCell() == null || p == null)
 			return;
 		StringBuilder packet = new StringBuilder();

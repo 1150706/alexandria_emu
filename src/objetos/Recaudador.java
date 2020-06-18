@@ -302,7 +302,7 @@ public class Recaudador
 		return i;
 	}
 	
-	public static void parseAttaque(Jugador perso, int guildID)
+	public static void parseAttaque(Personaje perso, int guildID)
 	{
 		for(Entry<Integer, Recaudador> perco :  Mundo.getPercos().entrySet())
 		{
@@ -313,7 +313,7 @@ public class Recaudador
 		}
 	}
 	
-	public static void parseDefense(Jugador perso, int guildID)
+	public static void parseDefense(Personaje perso, int guildID)
 	{
 		for(Entry<Integer, Recaudador> perco :  Mundo.getPercos().entrySet())
 		{
@@ -402,7 +402,7 @@ public class Recaudador
 	}
 	
 	
-	public void removeFromPercepteur(Jugador P, int guid, int qua)
+	public void removeFromPercepteur(Personaje P, int guid, int qua)
 	{
 		Objeto PercoObj = Mundo.getObjet(guid);
 		Objeto PersoObj = P.getSimilarItem(PercoObj);
@@ -523,7 +523,7 @@ public class Recaudador
 			if(perco.getValue().get_guildID() == GuildID)
 			{
 				Mundo.getPercos().remove(perco.getKey());
-				for(Jugador p : Mundo.getCarte((short) perco.getValue().get_mapID()).getPersos())
+				for(Personaje p : Mundo.getCarte((short) perco.getValue().get_mapID()).getPersos())
 				{
 					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(p.get_curCarte(), perco.getValue().getGuid());//Suppression visuelle
 				}

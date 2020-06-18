@@ -563,7 +563,7 @@ public class GestorSQL {
 				stats.put(Constantes.STATS_ADD_CHAN, RS.getInt("suerte"));
 				stats.put(Constantes.STATS_ADD_AGIL, RS.getInt("agilidad"));
 				
-				Jugador perso = new Jugador(
+				Personaje perso = new Personaje(
 						RS.getInt("id"),
 						RS.getString("nombre"),
 						RS.getInt("sexo"),
@@ -632,7 +632,7 @@ public class GestorSQL {
 				stats.put(Constantes.STATS_ADD_CHAN, RS.getInt("suerte"));
 				stats.put(Constantes.STATS_ADD_AGIL, RS.getInt("agilidad"));
 				
-				Jugador perso = new Jugador(
+				Personaje perso = new Personaje(
 						RS.getInt("id"),
 						RS.getString("nombre"),
 						RS.getInt("sexo"),
@@ -685,7 +685,7 @@ public class GestorSQL {
 		}
 	}
 
-	public static boolean eliminar_personaje_db(Jugador perso) {
+	public static boolean eliminar_personaje_db(Personaje perso) {
 		int guid = perso.get_GUID();
 		String baseQuery = "DELETE FROM datos_personajes WHERE id = ?;";
 		
@@ -728,7 +728,7 @@ public class GestorSQL {
 		}
 	}
 
-	public static boolean agregar_personaje_db(Jugador perso) {
+	public static boolean agregar_personaje_db(Personaje perso) {
 		String baseQuery = "INSERT INTO datos_personajes( `id` , `nombre` , `sexo` , `clase` , `color1` , `color2` , `color3` , `kamas` , `puntoshechizo` , `capital` , `energia` , `nivel` , `experiencia`, `tamaño`, `gfx`, `cuenta`, `celda`,`mapa`,`hechizos`,`objetos`, `objetosmercante`)" +
 				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'', '');";
 		try {
@@ -837,7 +837,7 @@ public class GestorSQL {
 		}
 	}
 
-	public static void guardar_personaje(Jugador _perso, boolean saveItem) {
+	public static void guardar_personaje(Personaje _perso, boolean saveItem) {
 		String baseQuery = "UPDATE `datos_personajes` SET "+
 						"`kamas`= ?,"+
 						"`puntoshechizo`= ?,"+
@@ -1883,7 +1883,7 @@ public class GestorSQL {
 
 	public static void cargar_acciones() {
 			/*Variables représentant les champs de la base*/
-			Jugador perso;
+			Personaje perso;
 			int action;
 			int nombre;
 			int id;
@@ -2122,7 +2122,7 @@ public class GestorSQL {
 			return exist;
 		}
 
-		public static void comprar_casa(Jugador P, House h) {
+		public static void comprar_casa(Personaje P, House h) {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `venta`='0', `dueño`=?, `gremio`='0', `acceso`='0', `llave`='-', `derechosgremio`='0' WHERE `id`=?;";
 			try {
@@ -2177,7 +2177,7 @@ public class GestorSQL {
 			}
 		}
 
-		public static void codigo_casa(Jugador P, House h, String packet) {
+		public static void codigo_casa(Personaje P, House h, String packet) {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `llave`=? WHERE `id`=? AND dueño=?;";
 			try {
@@ -2506,7 +2506,7 @@ public class GestorSQL {
                 return nbr;
         }
        
-        public static void cofre_codigo(Jugador P, Cofres t, String packet) {
+        public static void cofre_codigo(Personaje P, Cofres t, String packet) {
                 PreparedStatement p;
                 String query = "UPDATE `datos_cofres` SET `llave`=? WHERE `id`=? AND dueño=?;";
                 try {

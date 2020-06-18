@@ -10,7 +10,7 @@ import objetos.*;
 
 public class Condiciones
 {
-	public static boolean validConditions(Jugador perso, String req)
+	public static boolean validConditions(Personaje perso, String req)
 	{
 		if(req == null || req.equals(""))return true;
 		if(req.contains("BI"))return false;
@@ -69,7 +69,7 @@ public class Condiciones
 		return true;
 	}
 	
-	public static String havePO(String cond, Jugador perso)//On remplace les PO par leurs valeurs si possession de l'item
+	public static String havePO(String cond, Personaje perso)//On remplace les PO par leurs valeurs si possession de l'item
 	{
 		boolean Jump = false;
 		boolean ContainsPO = false;
@@ -268,7 +268,7 @@ public class Condiciones
 		return copyCond;
 	}
 	
-	public static String canPN(String cond, Jugador perso)//On remplace le PN par 1 et si le nom correspond == 1 sinon == 0
+	public static String canPN(String cond, Personaje perso)//On remplace le PN par 1 et si le nom correspond == 1 sinon == 0
 	{
 		String copyCond = "";
 		for(String cur : cond.split("=="))

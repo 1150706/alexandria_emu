@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
-import objetos.Jugador.Stats;
+import objetos.Personaje.Stats;
 import comunes.MainServidor;
 import comunes.Constantes;
 import comunes.Formulas;
@@ -230,7 +230,7 @@ public class Objeto {
 			return (this.ID+";"+StrTemplate);
 		}
 
-		public void applyAction(Jugador perso, Jugador target, int objID, short cellid)
+		public void applyAction(Personaje perso, Personaje target, int objID, short cellid)
 		{
 			for(Accion a : onUseActions)a.apply(perso, target, objID, cellid);
 		}
@@ -259,7 +259,7 @@ public class Objeto {
 	protected int guid;
 	protected int obvijevan;
 	protected int obvijevanLook;
-	private Jugador.Stats Stats = new Stats();
+	private Personaje.Stats Stats = new Stats();
 	protected int dueño;
 	private ArrayList<EfectoHechizo> Effects = new ArrayList<>();
 	private Map<Integer,String> txtStats = new TreeMap<>();
@@ -374,7 +374,7 @@ public class Objeto {
 	    this.obvijevanLook = 0;
 	}
 	
-	public Jugador.Stats getStats() {
+	public Personaje.Stats getStats() {
 		return Stats;
 	}
 
@@ -583,7 +583,7 @@ public class Objeto {
 	
 	public void removeAllObvijevanStats() {
 		setObvijevanPos(0);
-		Jugador.Stats StatsSansObvi = new Jugador.Stats();
+		Personaje.Stats StatsSansObvi = new Personaje.Stats();
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
 			int statID = ((Integer)entry.getKey()).intValue();
@@ -597,7 +597,7 @@ public class Objeto {
 	public void removeAll_ExepteObvijevanStats()
 	{
 		setObvijevanPos(0);
-		Jugador.Stats StatsSansObvi = new Jugador.Stats();
+		Personaje.Stats StatsSansObvi = new Personaje.Stats();
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
 			int statID = ((Integer)entry.getKey()).intValue();

@@ -129,3 +129,17 @@ Lancement du serveur...
 11:12:13: Realm: Recv << Af
 11:12:13: Realm: Recv << Ax
 11:12:13: Realm: Recv << AX1
+Lancement du serveur...
+11:12:13: Realm: Recv << 1.29.1
+11:12:13: Realm: Recv << admin
+11:12:13: Realm: Recv << #18698PP
+11:12:13: Realm: Recv << Af
+11:12:13: Realm: Recv << Ax
+11:12:13: Realm: Recv << AX1
+Lancement du serveur...
+11:12:13: Realm: Recv << 1.29.1
+11:12:13: Realm: Recv << admin
+11:12:13: Realm: Recv << #1USNMVV
+11:12:13: Realm: Recv << Af
+11:12:13: Realm: Recv << Ax
+11:12:13: Realm: Recv << AX1

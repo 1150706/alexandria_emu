@@ -1915,7 +1915,7 @@ public class EfectoHechizo
 		{
 			int cell = this.cell.getID();
 			int id = fight.getNextLowerFighterGuid();
-			Jugador Clone = Jugador.ClonePerso(caster.getPersonnage(), id);
+			Personaje Clone = Personaje.ClonePerso(caster.getPersonnage(), id);
 			Fighter F = new Fighter(fight,Clone);
 			F.setTeam(caster.getTeam());
 			F.setInvocator(caster);

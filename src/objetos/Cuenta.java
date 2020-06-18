@@ -2,8 +2,6 @@ package objetos;
 
 import juego.JuegoThread;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -34,7 +32,7 @@ public class Cuenta {
 	private String _lastConnectionDate = "";
 	private JuegoThread _gameThread;
 	private RealmThread _realmThread;
-	private Jugador _curPerso;
+	private Personaje _curPerso;
 	private long _bankKamas = 0;
 	private Map<Integer, Objeto> _bank = new TreeMap<>();
 	private ArrayList<Integer> _friendGuids = new ArrayList<>();
@@ -44,7 +42,7 @@ public class Cuenta {
 	public int _position = -1;//Position du joueur
 	private Map<Integer,ArrayList<HdvEntry>> _hdvsItems;// Contient les items des HDV format : <hdvID,<cheapestID>>
 	
-	private Map<Integer, Jugador> _persos = new TreeMap<>();
+	private Map<Integer, Personaje> _persos = new TreeMap<>();
 	
 	public Cuenta(int aGUID, String aName, String aPass, String aPseudo, String aQuestion, String aReponse, int aGmLvl, int vip, boolean aBanned, String aLastIp, String aLastConnectionDate, String bank, int bankKamas, String friends, String enemy)
 	{
@@ -127,21 +125,18 @@ public class Cuenta {
 		}
 	}
 	
-	public String parseBankObjetsToDB()
-	{
+	public String parseBankObjetsToDB() {
 		StringBuilder str = new StringBuilder();
-		if(_bank.isEmpty())return "";
-		for(Entry<Integer, Objeto> entry : _bank.entrySet())
-		{
+		if(_bank.isEmpty())
+			return "";
+		for(Entry<Integer, Objeto> entry : _bank.entrySet()) {
 			Objeto obj = entry.getValue();
 			str.append(obj.getGuid()).append("|");
 		}
 		return str.toString();
 	}
 	
-	public Map<Integer, Objeto> getBank() {
-		return _bank;
-	}
+	public Map<Integer, Objeto> getBank() { return _bank; }
 
 	public long getBankKamas()
 	{
@@ -205,7 +200,7 @@ public class Cuenta {
 		_key = aKey;
 	}
 	
-	public Map<Integer, Jugador> get_persos() {
+	public Map<Integer, Personaje> get_persos() {
 		return _persos;
 	}
 
@@ -217,7 +212,7 @@ public class Cuenta {
 		return _question;
 	}
 
-	public Jugador get_curPerso() {
+	public Personaje get_curPerso() {
 		return _curPerso;
 	}
 
@@ -268,7 +263,7 @@ public class Cuenta {
 		}
 	}
 
-	public void addPerso(Jugador perso)
+	public void addPerso(Personaje perso)
 	{
 		_persos.put(perso.get_GUID(),perso);
 	}
@@ -276,7 +271,7 @@ public class Cuenta {
 	public boolean createPerso(String name, int sexe, int classe,int color1, int color2, int color3)
 	{
 		
-		Jugador perso = Jugador.CREATE_PERSONNAGE(name, sexe, classe, color1, color2, color3, this);
+		Personaje perso = Personaje.CREATE_PERSONNAGE(name, sexe, classe, color1, color2, color3, this);
 		if(perso==null)
 		{
 			return false;
@@ -297,7 +292,7 @@ public class Cuenta {
 		_realmThread = thread;
 	}
 
-	public void setCurPerso(Jugador perso)
+	public void setCurPerso(Personaje perso)
 	{
 		_curPerso = perso;
 	}
@@ -327,7 +322,7 @@ public class Cuenta {
 
 	public void resetAllChars(boolean save)
 	{
-		for(Jugador P : _persos.values())
+		for(Personaje P : _persos.values())
 		{
 			//Si Echange avec un joueur
 			if(P.get_curExchange() != null)P.get_curExchange().cancel();
@@ -360,7 +355,7 @@ public class Cuenta {
 			str.append("|").append(C.get_pseudo());
 			//on s'arrete la si aucun perso n'est connecté
 			if(!C.isOnline())continue;
-			Jugador P = C.get_curPerso();
+			Personaje P = C.get_curPerso();
 			if(P == null)continue;
 			str.append(P.parseToFriendList(_GUID));
 		}
@@ -373,7 +368,7 @@ public class Cuenta {
 		{
 			if (this.isFriendWith(i))
 			{
-				Jugador perso = Mundo.getPersonnage(i);
+				Personaje perso = Mundo.getPersonnage(i);
 				if (perso != null && perso.is_showFriendConnection() && perso.isOnline())
 				GestorSalida.GAME_SEND_FRIEND_ONLINE(this._curPerso, perso);
 			}
@@ -428,7 +423,7 @@ public class Cuenta {
 		if(!_EnemyGuids.contains(guid))
 		{
 			_EnemyGuids.add(guid);
-			Jugador Pr = Mundo.getPersoByName(packet);
+			Personaje Pr = Mundo.getPersoByName(packet);
 			GestorSalida.GAME_SEND_ADD_ENEMY(_curPerso, Pr);
 			GestorSQL.actualizar_datos_cuenta(this);
 		}
@@ -468,7 +463,7 @@ public class Cuenta {
 			str.append("|").append(C.get_pseudo());
 			//on s'arrete la si aucun perso n'est connecté
 			if(!C.isOnline())continue;
-			Jugador P = C.get_curPerso();
+			Personaje P = C.get_curPerso();
 			if(P == null)continue;
 			str.append(P.parseToEnemyList(_GUID));
 		}

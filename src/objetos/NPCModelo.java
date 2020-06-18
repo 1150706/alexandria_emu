@@ -46,7 +46,7 @@ public class NPCModelo {
 			return _id;
 		}
 		
-		public String parseToDQPacket(Jugador perso)
+		public String parseToDQPacket(Personaje perso)
 		{
 			boolean mariage = false;
 			boolean maried = false;
@@ -70,7 +70,7 @@ public class NPCModelo {
 			return _reponses;
 		}
 		
-		private String parseArguments(String args, Jugador perso)
+		private String parseArguments(String args, Personaje perso)
 		{
 			String arg = args;
 			arg = arg.replace("[name]", perso.getStringVar("name"));
@@ -116,7 +116,7 @@ public class NPCModelo {
 			return _orientation;
 		}
 
-		public String parseGM(Jugador p)
+		public String parseGM(Personaje p)
 		{
 			StringBuilder sock = new StringBuilder();
 			sock.append("+");
@@ -199,7 +199,7 @@ public class NPCModelo {
 			_actions.add(act);
 		}
 		
-		public void apply(Jugador perso)
+		public void apply(Personaje perso)
 		{
 			for(Accion act : _actions)
 			act.apply(perso, null, -1, -1);
@@ -287,7 +287,7 @@ public class NPCModelo {
 		return _acces;
 	}
 
-	public String get_extraClip(Jugador p) {
+	public String get_extraClip(Personaje p) {
 		System.out.println("Quest test " + _quest);
 		switch(_extraClip){
 		case -1: // Personnage NPC banal.

@@ -4,8 +4,6 @@
 	import java.util.ArrayList;
 	import java.util.Map;
 import java.util.TreeMap;
-
-import objetos.Objeto.ObjTemplate;
 //import objects.Quest.Step;
       
 	public class Quest
@@ -71,7 +69,7 @@ import objetos.Objeto.ObjTemplate;
 			return this._ID;
 		}
 		
-		public boolean can_do(Jugador p)
+		public boolean can_do(Personaje p)
 		{
 			return ((this._ali == 0) || (this._ali == p.get_align())) && 
 					(this._lvl <= p.get_lvl());

@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 
-import objetos.Jugador;
+import objetos.Personaje;
 import objetos.Oficio.JobAction;
 import objetos.Objeto.ObjTemplate;
-import objetos.Jugador.Stats;
+import objetos.Personaje.Stats;
 import objetos.Hechizos.SortStats;
 
 public class Constantes
@@ -1290,7 +1290,7 @@ public class Constantes
 		return false;
 	}
 	
-	public static void onLevelUpSpells(Jugador perso, int lvl)
+	public static void onLevelUpSpells(Personaje perso, int lvl)
 	{
 		switch(perso.get_classe())
 		{
@@ -2873,7 +2873,7 @@ public class Constantes
 		return -1;
 	}
 	
-	public static void applyPlotIOAction(Jugador perso, int mID, int cID)
+	public static void applyPlotIOAction(Personaje perso, int mID, int cID)
 	{
 		//Gère les differentes actions des "bornes" (IO des émotes)
 		switch(mID)
@@ -2896,7 +2896,7 @@ public class Constantes
 		}
 	}
 	
-	public static int getNearCellidUnused(Jugador _perso)
+	public static int getNearCellidUnused(Personaje _perso)
 	{
 		int cellFront = 0;
 		int cellBack = 0;

@@ -3,8 +3,6 @@ package objetos;
 import juego.JuegoServidor;
 import juego.JuegoThread.GameAction;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 //import java.util.Collections;
@@ -21,8 +19,8 @@ import objetos.Mapa.Case;
 import objetos.Monstruo.MobGrade;
 import objetos.Monstruo.MobGroup;
 import objetos.Objeto.ObjTemplate;
-import objetos.Jugador.Group;
-import objetos.Jugador.Stats;
+import objetos.Personaje.Group;
+import objetos.Personaje.Stats;
 import objetos.Hechizos.SortStats;
 
 import comunes.*;
@@ -169,9 +167,9 @@ public class Pelea
 		private Pelea _fight;
 		private int _type = 0; // 1 : Personnage, 2 : Mob, 5 : Perco
 		private MobGrade _mob = null;
-		private Jugador _perso = null;
+		private Personaje _perso = null;
 		private Recaudador _Perco = null;
-		private Jugador _double = null;
+		private Personaje _double = null;
 		private int _team = -2;
 		private Case _cell;
 		private ArrayList<EfectoHechizo> _fightBuffs = new ArrayList<>();
@@ -208,7 +206,7 @@ public class Pelea
 			_gfxID = getDefaultGfx();
 		}
 		
-		public Fighter(Pelea f, Jugador perso)
+		public Fighter(Pelea f, Personaje perso)
 		{
 			_fight = f;
 			if(perso._isClone)
@@ -329,7 +327,7 @@ public class Pelea
 			_hasLeft = hasLeft;
 		}
 
-		public Jugador getPersonnage()
+		public Personaje getPersonnage()
 		{
 			if(_type == 1)
 				return _perso;
@@ -1171,7 +1169,7 @@ public class Pelea
 	private Map<Integer,Fighter> _team0 = new TreeMap<>();
 	private Map<Integer,Fighter> _team1 = new TreeMap<>();
 	private Map<Integer,Fighter> deadList = new TreeMap<>();
-	private Map<Integer, Jugador> _spec  = new TreeMap<>();
+	private Map<Integer, Personaje> _spec  = new TreeMap<>();
 	private Mapa _map;
 	private Mapa _mapOld;
 	private Fighter _init0;
@@ -1281,7 +1279,7 @@ public class Pelea
 	      }
 	  }
 	
-	public Pelea(int type, int id, Mapa map, Jugador init1, Jugador init2)
+	public Pelea(int type, int id, Mapa map, Personaje init1, Personaje init2)
 	{
 		_type = type; //0: D�fie (4: Pvm) 1:PVP (5:Perco)
 		_id = id;
@@ -1356,7 +1354,7 @@ public class Pelea
 		set_state(Constantes.FIGHT_STATE_PLACE);
 	}
 	
-	public Pelea(int id, Mapa map, Jugador init1, MobGroup group)
+	public Pelea(int id, Mapa map, Personaje init1, MobGroup group)
 	{
 		_mobGroup = group;
 		_type = Constantes.FIGHT_TYPE_PVM; //(0: D�fie) 4: Pvm (1:PVP) (5:Perco)
@@ -1447,7 +1445,7 @@ public class Pelea
 		set_state(Constantes.FIGHT_STATE_PLACE);
 	}
 
-	public Pelea(int id, Mapa map, Jugador perso, Recaudador perco)
+	public Pelea(int id, Mapa map, Personaje perso, Recaudador perco)
 	{	
 		set_guildID(perco.get_guildID());
 		perco.set_inFight((byte)1);
@@ -1537,7 +1535,7 @@ public class Pelea
 		set_state(Constantes.FIGHT_STATE_PLACE);
 		
 		//On actualise la guilde+Message d'attaque FIXME
-		for(Jugador z : Mundo.getGuild(_guildID).getMembers())
+		for(Personaje z : Mundo.getGuild(_guildID).getMembers())
 		{
 			if(z == null) continue;
 			if(z.isOnline())
@@ -1597,7 +1595,7 @@ public class Pelea
 		
 		if(teams - 4 >= 0)
 		{
-			for(Entry<Integer, Jugador> entry : _spec.entrySet())
+			for(Entry<Integer, Personaje> entry : _spec.entrySet())
 			{
 				fighters.add(new Fighter(this,entry.getValue()));
 			}
@@ -1621,7 +1619,7 @@ public class Pelea
 		return fighters;
 	}
 	
-	public synchronized void changePlace(Jugador perso, int cell)
+	public synchronized void changePlace(Personaje perso, int cell)
 	{
 		Fighter fighter = getFighterByPerso(perso);
 		int team = getTeamID(perso.get_GUID()) -1;
@@ -1696,7 +1694,7 @@ public class Pelea
 			_perco.set_inFight((byte)2);
 			//On actualise la guilde+Message d'attaque FIXME
 			String packet = Recaudador.parsetoGuild(_guildID);
-			for(Jugador z : Mundo.getGuild(_guildID).getMembers())
+			for(Personaje z : Mundo.getGuild(_guildID).getMembers())
 			{
 				if(z == null) continue;
 				if(z.isOnline())
@@ -1733,7 +1731,7 @@ public class Pelea
 		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Debut du combat");
 		for(Fighter F : getFighters(3))
 		{
-			Jugador perso = F.getPersonnage();
+			Personaje perso = F.getPersonnage();
 			if(perso == null)continue;
 			if(perso.isOnMount())
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_CHEVAUCHANT+",1");
@@ -1750,7 +1748,7 @@ public class Pelea
 	    	  boolean hasBoss = false, inDungeon = false;
 	    	  for(Fighter f : _team0.values()) {
 	    		  if(f.getPersonnage() != null) {
-	    			  Jugador perso = f.getPersonnage();
+	    			  Personaje perso = f.getPersonnage();
 	    			  if(perso.hasSpell(367))
 	    				  hasCawotte = true;
 	    			  if(perso.hasSpell(373))
@@ -2103,7 +2101,7 @@ public class Pelea
 		}while(_ordreJeu.size() != getFighters(3).size());
 	}
 
-	public void joinFight(Jugador perso, int guid)
+	public void joinFight(Personaje perso, int guid)
 	{	
 		long timeRestant = MainServidor.CONFIG_MS_FOR_START_FIGHT - (System.currentTimeMillis() - _ticMyTimer_startTime);
 		Fighter current_Join = null;
@@ -2239,7 +2237,7 @@ public class Pelea
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS(this,_map,perso);
 		if(_perco != null)
 		{
-			for(Jugador z : Mundo.getGuild(_guildID).getMembers())
+			for(Personaje z : Mundo.getGuild(_guildID).getMembers())
 			{
 				if(z.isOnline())
 				{
@@ -2250,7 +2248,7 @@ public class Pelea
 		}
 	}
 	
-	public void joinPercepteurFight(Jugador perso, int guid, int percoID)
+	public void joinPercepteurFight(Personaje perso, int guid, int percoID)
 	{	
 		try {
 			Thread.sleep(700);
@@ -2536,7 +2534,7 @@ public class Pelea
         return true;
     }
 
-	public void onGK(Jugador perso)
+	public void onGK(Personaje perso)
 	{
 		if(_curAction.equals("")|| _ordreJeu.get(_curPlayer).getGUID() != perso.get_GUID() || _state!= Constantes.FIGHT_STATE_ACTIVE)return;
 		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("("+_curPlayer+")Fin du deplacement de Fighter ID= "+perso.get_GUID());
@@ -2561,7 +2559,7 @@ public class Pelea
 		_curAction = "";
 	}
 	
-	public void playerPass(Jugador _perso)
+	public void playerPass(Personaje _perso)
 	{
 		Fighter f = getFighterByPerso(_perso);
 		if(f == null)return;
@@ -2681,7 +2679,7 @@ public class Pelea
 		}
 		
 		Fighter f = _ordreJeu.get(_curPlayer);
-		Jugador perso = fighter.getPersonnage();
+		Personaje perso = fighter.getPersonnage();
 		//Si le sort n'est pas existant
 		if(spell == null)
 		{
@@ -2822,7 +2820,7 @@ public class Pelea
         //int TEAM1lvl = 0;
        // int TEAM2lvl = 0;
         //Traque
-        Jugador curp = null;
+        Personaje curp = null;
         //Evaluation du level
         for(Fighter F : TEAM1)
         {
@@ -3153,7 +3151,7 @@ public class Pelea
 	        			if(i.getPersonnage().getDeshonor() > 0) winD = -1;
 	    			}
         		}
-        		Jugador P = i.getPersonnage();
+        		Personaje P = i.getPersonnage();
         		if(P.get_honor()+winH<0)winH = -P.get_honor();
         		P.addHonor(winH);
         		P.setDeshonor(P.getDeshonor()+winD);
@@ -3196,7 +3194,7 @@ public class Pelea
         			}
     			}
         		
-        		Jugador P = i.getPersonnage();
+        		Personaje P = i.getPersonnage();
         		if(P.get_honor()+winH<0)winH = -P.get_honor();
         		P.addHonor(winH);
         		if(P.getDeshonor()-winD<0) winD = 0;
@@ -3341,7 +3339,7 @@ public class Pelea
 			
 			for(Entry<Integer, Fighter> entry : _team0.entrySet())//Team joueurs
 			{
-				Jugador perso = entry.getValue().getPersonnage();
+				Personaje perso = entry.getValue().getPersonnage();
 				if(perso == null)continue;
 				perso.set_duelID(-1);
 				perso.set_ready(false);
@@ -3352,7 +3350,7 @@ public class Pelea
 				case Constantes.FIGHT_TYPE_AGRESSION://Aggro
 					for(Entry<Integer, Fighter> entry : _team1.entrySet())
 					{
-						Jugador perso = entry.getValue().getPersonnage();
+						Personaje perso = entry.getValue().getPersonnage();
 						if(perso == null)continue;
 						perso.set_duelID(-1);
 						perso.set_ready(false);
@@ -3365,7 +3363,7 @@ public class Pelea
 			}
 			
 			//on vire les spec du combat
-			for(Jugador perso: _spec.values())
+			for(Personaje perso: _spec.values())
 			{
 				//on remet le perso sur la map
 				perso.get_curCarte().addPlayer(perso);
@@ -3400,7 +3398,7 @@ public class Pelea
 				if(F._Perco != null)
 				{
 					//On actualise la guilde+Message d'attaque FIXME
-					for(Jugador z : Mundo.getGuild(_guildID).getMembers())
+					for(Personaje z : Mundo.getGuild(_guildID).getMembers())
 					{
 						if(z == null) continue;
 						if(z.isOnline())
@@ -3411,7 +3409,7 @@ public class Pelea
 					}
 					F._Perco.set_inFight((byte)0);
 					F._Perco.set_inFightID((byte)-1);
-					for(Jugador z : Mundo.getCarte((short)F._Perco.get_mapID()).getPersos())
+					for(Personaje z : Mundo.getCarte((short)F._Perco.get_mapID()).getPersos())
 					{
 						if(z == null) continue;
 						GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.get_compte().getGameThread().get_out(), z.get_curCarte());
@@ -3456,7 +3454,7 @@ public class Pelea
 					_perco.DelPerco(F._Perco.getGuid());
 					GestorSQL.eliminar_recaudador(F._Perco.getGuid());
 					//On actualise la guilde+Message d'attaque FIXME
-					for(Jugador z : Mundo.getGuild(_guildID).getMembers())
+					for(Personaje z : Mundo.getGuild(_guildID).getMembers())
 					{
 						if(z == null) continue;
 						if(z.isOnline())
@@ -3672,7 +3670,7 @@ public class Pelea
 		return -1;
 	}
 
-	public void tryCaC(Jugador perso, int cellID)
+	public void tryCaC(Personaje perso, int cellID)
 	{
 		Fighter caster = getFighterByPerso(perso);
 		
@@ -3786,7 +3784,7 @@ public class Pelea
 		}
 	}
 	
-	public Fighter getFighterByPerso(Jugador perso)
+	public Fighter getFighterByPerso(Personaje perso)
 	{
 		Fighter fighter = null;
 		if(_team0.get(perso.get_GUID()) != null)
@@ -3807,7 +3805,7 @@ public class Pelea
 		_curFighterPM = _ordreJeu.get(_curPlayer).getTotalStats().getEffect(Constantes.STATS_ADD_PM) - _curFighterUsedPM;
 	}
 
-	public void leftFight(Jugador perso, Jugador target)
+	public void leftFight(Personaje perso, Personaje target)
 	{
 		if(perso == null)return;
 		Fighter F = this.getFighterByPerso(perso);
@@ -3855,7 +3853,7 @@ public class Pelea
 							F.setLeft(true);
 							GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_map, F.getGUID());
 								
-							Jugador P = F.getPersonnage();
+							Personaje P = F.getPersonnage();
 							P.set_duelID(-1);
 							P.set_ready(false);
 							P.fullPDV();
@@ -3942,7 +3940,7 @@ public class Pelea
 								if(MainServidor.CONFIG_DEBUG) System.out.println("EXLUSION DE : "+T.getPersonnage().get_name());
 								GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, T.getPersonnage().get_GUID(), getTeamID(T.getGUID()));
 								if(_type == Constantes.FIGHT_TYPE_AGRESSION || _type == Constantes.FIGHT_TYPE_CHALLENGE || _type == Constantes.FIGHT_TYPE_PVT) GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, T.getPersonnage().get_GUID(), getOtherTeamID(T.getGUID()));
-								Jugador P = T.getPersonnage();
+								Personaje P = T.getPersonnage();
 								P.set_duelID(-1);
 								P.set_ready(false);
 								P.fullPDV();
@@ -3971,7 +3969,7 @@ public class Pelea
 									T._cell.removeFighter(T);
 									_team1.remove(T.getGUID());
 								}
-								for(Jugador z : _mapOld.getPersos()) FightStateAddFlag(this._mapOld, z);
+								for(Personaje z : _mapOld.getPersos()) FightStateAddFlag(this._mapOld, z);
 							}
 						}else if(T == null)//Il leave de son plein gr� donc (T = null)
 						{
@@ -3995,7 +3993,7 @@ public class Pelea
 							{
 								for(Fighter f : this.getFighters(F.getTeam2()))
 								{
-									Jugador P = f.getPersonnage();
+									Personaje P = f.getPersonnage();
 									P.set_duelID(-1);
 									P.set_ready(false);
 									P.fullPDV();
@@ -4067,7 +4065,7 @@ public class Pelea
 									for(Fighter f : this.getFighters(F.getOtherTeam()))
 									{
 										if(f.getPersonnage() == null) continue;
-										Jugador P = f.getPersonnage();
+										Personaje P = f.getPersonnage();
 										P.set_duelID(-1);
 										P.set_ready(false);
 										P.fullPDV();
@@ -4093,7 +4091,7 @@ public class Pelea
 								if(_type == Constantes.FIGHT_TYPE_PVT)
 								{
 									//On actualise la guilde+Message d'attaque FIXME
-									for(Jugador z : Mundo.getGuild(_guildID).getMembers())
+									for(Personaje z : Mundo.getGuild(_guildID).getMembers())
 									{
 										if(z == null) continue;
 										if(z.isOnline())
@@ -4104,7 +4102,7 @@ public class Pelea
 									}
 									_perco.set_inFight((byte)0);
 									_perco.set_inFightID((byte)-1);
-									for(Jugador z : Mundo.getCarte((short)_perco.get_mapID()).getPersos())
+									for(Personaje z : Mundo.getCarte((short)_perco.get_mapID()).getPersos())
 									{
 										if(z == null) continue;
 										GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.get_compte().getGameThread().get_out(), z.get_curCarte());
@@ -4126,7 +4124,7 @@ public class Pelea
 							{
 								GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, F.getPersonnage().get_GUID(), getTeamID(F.getGUID()));
 								if(_type == Constantes.FIGHT_TYPE_AGRESSION || _type == Constantes.FIGHT_TYPE_CHALLENGE || _type == Constantes.FIGHT_TYPE_PVT) GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, F.getPersonnage().get_GUID(), getOtherTeamID(F.getGUID()));
-								Jugador P = F.getPersonnage();
+								Personaje P = F.getPersonnage();
 								P.set_duelID(-1);
 								P.set_ready(false);
 								P.fullPDV();
@@ -4187,7 +4185,7 @@ public class Pelea
 									F._cell.removeFighter(F);
 									_team1.remove(F.getGUID());
 								}
-								for(Jugador z : _mapOld.getPersos()) FightStateAddFlag(this._mapOld, z);
+								for(Personaje z : _mapOld.getPersos()) FightStateAddFlag(this._mapOld, z);
 							}
 						}
 					}else
@@ -4325,14 +4323,14 @@ public class Pelea
 			if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().get_compte().getGameThread() != null)
 				PWs.add(e.getValue().getPersonnage().get_compte().getGameThread().get_out());
 		}
-		for(Entry<Integer, Jugador> e : _spec.entrySet())
+		for(Entry<Integer, Personaje> e : _spec.entrySet())
 		{
 			PWs.add(e.getValue().get_compte().getGameThread().get_out());
 		}
 		GestorSalida.GAME_SEND_FIGHT_SHOW_CASE(PWs, guid, cellID);
 	}
 
-	public void joinAsSpect(Jugador p)
+	public void joinAsSpect(Personaje p)
 	{
 		if(!specOk  || _state != Constantes.FIGHT_STATE_ACTIVE)
 		{
@@ -4451,7 +4449,7 @@ public class Pelea
 		return false;
 	}
 	
-	public static void FightStateAddFlag(Mapa _map, Jugador P)
+	public static void FightStateAddFlag(Mapa _map, Personaje P)
 	{
 		for(Entry<Integer, Pelea> fight : _map.get_fights().entrySet())
 		{

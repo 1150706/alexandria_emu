@@ -6,7 +6,7 @@ import objetos.Oficio.StatsMetier;
 import objetos.Monstruo.MobGroup;
 import objetos.NPCModelo.NPC_question;
 import objetos.Objeto.ObjTemplate;
-import objetos.Jugador.traque;
+import objetos.Personaje.traque;
 
 import comunes.MainServidor;
 import comunes.Condiciones;
@@ -33,41 +33,39 @@ public class Accion {
 	}
 
 
-	public void apply(Jugador perso, Jugador target, int itemID, int cellid)
-	{
+	public void apply(Personaje perso, Personaje target, int itemID, int cellid) {
 		if(perso == null)return;
-		if(!cond.equalsIgnoreCase("") && !cond.equalsIgnoreCase("-1")&& !Condiciones.validConditions(perso,cond))
-		{
+		if(!cond.equalsIgnoreCase("") && !cond.equalsIgnoreCase("-1")&& !Condiciones.validConditions(perso,cond)) {
 			GestorSalida.GAME_SEND_Im_PACKET(perso, "119");
 			return;
 		}
 		if(perso.get_compte().getGameThread() == null) return;
 		PrintWriter out = perso.get_compte().getGameThread().get_out();	
-		switch(ID)
-		{
-			case -2://créer guilde
+		switch(ID) {
+
+			case -2://Crear un gremio
 				if(perso.is_away())return;
-				if(perso.get_guild() != null || perso.getGuildMember() != null)
-				{
+				if(perso.get_guild() != null || perso.getGuildMember() != null) {
 					GestorSalida.GAME_SEND_gC_PACKET(perso, "Ea");
 					return;
 				}
 				GestorSalida.GAME_SEND_gn_PACKET(perso);
 			break;
-			case -1://Ouvrir banque
-				//Sauvagarde du perso et des item avant.
+
+			case -1://Abrir el banco
+				//Guardamos el personaje y los elementos antes de entrar al banco
 				GestorSQL.guardar_personaje(perso,true);
-				if(perso.getDeshonor() >= 1) 
-				{
+				//Si tiene deshonor no dejamos que abra el banco
+				if(perso.getDeshonor() >= 1) {
 					GestorSalida.GAME_SEND_Im_PACKET(perso, "183");
 					return;
 				}
-				int cost = perso.getBankCost();
-				if(cost > 0)
-				{
+				//Sacamos la cantidad de kamas necesarias para abrir el banco
+				int cost = perso.getCostoAbrirBanco();
+				if(cost > 0) {
 					long nKamas = perso.get_kamas() - cost;
-					if(nKamas <0)//Si le joueur n'a pas assez de kamas pour ouvrir la banque
-					{
+					//Si el jugador no tiene las suficientes kamas para abrir el banco
+					if(nKamas <0){
 						GestorSalida.GAME_SEND_Im_PACKET(perso, "1128;"+cost);
 						return;
 					}
@@ -81,33 +79,27 @@ public class Accion {
 				perso.setInBank(true);
 			break;
 			
-			case 0://Téléportation
-				try
-				{
-					short newMapID = Short.parseShort(args.split(",",2)[0]);
-					int newCellID = Integer.parseInt(args.split(",",2)[1]);
-					
-					perso.teleport(newMapID,newCellID);	
+			case 0://Teletransportacion
+				try {
+					short nuevomapa = Short.parseShort(args.split(",",2)[0]);
+					int nuevacelda = Integer.parseInt(args.split(",",2)[1]);
+					perso.teleport(nuevomapa,nuevacelda);
 				}catch(Exception e ){return;};
 			break;
 			
-			case 1://Discours NPC
+			case 1://Discusion con un NPC
 				out = perso.get_compte().getGameThread().get_out();
-				if(args.equalsIgnoreCase("DV"))
-				{
+				if(args.equalsIgnoreCase("DV")) {
 					GestorSalida.GAME_SEND_END_DIALOG_PACKET(out);
 					perso.set_isTalkingWith(0);
-				}else
-				{
+				}else {
 					int qID = -1;
-					try
-					{
+					try {
 						qID = Integer.parseInt(args);
-					}catch(NumberFormatException e){};
+					}catch(NumberFormatException ignored){};
 					
 					NPC_question  quest = Mundo.getNPCQuestion(qID);
-					if(quest == null)
-					{
+					if(quest == null) {
 						GestorSalida.GAME_SEND_END_DIALOG_PACKET(out);
 						perso.set_isTalkingWith(0);
 						return;
@@ -117,47 +109,42 @@ public class Accion {
 			break;
 			
 			case 4://Kamas
-				try
-				{
+				try {
 					int count = Integer.parseInt(args);
 					long curKamas = perso.get_kamas();
 					long newKamas = curKamas + count;
 					if(newKamas <0) newKamas = 0;
 					perso.set_kamas(newKamas);
-					
 					//Si en ligne (normalement oui)
 					if(perso.isOnline())
 						GestorSalida.GAME_SEND_STATS_PACKET(perso);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
-			case 5://objet
-				try
-				{
+
+			case 5://Objeto
+				try {
 					int tID = Integer.parseInt(args.split(",")[0]);
 					int count = Integer.parseInt(args.split(",")[1]);
 					boolean send = true;
 					if(args.split(",").length >2)send = args.split(",")[2].equals("1");
 					
 					//Si on ajoute
-					if(count > 0)
-					{
+					if(count > 0) {
 						ObjTemplate T = Mundo.getObjTemplate(tID);
 						if(T == null)return;
 						Objeto O = T.createNewItem(count, false);
 						//Si retourne true, on l'ajoute au monde
 						if(perso.addObjet(O, true))
 							Mundo.addObjet(O, true);
-					}else
-					{
+					}else {
 						perso.removeByTemplateID(tID,-count);
 					}
 					//Si en ligne (normalement oui)
 					if(perso.isOnline())//on envoie le packet qui indique l'ajout//retrait d'un item
 					{
 						GestorSalida.GAME_SEND_Ow_PACKET(perso);
-						if(send)
-						{
+						if(send) {
 							if(count >= 0){
 								GestorSalida.GAME_SEND_Im_PACKET(perso, "021;"+count+"~"+tID);
 							}
@@ -169,25 +156,24 @@ public class Accion {
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
-			case 6://Apprendre un métier
-				try
-				{
-					int mID = Integer.parseInt(args);
-					if(Mundo.getMetier(mID) == null)return;
-					// Si c'est un métier 'basic' :
-					if(mID == 	2 || mID == 11 ||
-					   mID == 13 || mID == 14 ||
-					   mID == 15 || mID == 16 ||
-					   mID == 17 || mID == 18 ||
-					   mID == 19 || mID == 20 ||
-					   mID == 24 || mID == 25 ||
-					   mID == 26 || mID == 27 ||
-					   mID == 28 || mID == 31 ||
-					   mID == 36 || mID == 41 ||
-					   mID == 56 || mID == 58 ||
-					   mID == 60 || mID == 65)
-					{
-						if(perso.getMetierByID(mID) != null)//Métier déjà appris
+
+			case 6://Aprender un oficio
+				try {
+					int oficioid = Integer.parseInt(args);
+					if(Mundo.getMetier(oficioid) == null)return;
+					//Si es un oficio basico
+					if(oficioid == 	2 || oficioid == 11 ||
+					   oficioid == 13 || oficioid == 14 ||
+					   oficioid == 15 || oficioid == 16 ||
+					   oficioid == 17 || oficioid == 18 ||
+					   oficioid == 19 || oficioid == 20 ||
+					   oficioid == 24 || oficioid == 25 ||
+					   oficioid == 26 || oficioid == 27 ||
+					   oficioid == 28 || oficioid == 31 ||
+					   oficioid == 36 || oficioid == 41 ||
+					   oficioid == 56 || oficioid == 58 ||
+					   oficioid == 60 || oficioid == 65) {
+						if(perso.getMetierByID(oficioid) != null)//Métier déjà appris
 						{
 							GestorSalida.GAME_SEND_Im_PACKET(perso, "111");
 						}
@@ -197,32 +183,30 @@ public class Accion {
 							GestorSalida.GAME_SEND_Im_PACKET(perso, "19");
 						}else//Si c'est < ou = à 2 on apprend
 						{
-							perso.learnJob(Mundo.getMetier(mID));
+							perso.learnJob(Mundo.getMetier(oficioid));
 						}
 					}
-					// Si c'est une specialisations 'FM' :
-					if(mID == 	43 || mID == 44 ||
-					   mID == 45 || mID == 46 ||
-					   mID == 47 || mID == 48 ||
-					   mID == 49 || mID == 50 ||
-					   mID == 62 || mID == 63 ||
-					   mID == 64)
-					{
-						//Métier simple level 65 nécessaire
-						if(perso.getMetierByID(17) != null && perso.getMetierByID(17).get_lvl() >= 65 && mID == 43
-						|| perso.getMetierByID(11) != null && perso.getMetierByID(11).get_lvl() >= 65 && mID == 44
-						|| perso.getMetierByID(14) != null && perso.getMetierByID(14).get_lvl() >= 65 && mID == 45
-						|| perso.getMetierByID(20) != null && perso.getMetierByID(20).get_lvl() >= 65 && mID == 46
-						|| perso.getMetierByID(31) != null && perso.getMetierByID(31).get_lvl() >= 65 && mID == 47
-						|| perso.getMetierByID(13) != null && perso.getMetierByID(13).get_lvl() >= 65 && mID == 48
-						|| perso.getMetierByID(19) != null && perso.getMetierByID(19).get_lvl() >= 65 && mID == 49
-						|| perso.getMetierByID(18) != null && perso.getMetierByID(18).get_lvl() >= 65 && mID == 50
-						|| perso.getMetierByID(15) != null && perso.getMetierByID(15).get_lvl() >= 65 && mID == 62
-						|| perso.getMetierByID(16) != null && perso.getMetierByID(16).get_lvl() >= 65 && mID == 63
-						|| perso.getMetierByID(27) != null && perso.getMetierByID(27).get_lvl() >= 65 && mID == 64)
-						{
+					//Si es un oficio espesial de ForjaMagia
+					if(oficioid == 	43 || oficioid == 44 ||
+					   oficioid == 45 || oficioid == 46 ||
+					   oficioid == 47 || oficioid == 48 ||
+					   oficioid == 49 || oficioid == 50 ||
+					   oficioid == 62 || oficioid == 63 ||
+					   oficioid == 64) {
+						//Requiere nivel 65 de un oficio simple
+						if(perso.getMetierByID(17) != null && perso.getMetierByID(17).get_lvl() >= 65 && oficioid == 43
+						|| perso.getMetierByID(11) != null && perso.getMetierByID(11).get_lvl() >= 65 && oficioid == 44
+						|| perso.getMetierByID(14) != null && perso.getMetierByID(14).get_lvl() >= 65 && oficioid == 45
+						|| perso.getMetierByID(20) != null && perso.getMetierByID(20).get_lvl() >= 65 && oficioid == 46
+						|| perso.getMetierByID(31) != null && perso.getMetierByID(31).get_lvl() >= 65 && oficioid == 47
+						|| perso.getMetierByID(13) != null && perso.getMetierByID(13).get_lvl() >= 65 && oficioid == 48
+						|| perso.getMetierByID(19) != null && perso.getMetierByID(19).get_lvl() >= 65 && oficioid == 49
+						|| perso.getMetierByID(18) != null && perso.getMetierByID(18).get_lvl() >= 65 && oficioid == 50
+						|| perso.getMetierByID(15) != null && perso.getMetierByID(15).get_lvl() >= 65 && oficioid == 62
+						|| perso.getMetierByID(16) != null && perso.getMetierByID(16).get_lvl() >= 65 && oficioid == 63
+						|| perso.getMetierByID(27) != null && perso.getMetierByID(27).get_lvl() >= 65 && oficioid == 64) {
 							//On compte les specialisations déja acquis si c'est supérieur a 2 on ignore
-							if(perso.getMetierByID(mID) != null)//Métier déjà appris
+							if(perso.getMetierByID(oficioid) != null)//Métier déjà appris
 							{
 								GestorSalida.GAME_SEND_Im_PACKET(perso, "111");
 							}
@@ -233,60 +217,54 @@ public class Accion {
 							}
 							else//Si c'est < ou = à 2 on apprend
 							{
-								perso.learnJob(Mundo.getMetier(mID));
-								perso.getMetierByID(mID).addXp(perso, 582000);//Level 100 direct
+								perso.learnJob(Mundo.getMetier(oficioid));
+								perso.getMetierByID(oficioid).addXp(perso, 582000);//Level 100 direct
 							}	
-						}else
-						{
+						}else {
 							GestorSalida.GAME_SEND_Im_PACKET(perso, "12");
 						}
 					}
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
-			case 7://retour au point de sauvegarde
+
+			case 7://Devolver al punto de guardado
 				perso.warpToSavePos();
 			break;
-			case 8://Ajouter une Stat
 
+			case 8://Ajustar las estadisticas
 		            int statID = Integer.parseInt(args.split(",", 2)[0]);
 		            int number = Integer.parseInt(args.split(",", 2)[1]);
 		            perso.get_baseStats().addOneStat(statID, number);
 		            GestorSalida.GAME_SEND_STATS_PACKET(perso);
 		            int messID = 0;
-		            switch(statID)
-		            {
-		            case 126: // '~'
-		                messID = 14;
-		                break;
-		            }
+				if (statID == 126) { // '~'
+					messID = 14;
+				}
 		            if(messID > 0)
-		                GestorSalida.GAME_SEND_Im_PACKET(perso, (new StringBuilder("0")).append(messID).append(";").append(number).toString());
+		                GestorSalida.GAME_SEND_Im_PACKET(perso, "0" + messID + ";" + number);
 		            return;
-			case 9://Apprendre un sort
-				try
-				{
+
+			case 9://Aprender un hechizo
+				try {
 					int sID = Integer.parseInt(args);
 					if(Mundo.getSort(sID) == null)return;
 					perso.learnSpell(sID,1, true,true);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
+
 			case 10://Pain/potion/viande/poisson
-				try
-				{
+				try {
 					int min = Integer.parseInt(args.split(",",2)[0]);
 					int max = Integer.parseInt(args.split(",",2)[1]);
 					if(max == 0) max = min;
 					int val = Formulas.getRandomValue(min, max);
-					if(target != null)
-					{
+					if(target != null) {
 						if(target.get_PDV() + val > target.get_PDVMAX())val = target.get_PDVMAX()-target.get_PDV();
 						target.set_PDV(target.get_PDV()+val);
 						GestorSalida.GAME_SEND_STATS_PACKET(target);
-					}
-					else
-					{
+					} else {
 						if(perso.get_PDV() + val > perso.get_PDVMAX())val = perso.get_PDVMAX()-perso.get_PDV();
 						perso.set_PDV(perso.get_PDV()+val);
 						GestorSalida.GAME_SEND_STATS_PACKET(perso);
@@ -294,9 +272,9 @@ public class Accion {
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
-			case 11://Definir l'alignement
-				try
-				{
+
+			case 11://Definir la alineacion
+				try {
 					byte newAlign = Byte.parseByte(args.split(",",2)[0]);
 					boolean replace = Integer.parseInt(args.split(",",2)[1]) == 1;
 					//Si le perso n'est pas neutre, et qu'on doit pas remplacer, on passe
@@ -305,31 +283,25 @@ public class Accion {
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
-			/* TODO: autres actions */
-			case 12://Spawn d'un groupe de monstre
-				try
-				{
+
+			case 12://Refrescar un grupo de monstruos
+				try {
 					boolean delObj = args.split(",")[0].equals("true");
 					boolean inArena = args.split(",")[1].equals("true");
-
 					if(inArena && !Mundo.isArenaMap(perso.get_curCarte().get_id()))return;	//Si la map du personnage n'est pas classé comme étant dans l'arène
-
 					PiedraAlma pierrePleine = (PiedraAlma) Mundo.getObjet(itemID);
-
 					String groupData = pierrePleine.parseGroupData();
 					String condition = "MiS = "+perso.get_GUID();	//Condition pour que le groupe ne soit lançable que par le personnage qui à utiliser l'objet
 					perso.get_curCarte().spawnNewGroup(true, perso.get_curCell().getID(), groupData,condition);
-
-					if(delObj)
-					{
+					if(delObj) {
 						perso.removeItem(itemID, 1, true, true);
 					}
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
-		    case 13: //Reset Carac
-		        try
-		        {
+
+		    case 13://Reiniciar caracteristicas
+		        try {
 		          perso.get_baseStats().addOneStat(125, -perso._baseStats.getEffect(125));
 		          perso.get_baseStats().addOneStat(124, -perso._baseStats.getEffect(124));
 		          perso.get_baseStats().addOneStat(118, -perso._baseStats.getEffect(118));
@@ -337,11 +309,11 @@ public class Accion {
 		          perso.get_baseStats().addOneStat(119, -perso._baseStats.getEffect(119));
 		          perso.get_baseStats().addOneStat(126, -perso._baseStats.getEffect(126));
 		          perso.addCapital((perso.get_lvl() - 1) * 5 - perso.get_capital());
-
 		          GestorSalida.GAME_SEND_STATS_PACKET(perso);
 		        }catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 		    break;
+
 		    case 14://Ouvrir l'interface d'oublie de sort
 		    	perso.setisForgetingSpell(true);
 				GestorSalida.GAME_SEND_FORGETSPELL_INTERFACE('+', perso);
@@ -531,14 +503,14 @@ public class Accion {
 				}
 				if(perso.get_traque().get_time() < System.currentTimeMillis() - 600000 || perso.get_traque().get_time() == 0)
 				{
-					Jugador tempP = null;
+					Personaje tempP = null;
 					int tmp = 15;
 					int diff = 0;
 					for(byte b = 0; b < 100; b++)
 					{
 					if(b == MainServidor.gameServer.getClients().size())break;
 					JuegoThread GT = MainServidor.gameServer.getClients().get(b);
-					Jugador P = GT.getPerso();
+					Personaje P = GT.getPerso();
 					if(P == null || P == perso)continue;
 					if(P.get_compte().get_curIP().compareTo(perso.get_compte().get_curIP()) == 0)continue;
 					//SI pas sériane ni neutre et si alignement opposé
@@ -612,7 +584,7 @@ public class Accion {
 				{
 					break;	
 				}
-				Jugador cible = Mundo.getPersoByName(perr);
+				Personaje cible = Mundo.getPersoByName(perr);
 				if(cible==null)break;
 				if(!cible.isOnline())
 				{
@@ -671,18 +643,68 @@ public class Accion {
 			case 102://Marier des personnages
 				Mundo.PriestRequest(perso, perso.get_curCarte(), perso.get_isTalkingWith());
 			break;
-			case 103://Divorce
-				if(perso.get_kamas() < 50000)
-				{
+
+			case 103://Divorsiarse
+				if(perso.get_kamas() < 50000) {
 					return;
-				}else
-				{
+				}else {
 					perso.set_kamas(perso.get_kamas()-50000);
-					Jugador wife = Mundo.getPersonnage(perso.getWife());
+					Personaje wife = Mundo.getPersonnage(perso.getWife());
 					wife.Divorce();
 					perso.Divorce();
 				}
 			break;
+
+			case 104://Cliqueador
+				try {
+					int caracteristica = Integer.parseInt(args);
+					int valor = 0;
+					int cantidad = 0;
+					while(cantidad <= perso.get_capital()){
+						switch (caracteristica) {
+							//Fuerza
+							case 10 -> valor = perso._baseStats.getEffect(Constantes.STATS_ADD_FORC);
+							//Suerte
+							case 13 -> valor = perso._baseStats.getEffect(Constantes.STATS_ADD_CHAN);
+							//Agilidad
+							case 14 -> valor = perso._baseStats.getEffect(Constantes.STATS_ADD_AGIL);
+							//Inteligencia
+							case 15 -> valor = perso._baseStats.getEffect(Constantes.STATS_ADD_INTE);
+						}
+						cantidad = Constantes.getReqPtsToBoostStatsByClass(perso.get_classe(), caracteristica, valor);
+						switch(caracteristica) {
+							case 11://Vitalidad
+								//Si es sacrogrito se modifica
+								if(perso.get_classe() != Constantes.CLASS_SACRIEUR)
+									perso._baseStats.addOneStat(Constantes.STATS_ADD_VITA, 1);
+								else
+									perso._baseStats.addOneStat(Constantes.STATS_ADD_VITA, 2);
+								break;
+							case 12://Sabiduria
+								perso._baseStats.addOneStat(Constantes.STATS_ADD_SAGE, 1);
+								break;
+							case 10://Fuerza
+								perso._baseStats.addOneStat(Constantes.STATS_ADD_FORC, 1);
+								break;
+							case 13://Suerte
+								perso._baseStats.addOneStat(Constantes.STATS_ADD_CHAN, 1);
+								break;
+							case 14://Agilidad
+								perso._baseStats.addOneStat(Constantes.STATS_ADD_AGIL, 1);
+								break;
+							case 15://Inteligencia
+								perso._baseStats.addOneStat(Constantes.STATS_ADD_INTE, 1);
+								break;
+							default:
+								return;
+						}
+						perso.addCapital(-cantidad);
+					}
+					GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					GestorSQL.guardar_personaje(perso, false);
+				}catch(Exception e){JuegoServidor.addToLog(e.getMessage());};
+				break;
+
 			case 228://Faire animation Hors Combat
 				try
 				{

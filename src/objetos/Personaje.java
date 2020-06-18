@@ -70,7 +70,7 @@ public class Personaje {
 	private boolean _sitted;
 	private boolean _ready = false;
 	private boolean _isOnline  = false;
-	private Group _group;
+	private Grupo _group;
 	private int _duelID = -1;
 	private Map<Integer, EfectoHechizo> _buffs = new TreeMap<>();
 	private Map<Integer, Objeto> _items = new TreeMap<>();
@@ -168,11 +168,12 @@ public class Personaje {
 			_time = time;
 		}
 	}
-	public static class Group {
+
+	public static class Grupo {
 		private ArrayList<Personaje> _persos = new ArrayList<>();
 		private Personaje _chief;
 		
-		public Group(Personaje p1, Personaje p2) {
+		public Grupo(Personaje p1, Personaje p2) {
 			_chief = p1;
 			_persos.add(p1);
 			_persos.add(p2);
@@ -202,10 +203,7 @@ public class Personaje {
 			return lvls;
 		}
 		
-		public ArrayList<Personaje> getPersos()
-		{
-			return _persos;
-		}
+		public ArrayList<Personaje> getMiembrosGrupo() { return _persos; }
 
 		public Personaje getChief()
 		{
@@ -734,15 +732,12 @@ public class Personaje {
 		return _isOnline;
 	}
 	
-	public void setGroup(Group g)
+	public void setGroup(Grupo g)
 	{
 		_group = g;
 	}
 
-	public Group getGroup()
-	{
-		return _group;
-	}
+	public Grupo getActualGrupo() { return _group; }
 	
 	public String parseSpellToDB()
 	{
@@ -901,9 +896,7 @@ public class Personaje {
 		return _curExp;
 	}
 
-	public Mapa.Case get_curCell() {
-		return _curCell;
-	}
+	public Mapa.Case getActualCelda() { return _curCell; }
 
 	public void set_curCell(Mapa.Case cell) {
 		_curCell = cell;
@@ -937,9 +930,7 @@ public class Personaje {
 		return _GUID;
 	}
 
-	public Mapa get_curCarte() {
-		return _curCarte;
-	}
+	public Mapa getActualMapa() { return _curCarte; }
 
 	public String get_name() {
 		return _name;
@@ -1219,10 +1210,10 @@ public class Personaje {
 		if(_compte.getGameThread() == null) return;
 		PrintWriter out = _compte.getGameThread().get_out();
 		
-		if(is_showSeller() == true && Mundo.getSeller(get_curCarte().get_id()) != null && Mundo.getSeller(get_curCarte().get_id()).contains(get_GUID()))
+		if(is_showSeller() == true && Mundo.getSeller(getActualMapa().get_id()) != null && Mundo.getSeller(getActualMapa().get_id()).contains(get_GUID()))
 		{
-			Mundo.removeSeller(get_GUID(), get_curCarte().get_id());
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(get_curCarte(), get_GUID());
+			Mundo.removeSeller(get_GUID(), getActualMapa().get_id());
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), get_GUID());
 			set_showSeller(false);
 		}
 		
@@ -1230,7 +1221,7 @@ public class Personaje {
 		GestorSalida.GAME_SEND_STATS_PACKET(this);
 		GestorSQL.salir_del_juego(_compte.get_GUID(), 1);
 		GestorSalida.GAME_SEND_MAPDATA(out,_curCarte.get_id(),_curCarte.get_date(),_curCarte.get_key());
-		GestorSalida.GAME_SEND_MAP_FIGHT_COUNT(out,this.get_curCarte());
+		GestorSalida.GAME_SEND_MAP_FIGHT_COUNT(out,this.getActualMapa());
 		_curCarte.addPlayer(this);
 		GestorSQL.guardar_personaje(this, true);
 	}
@@ -2082,7 +2073,7 @@ public class Personaje {
 		_curCarte.getCase(cellID).finishAction(this,GA);
 	}
 	
-	public void teleport(short newMapID, int newCellID) {
+	public void teletransportar(short newMapID, int newCellID) {
 		PrintWriter PW = null;
 		if(_compte.getGameThread() != null) {
 			PW = _compte.getGameThread().get_out();
@@ -2413,7 +2404,7 @@ public class Personaje {
 		try
 		{
 			String[] infos = _savePos.split(",");
-			teleport(Short.parseShort(infos[0]), Integer.parseInt(infos[1]));
+			teletransportar(Short.parseShort(infos[0]), Integer.parseInt(infos[1]));
 		}catch(Exception e){};
 	}
 	
@@ -2893,7 +2884,7 @@ public class Personaje {
 			return;
 		}
 		_kamas -= cost;
-		teleport(mapID,cellID);
+		teletransportar(mapID,cellID);
 		GestorSalida.GAME_SEND_STATS_PACKET(this);//On envoie la perte de kamas
 		GestorSalida.GAME_SEND_WV_PACKET(this);//On ferme l'interface Zaap
 		_isZaaping = false;
@@ -2952,7 +2943,7 @@ public class Personaje {
 		price = 10;
 		_kamas -= price;
 		GestorSalida.GAME_SEND_STATS_PACKET(this);
-		this.teleport(Short.valueOf(packet.substring(2)), idcelula);
+		this.teletransportar(Short.valueOf(packet.substring(2)), idcelula);
 		GestorSalida.GAME_SEND_CLOSE_ZAAPI_PACKET(this);
 		}
 	}
@@ -3345,8 +3336,8 @@ public class Personaje {
 	{
 		if(p == null)return; // Ne devrait theoriquement jamais se produire.
 		
-		int dist = (_curCarte.getX() - p.get_curCarte().getX())*(_curCarte.getX() - p.get_curCarte().getX())
-					+ (_curCarte.getY() - p.get_curCarte().getY())*(_curCarte.getY() - p.get_curCarte().getY());
+		int dist = (_curCarte.getX() - p.getActualMapa().getX())*(_curCarte.getX() - p.getActualMapa().getX())
+					+ (_curCarte.getY() - p.getActualMapa().getY())*(_curCarte.getY() - p.getActualMapa().getY());
 		if(dist > 100)// La distance est trop grande...
 		{
 			if(p.get_sexe() == 0)
@@ -3372,7 +3363,7 @@ public class Personaje {
 			return;
 		}
 		
-		teleport(p.get_curCarte().get_id(), (p.get_curCell().getID()+cellPositiontoadd));
+		teletransportar(p.getActualMapa().get_id(), (p.getActualCelda().getID()+cellPositiontoadd));
 	}
 	
 	public void Divorce()
@@ -3407,7 +3398,7 @@ public class Personaje {
 				|| this.get_orientation() == 6)
 		{
 			this.set_orientation(toOrientation);
-			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(get_curCarte(), this.get_GUID(), toOrientation);
+			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(getActualMapa(), this.get_GUID(), toOrientation);
 		}
 	}
 	/*
@@ -3425,7 +3416,7 @@ public class Personaje {
 		set_canAggro(false);
 		set_away(true);
 		set_Speed(-40);
-		teleport((short)20020, 397);
+		teletransportar((short)20020, 397);
 		//Le teleporter aux zone de mort la plus proche
 		/*for(Carte map : ) FIXME
 		{
@@ -3443,8 +3434,8 @@ public class Personaje {
 		set_away(false);
 		set_Speed(0);
 		GestorSalida.GAME_SEND_STATS_PACKET(this);
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(get_curCarte(), get_GUID());
-		GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(get_curCarte(), this);
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), get_GUID());
+		GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(getActualMapa(), this);
 	}
    
     public void setInTrunk(Cofres t)

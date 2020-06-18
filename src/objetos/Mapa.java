@@ -1031,8 +1031,8 @@ public class Mapa {
 					if(_object.getState() != Constantes.IOBJECT_STATE_FULL)return;//Si le puits est vide
 					_object.setState(Constantes.IOBJECT_STATE_EMPTYING);
 					_object.setInteractive(false);
-					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.get_curCarte(),""+GA._id, 501, perso.get_GUID()+"", _id+","+_object.getUseDuration()+","+_object.getUnknowValue());
-					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(perso.get_curCarte(),this);
+					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(),""+GA._id, 501, perso.get_GUID()+"", _id+","+_object.getUseDuration()+","+_object.getUnknowValue());
+					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(perso.getActualMapa(),this);
 				break;
 				case 114://Utiliser (zaap)
 					perso.openZaapMenu();
@@ -1044,12 +1044,12 @@ public class Mapa {
 					int count = 0;
 					int price = 20;
 					
-					if (perso.get_curCarte()._subArea.get_area().get_id() == 7 && (perso.get_align() == 1 || perso.get_align() == 0 || perso.get_align() == 3))//Ange, Neutre ou Sérianne
+					if (perso.getActualMapa()._subArea.get_area().get_id() == 7 && (perso.get_align() == 1 || perso.get_align() == 0 || perso.get_align() == 3))//Ange, Neutre ou Sérianne
 					{
 						Zaapis = Constantes.ZAAPI.get(Constantes.ALIGNEMENT_BONTARIEN).split(",");
 						if (perso.get_align() == 1) price = 10;
 					}
-					else if (perso.get_curCarte()._subArea.get_area().get_id() == 11 && (perso.get_align() == 2 || perso.get_align() == 0 || perso.get_align() == 3))//Démons, Neutre ou Sérianne
+					else if (perso.getActualMapa()._subArea.get_area().get_id() == 11 && (perso.get_align() == 2 || perso.get_align() == 0 || perso.get_align() == 3))//Démons, Neutre ou Sérianne
 					{
 						Zaapis = Constantes.ZAAPI.get(Constantes.ALIGNEMENT_BRAKMARIEN).split(",");
 						if (perso.get_align() == 2) price = 10;
@@ -1079,7 +1079,7 @@ public class Mapa {
 					perso.openMountPark();
 				break;
 				case 176://Achat enclo
-					MountPark MP = perso.get_curCarte().getMountPark();
+					MountPark MP = perso.getActualMapa().getMountPark();
 					if(MP.get_owner() == -1)//Public
 					{
 						GestorSalida.GAME_SEND_Im_PACKET(perso, "196");
@@ -1104,7 +1104,7 @@ public class Mapa {
 				break;
 				case 177://Vendre enclo
 				case 178://Modifier prix de vente
-					MountPark MP1 = perso.get_curCarte().getMountPark();
+					MountPark MP1 = perso.getActualMapa().getMountPark();
 					if(MP1.get_owner() == -1)
 					{
 						GestorSalida.GAME_SEND_Im_PACKET(perso, "194");
@@ -1126,43 +1126,43 @@ public class Mapa {
 					}
 					short mapID  = Constantes.getStartMap(perso.get_classe());
 					int cellID = Constantes.getStartCell(perso.get_classe());
-					perso.teleport(mapID, cellID);
+					perso.teletransportar(mapID, cellID);
 					perso.get_compte().getGameThread().removeAction(GA);
 				break;
 				case 81://Vérouiller maison
-					House h = House.get_house_id_by_coord(perso.get_curCarte().get_id(), CcellID);
+					House h = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
 					if(h == null)return;
 					perso.setInHouse(h);
 					h.Lock(perso);
 				break;
 				case 84://Rentrer dans une maison
-					House h2 = House.get_house_id_by_coord(perso.get_curCarte().get_id(), CcellID);
+					House h2 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
 					if(h2 == null)return;
 					perso.setInHouse(h2);
 					h2.HopIn(perso);
 				break;
 				case 97://Acheter maison
-					House h3 = House.get_house_id_by_coord(perso.get_curCarte().get_id(), CcellID);
+					House h3 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
 					if(h3 == null)return;
 					perso.setInHouse(h3);
 					h3.BuyIt(perso);
 				break;
 				
                 case 104://Ouvrir coffre privé
-                	Cofres trunk = Cofres.get_trunk_id_by_coord(perso.get_curCarte().get_id(), CcellID);
+                	Cofres trunk = Cofres.get_trunk_id_by_coord(perso.getActualMapa().get_id(), CcellID);
                 	if(trunk == null)
                     {
-                    	JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : "+perso.get_curCarte().get_id()+" CELLID : "+CcellID);
+                    	JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : "+perso.getActualMapa().get_id()+" CELLID : "+CcellID);
                     	return;
                     }
                     perso.setInTrunk(trunk);
                     trunk.HopIn(perso);
                 break;
                 case 105://Vérouiller coffre
-                    Cofres t = Cofres.get_trunk_id_by_coord(perso.get_curCarte().get_id(), CcellID);
+                    Cofres t = Cofres.get_trunk_id_by_coord(perso.getActualMapa().get_id(), CcellID);
                     if(t == null)
                     {
-                    	JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : "+perso.get_curCarte().get_id()+" CELLID : "+CcellID);
+                    	JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : "+perso.getActualMapa().get_id()+" CELLID : "+CcellID);
                     	return;
                     }
                     perso.setInTrunk(t);
@@ -1171,7 +1171,7 @@ public class Mapa {
                 
 				case 98://Vendre
 				case 108://Modifier prix de vente
-					House h4 = House.get_house_id_by_coord(perso.get_curCarte().get_id(), CcellID);
+					House h4 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
 					if(h4 == null)return;
 					perso.setInHouse(h4);
 					h4.SellIt(perso);
@@ -1212,7 +1212,7 @@ public class Mapa {
 					_object.setState(Constantes.IOBJECT_STATE_EMPTY);
 					_object.setInteractive(false);
 					_object.startTimer();
-					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(perso.get_curCarte(),this);
+					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(perso.getActualMapa(),this);
 					int qua = Formulas.getRandomValue(1, 10);//On a entre 1 et 10 eaux
 					Objeto obj = Mundo.getObjTemplate(311).createNewItem(qua, false);
 					if(perso.addObjet(obj, true))
@@ -1516,7 +1516,7 @@ public class Mapa {
 	public void addPlayer(Personaje perso)
 	{
 		GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(this,perso);
-		perso.get_curCell().addPerso(perso);
+		perso.getActualCelda().addPerso(perso);
 	}
 
 	public String getGMsPackets()
@@ -1723,7 +1723,7 @@ public class Mapa {
 		
 		if(_placesStr.equalsIgnoreCase("|")) return;
 		//Si le joueur a changer de map ou ne peut etre aggro
-		if(perso.get_curCarte().get_id() != _id || !perso.canAggro())return;
+		if(perso.getActualMapa().get_id() != _id || !perso.canAggro())return;
 		
 		for(MobGroup group : _mobGroups.values())
 		{

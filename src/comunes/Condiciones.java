@@ -51,9 +51,9 @@ public class Condiciones
 			 	jep.addVariable("PZ", 1);//Abonnement
 			 	jep.addVariable("PX", perso.get_compte().get_gmLvl());
 			 	jep.addVariable("PW", perso.getMaxPod());
-			 	jep.addVariable("PB", perso.get_curCarte().getSubArea().get_id());
+			 	jep.addVariable("PB", perso.getActualMapa().getSubArea().get_id());
 			 	jep.addVariable("PR", (perso.getWife()>0?1:0));
-			 	jep.addVariable("SI", perso.get_curCarte().get_id());
+			 	jep.addVariable("SI", perso.getActualMapa().get_id());
 			 	//Les pierres d'ames sont lancables uniquement par le lanceur.
 			 	jep.addVariable("MiS",perso.get_GUID());
 			 	

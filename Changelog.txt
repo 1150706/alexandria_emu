@@ -18,3 +18,4 @@ v0.00.2
 - Arreglo en base de datos, carga de personajes en el gremio
 - Agregado de capital en caracteristicas reparado
 - Agregada accion 104 Cliqueador automatico
+- Agregada accion 105 teletransportar a todos los miembros del grupo

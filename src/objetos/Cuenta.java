@@ -327,14 +327,14 @@ public class Cuenta {
 			//Si Echange avec un joueur
 			if(P.get_curExchange() != null)P.get_curExchange().cancel();
 			//Si en groupe
-			if(P.getGroup() != null)P.getGroup().leave(P);
+			if(P.getActualGrupo() != null)P.getActualGrupo().leave(P);
 			
 			//Si en combat
 			if(P.get_fight() != null)P.get_fight().leftFight(P, null);
 			else//Si hors combat
 			{
-				P.get_curCell().removePlayer(P.get_GUID());
-				if(P.get_curCarte() != null && P.isOnline()) GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(P.get_curCarte(), P.get_GUID());
+				P.getActualCelda().removePlayer(P.get_GUID());
+				if(P.getActualMapa() != null && P.isOnline()) GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(P.getActualMapa(), P.get_GUID());
 			}
 			P.set_Online(false);
 			//Reset des vars du perso

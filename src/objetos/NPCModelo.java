@@ -51,7 +51,7 @@ public class NPCModelo {
 			boolean mariage = false;
 			boolean maried = false;
 			if(_id == 50030 && //Si prêtre
-					(perso.get_curCell().getID() == 282 || perso.get_curCell().getID() == 297)) // Si un des deux à marier
+					(perso.getActualCelda().getID() == 282 || perso.getActualCelda().getID() == 297)) // Si un des deux à marier
 				mariage = Mundo.mariageok();
 			if(_id == 50030 && perso.getWife() !=0)//Si prêtre et marrié
 				maried = true;

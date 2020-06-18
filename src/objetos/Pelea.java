@@ -19,7 +19,7 @@ import objetos.Mapa.Case;
 import objetos.Monstruo.MobGrade;
 import objetos.Monstruo.MobGroup;
 import objetos.Objeto.ObjTemplate;
-import objetos.Personaje.Group;
+import objetos.Personaje.Grupo;
 import objetos.Personaje.Stats;
 import objetos.Hechizos.SortStats;
 
@@ -1328,8 +1328,8 @@ public class Pelea
 		_init0.set_fightCell(getRandomCell(_start0));
 		_init1.set_fightCell(getRandomCell(_start1));
 		
-		_init0.getPersonnage().get_curCell().removePlayer(_init0.getGUID());
-		_init1.getPersonnage().get_curCell().removePlayer(_init1.getGUID());
+		_init0.getPersonnage().getActualCelda().removePlayer(_init0.getGUID());
+		_init1.getPersonnage().getActualCelda().removePlayer(_init1.getGUID());
 		
 		_init0.get_fightCell().addFighter(_init0);
 		_init1.get_fightCell().addFighter(_init1);
@@ -1337,17 +1337,17 @@ public class Pelea
 		_init0.setTeam(0);
 		_init1.getPersonnage().set_fight(this);
 		_init1.setTeam(1);
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().get_curCarte(), _init0.getGUID());
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init1.getPersonnage().get_curCarte(), _init1.getGUID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().getActualMapa(), _init0.getGUID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init1.getPersonnage().getActualMapa(), _init1.getGUID());
 		if(_type == 1)
 		{
-			GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),0,_init0.getGUID(),_init1.getGUID(),_init0.getPersonnage().get_curCell().getID(),"0;"+_init0.getPersonnage().get_align(), _init1.getPersonnage().get_curCell().getID(), "0;"+_init1.getPersonnage().get_align());
+			GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),0,_init0.getGUID(),_init1.getGUID(),_init0.getPersonnage().getActualCelda().getID(),"0;"+_init0.getPersonnage().get_align(), _init1.getPersonnage().getActualCelda().getID(), "0;"+_init1.getPersonnage().get_align());
 		}else
 		{
-			GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),0,_init0.getGUID(),_init1.getGUID(),_init0.getPersonnage().get_curCell().getID(),"0;-1", _init1.getPersonnage().get_curCell().getID(), "0;-1");
+			GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),0,_init0.getGUID(),_init1.getGUID(),_init0.getPersonnage().getActualCelda().getID(),"0;-1", _init1.getPersonnage().getActualCelda().getID(), "0;-1");
 		}
-		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),_init0.getGUID(), _init0);
-		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),_init1.getGUID(), _init1);
+		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),_init0.getGUID(), _init0);
+		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),_init1.getGUID(), _init1);
 		
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS_TO_FIGHT(this,7,_map);
 		
@@ -1422,22 +1422,22 @@ public class Pelea
 		}
 		_init0.set_fightCell(getRandomCell(_start0));
 		
-		_init0.getPersonnage().get_curCell().removePlayer(_init0.getPersonnage().get_GUID());
+		_init0.getPersonnage().getActualCelda().removePlayer(_init0.getPersonnage().get_GUID());
 		
 		_init0.get_fightCell().addFighter(_init0);
 		
 		_init0.getPersonnage().set_fight(this);
 		_init0.setTeam(0);
 		
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().get_curCarte(), _init0.getGUID());
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().get_curCarte(), group.getID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().getActualMapa(), _init0.getGUID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().getActualMapa(), group.getID());
 		
-		GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),4,_init0.getGUID(),group.getID(),(_init0.getPersonnage().get_curCell().getID()+1),"0;-1",group.getCellID(),"1;-1");
-		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),_init0.getGUID(), _init0);
+		GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),4,_init0.getGUID(),group.getID(),(_init0.getPersonnage().getActualCelda().getID()+1),"0;-1",group.getCellID(),"1;-1");
+		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),_init0.getGUID(), _init0);
 		
 		for(Fighter f : _team1.values())
 		{
-			GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),group.getID(), f);
+			GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),group.getID(), f);
 		}
 		
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS_TO_FIGHT(this,7,_map);
@@ -1513,22 +1513,22 @@ public class Pelea
 		}
 		_init0.set_fightCell(getRandomCell(_start0));
 		
-		_init0.getPersonnage().get_curCell().removePlayer(_init0.getPersonnage().get_GUID());
+		_init0.getPersonnage().getActualCelda().removePlayer(_init0.getPersonnage().get_GUID());
 		
 		_init0.get_fightCell().addFighter(_init0);
 		
 		_init0.getPersonnage().set_fight(this);
 		_init0.setTeam(0);
 		
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().get_curCarte(), _init0.getGUID());
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().get_curCarte(), perco.getGuid());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().getActualMapa(), _init0.getGUID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_init0.getPersonnage().getActualMapa(), perco.getGuid());
 		
-		GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),5,_init0.getGUID(),perco.getGuid(),(_init0.getPersonnage().get_curCell().getID()+1),"0;-1",perco.get_cellID(),"3;-1");
-		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),_init0.getGUID(), _init0);
+		GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),5,_init0.getGUID(),perco.getGuid(),(_init0.getPersonnage().getActualCelda().getID()+1),"0;-1",perco.get_cellID(),"3;-1");
+		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),_init0.getGUID(), _init0);
 		
 		for(Fighter f : _team1.values())
 		{
-			GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),perco.getGuid(), f);
+			GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),perco.getGuid(), f);
 		}
 
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS_TO_FIGHT(this,7,_map);
@@ -1708,7 +1708,7 @@ public class Pelea
 		}
 		_state = Constantes.FIGHT_STATE_ACTIVE;
 		_startTime = System.currentTimeMillis();
-		GestorSalida.GAME_SEND_GAME_REMFLAG_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(),_init0.getGUID());
+		GestorSalida.GAME_SEND_GAME_REMFLAG_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(),_init0.getGUID());
 		if(_type == Constantes.FIGHT_TYPE_PVM)
 		{
 			int align = -1;
@@ -1761,7 +1761,7 @@ public class Pelea
 	    				  hasMale = true;
 	    			  if(perso.get_sexe() == 1)
 	    				  hasFemale = true;
-	    			  if(perso.get_curCarte().hasEndFightAction(_type))
+	    			  if(perso.getActualMapa().hasEndFightAction(_type))
 	    				  inDungeon = true;
 	    		  }
 	    	  }
@@ -2112,10 +2112,10 @@ public class Pelea
 			
 			if(onlyGroup0)
 			{
-				Group g = _init0.getPersonnage().getGroup();
+				Grupo g = _init0.getPersonnage().getActualGrupo();
 				if(g != null)
 				{
-					if(!g.getPersos().contains(perso))
+					if(!g.getMiembrosGrupo().contains(perso))
 					{
 						GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.get_compte().getGameThread().get_out(),'f',guid);
 						return;
@@ -2158,7 +2158,7 @@ public class Pelea
 			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.get_compte().getGameThread().get_out(), _map.get_placesStr(), _st1);
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.get_curCarte(), perso.get_GUID());
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
 			
 			Fighter f = new Fighter(this, perso);
 			current_Join = f;
@@ -2176,10 +2176,10 @@ public class Pelea
 			
 			if(onlyGroup1)
 			{
-				Group g = _init1.getPersonnage().getGroup();
+				Grupo g = _init1.getPersonnage().getActualGrupo();
 				if(g != null)
 				{
-					if(!g.getPersos().contains(perso))
+					if(!g.getMiembrosGrupo().contains(perso))
 					{
 						GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.get_compte().getGameThread().get_out(),'f',guid);
 						return;
@@ -2222,7 +2222,7 @@ public class Pelea
 			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.get_compte().getGameThread().get_out(), _map.get_placesStr(), _st2);
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.get_curCarte(), perso.get_GUID());
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
 			Fighter f = new Fighter(this, perso);
 			current_Join = f;
 			f.setTeam(1);
@@ -2231,8 +2231,8 @@ public class Pelea
 			f.set_fightCell(cell);
 			f.get_fightCell().addFighter(f);
 		}
-		perso.get_curCell().removePlayer(perso.get_GUID());
-		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(perso.get_curCarte(),(current_Join.getTeam()==0?_init0:_init1).getGUID(), current_Join);
+		perso.getActualCelda().removePlayer(perso.get_GUID());
+		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(perso.getActualMapa(),(current_Join.getTeam()==0?_init0:_init1).getGUID(), current_Join);
 		GestorSalida.GAME_SEND_FIGHT_PLAYER_JOIN(this,7,current_Join);
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS(this,_map,perso);
 		if(_perco != null)
@@ -2260,7 +2260,7 @@ public class Pelea
 		GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.get_compte().getGameThread().get_out(), _map.get_placesStr(), _st2);
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.get_curCarte(), perso.get_GUID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
 		Fighter f = new Fighter(this, perso);
 		current_Join = f;
 		f.setTeam(1);
@@ -2270,8 +2270,8 @@ public class Pelea
 		f.get_fightCell().addFighter(f);
 		GestorSalida.GAME_SEND_ILF_PACKET(perso, 0);
 		
-		perso.get_curCell().removePlayer(perso.get_GUID());
-		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(perso.get_curCarte(), percoID, current_Join);
+		perso.getActualCelda().removePlayer(perso.get_GUID());
+		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(perso.getActualMapa(), percoID, current_Join);
 		GestorSalida.GAME_SEND_FIGHT_PLAYER_JOIN(this,7,current_Join);
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS(this,_map,perso);
 	}
@@ -2282,13 +2282,13 @@ public class Pelea
 		{
 			locked0 = !locked0;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(locked0?"L'equipe 1 devient bloquee":"L'equipe 1 n'est plus bloquee");
-			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(), locked0?'+':'-', 'A', guid);
+			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), locked0?'+':'-', 'A', guid);
 			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,1,locked0?"095":"096");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			locked1 = !locked1;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(locked1?"L'equipe 2 devient bloquee":"L'equipe 2 n'est plus bloquee");
-			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().get_curCarte(), locked1?'+':'-', 'A', guid);
+			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), locked1?'+':'-', 'A', guid);
 			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,2,locked1?"095":"096");
 		}
 	}
@@ -2299,13 +2299,13 @@ public class Pelea
 		{
 			onlyGroup0 = !onlyGroup0;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(locked0?"L'equipe 1 n'accepte que les membres du groupe":"L'equipe 1 n'est plus bloquee");
-			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(), onlyGroup0?'+':'-', 'P', guid);
+			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), onlyGroup0?'+':'-', 'P', guid);
 			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,1,onlyGroup0?"093":"094");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			onlyGroup1 = !onlyGroup1;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(locked1?"L'equipe 2 n'accepte que les membres du groupe":"L'equipe 2 n'est plus bloquee");
-			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().get_curCarte(), onlyGroup1?'+':'-', 'P', guid);
+			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), onlyGroup1?'+':'-', 'P', guid);
 			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,2,onlyGroup1?"095":"096");
 		}
 	}
@@ -2316,8 +2316,8 @@ public class Pelea
 		{
 			specOk = !specOk;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(specOk?"Le combat accepte les spectateurs":"Le combat n'accepte plus les spectateurs");
-			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(), specOk?'+':'-', 'S', _init0.getGUID());
-			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(), specOk?'+':'-', 'S', _init1.getGUID());
+			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), specOk?'+':'-', 'S', _init0.getGUID());
+			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), specOk?'+':'-', 'S', _init1.getGUID());
 			GestorSalida.GAME_SEND_Im_PACKET_TO_MAP(_map,specOk?"039":"040");
 		}
 	}
@@ -2328,13 +2328,13 @@ public class Pelea
 		{
 			help1 = !help1;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(help2?"L'equipe 1 demande de l'aide":"L'equipe 1s ne demande plus d'aide");
-			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().get_curCarte(), locked0?'+':'-', 'H', guid);
+			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), locked0?'+':'-', 'H', guid);
 			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,1,help1?"0103":"0104");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			help2 = !help2;
 			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(help2?"L'equipe 2 demande de l'aide":"L'equipe 2 ne demande plus d'aide");
-			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().get_curCarte(), locked1?'+':'-', 'H', guid);
+			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), locked1?'+':'-', 'H', guid);
 			GestorSalida.GAME_SEND_Im_PACKET_TO_FIGHT(this,2,help2?"0103":"0104");
 		}
 	}
@@ -3334,7 +3334,7 @@ public class Pelea
 			{
 				GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_map, entry.getValue().getGUID());
 			}
-			this._init0.getPersonnage().get_curCarte().removeFight(this._id);
+			this._init0.getPersonnage().getActualMapa().removeFight(this._id);
 			GestorSalida.GAME_SEND_FIGHT_GE_PACKET_TO_FIGHT(this,7,winner);
 			
 			for(Entry<Integer, Fighter> entry : _team0.entrySet())//Team joueurs
@@ -3366,7 +3366,7 @@ public class Pelea
 			for(Personaje perso: _spec.values())
 			{
 				//on remet le perso sur la map
-				perso.get_curCarte().addPlayer(perso);
+				perso.getActualMapa().addPlayer(perso);
 				//SocketManager.GAME_SEND_GV_PACKET(perso);	//Mauvaise ligne apparemment
 				perso.refreshMapAfterFight();
 			}
@@ -3412,7 +3412,7 @@ public class Pelea
 					for(Personaje z : Mundo.getCarte((short)F._Perco.get_mapID()).getPersos())
 					{
 						if(z == null) continue;
-						GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.get_compte().getGameThread().get_out(), z.get_curCarte());
+						GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.get_compte().getGameThread().get_out(), z.getActualMapa());
 					}
 				}
 				if(F.hasLeft())continue;
@@ -3436,7 +3436,7 @@ public class Pelea
 					Thread.sleep(1000);
 				}catch(Exception E){};*/
 				if(_type != Constantes.FIGHT_TYPE_CHALLENGE)
-					F.getPersonnage().get_curCarte().applyEndFightAction(_type, F.getPersonnage());
+					F.getPersonnage().getActualMapa().applyEndFightAction(_type, F.getPersonnage());
 
 				try
 				{
@@ -4105,7 +4105,7 @@ public class Pelea
 									for(Personaje z : Mundo.getCarte((short)_perco.get_mapID()).getPersos())
 									{
 										if(z == null) continue;
-										GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.get_compte().getGameThread().get_out(), z.get_curCarte());
+										GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.get_compte().getGameThread().get_out(), z.getActualMapa());
 									}
 								}
 								if(_type == Constantes.FIGHT_TYPE_PVM)
@@ -4338,11 +4338,11 @@ public class Pelea
 			return;
 		}
 		long timeRestant = (MainServidor.CONFIG_MS_PER_TURN - 1) - (System.currentTimeMillis() - _ticMyTimer_startTime);
-		p.get_curCell().removePlayer(p.get_GUID());
+		p.getActualCelda().removePlayer(p.get_GUID());
 		GestorSalida.GAME_SEND_GJK_PACKET(p, _state, 0, 0, 1, timeRestant, _type);
 		GestorSalida.GAME_SEND_GS_PACKET(p);
 		GestorSalida.GAME_SEND_GTL_PACKET(p,this);
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(p.get_curCarte(), p.get_GUID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(p.getActualMapa(), p.get_GUID());
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS(this,_map,p);
 		GestorSalida.GAME_SEND_GAMETURNSTART_PACKET(p,_ordreJeu.get(_curPlayer).getGUID(), Constantes.TIME_BY_TURN);
 		_spec.put(p.get_GUID(), p);
@@ -4457,37 +4457,37 @@ public class Pelea
 			{
 				if(fight.getValue()._type == Constantes.FIGHT_TYPE_CHALLENGE)
 				{
-					GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().get_curCarte(),0,fight.getValue()._init0.getGUID(),fight.getValue()._init1.getGUID(),fight.getValue()._init0.getPersonnage().get_curCell().getID(),"0;-1", fight.getValue()._init1.getPersonnage().get_curCell().getID(), "0;-1");
+					GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().getActualMapa(),0,fight.getValue()._init0.getGUID(),fight.getValue()._init1.getGUID(),fight.getValue()._init0.getPersonnage().getActualCelda().getID(),"0;-1", fight.getValue()._init1.getPersonnage().getActualCelda().getID(), "0;-1");
 					for(Entry<Integer, Fighter> F : fight.getValue()._team0.entrySet())
 					{
 						if(MainServidor.CONFIG_DEBUG) System.out.println(F.getValue().getPersonnage().get_name());
-						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().get_curCarte(),fight.getValue()._init0.getGUID(), fight.getValue()._init0);
+						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().getActualMapa(),fight.getValue()._init0.getGUID(), fight.getValue()._init0);
 					}
 					for(Entry<Integer, Fighter> F : fight.getValue()._team1.entrySet())
 					{
 						if(MainServidor.CONFIG_DEBUG) System.out.println(F.getValue().getPersonnage().get_name());
-						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init1.getPersonnage().get_curCarte(),fight.getValue()._init1.getGUID(), fight.getValue()._init1);
+						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init1.getPersonnage().getActualMapa(),fight.getValue()._init1.getGUID(), fight.getValue()._init1);
 					}
 				}else if(fight.getValue()._type == Constantes.FIGHT_TYPE_AGRESSION)
 				{
-					GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().get_curCarte(),0,fight.getValue()._init0.getGUID(),fight.getValue()._init1.getGUID(),fight.getValue()._init0.getPersonnage().get_curCell().getID(),"0;"+fight.getValue()._init0.getPersonnage().get_align(), fight.getValue()._init1.getPersonnage().get_curCell().getID(), "0;"+fight.getValue()._init1.getPersonnage().get_align());
+					GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().getActualMapa(),0,fight.getValue()._init0.getGUID(),fight.getValue()._init1.getGUID(),fight.getValue()._init0.getPersonnage().getActualCelda().getID(),"0;"+fight.getValue()._init0.getPersonnage().get_align(), fight.getValue()._init1.getPersonnage().getActualCelda().getID(), "0;"+fight.getValue()._init1.getPersonnage().get_align());
 					for(Entry<Integer, Fighter> F : fight.getValue()._team0.entrySet())
 					{
 						if(MainServidor.CONFIG_DEBUG) System.out.println(F.getValue().getPersonnage().get_name());
-						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().get_curCarte(),fight.getValue()._init0.getGUID(), fight.getValue()._init0);
+						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().getActualMapa(),fight.getValue()._init0.getGUID(), fight.getValue()._init0);
 					}
 					for(Entry<Integer, Fighter> F : fight.getValue()._team1.entrySet())
 					{
 						if(MainServidor.CONFIG_DEBUG) System.out.println(F.getValue().getPersonnage().get_name());
-						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init1.getPersonnage().get_curCarte(),fight.getValue()._init1.getGUID(), fight.getValue()._init1);
+						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init1.getPersonnage().getActualMapa(),fight.getValue()._init1.getGUID(), fight.getValue()._init1);
 					}
 				}else if(fight.getValue()._type == Constantes.FIGHT_TYPE_PVM)
 				{
-					GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().get_curCarte(),4,fight.getValue()._init0.getGUID(),fight.getValue()._mobGroup.getID(),(fight.getValue()._init0.getPersonnage().get_curCell().getID()+1),"0;-1",fight.getValue()._mobGroup.getCellID(),"1;-1");
+					GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().getActualMapa(),4,fight.getValue()._init0.getGUID(),fight.getValue()._mobGroup.getID(),(fight.getValue()._init0.getPersonnage().getActualCelda().getID()+1),"0;-1",fight.getValue()._mobGroup.getCellID(),"1;-1");
 					for(Entry<Integer, Fighter> F : fight.getValue()._team0.entrySet())
 					{
 						if(MainServidor.CONFIG_DEBUG) System.out.println("PVM1: "+F.getValue().getPersonnage().get_name());
-						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().get_curCarte(),fight.getValue()._init0.getGUID(), fight.getValue()._init0);
+						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().getActualMapa(),fight.getValue()._init0.getGUID(), fight.getValue()._init0);
 					}
 					for(Entry<Integer, Fighter> F : fight.getValue()._team1.entrySet())
 					{
@@ -4496,11 +4496,11 @@ public class Pelea
 					}
 				}else if(fight.getValue()._type == Constantes.FIGHT_TYPE_PVT)
 				{
-					GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().get_curCarte(),5,fight.getValue()._init0.getGUID(),fight.getValue()._perco.getGuid(),(fight.getValue()._init0.getPersonnage().get_curCell().getID()+1),"0;-1",fight.getValue()._perco.get_cellID(),"3;-1");
+					GestorSalida.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().getActualMapa(),5,fight.getValue()._init0.getGUID(),fight.getValue()._perco.getGuid(),(fight.getValue()._init0.getPersonnage().getActualCelda().getID()+1),"0;-1",fight.getValue()._perco.get_cellID(),"3;-1");
 					for(Entry<Integer, Fighter> F : fight.getValue()._team0.entrySet())
 					{
 						if(MainServidor.CONFIG_DEBUG) System.out.println("PVT1: "+F.getValue().getPersonnage().get_name());
-						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().get_curCarte(),fight.getValue()._init0.getGUID(), fight.getValue()._init0);
+						GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(P, fight.getValue()._init0.getPersonnage().getActualMapa(),fight.getValue()._init0.getGUID(), fight.getValue()._init0);
 					}
 					for(Entry<Integer, Fighter> F : fight.getValue()._team1.entrySet())
 					{

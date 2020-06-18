@@ -244,7 +244,7 @@ public class House
             GestorSQL.guardar_personaje(P, true);
             if(!h.canDo(Constantes.H_OCANTOPEN) && packet.compareTo(h.get_key()) == 0 || isHome)
             {
-                P.teleport((short)h.get_mapid(), h.get_caseid());
+                P.teletransportar((short)h.get_mapid(), h.get_caseid());
                 closeCode(P);
             } else
             if(packet.compareTo(h.get_key()) != 0 || h.canDo(Constantes.H_OCANTOPEN))
@@ -325,9 +325,9 @@ public class House
 		GestorSQL.comprar_casa(P, h);
 
 		//Rafraichir la map après l'achat
-		for(Personaje z:P.get_curCarte().getPersos())
+		for(Personaje z:P.getActualMapa().getPersos())
 		{
-			LoadHouse(z, z.get_curCarte().get_id());
+			LoadHouse(z, z.getActualMapa().get_id());
 		}
 	}
 	
@@ -358,9 +358,9 @@ public class House
 			GestorSQL.vender_casa(h, price);
 
 			//Rafraichir la map après la mise en vente
-			for(Personaje z:P.get_curCarte().getPersos())
+			for(Personaje z:P.getActualMapa().getPersos())
 			{
-				LoadHouse(z, z.get_curCarte().get_id());
+				LoadHouse(z, z.getActualMapa().get_id());
 			}
 				
 			return;
@@ -547,8 +547,8 @@ public class House
 		if(!h.isHouse(P, h)) return;
 		int Pguid = Integer.parseInt(packet);
 		Personaje Target = Mundo.getPersonnage(Pguid);
-		if(Target == null || !Target.isOnline() || Target.get_fight() != null || Target.get_curCarte().get_id() != P.get_curCarte().get_id()) return;
-		Target.teleport(h.get_map_id(), h.get_cell_id());
+		if(Target == null || !Target.isOnline() || Target.get_fight() != null || Target.getActualMapa().get_id() != P.getActualMapa().get_id()) return;
+		Target.teletransportar(h.get_map_id(), h.get_cell_id());
 		GestorSalida.GAME_SEND_Im_PACKET(Target, "018;"+P.get_name());
 	}
 	

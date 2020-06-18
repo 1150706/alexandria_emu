@@ -525,7 +525,7 @@ public class Recaudador
 				Mundo.getPercos().remove(perco.getKey());
 				for(Personaje p : Mundo.getCarte((short) perco.getValue().get_mapID()).getPersos())
 				{
-					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(p.get_curCarte(), perco.getValue().getGuid());//Suppression visuelle
+					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(p.getActualMapa(), perco.getValue().getGuid());//Suppression visuelle
 				}
 				GestorSQL.eliminar_recaudador(perco.getKey());//Supprime les percepteurs
 			}else

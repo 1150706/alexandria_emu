@@ -749,8 +749,8 @@ public class GestorSQL {
 			p.setInt(14,perso.get_size());
 			p.setInt(15,perso.get_gfxID());
 			p.setInt(16,perso.getAccID());
-			p.setInt(17,perso.get_curCell().getID());
-			p.setInt(18,perso.get_curCarte().get_id());
+			p.setInt(17,perso.getActualCelda().getID());
+			p.setInt(18,perso.getActualMapa().get_id());
 			p.setString(19, perso.parseSpellToDB());
 			
 			p.execute();
@@ -904,8 +904,8 @@ public class GestorSQL {
 			p.setInt(21,(_perso.is_showWings()?1:0));
 			p.setInt(22,(_perso.is_showSeller()?1:0));
 			p.setString(23,_perso.get_canaux());
-			p.setInt(24,_perso.get_curCarte().get_id());
-			p.setInt(25,_perso.get_curCell().getID());
+			p.setInt(24,_perso.getActualMapa().get_id());
+			p.setInt(25,_perso.getActualCelda().getID());
 			p.setInt(26,_perso.get_pdvper());
 			p.setString(27,_perso.parseSpellToDB());
 			p.setString(28,_perso.parseObjetsToDB());

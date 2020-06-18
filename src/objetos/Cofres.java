@@ -312,7 +312,7 @@ public class Cofres {
 			}
 		}
 		
-		for(Personaje perso : P.get_curCarte().getPersos())
+		for(Personaje perso : P.getActualMapa().getPersos())
 		{
 			if(perso.getInTrunk() != null && get_id() == perso.getInTrunk().get_id())
 			{
@@ -403,7 +403,7 @@ public class Cofres {
 			}
 		}
 		
-		for(Personaje perso : P.get_curCarte().getPersos())
+		for(Personaje perso : P.getActualMapa().getPersos())
 		{
 			if(perso.getInTrunk() != null && get_id() == perso.getInTrunk().get_id())
 			{

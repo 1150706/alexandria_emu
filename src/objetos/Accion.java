@@ -1,6 +1,7 @@
 package objetos;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import objetos.Oficio.StatsMetier;
 import objetos.Monstruo.MobGroup;
@@ -83,7 +84,7 @@ public class Accion {
 				try {
 					short nuevomapa = Short.parseShort(args.split(",",2)[0]);
 					int nuevacelda = Integer.parseInt(args.split(",",2)[1]);
-					perso.teleport(nuevomapa,nuevacelda);
+					perso.teletransportar(nuevomapa,nuevacelda);
 				}catch(Exception e ){return;};
 			break;
 			
@@ -288,11 +289,11 @@ public class Accion {
 				try {
 					boolean delObj = args.split(",")[0].equals("true");
 					boolean inArena = args.split(",")[1].equals("true");
-					if(inArena && !Mundo.isArenaMap(perso.get_curCarte().get_id()))return;	//Si la map du personnage n'est pas classé comme étant dans l'arène
+					if(inArena && !Mundo.isArenaMap(perso.getActualMapa().get_id()))return;	//Si la map du personnage n'est pas classé comme étant dans l'arène
 					PiedraAlma pierrePleine = (PiedraAlma) Mundo.getObjet(itemID);
 					String groupData = pierrePleine.parseGroupData();
 					String condition = "MiS = "+perso.get_GUID();	//Condition pour que le groupe ne soit lançable que par le personnage qui à utiliser l'objet
-					perso.get_curCarte().spawnNewGroup(true, perso.get_curCell().getID(), groupData,condition);
+					perso.getActualMapa().spawnNewGroup(true, perso.getActualCelda().getID(), groupData,condition);
 					if(delObj) {
 						perso.removeItem(itemID, 1, true, true);
 					}
@@ -328,25 +329,25 @@ public class Accion {
 					if(ObjetNeed == 0)
 					{
 						//Téléportation sans objets
-						perso.teleport(newMapID,newCellID);
+						perso.teletransportar(newMapID,newCellID);
 					}else if(ObjetNeed > 0)
 					{
 					if(MapNeed == 0)
 					{
 						//Téléportation sans map
-						perso.teleport(newMapID,newCellID);
+						perso.teletransportar(newMapID,newCellID);
 					}else if(MapNeed > 0)
 					{
-					if (perso.hasItemTemplate(ObjetNeed, 1) && perso.get_curCarte().get_id() == MapNeed)
+					if (perso.hasItemTemplate(ObjetNeed, 1) && perso.getActualMapa().get_id() == MapNeed)
 					{
 						//Le perso a l'item
 						//Le perso est sur la bonne map
 						//On téléporte, on supprime après
-						perso.teleport(newMapID,newCellID);
+						perso.teletransportar(newMapID,newCellID);
 						perso.removeByTemplateID(ObjetNeed, 1);
 						GestorSalida.GAME_SEND_Ow_PACKET(perso);
 					}
-					else if(perso.get_curCarte().get_id() != MapNeed)
+					else if(perso.getActualMapa().get_id() != MapNeed)
 					{
 						//Le perso n'est pas sur la bonne map
 						GestorSalida.GAME_SEND_MESSAGE(perso, "Vous n'etes pas sur la bonne map du donjon pour etre teleporter.", "009900");
@@ -394,7 +395,7 @@ public class Accion {
 						perso.removeByTemplateID(obj.getTemplate().getID(),1);
 						House h = House.get_HouseByPerso(perso);
 						if(h == null) return;
-						perso.teleport((short)h.get_mapid(), h.get_caseid());
+						perso.teletransportar((short)h.get_mapid(), h.get_caseid());
 					}
 				}
 			break;
@@ -456,16 +457,16 @@ public class Accion {
 					int morphID = Integer.parseInt(args);
 					if(morphID < 0)return;
 					perso.set_gfxID(morphID);
-					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.get_curCarte(), perso.get_GUID());
-					GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(perso.get_curCarte(), perso);
+					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
+					GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(perso.getActualMapa(), perso);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
 			case 25://SimpleUnMorph
 				int UnMorphID = perso.get_classe()*10 + perso.get_sexe();
 				perso.set_gfxID(UnMorphID);
-				GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.get_curCarte(), perso.get_GUID());
-				GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(perso.get_curCarte(), perso);
+				GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
+				GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(perso.getActualMapa(), perso);
 			break;
 			case 26://Téléportation enclo de guilde (ouverture du panneau de guilde)
 				GestorSalida.GAME_SEND_GUILDENCLO_PACKET(perso);
@@ -490,8 +491,8 @@ public class Accion {
 						ValidMobGroup += monsterID+","+monsterLevel+","+monsterLevel+";";
 					}
 					if(ValidMobGroup.isEmpty()) return;
-					MobGroup group  = new MobGroup(perso.get_curCarte()._nextObjectID,perso.get_curCell().getID(),ValidMobGroup);
-					perso.get_curCarte().startFigthVersusMonstres(perso, group);
+					MobGroup group  = new MobGroup(perso.getActualMapa()._nextObjectID,perso.getActualCelda().getID(),ValidMobGroup);
+					perso.getActualMapa().startFigthVersusMonstres(perso, group);
 		        }catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;
@@ -608,40 +609,38 @@ public class Accion {
 
 			break;
 			case 100://Donner l'abilité 'args' à une dragodinde
-                Dragopavo mount = perso.getMount();
-                Mundo.addDragodinde(
-                  new Dragopavo(
-                 mount.get_id(),
-                 mount.get_color(),
-                 mount.get_sexe(),
-                 mount.get_amour(),
-                 mount.get_endurance(),
-                 mount.get_level(),
-                 mount.get_exp(),
-                 mount.get_nom(),
-                 mount.get_fatigue(),
-                 mount.get_energie(),
-                 mount.get_reprod(),
-                 mount.get_maturite(),
-                 mount.get_serenite(),
-                 mount.getItemsId(),
-                 mount.get_ancetres(),
-                 args));
-                 perso.setMount(Mundo.getDragoByID(mount.get_id()));
-                 GestorSalida.GAME_SEND_Re_PACKET(perso, "+", Mundo.getDragoByID(mount.get_id()));
-                 GestorSQL.actualizar_informacion_monturas(mount);
+                Dragopavo dragopavo = perso.getMount();
+                Mundo.addDragodinde(new Dragopavo(
+                 dragopavo.get_id(),
+                 dragopavo.get_color(),
+                 dragopavo.get_sexe(),
+                 dragopavo.get_amour(),
+                 dragopavo.get_endurance(),
+                 dragopavo.get_level(),
+                 dragopavo.get_exp(),
+                 dragopavo.get_nom(),
+                 dragopavo.get_fatigue(),
+                 dragopavo.get_energie(),
+                 dragopavo.get_reprod(),
+                 dragopavo.get_maturite(),
+                 dragopavo.get_serenite(),
+                 dragopavo.getItemsId(),
+                 dragopavo.get_ancetres(), args));
+                 perso.setMount(Mundo.getDragoByID(dragopavo.get_id()));
+                 GestorSalida.GAME_SEND_Re_PACKET(perso, "+", Mundo.getDragoByID(dragopavo.get_id()));
+                 GestorSQL.actualizar_informacion_monturas(dragopavo);
                  break;
+
 			case 101://Arriver sur case de mariage
-				if((perso.get_sexe() == 0 && perso.get_curCell().getID() == 282) || (perso.get_sexe() == 1 && perso.get_curCell().getID() == 297))
-				{
+				if((perso.get_sexe() == 0 && perso.getActualCelda().getID() == 282) || (perso.get_sexe() == 1 && perso.getActualCelda().getID() == 297)) {
 					Mundo.AddMarried(perso.get_sexe(), perso);
-				}else 
-				{
+				}else {
 					GestorSalida.GAME_SEND_Im_PACKET(perso, "1102");
 				}
 			break;
-			case 102://Marier des personnages
-				Mundo.PriestRequest(perso, perso.get_curCarte(), perso.get_isTalkingWith());
+
+			case 102://Casamiento de 2 personajes
+				Mundo.PriestRequest(perso, perso.getActualMapa(), perso.get_isTalkingWith());
 			break;
 
 			case 103://Divorsiarse
@@ -705,6 +704,23 @@ public class Accion {
 				}catch(Exception e){JuegoServidor.addToLog(e.getMessage());};
 				break;
 
+			case 105://Teletransportar a todos los miembros del grupo
+				Personaje.Grupo grupo = perso.getActualGrupo();
+				//Verificamos que el jugador este en un grupo
+				if (grupo == null) {
+					GestorSalida.GAME_SEND_Im_PACKET(perso, "1251;");
+					return;
+				}
+				//Vemos la ID del mapa y celda del jugador a crear la accion
+				short idmapa = perso.getActualMapa().get_id();
+				int idcelda = perso.getActualCelda().getID();
+				//Listamos los miembros del grupo
+				ArrayList<Personaje> miembros = perso.getActualGrupo().getMiembrosGrupo();
+				for (Personaje personaje : miembros) {
+					personaje.teletransportar(idmapa, idcelda);
+				}
+				break;
+
 			case 228://Faire animation Hors Combat
 				try
 				{
@@ -712,7 +728,7 @@ public class Accion {
 					Animaciones animation = Mundo.getAnimation(AnimationId);
 					if(perso.get_fight() != null) return;
 					perso.changeOrientation(1);
-					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.get_curCarte(), "0", 228, perso.get_GUID()+";"+cellid+","+ Animaciones.PrepareToGA(animation), "");
+					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "0", 228, perso.get_GUID()+";"+cellid+","+ Animaciones.PrepareToGA(animation), "");
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());};
 			break;

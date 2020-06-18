@@ -247,7 +247,7 @@ public class Oficio {
 				IO.setState(Constantes.IOBJECT_STATE_EMPTY);
 				IO.startTimer();
 				//Packet GDF (changement d'état de l'IO)
-				GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(P.get_curCarte(), cell);
+				GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(P.getActualMapa(), cell);
 				
 				boolean special = Formulas.getRandomValue(0, 99)==0;//Restriction de niveau ou pas ?
 				
@@ -273,8 +273,8 @@ public class Oficio {
 			{
 				IO.setInteractive(false);
 				IO.setState(Constantes.IOBJECT_STATE_EMPTYING);
-				GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(P.get_curCarte(),""+GA._id, 501, P.get_GUID()+"", cell.getID()+","+_time);
-				GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(P.get_curCarte(),cell);
+				GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(P.getActualMapa(),""+GA._id, 501, P.get_GUID()+"", cell.getID()+","+_time);
+				GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(P.getActualMapa(),cell);
 				_startTime = System.currentTimeMillis()+_time;//pour eviter le cheat
 			}else
 			{
@@ -282,7 +282,7 @@ public class Oficio {
 				IO.setState(Constantes.IOBJECT_STATE_EMPTYING);//FIXME trouver la bonne valeur
 				P.setCurJobAction(this);
 				GestorSalida.GAME_SEND_ECK_PACKET(P, 3, _min+";"+_skID);//_min => Nbr de Case de l'interface
-				GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(P.get_curCarte(), cell);
+				GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(P.getActualMapa(), cell);
 			}
 		}
 
@@ -411,7 +411,7 @@ public class Oficio {
 			if(tID == -1 || !SM.getTemplate().canCraft(_skID, tID))
 			{
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.get_curCarte(),_P.get_GUID(),"-");
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-");
 				_ingredients.clear();
 				
 				return;
@@ -424,7 +424,7 @@ public class Oficio {
 			if(!success)//Si echec
 			{
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EF");
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.get_curCarte(),_P.get_GUID(),"-"+tID);
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-"+tID);
 				GestorSalida.GAME_SEND_Im_PACKET(_P, "0118");
 			}else
 			{
@@ -458,7 +458,7 @@ public class Oficio {
 				GestorSalida.GAME_SEND_Ow_PACKET(_P);
 				GestorSalida.GAME_SEND_Em_PACKET(_P,"KO+"+guid+"|1|"+tID+"|"+newObj.parseStatsString().replace(";","#"));
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"K;"+tID);
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.get_curCarte(),_P.get_GUID(),"+"+tID);
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"+"+tID);
 			}
 			
 			
@@ -491,7 +491,7 @@ public class Oficio {
 				if(!_P.hasItemGuid(guid) || ing == null)
 				{
 					GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-					GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.get_curCarte(),_P.get_GUID(),"-");
+					GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-");
 					_ingredients.clear();
 					return;
 				}
@@ -940,7 +940,7 @@ public class Oficio {
 			if(SM == null || obj == null || mod == null)
 			{
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.get_curCarte(),_P.get_GUID(),"-");
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-");
 				_ingredients.clear();
 				return;
 			}
@@ -1107,7 +1107,7 @@ public class Oficio {
 				GestorSalida.GAME_SEND_OAKO_PACKET(_P, obj);
 				GestorSalida.GAME_SEND_Em_PACKET(_P,"EC+"+obj.getGuid()+"|1|"+tID+"|"+obj.parseStatsString().replace(";","#"));//On replace l'item dans l'inventaire
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EF");
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.get_curCarte(),_P.get_GUID(),"-"+tID);
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-"+tID);
 				GestorSalida.GAME_SEND_Im_PACKET(_P, "0183");
 				GestorSQL.guardar_objeto(obj);
 			}else
@@ -1207,7 +1207,7 @@ public class Oficio {
 				GestorSalida.GAME_SEND_OAKO_PACKET(_P, obj);//Nouveau jet
 				GestorSalida.GAME_SEND_Em_PACKET(_P,"KO+"+obj.getGuid()+"|1|"+tID+"|"+obj.parseStatsString().replace(";","#"));//On replace l'item dans l'inventaire
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"K;"+tID);//Réussite
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.get_curCarte(),_P.get_GUID(),"+"+tID);//Icone de réussite
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"+"+tID);//Icone de réussite
 				GestorSQL.guardar_objeto(obj);//On Save
 				//TODO : Le repeat ?
 		}

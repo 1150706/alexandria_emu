@@ -140,7 +140,7 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("REFRESHMOBS"))
 		{
-			_perso.get_curCarte().refreshSpawns();
+			_perso.getActualMapa().refreshSpawns();
 			String mess = "Mob Spawn refreshed!";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			return;
@@ -164,7 +164,7 @@ public class Comandos {
 			String mess = 	"==========\n"
 						+	"Liste des Npcs de la carte:";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
-			Mapa map = _perso.get_curCarte();
+			Mapa map = _perso.getActualMapa();
 			for(Entry<Integer,NPC> entry : map.get_npcs().entrySet())
 			{
 				mess = entry.getKey()+" "+entry.getValue().get_template().get_id()+" "+entry.getValue().get_cellID()+" "+entry.getValue().get_template().get_initQuestionID();
@@ -236,7 +236,7 @@ public class Comandos {
 				mess += " ";
 				mess += (P.get_sexe()==0?"M":"F")+" ";
 				mess += P.get_lvl()+" ";
-				mess += P.get_curCarte().get_id()+"("+P.get_curCarte().getX()+"/"+P.get_curCarte().getY()+") ";
+				mess += P.getActualMapa().get_id()+"("+P.getActualMapa().getX()+"/"+P.getActualMapa().getY()+") ";
 				mess += P.get_fight()==null?"":"Combat ";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			}
@@ -253,7 +253,7 @@ public class Comandos {
 		{
 			String mess = "Liste des StartCell [teamID][cellID]:";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
-			String places = _perso.get_curCarte().get_placesStr();
+			String places = _perso.getActualMapa().get_placesStr();
 			if(places.indexOf('|') == -1 || places.length() <2)
 			{
 				mess = "Les places n'ont pas ete definies";
@@ -369,8 +369,8 @@ public class Comandos {
 			}
 			int morphID = target.get_classe()*10 + target.get_sexe();
 			target.set_gfxID(morphID);
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.get_curCarte(), target.get_GUID());
-			GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(target.get_curCarte(), target);
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.get_GUID());
+			GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(target.getActualMapa(), target);
 			String str = "Le joueur a ete transforme";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 		}
@@ -384,8 +384,8 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			short mapID = P.get_curCarte().get_id();
-			int cellID = P.get_curCell().getID();
+			short mapID = P.getActualMapa().get_id();
+			int cellID = P.getActualCelda().getID();
 			
 			Personaje target = _perso;
 			if(infos.length > 2)//Si un nom de perso est spécifié
@@ -404,7 +404,7 @@ public class Comandos {
 					return;
 				}
 			}
-			target.teleport(mapID, cellID);
+			target.teletransportar(mapID, cellID);
 			String str = "Le joueur a ete teleporte";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 		}else
@@ -436,9 +436,9 @@ public class Comandos {
 			}
 			if(P.isOnline())
 			{
-				short mapID = P.get_curCarte().get_id();
-				int cellID = P.get_curCell().getID();
-				target.teleport(mapID, cellID);
+				short mapID = P.getActualMapa().get_id();
+				int cellID = P.getActualCelda().getID();
+				target.teletransportar(mapID, cellID);
 				String str = "Le joueur a ete teleporte";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 			}else
@@ -486,7 +486,7 @@ public class Comandos {
 					return;
 				}
 			}
-			target.teleport(mapID, cellID);
+			target.teletransportar(mapID, cellID);
 			String str = "Le joueur a ete teleporte";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 		}else
@@ -533,7 +533,7 @@ public class Comandos {
 					return;
 				}
 			}
-			target.teleport(map.get_id(), cellID);
+			target.teletransportar(map.get_id(), cellID);
 			String str = "Le joueur a ete teleporte";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 		}else
@@ -965,8 +965,8 @@ public class Comandos {
 				}
 			}
 			target.set_size(size);
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.get_curCarte(), target.get_GUID());
-			GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(target.get_curCarte(), target);
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.get_GUID());
+			GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(target.getActualMapa(), target);
 			String str = "La taille du joueur a ete modifiee";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 		}else
@@ -995,8 +995,8 @@ public class Comandos {
 				}
 			}
 			target.set_gfxID(morphID);
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.get_curCarte(), target.get_GUID());
-			GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(target.get_curCarte(), target);
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.get_GUID());
+			GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(target.getActualMapa(), target);
 			String str = "Le joueur a ete transforme";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 		}if(command.equalsIgnoreCase("MOVENPC"))
@@ -1006,7 +1006,7 @@ public class Comandos {
 			{
 				id = Integer.parseInt(infos[1]);
 			}catch(Exception e){};
-			NPC npc = _perso.get_curCarte().getNPC(id);
+			NPC npc = _perso.getActualMapa().getNPC(id);
 			if(id == 0 || npc == null)
 			{
 				String str = "Npc GUID invalide";
@@ -1015,20 +1015,20 @@ public class Comandos {
 			}
 			int exC = npc.get_cellID();
 			//on l'efface de la map
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_perso.get_curCarte(), id);
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_perso.getActualMapa(), id);
 			//on change sa position/orientation
-			npc.setCellID(_perso.get_curCell().getID());
+			npc.setCellID(_perso.getActualCelda().getID());
 			npc.setOrientation((byte)_perso.get_orientation());
 			//on envoie la modif
-			GestorSalida.GAME_SEND_ADD_NPC_TO_MAP(_perso.get_curCarte(),npc);
+			GestorSalida.GAME_SEND_ADD_NPC_TO_MAP(_perso.getActualMapa(),npc);
 			String str = "Le PNJ a ete deplace";
 			if(_perso.get_orientation() == 0
 			|| _perso.get_orientation() == 2
 			|| _perso.get_orientation() == 4
 			|| _perso.get_orientation() == 6)
 				str += " mais est devenu invisible (orientation diagonale invalide).";
-			if(GestorSQL.eliminar_npc_en_mapa(_perso.get_curCarte().get_id(),exC)
-			&& GestorSQL.agregar_npc_en_mapa(_perso.get_curCarte().get_id(),npc.get_template().get_id(),_perso.get_curCell().getID(),_perso.get_orientation()))
+			if(GestorSQL.eliminar_npc_en_mapa(_perso.getActualMapa().get_id(),exC)
+			&& GestorSQL.agregar_npc_en_mapa(_perso.getActualMapa().get_id(),npc.get_template().get_id(),_perso.getActualCelda().getID(),_perso.get_orientation()))
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 			else
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,"Erreur au moment de sauvegarder la position");
@@ -1228,7 +1228,7 @@ public class Comandos {
 				Mob = infos[1];
 			}catch(Exception e){};
             if(Mob == null) return;
-			_perso.get_curCarte().spawnGroupOnCommand(_perso.get_curCell().getID(), Mob);
+			_perso.getActualMapa().spawnGroupOnCommand(_perso.getActualCelda().getID(), Mob);
 		}else
 		if (command.equalsIgnoreCase("TITLE"))
 		{
@@ -1250,7 +1250,7 @@ public class Comandos {
 			target.set_title(TitleID);
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Titre mis en place.");
 			GestorSQL.guardar_personaje(target, false);
-			if(target.get_fight() == null) GestorSalida.GAME_SEND_ALTER_GM_PACKET(target.get_curCarte(), target);
+			if(target.get_fight() == null) GestorSalida.GAME_SEND_ALTER_GM_PACKET(target.getActualMapa(), target);
 		}else
 		{
 			this.commandGmOne(command, infos, msg);
@@ -1294,8 +1294,8 @@ public class Comandos {
 		}else
 		if(command.equalsIgnoreCase("GETCOORD"))
 		{
-			int cell = _perso.get_curCell().getID();
-			String mess = "["+ Camino.getCellXCoord(_perso.get_curCarte(), cell)+","+ Camino.getCellYCoord(_perso.get_curCarte(), cell)+"]";
+			int cell = _perso.getActualCelda().getID();
+			String mess = "["+ Camino.getCellXCoord(_perso.getActualMapa(), cell)+","+ Camino.getCellYCoord(_perso.getActualMapa(), cell)+"]";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			return;
 		}else
@@ -1306,11 +1306,11 @@ public class Comandos {
 			{
 				cell = Integer.parseInt(infos[2]);
 			}catch(Exception e){};
-			if(cell < 0 || _perso.get_curCarte().getCase(cell) == null)
+			if(cell < 0 || _perso.getActualMapa().getCase(cell) == null)
 			{
-				cell = _perso.get_curCell().getID();
+				cell = _perso.getActualCelda().getID();
 			}
-			String places = _perso.get_curCarte().get_placesStr();
+			String places = _perso.getActualMapa().get_placesStr();
 			String[] p = places.split("\\|");
 			String newPlaces = "";
 			String team0 = "",team1 = "";
@@ -1336,8 +1336,8 @@ public class Comandos {
 				if(cell == GestorEncriptador.cellCode_To_ID(c))continue;
 				newPlaces += c;
 			}
-			_perso.get_curCarte().setPlaces(newPlaces);
-			if(!GestorSQL.guardar_mapa(_perso.get_curCarte()))return;
+			_perso.getActualMapa().setPlaces(newPlaces);
+			if(!GestorSQL.guardar_mapa(_perso.getActualMapa()))return;
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,"Les places ont ete modifiees ("+newPlaces+")");
 			return;
 		}else
@@ -1395,11 +1395,11 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			if(cell <0 || _perso.get_curCarte().getCase(cell) == null || !_perso.get_curCarte().getCase(cell).isWalkable(true))
+			if(cell <0 || _perso.getActualMapa().getCase(cell) == null || !_perso.getActualMapa().getCase(cell).isWalkable(true))
 			{
-				cell = _perso.get_curCell().getID();
+				cell = _perso.getActualCelda().getID();
 			}
-			String places = _perso.get_curCarte().get_placesStr();
+			String places = _perso.getActualMapa().get_placesStr();
 			String[] p = places.split("\\|");
 			boolean already = false;
 			String team0 = "",team1 = "";
@@ -1426,8 +1426,8 @@ public class Comandos {
 			
 			String newPlaces = team0+"|"+team1;
 			
-			_perso.get_curCarte().setPlaces(newPlaces);
-			if(!GestorSQL.guardar_mapa(_perso.get_curCarte()))return;
+			_perso.getActualMapa().setPlaces(newPlaces);
+			if(!GestorSQL.guardar_mapa(_perso.getActualMapa()))return;
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,"Les places ont ete modifiees ("+newPlaces+")");
 			return;
 		}else
@@ -1446,8 +1446,8 @@ public class Comandos {
 				return;
 			}
 			String mess = "Le nombre de groupe a ete fixe";
-			_perso.get_curCarte().setMaxGroup(id);
-			boolean ok = GestorSQL.guardar_mapa(_perso.get_curCarte());
+			_perso.getActualMapa().setMaxGroup(id);
+			boolean ok = GestorSQL.guardar_mapa(_perso.getActualMapa());
 			if(ok)mess += " et a ete sauvegarder a la BDD";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 		}else
@@ -1520,8 +1520,8 @@ public class Comandos {
 				return;
 			}
 			String mess = "L'action a ete ajoute";
-			_perso.get_curCarte().addEndFightAction(type, new Accion(id,args,cond));
-			boolean ok = GestorSQL.agregar_fin_pelea_accion(_perso.get_curCarte().get_id(),type,id,args,cond);
+			_perso.getActualMapa().addEndFightAction(type, new Accion(id,args,cond));
+			boolean ok = GestorSQL.agregar_fin_pelea_accion(_perso.getActualMapa().get_id(),type,id,args,cond);
 			if(ok)mess += " et ajoute a la BDD";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 			return;
@@ -1530,10 +1530,10 @@ public class Comandos {
 		{
 			String groupData = infos[1];
 
-			_perso.get_curCarte().addStaticGroup(_perso.get_curCell().getID(), groupData);
+			_perso.getActualMapa().addStaticGroup(_perso.getActualCelda().getID(), groupData);
 			String str = "Le grouppe a ete fixe";
 			//Sauvegarde DB de la modif
-			if(GestorSQL.guardar_nuevo_grupo_monstruos(_perso.get_curCarte().get_id(),_perso.get_curCell().getID(), groupData))
+			if(GestorSQL.guardar_nuevo_grupo_monstruos(_perso.getActualMapa().get_id(),_perso.getActualCelda().getID(), groupData))
 				str += " et a ete sauvegarde dans la BDD";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 			return;
@@ -1551,8 +1551,8 @@ public class Comandos {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			NPC npc = _perso.get_curCarte().addNpc(id, _perso.get_curCell().getID(), _perso.get_orientation());
-			GestorSalida.GAME_SEND_ADD_NPC_TO_MAP(_perso.get_curCarte(), npc);
+			NPC npc = _perso.getActualMapa().addNpc(id, _perso.getActualCelda().getID(), _perso.get_orientation());
+			GestorSalida.GAME_SEND_ADD_NPC_TO_MAP(_perso.getActualMapa(), npc);
 			String str = "Le PNJ a ete ajoute";
 			if(_perso.get_orientation() == 0
 					|| _perso.get_orientation() == 2
@@ -1560,7 +1560,7 @@ public class Comandos {
 					|| _perso.get_orientation() == 6)
 						str += " mais est invisible (orientation diagonale invalide).";
 			
-			if(GestorSQL.agregar_npc_en_mapa(_perso.get_curCarte().get_id(), id, _perso.get_curCell().getID(), _perso.get_orientation()))
+			if(GestorSQL.agregar_npc_en_mapa(_perso.getActualMapa().get_id(), id, _perso.getActualCelda().getID(), _perso.get_orientation()))
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 			else
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,"Erreur au moment de sauvegarder la position");
@@ -1572,7 +1572,7 @@ public class Comandos {
 			{
 				id = Integer.parseInt(infos[1]);
 			}catch(Exception e){};
-			NPC npc = _perso.get_curCarte().getNPC(id);
+			NPC npc = _perso.getActualMapa().getNPC(id);
 			if(id == 0 || npc == null)
 			{
 				String str = "Npc GUID invalide";
@@ -1581,11 +1581,11 @@ public class Comandos {
 			}
 			int exC = npc.get_cellID();
 			//on l'efface de la map
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_perso.get_curCarte(), id);
-			_perso.get_curCarte().removeNpcOrMobGroup(id);
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_perso.getActualMapa(), id);
+			_perso.getActualMapa().removeNpcOrMobGroup(id);
 			
 			String str = "Le PNJ a ete supprime";
-			if(GestorSQL.eliminar_npc_en_mapa(_perso.get_curCarte().get_id(),exC))
+			if(GestorSQL.eliminar_npc_en_mapa(_perso.getActualMapa().get_id(),exC))
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 			else
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,"Erreur au moment de sauvegarder la position");
@@ -1597,15 +1597,15 @@ public class Comandos {
 			{
 				cellID = Integer.parseInt(infos[1]);
 			}catch(Exception e){};
-			if(cellID == -1 || _perso.get_curCarte().getCase(cellID) == null)
+			if(cellID == -1 || _perso.getActualMapa().getCase(cellID) == null)
 			{
 				String str = "CellID invalide";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
 			
-			_perso.get_curCarte().getCase(cellID).clearOnCellAction();
-			boolean success = GestorSQL.eliminar_celdas(_perso.get_curCarte().get_id(),cellID);
+			_perso.getActualMapa().getCase(cellID).clearOnCellAction();
+			boolean success = GestorSQL.eliminar_celdas(_perso.getActualMapa().get_id(),cellID);
 			String str = "";
 			if(success)	str = "Le trigger a ete retire";
 			else 		str = "Le trigger n'a pas ete retire";
@@ -1628,8 +1628,8 @@ public class Comandos {
 				return;
 			}
 			
-			_perso.get_curCell().addOnCellStopAction(actionID,args, cond);
-			boolean success = GestorSQL.guardar_celdas(_perso.get_curCarte().get_id(),_perso.get_curCell().getID(),actionID,1,args,cond);
+			_perso.getActualCelda().addOnCellStopAction(actionID,args, cond);
+			boolean success = GestorSQL.guardar_celdas(_perso.getActualMapa().get_id(),_perso.getActualCelda().getID(),actionID,1,args,cond);
 			String str = "";
 			if(success)	str = "Le trigger a ete ajoute";
 			else 		str = "Le trigger n'a pas ete ajoute";
@@ -1645,7 +1645,7 @@ public class Comandos {
 				npcGUID = Integer.parseInt(infos[1]);
 				itmID = Integer.parseInt(infos[2]);
 			}catch(Exception e){};
-			NPCModelo npc =  _perso.get_curCarte().getNPC(npcGUID).get_template();
+			NPCModelo npc =  _perso.getActualMapa().getNPC(npcGUID).get_template();
 			if(npcGUID == 0 || itmID == -1 || npc == null)
 			{
 				String str = "NpcGUID ou itmID invalide";
@@ -1669,7 +1669,7 @@ public class Comandos {
 				npcGUID = Integer.parseInt(infos[1]);
 				itmID = Integer.parseInt(infos[2]);
 			}catch(Exception e){};
-			NPCModelo npc =  _perso.get_curCarte().getNPC(npcGUID).get_template();
+			NPCModelo npc =  _perso.getActualMapa().getNPC(npcGUID).get_template();
 			ObjTemplate item =  Mundo.getObjTemplate(itmID);
 			if(npcGUID == 0 || itmID == -1 || npc == null || item == null)
 			{
@@ -1697,14 +1697,14 @@ public class Comandos {
 				if(price > 20000000)price = 20000000;
 				if(price <0)price = 0;
 			}catch(Exception e){};
-			if(size == -1 || owner == -2 || price == -1 || _perso.get_curCarte().getMountPark() != null)
+			if(size == -1 || owner == -2 || price == -1 || _perso.getActualMapa().getMountPark() != null)
 			{
 				String str = "Infos invalides ou map deja config.";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			MountPark MP = new MountPark(owner, _perso.get_curCarte(), _perso.get_curCell().getID(), size, "", -1, price);
-			_perso.get_curCarte().setMountPark(MP);
+			MountPark MP = new MountPark(owner, _perso.getActualMapa(), _perso.getActualCelda().getID(), size, "", -1, price);
+			_perso.getActualMapa().setMountPark(MP);
 			GestorSQL.guardar_cercados(MP);
 			String str = "L'enclos a ete config. avec succes";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);

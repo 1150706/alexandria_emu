@@ -1667,7 +1667,7 @@ public class Mundo {
 			GestorSalida.GAME_SEND_MESSAGE_TO_MAP(carte, Femme.get_name()+" est deja marier!", MainServidor.CONFIG_MOTD_COLOR);
 			return;
 		}
-		GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(perso.get_curCarte(), "", -1, "Pr?tre", perso.get_name()+" acceptez-vous d'?pouser "+getMarried((perso.get_sexe()==1?0:1)).get_name()+" ?");
+		GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(perso.getActualMapa(), "", -1, "Pr?tre", perso.get_name()+" acceptez-vous d'?pouser "+getMarried((perso.get_sexe()==1?0:1)).get_name()+" ?");
 		GestorSalida.GAME_SEND_WEDDING(carte, 617, (Homme==perso?Homme.get_GUID():Femme.get_GUID()), (Homme==perso?Femme.get_GUID():Homme.get_GUID()), IdPretre);
 	}
 	
@@ -1675,12 +1675,12 @@ public class Mundo {
 	{
 		if(isOK > 0)
 		{
-			GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(Homme.get_curCarte(), "", -1, "Pr?tre", "Je d?clare "+Homme.get_name()+" et "+Femme.get_name()+" unis par les liens sacr?s du mariage.");
+			GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(Homme.getActualMapa(), "", -1, "Pr?tre", "Je d?clare "+Homme.get_name()+" et "+Femme.get_name()+" unis par les liens sacr?s du mariage.");
 			Homme.MarryTo(Femme);
 			Femme.MarryTo(Homme);
 		}else
 		{
-			GestorSalida.GAME_SEND_Im_PACKET_TO_MAP(Homme.get_curCarte(), "048;"+Homme.get_name()+"~"+Femme.get_name());
+			GestorSalida.GAME_SEND_Im_PACKET_TO_MAP(Homme.getActualMapa(), "048;"+Homme.get_name()+"~"+Femme.get_name());
 		}
 		Married.get(0).setisOK(0);
 		Married.get(1).setisOK(0);
@@ -1790,18 +1790,18 @@ public class Mundo {
 	
 	public static void addSeller(Personaje p)
 	{
-		if(Seller.get(p.get_curCarte().get_id()) == null)
+		if(Seller.get(p.getActualMapa().get_id()) == null)
 		{
 			ArrayList<Integer> PersoID = new ArrayList<>();
 			PersoID.add(p.get_GUID());
-			Seller.put(p.get_curCarte().get_id(), PersoID);
+			Seller.put(p.getActualMapa().get_id(), PersoID);
 		}else
 		{
 			ArrayList<Integer> PersoID = new ArrayList<>();
-			PersoID.addAll(Seller.get(p.get_curCarte().get_id()));
+			PersoID.addAll(Seller.get(p.getActualMapa().get_id()));
 			PersoID.add(p.get_GUID());
-			Seller.remove(p.get_curCarte().get_id());
-			Seller.put(p.get_curCarte().get_id(), PersoID);
+			Seller.remove(p.getActualMapa().get_id());
+			Seller.put(p.getActualMapa().get_id(), PersoID);
 		}
 	}
 	

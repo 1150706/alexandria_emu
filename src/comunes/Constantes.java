@@ -2902,7 +2902,7 @@ public class Constantes
 		int cellBack = 0;
 		int cellRight = 0;
 		int cellLeft = 0;
-		if(_perso.get_curCarte().getSubArea().get_area().get_id() == 7 || _perso.get_curCarte().getSubArea().get_area().get_id() == 11)
+		if(_perso.getActualMapa().getSubArea().get_area().get_id() == 7 || _perso.getActualMapa().getSubArea().get_area().get_id() == 11)
 		{
 			cellFront = 19;
 			cellBack = -19;
@@ -2915,27 +2915,27 @@ public class Constantes
 			cellRight = 14;
 			cellLeft = -14;
 		}
-		if(_perso.get_curCarte().getCase(_perso.get_curCell().getID()+cellFront).getDroppedItem() == null
-				&& _perso.get_curCarte().GetCases().get(_perso.get_curCell().getID()+cellFront).getPersos().isEmpty()
-				&& _perso.get_curCarte().GetCases().get(_perso.get_curCell().getID()+cellFront).isWalkable(false))
+		if(_perso.getActualMapa().getCase(_perso.getActualCelda().getID()+cellFront).getDroppedItem() == null
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellFront).getPersos().isEmpty()
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellFront).isWalkable(false))
 		{
 			return cellFront;
 		}else
-		if(_perso.get_curCarte().getCase(_perso.get_curCell().getID()-cellBack).getDroppedItem() == null
-				&& _perso.get_curCarte().GetCases().get(_perso.get_curCell().getID()-cellBack).getPersos().isEmpty()
-				&& _perso.get_curCarte().GetCases().get(_perso.get_curCell().getID()-cellBack).isWalkable(false))
+		if(_perso.getActualMapa().getCase(_perso.getActualCelda().getID()-cellBack).getDroppedItem() == null
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellBack).getPersos().isEmpty()
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellBack).isWalkable(false))
 		{
 			return cellBack;
 		}else
-		if(_perso.get_curCarte().getCase(_perso.get_curCell().getID()+cellRight).getDroppedItem() == null
-				&& _perso.get_curCarte().GetCases().get(_perso.get_curCell().getID()+cellRight).getPersos().isEmpty()
-				&& _perso.get_curCarte().GetCases().get(_perso.get_curCell().getID()+cellRight).isWalkable(false))
+		if(_perso.getActualMapa().getCase(_perso.getActualCelda().getID()+cellRight).getDroppedItem() == null
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellRight).getPersos().isEmpty()
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellRight).isWalkable(false))
 		{
 			return cellRight;
 		}else
-		if(_perso.get_curCarte().getCase(_perso.get_curCell().getID()-cellLeft).getDroppedItem() == null
-				&& _perso.get_curCarte().GetCases().get(_perso.get_curCell().getID()-cellLeft).getPersos().isEmpty()
-				&& _perso.get_curCarte().GetCases().get(_perso.get_curCell().getID()-cellLeft).isWalkable(false))
+		if(_perso.getActualMapa().getCase(_perso.getActualCelda().getID()-cellLeft).getDroppedItem() == null
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellLeft).getPersos().isEmpty()
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellLeft).isWalkable(false))
 		{
 			return cellLeft;
 		}

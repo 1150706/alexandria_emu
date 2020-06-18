@@ -28,7 +28,7 @@ import objetos.Oficio.StatsMetier;
 import objetos.Monstruo.MobGroup;
 import objetos.NPCModelo.NPC;
 import objetos.Objeto.ObjTemplate;
-import objetos.Personaje.Group;
+import objetos.Personaje.Grupo;
 import objetos.Cofres;
 
 import realm.RealmServer;
@@ -1575,7 +1575,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_GROUP_CREATE(PrintWriter out, Group g)
+	public static void GAME_SEND_GROUP_CREATE(PrintWriter out, Grupo g)
 	{
 		String packet = "PCK"+g.getChief().get_name();
 		send(out,packet);
@@ -1583,7 +1583,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_PL_PACKET(PrintWriter out, Group g)
+	public static void GAME_SEND_PL_PACKET(PrintWriter out, Grupo g)
 	{
 		String packet = "PL"+g.getChief().get_GUID();
 		send(out,packet);
@@ -1607,12 +1607,12 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ALL_PM_ADD_PACKET(PrintWriter out,Group g)
+	public static void GAME_SEND_ALL_PM_ADD_PACKET(PrintWriter out, Grupo g)
 	{
 		StringBuilder packet = new StringBuilder();
 		packet.append("PM+");
 		boolean first = true;
-		for(Personaje p : g.getPersos())
+		for(Personaje p : g.getMiembrosGrupo())
 		{
 			if(!first) packet.append("|");
 			packet.append(p.parseToPM());
@@ -1623,34 +1623,34 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 	
-	public static void GAME_SEND_PM_ADD_PACKET_TO_GROUP(Group g, Personaje p)
+	public static void GAME_SEND_PM_ADD_PACKET_TO_GROUP(Grupo g, Personaje p)
 	{
 		String packet = "PM+"+p.parseToPM();
-		for(Personaje P : g.getPersos())send(P,packet);
+		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_PM_MOD_PACKET_TO_GROUP(Group g, Personaje p)
+	public static void GAME_SEND_PM_MOD_PACKET_TO_GROUP(Grupo g, Personaje p)
 	{
 		String packet = "PM~"+p.parseToPM();
-		for(Personaje P : g.getPersos())send(P,packet);
+		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_PM_DEL_PACKET_TO_GROUP(Group g, int guid)
+	public static void GAME_SEND_PM_DEL_PACKET_TO_GROUP(Grupo g, int guid)
 	{
 		String packet = "PM-"+guid;
-		for(Personaje P : g.getPersos())send(P,packet);
+		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_cMK_PACKET_TO_GROUP(Group g,String s, int guid, String name, String msg)
+	public static void GAME_SEND_cMK_PACKET_TO_GROUP(Grupo g, String s, int guid, String name, String msg)
 	{
 		String packet = "cMK"+s+"|"+guid+"|"+name+"|"+msg+"|";
-		for(Personaje P : g.getPersos())send(P,packet);
+		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
@@ -2083,7 +2083,7 @@ public class GestorSalida {
 	}
 	
 	public static void GAME_SEND_ZAAPI_PACKET(Personaje perso, String list) {
-		String packet = "Wc" + perso.get_curCarte().get_id()+ "|"+list;
+		String packet = "Wc" + perso.getActualMapa().get_id()+ "|"+list;
 		send(perso, packet);
 		JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
@@ -2237,7 +2237,7 @@ public class GestorSalida {
 	}
 	
 	public static void GAME_SEND_FLAG_PACKET(Personaje perso, Personaje cible) {
-		String packet = "IC"+cible.get_curCarte().getX()+"|"+cible.get_curCarte().getY(); 
+		String packet = "IC"+cible.getActualMapa().getX()+"|"+cible.getActualMapa().getY();
 		send(perso,packet); 
 		if(MainServidor.CONFIG_DEBUG)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
@@ -2354,8 +2354,8 @@ public class GestorSalida {
     public static void GAME_SEND_MERCHANT_LIST(Personaje P, short mapID) {
     	StringBuilder packet = new StringBuilder();
     	packet.append("GM|~");
-    	if(Mundo.getSeller(P.get_curCarte().get_id()) == null) return;
-        for (Integer pID : Mundo.getSeller(P.get_curCarte().get_id())) {
+    	if(Mundo.getSeller(P.getActualMapa().get_id()) == null) return;
+        for (Integer pID : Mundo.getSeller(P.getActualMapa().get_id())) {
         	if(!Mundo.getPersonnage(pID).isOnline() && Mundo.getPersonnage(pID).is_showSeller()) {
         		packet.append(Mundo.getPersonnage(pID).parseToMerchant()).append("|");
             }

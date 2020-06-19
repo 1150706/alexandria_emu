@@ -1284,7 +1284,7 @@ public class GestorSQL {
 
 	public static void crear_montura(Dragopavo DD) {
 		String baseQuery = "REPLACE INTO `datos_montura`(`id`,`color`,`sexo`,`nombre`,`experiencia`,`nivel`," +
-				"`resistencia`,`amor`,`madurez`,`serenidad`,`reproduccion`,`fatiga`,`objetos`," +
+				"`resistencia`,`amor`,`madurez`,`serenidad`,`reproducciones`,`fatiga`,`objetos`," +
 				"`ancestros`,`energia`, `habilidad`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 		try {
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
@@ -1433,7 +1433,7 @@ public class GestorSQL {
 		"`amor` = ?," +
 		"`madurez` = ?," +
 		"`serenidad` = ?," +
-		"`reproduccion` = ?," +
+		"`reproducciones` = ?," +
 		"`fatiga` = ?," +
 		"`energia` = ?," +
 		"`ancestros` = ?," +

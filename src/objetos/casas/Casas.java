@@ -13,7 +13,7 @@ import objetos.Cuenta;
 import objetos.Gremio;
 import objetos.Personaje;
 
-public class House
+public class Casas
 {
 	private final int _id;
 	private final short _map_id;
@@ -31,8 +31,8 @@ public class House
 	private final Map<Integer,Boolean> haveRight = new TreeMap<>();
 
 	
-	public House(int id, short map_id, int cell_id, int owner_id, int sale,
-			int guild_id, int access, String key, int guildrights, int mapid, int caseid) 
+	public Casas(int id, short map_id, int cell_id, int owner_id, int sale,
+				 int guild_id, int access, String key, int guildrights, int mapid, int caseid)
 	{
 		_id = id;
 		_map_id = map_id;
@@ -133,9 +133,9 @@ public class House
 		return _caseid;
 	}
 	
-	public static House get_house_id_by_coord(int map_id, int cell_id)
+	public static Casas get_house_id_by_coord(int map_id, int cell_id)
 	{
-		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
 		{
 			if(house.getValue().get_map_id() == map_id && house.getValue().get_cell_id() == cell_id)
 			{
@@ -148,7 +148,7 @@ public class House
 	public static void LoadHouse(Personaje P, int newMapID)//Affichage des maison + Blason
 	{
 		
-		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
 		{
 			if(house.getValue().get_map_id() == newMapID)
 			{
@@ -220,11 +220,10 @@ public class House
 		}
 	}
 
-    public void HopIn(Personaje P)
-    {
+    public void HopIn(Personaje P) {
         if(P.get_fight() != null || P.get_isTalkingWith() != 0 || P.get_isTradingWith() != 0 || P.getCurJobAction() != null || P.get_curExchange() != null)
             return;
-        House h = P.getInHouse();
+        Casas h = P.getInHouse();
         if(h == null)
             return;
         if(h.get_owner_id() == P.getAccID() || P.get_guild() != null && P.get_guild().get_id() == h.get_guild_id() && canDo(Constantes.H_GNOCODE))
@@ -243,7 +242,7 @@ public class House
     {
         if(P.get_savestat() == 0)
         {
-            House h = P.getInHouse();
+            Casas h = P.getInHouse();
             GestorSQL.guardar_personaje(P, true);
             if(!h.canDo(Constantes.H_OCANTOPEN) && packet.compareTo(h.get_key()) == 0 || isHome)
             {
@@ -271,14 +270,14 @@ public class House
 	
 	public void BuyIt(Personaje P)//Acheter une maison
 	{
-		House h = P.getInHouse();
+		Casas h = P.getInHouse();
 		String str = "CK"+h.get_id()+"|"+h.get_sale();//ID + Prix
 		GestorSalida.GAME_SEND_hOUSE(P, str);
 	}
 
 	public static void HouseAchat(Personaje P)//Acheter une maison
 	{
-		House h = P.getInHouse();
+		Casas h = P.getInHouse();
 
 		if(AlreadyHaveHouse(P))
 		{
@@ -305,15 +304,13 @@ public class House
 		}
 		
 		//Ajoute des kamas dans la banque du vendeur
-		if(h.get_owner_id() > 0)
-		{
+		if(h.get_owner_id() > 0) {
 			Cuenta Seller = Mundo.getCompte(h.get_owner_id());
 			long newbankkamas = Seller.getBankKamas()+h.get_sale()+tKamas;
 			Seller.setBankKamas(newbankkamas);
 			//Petit message pour le prévenir si il est on?
-			if(Seller.get_curPerso() != null)
-			{
-				GestorSalida.GAME_SEND_MESSAGE(Seller.get_curPerso(), "Une maison vous appartenant à été vendue "+h.get_sale()+" kamas.", MainServidor.CONFIG_MOTD_COLOR);
+			if(Seller.get_curPerso() != null) {
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(Seller.get_curPerso(), "1240;" + h.get_sale());
 				GestorSQL.guardar_personaje(Seller.get_curPerso(), true);
 			}
 			GestorSQL.actualizar_datos_cuenta(Seller);
@@ -336,7 +333,7 @@ public class House
 	
 	public void SellIt(Personaje P)//Vendre une maison
 	{
-		House h = P.getInHouse();
+		Casas h = P.getInHouse();
 		if(isHouse(P, h))
 		{
 			String str = "CK"+h.get_id()+"|"+h.get_sale();//ID + Prix
@@ -350,7 +347,7 @@ public class House
 	
 	public static void SellPrice(Personaje P, String packet)//Vendre une maison
 	{
-		House h = P.getInHouse();
+		Casas h = P.getInHouse();
 		int price = Integer.parseInt(packet);	
 		if(h.isHouse(P, h))
 		{
@@ -373,7 +370,7 @@ public class House
 		}
 	}
 
-	public boolean isHouse(Personaje P, House h)//Savoir si c'est sa maison
+	public boolean isHouse(Personaje P, Casas h)//Savoir si c'est sa maison
 	{
 		if(h.get_owner_id() == P.getAccID()) return true;
 		else return false;
@@ -396,7 +393,7 @@ public class House
 	
 	public static void LockHouse(Personaje P, String packet)
 	{
-		House h = P.getInHouse();
+		Casas h = P.getInHouse();
 		if(h.isHouse(P, h))
 		{
 			GestorSQL.codigo_casa(P, h, packet);//Change le code
@@ -413,7 +410,7 @@ public class House
 	{
 		boolean isFirst = true;
 		StringBuilder packet = new StringBuilder();
-		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
 		{
 			if(house.getValue().get_guild_id() == P.get_guild().get_id() && house.getValue().get_guild_rights() > 0)
 			{
@@ -433,7 +430,7 @@ public class House
 	
 	public static boolean AlreadyHaveHouse(Personaje P)
 	{
-		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
 		{
 			if(house.getValue().get_owner_id() == P.getAccID())
 			{
@@ -445,7 +442,7 @@ public class House
 	
 	public static void parseHG(Personaje P, String packet)
 	{
-		House h = P.getInHouse();
+		Casas h = P.getInHouse();
 		
 		if(P.get_guild() == null) return;
 		
@@ -487,7 +484,7 @@ public class House
 	public static byte HouseOnGuild(int GuildID) 
 	{
 		byte i = 0;
-		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
 		{
 			if(house.getValue().get_guild_id() == GuildID)
 			{
@@ -546,7 +543,7 @@ public class House
 	
 	public static void Leave(Personaje P, String packet)
 	{
-		House h = P.getInHouse();
+		Casas h = P.getInHouse();
 		if(!h.isHouse(P, h)) return;
 		int Pguid = Integer.parseInt(packet);
 		Personaje Target = Mundo.getPersonnage(Pguid);
@@ -556,9 +553,9 @@ public class House
 	}
 	
 	
-	public static House get_HouseByPerso(Personaje P)//Connaitre la MAPID + CELLID de sa maison
+	public static Casas get_HouseByPerso(Personaje P)//Connaitre la MAPID + CELLID de sa maison
 	{
-		for(Entry<Integer, House> house : Mundo.getHouses().entrySet())
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
 		{
 			if(house.getValue().get_owner_id() == P.getAccID())
 			{
@@ -570,7 +567,7 @@ public class House
 	
 	public static void removeHouseGuild(int GuildID)
 	{
-		for(Entry<Integer, House> h : Mundo.getHouses().entrySet())
+		for(Entry<Integer, Casas> h : Mundo.getHouses().entrySet())
 		{
 			if(h.getValue().get_guild_id() == GuildID)
 			{

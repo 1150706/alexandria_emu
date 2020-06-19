@@ -23,9 +23,9 @@ object MainServidor {
     @JvmField
     var DB_PASS: String? = null
     @JvmField
-    var STATIC_DB_NAME: String? = null
+    var DB_ESTATICOS: String? = null
     @JvmField
-    var OTHER_DB_NAME: String? = null
+    var DB_DINAMICOS: String? = null
     @JvmField
     var FLOOD_TIME: Long = 60000
     @JvmField
@@ -52,11 +52,11 @@ object MainServidor {
     @JvmField
     var CONFIG_MAX_PERSOS = 5
     @JvmField
-    var CONFIG_START_MAP: Short = 10298
+    var MAPA_INICIO_PERSONALIZADO: Short = 10298
     @JvmField
     var CONFIG_DD_LVL_DEPART: Short = 100
     @JvmField
-    var CONFIG_START_CELL = 314
+    var CALDA_INICIO_PERSONALIZADA = 314
     @JvmField
     var CONFIG_MAP_SHOP: Short = 10114
     @JvmField
@@ -76,15 +76,15 @@ object MainServidor {
     @JvmField
     var CONFIG_ALLOW_MULTI = false
     @JvmField
-    var CONFIG_START_LEVEL = 1
+    var NIVEL_DE_INICIO = 1
     @JvmField
-    var CONFIG_START_KAMAS = 0
+    var KAMAS_DE_INICIO = 0
     @JvmField
     var CONFIG_KAMASMIN = 101
     @JvmField
     var CONFIG_KAMASMAX = 10000
     @JvmField
-    var CONFIG_SAVE_TIME = 10 * 60 * 10000
+    var TIEMPO_DE_GUARDADO = 10 * 60 * 10000
     @JvmField
     var CONFIG_DROP = 1
     @JvmField
@@ -114,11 +114,11 @@ object MainServidor {
     @JvmField
     var HONOR = 1
     @JvmField
-    var XP_METIER = 1
+    var XP_OFICIOS = 1
     @JvmField
     var CONFIG_CUSTOM_STARTMAP = false
     @JvmField
-    var CONFIG_USE_MOBS = false
+    var USAR_MOOBS = false
     @JvmField
     var CONFIG_XP_DEFI = true
     @JvmField
@@ -327,14 +327,14 @@ object MainServidor {
                     if (value.equals("false", ignoreCase = true)) {
                         CONFIG_TAILLE_VAR = false
                     }
-                } else if (param.equals("USE_CUSTOM_START", ignoreCase = true)) {
+                } else if (param.equals("USAR_MAPA_INICIO_PERSONALIZADO", ignoreCase = true)) {
                     if (value.equals("true", ignoreCase = true)) {
                         CONFIG_CUSTOM_STARTMAP = true
                     }
-                } else if (param.equals("START_KAMAS", ignoreCase = true)) {
-                    CONFIG_START_KAMAS = value.toInt()
-                    if (CONFIG_START_KAMAS < 0) CONFIG_START_KAMAS = 0
-                    if (CONFIG_START_KAMAS > 1000000000) CONFIG_START_KAMAS = 1000000000
+                } else if (param.equals("KAMAS_DE_INICIO", ignoreCase = true)) {
+                    KAMAS_DE_INICIO = value.toInt()
+                    if (KAMAS_DE_INICIO < 0) KAMAS_DE_INICIO = 0
+                    if (KAMAS_DE_INICIO > 1000000000) KAMAS_DE_INICIO = 1000000000
                 } else if (param.equals("KAMASMAX", ignoreCase = true)) {
                     CONFIG_KAMASMAX = value.toInt()
                     if (CONFIG_KAMASMAX < 0) CONFIG_KAMASMAX = 0
@@ -343,12 +343,12 @@ object MainServidor {
                     CONFIG_KAMASMIN = value.toInt()
                     if (CONFIG_KAMASMIN < 0) CONFIG_KAMASMIN = 0
                     if (CONFIG_KAMASMIN > 1000000000) CONFIG_KAMASMIN = 1000000000
-                } else if (param.equals("START_LEVEL", ignoreCase = true)) {
-                    CONFIG_START_LEVEL = value.toInt()
-                    if (CONFIG_START_LEVEL < 1) CONFIG_START_LEVEL = 1
-                    if (CONFIG_START_LEVEL > 200) CONFIG_START_LEVEL = 200
-                } else if (param.equals("START_MAP", ignoreCase = true)) {
-                    CONFIG_START_MAP = value.toShort()
+                } else if (param.equals("NVEL_DE_INICIO", ignoreCase = true)) {
+                    NIVEL_DE_INICIO = value.toInt()
+                    if (NIVEL_DE_INICIO < 1) NIVEL_DE_INICIO = 1
+                    if (NIVEL_DE_INICIO > 200) NIVEL_DE_INICIO = 200
+                } else if (param.equals("MAPA_INICIO_PERSONALIZADO", ignoreCase = true)) {
+                    MAPA_INICIO_PERSONALIZADO = value.toShort()
                 } else if (param.equals("DD_LVL_DEPART", ignoreCase = true)) {
                     CONFIG_DD_LVL_DEPART = value.toShort()
                 } else if (param.equals("MAP_PVP", ignoreCase = true)) {
@@ -367,14 +367,14 @@ object MainServidor {
                     CONFIG_MAP_SHOP = value.toShort()
                 } else if (param.equals("CELL_SHOP", ignoreCase = true)) {
                     CONFIG_CELL_SHOP = value.toShort()
-                } else if (param.equals("START_CELL", ignoreCase = true)) {
-                    CONFIG_START_CELL = value.toInt()
+                } else if (param.equals("CELDA_INICIO_PERSONALIZADA", ignoreCase = true)) {
+                    CALDA_INICIO_PERSONALIZADA = value.toInt()
                 } else if (param.equals("KAMAS", ignoreCase = true)) {
                     KAMAS = value.toInt()
                 } else if (param.equals("HONOR", ignoreCase = true)) {
                     HONOR = value.toInt()
-                } else if (param.equals("SAVE_TIME", ignoreCase = true)) {
-                    CONFIG_SAVE_TIME = value.toInt() * 60 * 1000000000
+                } else if (param.equals("TIEMPO_DE_GUARDADO", ignoreCase = true)) {
+                    TIEMPO_DE_GUARDADO = value.toInt() * 60 * 1000000000
                 } else if (param.equals("XP_PVM", ignoreCase = true)) {
                     XP_PVM = value.toInt()
                 } else if (param.equals("XP_PVP", ignoreCase = true)) {
@@ -405,8 +405,8 @@ object MainServidor {
                     CONFIG_MOTD_COLOR = value
                 } else if (param.equals("PUB_COLOR", ignoreCase = true)) {
                     CONFIG_PUB_COLOR = value
-                } else if (param.equals("XP_METIER", ignoreCase = true)) {
-                    XP_METIER = value.toInt()
+                } else if (param.equals("XP_OFICIOS", ignoreCase = true)) {
+                    XP_OFICIOS = value.toInt()
                 } else if (param.equals("PUERTO_DE_JUEGO", ignoreCase = true)) {
                     PUERTO_DE_JUEGO = value.toInt()
                 } else if (param.equals("HELP", ignoreCase = true)) {
@@ -428,14 +428,14 @@ object MainServidor {
                 } else if (param.equals("DB_PASS", ignoreCase = true)) {
                     if (value == null) value = ""
                     DB_PASS = value
-                } else if (param.equals("STATIC_DB_NAME", ignoreCase = true)) {
-                    STATIC_DB_NAME = value
-                } else if (param.equals("OTHER_DB_NAME", ignoreCase = true)) {
-                    OTHER_DB_NAME = value
-                } else if (param.equals("MAX_PERSO_PAR_COMPTE", ignoreCase = true)) {
+                } else if (param.equals("DB_ESTATICOS", ignoreCase = true)) {
+                    DB_ESTATICOS = value
+                } else if (param.equals("DB_DINAMICOS", ignoreCase = true)) {
+                    DB_DINAMICOS = value
+                } else if (param.equals("MAXIMO_PERSONAJES_POR_CUENTA", ignoreCase = true)) {
                     CONFIG_MAX_PERSOS = value.toInt()
-                } else if (param.equals("USE_MOBS", ignoreCase = true)) {
-                    CONFIG_USE_MOBS = value.equals("true", ignoreCase = true)
+                } else if (param.equals("USAR_MOOBS", ignoreCase = true)) {
+                    USAR_MOOBS = value.equals("true", ignoreCase = true)
                 } else if (param.equals("ALLOW_MULTI_ACCOUNT", ignoreCase = true)) {
                     CONFIG_ALLOW_MULTI = value.equals("true", ignoreCase = true)
                 } else if (param.equals("LOAD_ACTION_DELAY", ignoreCase = true)) {
@@ -468,7 +468,7 @@ object MainServidor {
                     CONFIG_ALLOW_PLAYER_COMMANDS = value.equals("true", ignoreCase = true)
                 }
             }
-            if (STATIC_DB_NAME == null || OTHER_DB_NAME == null || DB_HOST == null || DB_PASS == null || DB_USER == null) {
+            if (DB_ESTATICOS == null || DB_DINAMICOS == null || DB_HOST == null || DB_PASS == null || DB_USER == null) {
                 throw Exception()
             }
         } catch (e: Exception) {

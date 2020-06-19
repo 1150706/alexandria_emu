@@ -36,7 +36,7 @@ public class JuegoServidor implements Runnable{
 						t.start();
 					}
 				}
-			}, MainServidor.CONFIG_SAVE_TIME, MainServidor.CONFIG_SAVE_TIME);
+			}, MainServidor.TIEMPO_DE_GUARDADO, MainServidor.TIEMPO_DE_GUARDADO);
 
 			Timer _movimientodemonsters = new Timer();
 			_movimientodemonsters.schedule(new TimerTask() {

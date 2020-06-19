@@ -20,8 +20,8 @@ import objetos.Oficio.StatsMetier;
 import objetos.NPCModelo.*;
 import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Grupo;
+import objetos.casas.Casas;
 import objetos.casas.Cofres;
-import objetos.casas.House;
 import objetos.hechizos.EfectoHechizo;
 import objetos.hechizos.Hechizos.SortStats;
 import comunes.*;
@@ -201,26 +201,26 @@ public class JuegoThread implements Runnable {
 //Acheter la maison
 			case 'B' -> {
 				packet = packet.substring(2);
-				House.HouseAchat(_perso);
+				Casas.HouseAchat(_perso);
 			}
 //Maison de guilde
 			case 'G' -> {
 				packet = packet.substring(2);
 				if (packet.isEmpty()) packet = null;
-				House.parseHG(_perso, packet);
+				Casas.parseHG(_perso, packet);
 			}
 //Quitter/Expulser de la maison
 			case 'Q' -> {
 				packet = packet.substring(2);
-				House.Leave(_perso, packet);
+				Casas.Leave(_perso, packet);
 			}
 //Modification du prix de vente
 			case 'S' -> {
 				packet = packet.substring(2);
-				House.SellPrice(_perso, packet);
+				Casas.SellPrice(_perso, packet);
 			}
 //Fermer fenetre d'achat
-			case 'V' -> House.closeBuy(_perso);
+			case 'V' -> Casas.closeBuy(_perso);
 		}
 	}
 	
@@ -228,7 +228,7 @@ public class JuegoThread implements Runnable {
 	{
 		switch (packet.charAt(1)) {
 //Fermer fenetre du code
-			case 'V' -> House.closeCode(_perso);
+			case 'V' -> Casas.closeCode(_perso);
 //Envoi du code
 			case 'K' -> House_code(packet);
 		}
@@ -243,7 +243,7 @@ public class JuegoThread implements Runnable {
 				if (_perso.getInTrunk() != null)
 					Cofres.OpenTrunk(_perso, packet, false);
 				else
-					House.OpenHouse(_perso, packet, false);
+					Casas.OpenHouse(_perso, packet, false);
 			}
 //Changement du code
 			case '1' -> {
@@ -251,7 +251,7 @@ public class JuegoThread implements Runnable {
 				if (_perso.getInTrunk() != null)
 					Cofres.LockTrunk(_perso, packet);
 				else
-					House.LockHouse(_perso, packet);
+					Casas.LockHouse(_perso, packet);
 			}
 		}
 	}
@@ -630,7 +630,7 @@ public class JuegoThread implements Runnable {
 		
 		if(_perso.get_fight() != null || _perso.is_away())return;
 		int HouseID = Integer.parseInt(packet);
-		House h = Mundo.getHouses().get(HouseID);
+		Casas h = Mundo.getHouses().get(HouseID);
 		if(h == null) return;
 		if(_perso.get_guild().get_id() != h.get_guild_id()) 
 		{
@@ -902,7 +902,7 @@ public class JuegoThread implements Runnable {
 //General
 			case 'G' -> GestorSalida.GAME_SEND_gIG_PACKET(_perso, _perso.get_guild());
 //House
-			case 'H' -> GestorSalida.GAME_SEND_gIH_PACKET(_perso, House.parseHouseToGuild(_perso));
+			case 'H' -> GestorSalida.GAME_SEND_gIH_PACKET(_perso, Casas.parseHouseToGuild(_perso));
 //Members
 			case 'M' -> GestorSalida.GAME_SEND_gIM_PACKET(_perso, _perso.get_guild(), '+');
 //Perco
@@ -3850,7 +3850,7 @@ public class JuegoThread implements Runnable {
 		//Enclos
 		GestorSalida.GAME_SEND_Rp_PACKET(_perso, _perso.getActualMapa().getMountPark());
 		//Maisons
-		House.LoadHouse(_perso, _perso.getActualMapa().get_id());
+		Casas.LoadHouse(_perso, _perso.getActualMapa().get_id());
 		//Objets sur la carte
 		GestorSalida.GAME_SEND_MAP_GMS_PACKETS(_perso.getActualMapa(), _perso);
 		GestorSalida.GAME_SEND_MAP_MOBS_GMS_PACKETS(_perso.get_compte().getGameThread().get_out(), _perso.getActualMapa());
@@ -3928,7 +3928,7 @@ public class JuegoThread implements Runnable {
 	private void house_action(String packet)
 	{
 		int actionID = Integer.parseInt(packet.substring(5));
-		House h = _perso.getInHouse();
+		Casas h = _perso.getInHouse();
 		if(h == null) return;
 		switch (actionID) {
 //V�rouiller maison

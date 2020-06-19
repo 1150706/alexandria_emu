@@ -19,8 +19,8 @@ import comunes.Mundo.*;
 import objetos.*;
 import objetos.NPCModelo.*;
 import objetos.Objeto.*;
+import objetos.casas.Casas;
 import objetos.casas.Cofres;
-import objetos.casas.House;
 import objetos.hechizos.Hechizos;
 import objetos.hechizos.Hechizos.*;
 import objetos.Mapa.*;
@@ -41,7 +41,7 @@ public class GestorSQL {
 			return null;
 		
 		Connection DB;
-		if(DBNAME.equals(MainServidor.OTHER_DB_NAME))
+		if(DBNAME.equals(MainServidor.DB_DINAMICOS))
 			DB = _dinamicos;
 		else
 			DB = _estaticos;
@@ -92,7 +92,7 @@ public class GestorSQL {
 			configDinamica.setDataSourceClassName("org.mariadb.jdbc.MySQLDataSource");
 			configDinamica.addDataSourceProperty("serverName", MainServidor.DB_HOST);
 			configDinamica.addDataSourceProperty("port", 3306);
-			configDinamica.addDataSourceProperty("databaseName", MainServidor.OTHER_DB_NAME);
+			configDinamica.addDataSourceProperty("databaseName", MainServidor.DB_DINAMICOS);
 			configDinamica.addDataSourceProperty("user", MainServidor.DB_USER);
 			configDinamica.addDataSourceProperty("password", MainServidor.DB_PASS);
 			configDinamica.setAutoCommit(true);
@@ -104,7 +104,7 @@ public class GestorSQL {
 			configEstatica.setDataSourceClassName("org.mariadb.jdbc.MySQLDataSource");
 			configEstatica.addDataSourceProperty("serverName", MainServidor.DB_HOST);
 			configEstatica.addDataSourceProperty("port", 3306);
-			configEstatica.addDataSourceProperty("databaseName", MainServidor.STATIC_DB_NAME);
+			configEstatica.addDataSourceProperty("databaseName", MainServidor.DB_ESTATICOS);
 			configEstatica.addDataSourceProperty("user", MainServidor.DB_USER);
 			configEstatica.addDataSourceProperty("password", MainServidor.DB_PASS);
 			configEstatica.setAutoCommit(true);
@@ -170,7 +170,7 @@ public class GestorSQL {
 
 	public static void cargar_recetas() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_recetas`;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_recetas`;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				ArrayList<Couple<Integer,Integer>> m = new ArrayList<>();
 				
@@ -197,7 +197,7 @@ public class GestorSQL {
 	
 	public static void cargar_retos() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_retos`;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_retos`;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				String chal = RS.getInt("id") + "," +
 						RS.getInt("gananciaxp") + "," +
@@ -215,7 +215,7 @@ public class GestorSQL {
 
 	public static void cargar_gremios() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_gremio;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_gremio;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				Mundo.addGuild
 				(new Gremio(
@@ -238,7 +238,7 @@ public class GestorSQL {
 
 	public static void cargar_miembros_gremio() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_miembros_gremio;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_miembros_gremio;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				Gremio G = Mundo.getGuild(RS.getInt("gremio"));
 				if(G == null)continue;
@@ -253,7 +253,7 @@ public class GestorSQL {
 
 	public static void cargar_montura() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_montura;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_montura;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				Mundo.addDragopavo(new Dragopavo(
 						RS.getInt("id"),
@@ -282,7 +282,7 @@ public class GestorSQL {
 
 	public static void cargar_drops() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_drops;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_drops;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				Monstruo MT = Mundo.getMonstre(RS.getInt("monstruo"));
 				MT.addDrop(new Drop(
@@ -300,7 +300,7 @@ public class GestorSQL {
 
 	public static void cargar_sets() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_sets;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_sets;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				Mundo.addItemSet(new ItemSet(
 								RS.getInt("id"),
@@ -317,7 +317,7 @@ public class GestorSQL {
 
 	public static void LOAD_IOTEMPLATE() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_interactivos;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_interactivos;", MainServidor.DB_ESTATICOS);
 			while(RS.next())
 			{
 				Mundo.addIOTemplate(new IOTemplate(
@@ -337,7 +337,7 @@ public class GestorSQL {
 	public static int cargar_cercados() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cercados;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cercados;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapa"));
 				if(map == null)continue;
@@ -361,7 +361,7 @@ public class GestorSQL {
 
 	public static void cargar_oficios() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_oficios;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_oficios;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				Mundo.addJob(new Oficio(
 							RS.getInt("id"),
@@ -378,7 +378,7 @@ public class GestorSQL {
 	
 	public static void cargar_area() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_area;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_area;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				Area A = new Area(
 						RS.getInt("id"),
@@ -397,7 +397,7 @@ public class GestorSQL {
 
 	public static void cargar_subareas() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_subareas;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_subareas;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				SubArea SA = new SubArea(
 						RS.getInt("id"),
@@ -419,7 +419,7 @@ public class GestorSQL {
 	public static int cargar_npc() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapa"));
 				if(map == null)continue;
@@ -438,7 +438,7 @@ public class GestorSQL {
 	public static int cargar_recaudadores() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_recaudadores;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_recaudadores;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapid"));
 				if(map == null)continue;
@@ -469,12 +469,12 @@ public class GestorSQL {
 	public static int cargar_casas() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_casas;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_casas;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapa"));
 				if(map == null)continue;
 				
-				Mundo.addHouse(new House(
+				Mundo.addHouse(new Casas(
 						RS.getInt("id"),
 						RS.getShort("mapa"),
 						RS.getInt("celda"),
@@ -500,7 +500,7 @@ public class GestorSQL {
 
 	public static void cargar_cuentas() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta;", MainServidor.DB_DINAMICOS);
 			String baseQuery = "UPDATE datos_cuenta SET `actualizarnecesita` = 0 WHERE id = ?;";
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			while(RS.next()) {
@@ -537,7 +537,7 @@ public class GestorSQL {
 
 	public static int getSiguienteIDPersonaje() {
 		try {
-			ResultSet RS = EjecutarConsulta("SELECT id FROM datos_personajes ORDER BY id DESC LIMIT 1;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = EjecutarConsulta("SELECT id FROM datos_personajes ORDER BY id DESC LIMIT 1;", MainServidor.DB_DINAMICOS);
 			if(!RS.first())return 1;
 			int guid = RS.getInt("id");
 			guid++;
@@ -553,7 +553,7 @@ public class GestorSQL {
 
 	public static void cargar_personaje_por_cuenta(int accID) {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_personajes WHERE cuenta = '"+accID+"';", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_personajes WHERE cuenta = '"+accID+"';", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				TreeMap<Integer,Integer> stats = new TreeMap<>();
 				stats.put(Constantes.STATS_ADD_VITA, RS.getInt("vitalidad"));
@@ -622,7 +622,7 @@ public class GestorSQL {
 
 	public static void cargar_personaje() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_personajes;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_personajes;", MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				TreeMap<Integer,Integer> stats = new TreeMap<>();
 				stats.put(Constantes.STATS_ADD_VITA, RS.getInt("vitalidad"));
@@ -766,7 +766,7 @@ public class GestorSQL {
 
 	public static void cargar_experiencias() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_experiencia;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_experiencia;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) Mundo.addExpLevel(RS.getInt("nivel"),new Mundo.ExpLevel(RS.getLong("personaje"),RS.getInt("oficio"),RS.getInt("dragopavo"),RS.getInt("alineacion")));
 			CerrarResultado(RS);
 		}catch(SQLException e) {
@@ -778,7 +778,7 @@ public class GestorSQL {
 	public static int cargar_celdas() {
 		try {
 			int nbr = 0;
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_celdas_accion`", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_celdas_accion`", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				if(Mundo.getCarte(RS.getShort("mapa")) == null) continue;
 				if(Mundo.getCarte(RS.getShort("mapa")).getCase(RS.getInt("celda")) == null) continue;
@@ -802,7 +802,7 @@ public class GestorSQL {
 	public static void cargar_mapas() {
 		try {
 			ResultSet RS;
-			RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_mapas LIMIT "+ Constantes.LIMITE_MAPAS +";", MainServidor.STATIC_DB_NAME);
+			RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_mapas LIMIT "+ Constantes.LIMITE_MAPAS +";", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 					Mundo.addCarte(new Mapa(
 							RS.getShort("id"),
@@ -819,7 +819,7 @@ public class GestorSQL {
 							RS.getByte("tamañogrupo")));
 			}
 			GestorSQL.CerrarResultado(RS);
-			RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_grupo_mobs;", MainServidor.STATIC_DB_NAME);
+			RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_grupo_mobs;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 					Mapa c = Mundo.getCarte(RS.getShort("mapa"));
 					if(c == null)continue;
@@ -973,7 +973,7 @@ public class GestorSQL {
 
 	public static void cargar_hechizos() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_hechizos;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_hechizos;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				int id = RS.getInt("id");
 				Hechizos sort = new Hechizos(id,RS.getInt("sprite"),RS.getString("infosprite"),RS.getString("objetivoefecto"));
@@ -1004,7 +1004,7 @@ public class GestorSQL {
 
 	public static void cargar_objetos_modelo() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objeto_modelo;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objeto_modelo;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 					Mundo.addObjTemplate(new ObjTemplate(
 							RS.getInt("id"),
@@ -1070,7 +1070,7 @@ public class GestorSQL {
 
 	public static void cargar_monstruo_modelo() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_monstruos;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_monstruos;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				int id = RS.getInt("id");
 				int gfxID = RS.getInt("gfx");
@@ -1099,7 +1099,7 @@ public class GestorSQL {
 
 	public static void cargar_npc_modelo() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_modelo;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_modelo;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				int id = RS.getInt("id");
 				int bonusValue = RS.getInt("bonificacion");
@@ -1157,7 +1157,7 @@ public class GestorSQL {
 
 	public static void cargar_preguntas_npc() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_pregunta;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_pregunta;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				Mundo.addNPCQuestion(new NPC_question(
 						RS.getInt("id"),
@@ -1175,7 +1175,7 @@ public class GestorSQL {
 
 	public static void cargar_respuestas_npc() {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_respuesta;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_respuesta;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				int id = RS.getInt("id");
 				int type = RS.getInt("tipo");
@@ -1194,7 +1194,7 @@ public class GestorSQL {
 	public static int cargar_acciones_fin_pelea() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_fin_pelea_accion;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_fin_pelea_accion;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapa"));
 				if(map == null)continue;
@@ -1214,7 +1214,7 @@ public class GestorSQL {
 	public static int cargar_accion_objetos() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_accion;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_accion;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				int id = RS.getInt("modelo");
 				int type = RS.getInt("tipo");
@@ -1235,7 +1235,7 @@ public class GestorSQL {
 	public static void cargando_objetos(String ids) {
 		String req = "SELECT * FROM datos_objetos WHERE id IN ("+ids+");";
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta(req, MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta(req, MainServidor.DB_DINAMICOS);
 			while(RS.next()) {
 				int guid 	= RS.getInt("id");
 				int tempID 	= RS.getInt("modelo");
@@ -1327,7 +1327,7 @@ public class GestorSQL {
 
 	public static void cargar_cuenta_por_id(int user) {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta WHERE `id` = '"+user+"';", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta WHERE `id` = '"+user+"';", MainServidor.DB_DINAMICOS);
 			String baseQuery = "UPDATE datos_cuenta SET `actualizarnecesita` = 0 WHERE id = ?;";
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			while(RS.next()) {
@@ -1366,7 +1366,7 @@ public class GestorSQL {
 
 	public static void Cargar_cuenta_por_usuario(String user) {
 		try {
-			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta WHERE `cuenta` LIKE '"+user+"';", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta WHERE `cuenta` LIKE '"+user+"';", MainServidor.DB_DINAMICOS);
 			String baseQuery = "UPDATE datos_cuenta SET `actualizarnecesita` = 0 WHERE id = ?;";
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			
@@ -1783,7 +1783,7 @@ public class GestorSQL {
 	public static int isPersoInGuild(int guid) {
 		int guildId = -1;
 		try {
-			ResultSet GuildQuery = GestorSQL.EjecutarConsulta("SELECT gremio FROM `datos_miembros_gremio` WHERE id ="+guid+";", MainServidor.OTHER_DB_NAME);
+			ResultSet GuildQuery = GestorSQL.EjecutarConsulta("SELECT gremio FROM `datos_miembros_gremio` WHERE id ="+guid+";", MainServidor.DB_DINAMICOS);
 			boolean found = GuildQuery.first();
 			if(found)
 				guildId = GuildQuery.getInt("gremio");
@@ -1799,7 +1799,7 @@ public class GestorSQL {
 		int guildId = -1;
 		int guid = -1;
 		try {
-			ResultSet GuildQuery = GestorSQL.EjecutarConsulta("SELECT gremio,id FROM `datos_miembros_gremio` WHERE nombre ='"+name+"';", MainServidor.OTHER_DB_NAME);
+			ResultSet GuildQuery = GestorSQL.EjecutarConsulta("SELECT gremio,id FROM `datos_miembros_gremio` WHERE nombre ='"+name+"';", MainServidor.DB_DINAMICOS);
 			boolean found = GuildQuery.first();
 			if(found) {
 				guildId = GuildQuery.getInt("gremio");
@@ -1891,7 +1891,7 @@ public class GestorSQL {
 			PreparedStatement p;
 			/*FIN*/
 			try {
-				ResultSet RS = EjecutarConsulta("SELECT * FROM datos_acciones_tiempo_real;", MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT * FROM datos_acciones_tiempo_real;", MainServidor.DB_DINAMICOS);
 				while(RS.next()) {
 					perso = Mundo.getPersonnage(RS.getInt("personaje"));
 					if(perso == null) {
@@ -2059,7 +2059,7 @@ public class GestorSQL {
 
 	public static void cargar_maximo_de_objetos() {
 		    try {
-		      ResultSet RS = EjecutarConsulta("SELECT * FROM datos_objetos;", MainServidor.OTHER_DB_NAME);
+		      ResultSet RS = EjecutarConsulta("SELECT * FROM datos_objetos;", MainServidor.DB_DINAMICOS);
 		      while (RS.next()) {
 		        int guid = RS.getInt("id");
 		        int tempID = RS.getInt("modelo");
@@ -2118,7 +2118,7 @@ public class GestorSQL {
 			return exist;
 		}
 
-		public static void comprar_casa(Personaje P, House h) {
+		public static void comprar_casa(Personaje P, Casas h) {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `venta`='0', `dueño`=?, `gremio`='0', `acceso`='0', `llave`='-', `derechosgremio`='0' WHERE `id`=?;";
 			try {
@@ -2157,7 +2157,7 @@ public class GestorSQL {
 			}
 		}
 
-		public static void vender_casa(House h, int price) {
+		public static void vender_casa(Casas h, int price) {
 			h.set_sale(price);
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `venta`=? WHERE `id`=?;";
@@ -2173,7 +2173,7 @@ public class GestorSQL {
 			}
 		}
 
-		public static void codigo_casa(Personaje P, House h, String packet) {
+		public static void codigo_casa(Personaje P, Casas h, String packet) {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `llave`=? WHERE `id`=? AND dueño=?;";
 			try {
@@ -2190,7 +2190,7 @@ public class GestorSQL {
 			}
 		}
 
-		public static void casa_gremio(House h, int GuildID, int GuildRights) {
+		public static void casa_gremio(Casas h, int GuildID, int GuildRights) {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `gremio`=?, `derechosgremio`=? WHERE `id`=?;";
 			try {
@@ -2222,7 +2222,7 @@ public class GestorSQL {
 			}
 		}
 
-		public static void actualizar_casa(House h) {
+		public static void actualizar_casa(Casas h) {
 			String baseQuery = "UPDATE `datos_casas` SET `dueño` = ?, `venta` = ?, `gremio` = ?, `acceso` = ?, `llave` = ?, `derechosgremio` = ? WHERE id = ?;";
 			try {
 				PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
@@ -2245,7 +2245,7 @@ public class GestorSQL {
 			int i = -50;//Pour éviter les conflits avec touts autre NPC
 			try {
 				String query = "SELECT `id` FROM `datos_recaudadores` ORDER BY `id` ASC LIMIT 0 , 1;";
-				ResultSet RS = EjecutarConsulta(query, MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta(query, MainServidor.DB_DINAMICOS);
 				while (RS.next()) {
 					i = RS.getInt("guid")-1; 
 				}
@@ -2263,7 +2263,7 @@ public class GestorSQL {
 			StringBuilder brak = new StringBuilder();
 			StringBuilder neutral = new StringBuilder();
 			try {
-				ResultSet RS = GestorSQL.EjecutarConsulta("SELECT mapa, alineacion FROM datos_zappis;", MainServidor.STATIC_DB_NAME);
+				ResultSet RS = GestorSQL.EjecutarConsulta("SELECT mapa, alineacion FROM datos_zappis;", MainServidor.DB_ESTATICOS);
 				while (RS.next()) {
 					if(RS.getInt("alineacion") == Constantes.ALIGNEMENT_BONTARIEN) {
 						bonta.append(RS.getString("mapa"));
@@ -2293,7 +2293,7 @@ public class GestorSQL {
 		public static int cargar_zaaps() {
 			int i = 0;
 			try {
-				ResultSet RS = GestorSQL.EjecutarConsulta("SELECT mapa, celda FROM datos_zaaps;", MainServidor.STATIC_DB_NAME);
+				ResultSet RS = GestorSQL.EjecutarConsulta("SELECT mapa, celda FROM datos_zaaps;", MainServidor.DB_ESTATICOS);
 				while (RS.next()) {
 					Constantes.ZAAPS.put(RS.getInt("mapa"), RS.getInt("celda"));
 					i++;
@@ -2308,7 +2308,7 @@ public class GestorSQL {
 
 		public static int siguiente_id_objeto() {
 			try {
-				ResultSet RS = EjecutarConsulta("SELECT MAX(id) AS max FROM datos_objetos;", MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT MAX(id) AS max FROM datos_objetos;", MainServidor.DB_DINAMICOS);
 				int guid = 0;
 				boolean found = RS.first();
 				if(found)
@@ -2326,7 +2326,7 @@ public class GestorSQL {
 		public static int cargar_ip_baneadas() {
 			int i = 0;
 			try {
-				ResultSet RS = EjecutarConsulta("SELECT ip FROM datos_ipbaneadas;", MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT ip FROM datos_ipbaneadas;", MainServidor.DB_DINAMICOS);
 				while (RS.next()) {
 					Constantes.BAN_IP += RS.getString("ip");
 					if(!RS.isLast()) Constantes.BAN_IP += ",";
@@ -2357,7 +2357,7 @@ public class GestorSQL {
 
 		public static void cargar_mercadillos() {
 			try {
-				ResultSet RS = EjecutarConsulta("SELECT * FROM `datos_mercadillos` ORDER BY id ASC", MainServidor.STATIC_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT * FROM `datos_mercadillos` ORDER BY id ASC", MainServidor.DB_ESTATICOS);
 				while(RS.next()) {
 					Mundo.addHdv(new Mercadillo(
 									RS.getInt("mapa"),
@@ -2368,7 +2368,7 @@ public class GestorSQL {
 									RS.getString("categoria")));
 					
 				}
-				RS = EjecutarConsulta("SELECT id MAX FROM `datos_mercadillos`", MainServidor.STATIC_DB_NAME);
+				RS = EjecutarConsulta("SELECT id MAX FROM `datos_mercadillos`", MainServidor.DB_ESTATICOS);
 				RS.first();
 				Mundo.setNextHdvID(RS.getInt("MAX"));
 				CerrarResultado(RS);
@@ -2381,7 +2381,7 @@ public class GestorSQL {
 		public static void cargar_objetos_mercadillos() {
 			try {
 				long time1 = System.currentTimeMillis();	//TIME
-				ResultSet RS = EjecutarConsulta("SELECT i.* FROM `datos_objetos` AS i,`datos_objetos_mercadillo` AS h WHERE i.id = h.objeto", MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT i.* FROM `datos_objetos` AS i,`datos_objetos_mercadillo` AS h WHERE i.id = h.objeto", MainServidor.DB_DINAMICOS);
 				//Load items
 				while(RS.next()) {
 					int guid 	= RS.getInt("id");
@@ -2393,7 +2393,7 @@ public class GestorSQL {
 				}
 				
 				//Load HDV entry
-				RS = EjecutarConsulta("SELECT * FROM `datos_objetos_mercadillo`", MainServidor.OTHER_DB_NAME);
+				RS = EjecutarConsulta("SELECT * FROM `datos_objetos_mercadillo`", MainServidor.DB_DINAMICOS);
 				while(RS.next()) {
 					Mercadillo tempHdv = Mundo.getHdv(RS.getInt("mapa"));
 					if(tempHdv == null)continue;
@@ -2460,7 +2460,7 @@ public class GestorSQL {
 
 		public static void cargar_animaciones() {
 			try {
-				ResultSet RS = EjecutarConsulta("SELECT * FROM datos_animaciones;", MainServidor.STATIC_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT * FROM datos_animaciones;", MainServidor.DB_ESTATICOS);
 				while(RS.next()) {
 					Mundo.addAnimation(new Animaciones(
 							RS.getInt("id"),
@@ -2480,7 +2480,7 @@ public class GestorSQL {
 	    public static int cargar_cofre() {
                 int nbr = 0;
                 try {
-                        ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cofres;", MainServidor.OTHER_DB_NAME);
+                        ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cofres;", MainServidor.DB_DINAMICOS);
                         while(RS.next()) {
                                 Mundo.addTrunk(new Cofres(
                                                 RS.getInt("id"),

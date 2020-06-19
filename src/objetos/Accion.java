@@ -19,7 +19,7 @@ import comunes.Mundo;
 
 import juego.JuegoServidor;
 import juego.JuegoThread;
-import objetos.casas.House;
+import objetos.casas.Casas;
 
 public class Accion {
 
@@ -388,13 +388,13 @@ public class Accion {
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
 			case 18://Téléportation chez sois
-				if(House.AlreadyHaveHouse(perso))//Si il a une maison
+				if(Casas.AlreadyHaveHouse(perso))//Si il a une maison
 				{
 					Objeto obj = Mundo.getObjet(itemID);
 					if (perso.hasItemTemplate(obj.getTemplate().getID(), 1))
 					{
 						perso.removeByTemplateID(obj.getTemplate().getID(),1);
-						House h = House.get_HouseByPerso(perso);
+						Casas h = Casas.get_HouseByPerso(perso);
 						if(h == null) return;
 						perso.teletransportar((short)h.get_mapid(), h.get_caseid());
 					}

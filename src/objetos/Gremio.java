@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import objetos.Personaje.Stats;
-import objetos.casas.House;
+import objetos.casas.Casas;
 import objetos.hechizos.Hechizos.SortStats;
 
 import org.joda.time.LocalDate;
@@ -327,9 +327,9 @@ public class Gremio {
 	}
 
 	public void removeMember(Personaje perso) {
-		House h = House.get_HouseByPerso(perso);//On prend ça maison
+		Casas h = Casas.get_HouseByPerso(perso);//On prend ça maison
 		if(h != null) {
-			if(House.HouseOnGuild(_id) > 0) {
+			if(Casas.HouseOnGuild(_id) > 0) {
 				GestorSQL.casa_gremio(h, 0, 0);//On retire de la guilde
 			}
 		}

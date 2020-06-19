@@ -13,36 +13,37 @@ NOMBRE_DEL_SERVIDOR = Alexandria EMU
 WEB_DEL_SERVIDOR = http://privatedofus.net
 MOTD_COLOR = FF0000
 SEND_POLICY = true
-SAVE_TIME = 30
+#Tiempo de guardado en minutos (defecto 30min)
+TIEMPO_DE_GUARDADO = 30
 LOCALIP_LOOPBACK = true
 LOG = true
 LOAD_ACTION_DELAY = 600
 PLAYER_LIMIT = 60
 ALLOW_MULTI_ACCOUNT = true
 
-# Rates
+#Configuracion de los rates
 XP_PVP = 1
-XP_METIER = 1
+XP_OFICIOS = 1
 XP_PVM = 1
 DROP = 1
 KAMAS = 1
 HONOR = 3
 
-# Configuration de la base de donnée
+#Configuracion de la base de datos
 DB_HOST = 127.0.0.1
 DB_USER = root
 DB_PASS = 
-STATIC_DB_NAME = alexandria_estaticos
-OTHER_DB_NAME = alexandria_dinamicos
+DB_ESTATICOS = alexandria_estaticos
+DB_DINAMICOS = alexandria_dinamicos
 
-# Configuration du GamePlay
-MAX_PERSO_PAR_COMPTE = 5
-USE_MOBS = true
-USE_CUSTOM_START = false
-START_MAP = 5
-START_CELL = 255
-START_LEVEL = 80
-START_KAMAS = 5000000
+#Configuracion del juego
+MAXIMO_PERSONAJES_POR_CUENTA = 5
+USAR_MOOBS = true
+USAR_MAPA_INICIO_PERSONALIZADO = false
+MAPA_INICIO_PERSONALIZADO = 5
+CELDA_INICIO_PERSONALIZADA = 255
+NVEL_DE_INICIO = 80
+KAMAS_DE_INICIO = 5000000
 ZAAP = true
 LVL_PVP = 5000
 ALLOW_MULE_PVP = false
@@ -50,7 +51,6 @@ AURA_SYSTEM = true
 MAX_IDLE_TIME = 500
 NOT_IN_HDV = 4820
 
-#Ajout de Mihawk
 XP_DEFI = true
 ALLOW_PLAYER_COMMANDS = true
 DD_LVL_DEPART = 100

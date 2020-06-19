@@ -14,8 +14,8 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 import comunes.*;
 import comunes.Mundo.*;
+import objetos.casas.Casas;
 import objetos.casas.Cofres;
-import objetos.casas.House;
 
 public class Mapa {
 	private final short _id;
@@ -980,21 +980,21 @@ public class Mapa {
 				}
 //Vérouiller maison
 				case 81 -> {
-					House h = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Casas h = Casas.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
 					if (h == null) return;
 					perso.setInHouse(h);
 					h.Lock(perso);
 				}
 //Rentrer dans une maison
 				case 84 -> {
-					House h2 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Casas h2 = Casas.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
 					if (h2 == null) return;
 					perso.setInHouse(h2);
 					h2.HopIn(perso);
 				}
 //Acheter maison
 				case 97 -> {
-					House h3 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Casas h3 = Casas.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
 					if (h3 == null) return;
 					perso.setInHouse(h3);
 					h3.BuyIt(perso);
@@ -1021,7 +1021,7 @@ public class Mapa {
 				}
 //Modifier prix de vente
 				case 98, 108 -> {
-					House h4 = House.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Casas h4 = Casas.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
 					if (h4 == null) return;
 					perso.setInHouse(h4);
 					h4.SellIt(perso);
@@ -1151,7 +1151,7 @@ public class Mapa {
 		}
 		if(_cases.isEmpty())return;
 		
-		if (MainServidor.CONFIG_USE_MOBS) {
+		if (MainServidor.USAR_MOOBS) {
 			if(_maxGroup == 0)return;
 			spawnGroup(Constantes.ALIGNEMENT_NEUTRE,_maxGroup,false,-1);//Spawn des groupes d'alignement neutre
 			spawnGroup(Constantes.ALIGNEMENT_BONTARIEN,1,false,-1);//Spawn du groupe de gardes bontarien s'il y a

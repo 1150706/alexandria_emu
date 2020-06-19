@@ -155,7 +155,7 @@ public class Cofres {
 		}
 		
 		Cofres t = P.getInTrunk();
-		House h = Mundo.getHouse(_house_id);
+		Casas h = Mundo.getHouse(_house_id);
 		
 		if(t == null) return;
 		if(t.get_owner_id() == P.getAccID() || (P.get_guild() == null ? false : P.get_guild().get_id() == h.get_guild_id() && h.canDo(Constantes.C_GNOCODE)))
@@ -211,7 +211,7 @@ public class Cofres {
 		else return false;
 	}
 	
-    public static ArrayList<Cofres> getTrunksByHouse(House h)
+    public static ArrayList<Cofres> getTrunksByHouse(Casas h)
     {
             ArrayList<Cofres> trunks = new ArrayList<>();
             for(Entry<Integer, Cofres> trunk : Mundo.getTrunks().entrySet())

@@ -880,7 +880,7 @@ public class Objeto {
 		String NaturalStatsItem = "";
 		ResultSet RS;
 		try {
-			RS = GestorSQL.EjecutarConsulta("SELECT statsTemplate from `item_template` WHERE `id`='"+i+"';", MainServidor.STATIC_DB_NAME);
+			RS = GestorSQL.EjecutarConsulta("SELECT statsTemplate from `item_template` WHERE `id`='"+i+"';", MainServidor.DB_ESTATICOS);
 			RS.next();
 				NaturalStatsItem = RS.getString("statsTemplate");
 		} catch (SQLException e) {

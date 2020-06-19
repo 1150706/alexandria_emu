@@ -17,8 +17,8 @@ import javax.swing.Timer;
 import objetos.Mapa.*;
 import objetos.Gremio.GuildMember;
 import objetos.Oficio.*;
+import objetos.casas.Casas;
 import objetos.casas.Cofres;
-import objetos.casas.House;
 import objetos.hechizos.EfectoHechizo;
 import objetos.hechizos.Hechizos.SortStats;
 
@@ -134,7 +134,7 @@ public class Personaje {
 	//Coffre
 	private Cofres _curTrunk;
 	//Maison
-	private House _curHouse;
+	private Casas _curHouse;
 	//Marchand
 	public boolean _seeSeller = false;
 	private final Map<Integer , Integer> _storeItems = new TreeMap<>();//<ObjID, Prix>
@@ -491,17 +491,17 @@ public class Personaje {
 		this._canaux = canaux;
 		this._curCarte = Mundo.getCarte(map);
 		this._savePos = savePos;
-		if(_curCarte == null && Mundo.getCarte(MainServidor.CONFIG_START_MAP) != null) {
-			this._curCarte = Mundo.getCarte(MainServidor.CONFIG_START_MAP);
-			this._curCell = _curCarte.getCase(MainServidor.CONFIG_START_CELL);
-		}else if (_curCarte == null && Mundo.getCarte(MainServidor.CONFIG_START_MAP) == null) {
+		if(_curCarte == null && Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO) != null) {
+			this._curCarte = Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO);
+			this._curCell = _curCarte.getCase(MainServidor.CALDA_INICIO_PERSONALIZADA);
+		}else if (_curCarte == null && Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO) == null) {
 			JuegoServidor.addToLog("Personnage mal positione, et position de départ non valide. Fermeture du serveur.");
 			MainServidor.closeServers();
 		} else if(_curCarte != null) {
 			this._curCell = _curCarte.getCase(cell);
 			if(_curCell == null) {
-				this._curCarte = Mundo.getCarte(MainServidor.CONFIG_START_MAP);
-				this._curCell = _curCarte.getCase(MainServidor.CONFIG_START_CELL);
+				this._curCarte = Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO);
+				this._curCell = _curCarte.getCase(MainServidor.CALDA_INICIO_PERSONALIZADA);
 			}
 		}
 		for(String str : z.split(",")) {
@@ -651,12 +651,12 @@ public class Personaje {
 				color1,
 				color2,
 				color3,
-				MainServidor.CONFIG_START_KAMAS,
-				((MainServidor.CONFIG_START_LEVEL - 1)),
-				((MainServidor.CONFIG_START_LEVEL-1)*5),
+				MainServidor.KAMAS_DE_INICIO,
+				((MainServidor.NIVEL_DE_INICIO - 1)),
+				((MainServidor.NIVEL_DE_INICIO -1)*5),
 				10000,
-				MainServidor.CONFIG_START_LEVEL,
-				Mundo.getPersoXpMin(MainServidor.CONFIG_START_LEVEL),
+				MainServidor.NIVEL_DE_INICIO,
+				Mundo.getPersoXpMin(MainServidor.NIVEL_DE_INICIO),
 				100,
 				classe * 10 + sexe,
 				(byte)0,
@@ -672,7 +672,7 @@ public class Personaje {
 				"",
 				100,
 				"",
-				MainServidor.CONFIG_START_MAP + "," + MainServidor.CONFIG_START_CELL,
+				MainServidor.MAPA_INICIO_PERSONALIZADO + "," + MainServidor.CALDA_INICIO_PERSONALIZADA,
 				"",
 				0,
 				-1,
@@ -3202,12 +3202,12 @@ public class Personaje {
             return _curTrunk;
     }
     
-    public void setInHouse(House h)
+    public void setInHouse(Casas h)
     {
             _curHouse = h;
     }
    
-    public House getInHouse()
+    public Casas getInHouse()
     {
             return _curHouse;
     }

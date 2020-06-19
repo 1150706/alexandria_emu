@@ -506,7 +506,7 @@ public class Constantes {
 		}
 		if(MainServidor.CONFIG_CUSTOM_STARTMAP)
 		{
-			return MainServidor.CONFIG_START_MAP;
+			return MainServidor.MAPA_INICIO_PERSONALIZADO;
 		}
 		return pos;
 	}
@@ -656,7 +656,7 @@ public class Constantes {
 		}
 		if(MainServidor.CONFIG_CUSTOM_STARTMAP)
 		{
-			return MainServidor.CONFIG_START_CELL;
+			return MainServidor.CALDA_INICIO_PERSONALIZADA;
 		}
 		return pos;
 	}

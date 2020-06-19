@@ -118,7 +118,7 @@ public class Oficio {
 		{
 			if(_curAction == null)return;
 			_curAction.endAction(P,IO,GA,cell);
-			addXp(P,_curAction.getXpWin()* MainServidor.XP_METIER);
+			addXp(P,_curAction.getXpWin()* MainServidor.XP_OFICIOS);
 			//Packet JX
 			//on créer la listes des statsMetier a envoyer (Seulement celle ci)
 			ArrayList<StatsMetier> list = new ArrayList<>();
@@ -463,7 +463,7 @@ public class Oficio {
 			
 			
 			//On donne l'xp
-			int winXP =  Constantes.calculXpWinCraft(SM.get_lvl(),_ingredients.size()) * MainServidor.XP_METIER;
+			int winXP =  Constantes.calculXpWinCraft(SM.get_lvl(),_ingredients.size()) * MainServidor.XP_OFICIOS;
 			if(success)
 			{
 				SM.addXp(_P,winXP);

@@ -17,8 +17,8 @@ import objetos.Mercadillo.HdvEntry;
 import objetos.NPCModelo.*;
 import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Stats;
+import objetos.casas.Casas;
 import objetos.casas.Cofres;
-import objetos.casas.House;
 import objetos.hechizos.Hechizos;
 
 public class Mundo {
@@ -52,7 +52,7 @@ public class Mundo {
 	private static final Map<Short, Mapa.MountPark> MountPark = new TreeMap<>();
 	private static final Map<Integer, Cofres> Trunks = new TreeMap<>();
 	private static final Map<Integer, Recaudador> Percepteurs = new TreeMap<>();
-	private static final Map<Integer,House> Houses = new TreeMap<>();
+	private static final Map<Integer, Casas> Houses = new TreeMap<>();
 	private static final Map<Short,Collection<Integer>> Seller	= new TreeMap<>();
 	public static final Map<Integer, Quest.Step> Steps = new TreeMap<>();
 	public static final Map<Integer, Quest> Quests = new TreeMap<>();
@@ -1196,7 +1196,7 @@ public class Mundo {
 			//Thread.sleep(2500);
 			
 			JuegoServidor.addToLog("Sauvegarde des maisons...");
-			for(House house : Houses.values())
+			for(Casas house : Houses.values())
 			{
 				if(house.get_owner_id() > 0)
 				{
@@ -1450,7 +1450,7 @@ public class Mundo {
 
 	public static void removeGuild(int id) {
 		//Maison de guilde+SQL
-		House.removeHouseGuild(id);
+		Casas.removeHouseGuild(id);
 		//Enclo+SQL
 		Mapa.MountPark.removeMountPark(id);
 		//Percepteur+SQL
@@ -1672,17 +1672,17 @@ public class Mundo {
 		Animations.put(animation.getId(), animation);
 	}
 	
-	public static void addHouse(House house)
+	public static void addHouse(Casas house)
 	{
 		Houses.put(house.get_id(), house);
 	}
 	
-	public static Map<Integer, House> getHouses()
+	public static Map<Integer, Casas> getHouses()
 	{
 		return Houses;
 	}
 	
-	public static House getHouse(int id)
+	public static Casas getHouse(int id)
 	{
 		return Houses.get(id);
 	}

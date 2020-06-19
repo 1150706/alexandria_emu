@@ -1,0 +1,300 @@
+Lanzando el servidor
+9:14:51: Moviendo los monstruos en mapas donde se encuentran personajes
+Lanzando el servidor
+10:4:35: Moviendo los monstruos en mapas donde se encuentran personajes
+10:5:5: Moviendo los monstruos en mapas donde se encuentran personajes
+10:5:35: Moviendo los monstruos en mapas donde se encuentran personajes
+10:6:5: Moviendo los monstruos en mapas donde se encuentran personajes
+Lanzando el servidor
+Lanzando el servidor
+Lanzando el servidor
+10:22:3: Personaje Player-xD guardado
+10:22:16: Moviendo los monstruos en mapas donde se encuentran personajes
+10:22:46: Se ha desconectado a Player-xD por inactividad
+10:22:46: Moviendo los monstruos en mapas donde se encuentran personajes
+10:22:46: Socket closed
+10:22:46: Personaje Player-xD guardado
+Lanzando el servidor
+10:25:14: Personaje Player-xD guardado
+10:25:36: Moviendo los monstruos en mapas donde se encuentran personajes
+10:26:6: Se ha desconectado a Player-xD por inactividad
+10:26:6: Moviendo los monstruos en mapas donde se encuentran personajes
+10:26:6: Socket closed
+10:26:6: Personaje Player-xD guardado
+10:26:36: Moviendo los monstruos en mapas donde se encuentran personajes
+10:27:6: Moviendo los monstruos en mapas donde se encuentran personajes
+10:27:36: Moviendo los monstruos en mapas donde se encuentran personajes
+Lanzando el servidor
+Lanzando el servidor
+Lanzando el servidor
+10:31:26: Personaje Player-xD guardado
+10:31:43: Moviendo los monstruos en mapas donde se encuentran personajes
+10:32:13: Moviendo los monstruos en mapas donde se encuentran personajes
+10:32:13: Se ha desconectado a Player-xD por inactividad
+10:32:13: Socket closed
+10:32:13: Personaje Player-xD guardado
+Lanzando el servidor
+10:39:35: Moviendo los monstruos en mapas donde se encuentran personajes
+10:40:5: Moviendo los monstruos en mapas donde se encuentran personajes
+10:40:35: Moviendo los monstruos en mapas donde se encuentran personajes
+Lanzando el servidor
+10:41:38: Enviando publicidad automatica
+10:41:50: Personaje Player-xD guardado
+10:41:58: Moviendo los monstruos en mapas donde se encuentran personajes
+10:42:28: Se ha desconectado a Player-xD por inactividad
+10:42:28: Moviendo los monstruos en mapas donde se encuentran personajes
+10:42:28: Socket closed
+10:42:28: Personaje Player-xD guardado
+Lanzando el servidor
+11:2:42: Enviando publicidad automatica
+11:3:2: Moviendo los monstruos en mapas donde se encuentran personajes
+11:3:32: Moviendo los monstruos en mapas donde se encuentran personajes
+Lanzando el servidor
+11:6:11: Enviando publicidad automatica
+11:6:21: Enviando publicidad automatica
+11:6:31: Moviendo los monstruos en mapas donde se encuentran personajes
+11:6:31: Enviando publicidad automatica
+11:6:41: Enviando publicidad automatica
+11:6:51: Enviando publicidad automatica
+11:7:1: Moviendo los monstruos en mapas donde se encuentran personajes
+11:7:1: Enviando publicidad automatica
+11:7:11: Enviando publicidad automatica
+11:7:21: Enviando publicidad automatica
+11:7:31: Moviendo los monstruos en mapas donde se encuentran personajes
+11:7:31: Enviando publicidad automatica
+11:7:41: Enviando publicidad automatica
+11:7:51: Enviando publicidad automatica
+11:8:1: Moviendo los monstruos en mapas donde se encuentran personajes
+11:8:1: Enviando publicidad automatica
+11:8:11: Enviando publicidad automatica
+11:8:21: Enviando publicidad automatica
+11:8:31: Moviendo los monstruos en mapas donde se encuentran personajes
+11:8:31: Enviando publicidad automatica
+11:8:41: Enviando publicidad automatica
+11:8:51: Enviando publicidad automatica
+Lanzando el servidor
+11:10:23: Moviendo los monstruos en mapas donde se encuentran personajes
+Lanzando el servidor
+11:11:38: Personaje Player-xD guardado
+11:11:42: Enviando publicidad automatica
+Lanzando el servidor
+11:19:7: Personaje Player-xD guardado
+11:19:13: Enviando publicidad automatica
+11:19:23: Enviando publicidad automatica
+11:19:33: Enviando publicidad automatica
+11:19:33: Moviendo los monstruos en mapas donde se encuentran personajes
+11:19:43: Enviando publicidad automatica
+11:19:53: Enviando publicidad automatica
+11:20:3: Moviendo los monstruos en mapas donde se encuentran personajes
+11:20:3: Enviando publicidad automatica
+11:20:13: Enviando publicidad automatica
+11:20:23: Enviando publicidad automatica
+11:20:33: Enviando publicidad automatica
+11:20:33: Moviendo los monstruos en mapas donde se encuentran personajes
+11:20:43: Enviando publicidad automatica
+11:20:53: Enviando publicidad automatica
+11:21:3: Se ha desconectado a Player-xD por inactividad
+11:21:3: Enviando publicidad automatica
+11:21:3: Socket closed
+11:21:3: Moviendo los monstruos en mapas donde se encuentran personajes
+11:21:3: Personaje Player-xD guardado
+11:21:13: Enviando publicidad automatica
+11:21:23: Enviando publicidad automatica
+11:21:33: Moviendo los monstruos en mapas donde se encuentran personajes
+11:21:33: Enviando publicidad automatica
+11:21:43: Enviando publicidad automatica
+11:21:53: Enviando publicidad automatica
+11:22:3: Moviendo los monstruos en mapas donde se encuentran personajes
+11:22:3: Enviando publicidad automatica
+11:22:13: Enviando publicidad automatica
+11:22:23: Enviando publicidad automatica
+11:22:33: Moviendo los monstruos en mapas donde se encuentran personajes
+11:22:33: Enviando publicidad automatica
+11:22:43: Enviando publicidad automatica
+11:22:53: Enviando publicidad automatica
+Lanzando el servidor
+11:23:12: Personaje Player-xD guardado
+11:23:17: Enviando publicidad automatica
+11:23:27: Enviando publicidad automatica
+11:23:37: Enviando publicidad automatica
+11:23:37: Moviendo los monstruos en mapas donde se encuentran personajes
+11:23:47: Enviando publicidad automatica
+11:23:57: Enviando publicidad automatica
+11:24:7: Enviando publicidad automatica
+11:24:7: Moviendo los monstruos en mapas donde se encuentran personajes
+11:24:7: Se ha desconectado a Player-xD por inactividad
+11:24:7: Socket closed
+11:24:7: Personaje Player-xD guardado
+11:24:17: Enviando publicidad automatica
+11:24:27: Enviando publicidad automatica
+11:24:37: Moviendo los monstruos en mapas donde se encuentran personajes
+11:24:37: Enviando publicidad automatica
+11:24:47: Enviando publicidad automatica
+Lanzando el servidor
+11:25:11: Personaje Player-xD guardado
+11:25:15: Enviando publicidad automatica
+11:25:25: Enviando publicidad automatica
+11:25:35: Enviando publicidad automatica
+11:25:35: Moviendo los monstruos en mapas donde se encuentran personajes
+11:25:45: Enviando publicidad automatica
+11:25:55: Enviando publicidad automatica
+11:26:5: Se ha desconectado a Player-xD por inactividad
+11:26:5: Enviando publicidad automatica
+11:26:5: Moviendo los monstruos en mapas donde se encuentran personajes
+11:26:5: Socket closed
+11:26:5: Personaje Player-xD guardado
+11:26:15: Enviando publicidad automatica
+Lanzando el servidor
+11:29:21: Enviando publicidad automatica
+11:29:31: Enviando publicidad automatica
+11:29:41: Enviando publicidad automatica
+11:29:51: Enviando publicidad automatica
+11:30:1: Enviando publicidad automatica
+11:30:11: Enviando publicidad automatica
+11:30:21: Enviando publicidad automatica
+11:30:31: Enviando publicidad automatica
+11:30:41: Enviando publicidad automatica
+11:30:51: Enviando publicidad automatica
+11:31:1: Enviando publicidad automatica
+11:31:11: Enviando publicidad automatica
+11:31:21: Enviando publicidad automatica
+Lanzando el servidor
+11:46:23: Personaje Player-xD guardado
+11:46:25: Enviando publicidad automatica
+11:46:35: Enviando publicidad automatica
+11:46:45: Enviando publicidad automatica
+11:46:45: Moviendo los monstruos en mapas donde se encuentran personajes
+11:46:47: Game: SQL ERROR: (conn=1385) Column count doesn't match value count at row 1
+11:46:47: Game: Query: INSERT INTO `datos_publicidad` VALUES (?);
+11:46:55: Enviando publicidad automatica
+Lanzando el servidor
+11:48:12: Personaje Player-xD guardado
+11:48:16: Enviando publicidad automatica
+11:48:17: Game: SQL ERROR: (conn=1389) Parameter at position 1 is not set
+11:48:17: Game: Query: INSERT INTO `datos_publicidad` VALUES (?, ?);
+Lanzando el servidor
+11:51:21: Personaje Player-xD guardado
+11:51:27: Enviando publicidad automatica
+11:51:37: Enviando publicidad automatica
+11:51:47: Enviando publicidad automatica
+11:51:47: Moviendo los monstruos en mapas donde se encuentran personajes
+11:51:57: Enviando publicidad automatica
+11:52:7: Enviando publicidad automatica
+11:52:17: Moviendo los monstruos en mapas donde se encuentran personajes
+11:52:17: Enviando publicidad automatica
+11:52:27: Enviando publicidad automatica
+Lanzando el servidor
+11:53:51: Personaje Player-xD guardado
+11:53:56: Enviando publicidad automatica
+11:54:0: Index 1 out of bounds for length 1
+11:54:0: Personaje Player-xD guardado
+11:54:6: Enviando publicidad automatica
+11:54:16: Enviando publicidad automatica
+11:54:26: Enviando publicidad automatica
+Lanzando el servidor
+11:54:57: Personaje Player-xD guardado
+11:55:3: Enviando publicidad automatica
+11:55:13: Enviando publicidad automatica
+Lanzando el servidor
+11:56:48: Personaje Player-xD guardado
+11:56:51: Index 1 out of bounds for length 1
+11:56:51: Personaje Player-xD guardado
+11:56:54: Enviando publicidad automatica
+Lanzando el servidor
+11:57:44: Personaje Player-xD guardado
+11:57:51: Enviando publicidad automatica
+11:58:1: Enviando publicidad automatica
+Lanzando el servidor
+12:3:35: Personaje Player-xD guardado
+12:3:39: Index 1 out of bounds for length 1
+12:3:39: Personaje Player-xD guardado
+12:3:41: Enviando publicidad automatica
+Lanzando el servidor
+12:4:55: Personaje Player-xD guardado
+12:5:0: Enviando publicidad automatica
+12:5:10: Enviando publicidad automatica
+12:5:20: Enviando publicidad automatica
+12:5:20: Moviendo los monstruos en mapas donde se encuentran personajes
+12:5:30: Enviando publicidad automatica
+Lanzando el servidor
+12:6:43: Personaje Player-xD guardado
+12:6:49: Enviando publicidad automatica
+Lanzando el servidor
+12:8:33: Personaje Player-xD guardado
+12:8:37: Enviando publicidad automatica
+12:8:47: Enviando publicidad automatica
+12:8:57: Enviando publicidad automatica
+12:8:57: Moviendo los monstruos en mapas donde se encuentran personajes
+12:9:7: Enviando publicidad automatica
+12:9:17: Enviando publicidad automatica
+12:9:27: Enviando publicidad automatica
+12:9:27: Moviendo los monstruos en mapas donde se encuentran personajes
+Lanzando el servidor
+12:11:25: Personaje Player-xD guardado
+12:11:33: Enviando publicidad automatica
+12:11:43: Enviando publicidad automatica
+12:11:53: Enviando publicidad automatica
+12:11:53: Moviendo los monstruos en mapas donde se encuentran personajes
+Lanzando el servidor
+12:24:13: Personaje Player-xD guardado
+12:24:18: Enviando publicidad automatica
+Lanzando el servidor
+Lanzando el servidor
+19:41:53: Personaje Player-xD guardado
+19:42:7: Moviendo los monstruos en mapas donde se encuentran personajes
+19:42:37: Moviendo los monstruos en mapas donde se encuentran personajes
+19:42:37: Enviando publicidad automatica
+19:42:47: Enviando publicidad automatica
+19:42:48: Player-xD lance un combat contre le groupe -3 sur la map 7454
+19:42:50: Groupe de monstres ajoutes sur la map: 7454 alignement: -1 ID: -4
+19:42:50: Debut du combat
+19:42:51: (0)Debut du tour de Fighter ID= 1
+19:42:53: Player-xD tentative de lancer le sort 415 sur la case 152
+19:42:53: Nombre d'effets: 1
+19:42:53: Effet id: 141 Args: 1;-1;-1;0;0 turns: 0 cibles: 1 chance: 0
+19:42:57: Player-xD tentative de lancer le sort 415 sur la case 178
+19:42:57: Nombre d'effets: 1
+19:42:57: Effet id: 141 Args: 1;-1;-1;0;0 turns: 0 cibles: 1 chance: 0
+19:42:57: Enviando publicidad automatica
+19:43:1: Player-xD tentative de lancer le sort 415 sur la case 92
+19:43:1: Nombre d'effets: 1
+19:43:1: Effet id: 141 Args: 1;-1;-1;0;0 turns: 0 cibles: 1 chance: 0
+19:43:5: Player-xD tentative de lancer le sort 415 sur la case 66
+19:43:5: Nombre d'effets: 1
+19:43:5: Effet id: 141 Args: 1;-1;-1;0;0 turns: 0 cibles: 1 chance: 0
+19:43:7: Moviendo los monstruos en mapas donde se encuentran personajes
+19:43:7: Enviando publicidad automatica
+19:43:9: (0)Fin du tour de Fighter ID= 1
+19:43:10: (1) Fighter ID=  -1 est mort
+19:43:10: (2) Fighter ID=  -2 est mort
+19:43:11: (3) Fighter ID=  -3 est mort
+19:43:11: (4) Fighter ID=  -4 est mort
+19:43:12: (5)Debut du tour de Fighter ID= -5
+19:43:12: (5) Le sort demande un lancer en ligne, or la case n'est pas alignee avec le joueur
+19:43:12: (5) La case est trop proche ou trop eloignee Min: 1 Max: 1 Dist: 15
+19:43:12: Tentative d'approche par 79 de Player-xD
+19:43:12: (5)Tentative de deplacement de Fighter ID= -5 a partir de la case 150
+19:43:12: Path: bcLbc0bddbds
+19:43:12: (5) Fighter ID= -5 se deplace de la case 150 vers 210
+19:43:14: (5) Le sort demande un lancer en ligne, or la case n'est pas alignee avec le joueur
+19:43:14: (5) La case est trop proche ou trop eloignee Min: 1 Max: 1 Dist: 11
+19:43:16: (5)Fin du tour de Fighter ID= -5
+19:43:16: (0)Debut du tour de Fighter ID= 1
+19:43:17: Enviando publicidad automatica
+19:43:24: Player-xD tentative de lancer le sort 415 sur la case 210
+19:43:24: Nombre d'effets: 1
+19:43:24: Effet id: 141 Args: 1;-1;-1;0;0 turns: 0 cibles: 1 chance: 0
+19:43:27: L'equipe 1 gagne !
+19:43:27: Enviando publicidad automatica
+19:43:29: Personaje Player-xD guardado
+19:43:37: Moviendo los monstruos en mapas donde se encuentran personajes
+19:43:37: Enviando publicidad automatica
+19:43:47: Enviando publicidad automatica
+19:43:57: Enviando publicidad automatica
+19:44:7: Moviendo los monstruos en mapas donde se encuentran personajes
+19:44:7: Enviando publicidad automatica
+19:44:17: Enviando publicidad automatica
+19:44:27: Enviando publicidad automatica
+19:44:37: Moviendo los monstruos en mapas donde se encuentran personajes
+19:44:37: Enviando publicidad automatica
+19:44:47: Enviando publicidad automatica

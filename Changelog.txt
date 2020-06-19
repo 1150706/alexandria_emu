@@ -29,3 +29,6 @@ v0.00.3
 - Nuevo sistema de publicidad automatica
 - Configurable desde la config.txt tiempo de impresion de publicidades
 - Nuevo comando de administrador nivel 4 - agregar_publicidad
+
+v0.00.4
+- Timmer de commit para SQL anulado ya que Hikari lo hace automaticamente

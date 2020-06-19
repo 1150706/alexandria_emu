@@ -1149,30 +1149,27 @@ public class Mundo {
 	{
 		Dragodindes.put(dragopavo.getID(), dragopavo);
 	}
+
 	public static void removeDragodinde(int DID)
 	{
 		Dragodindes.remove(DID);
 	}
-	public static void saveAll(Personaje saver)
-	{
+
+	public static void saveAll(Personaje saver) {
 		PrintWriter _out = null;
 		if(saver != null)
 		_out = saver.get_compte().getGameThread().get_out();
 		
 		set_state((short)2);
 
-		try
-		{
+		try {
 			JuegoServidor.addToLog("Lancement de la sauvegarde du Monde...");
 			MainServidor.isSaving = true;
-			GestorSQL.commitTransacts();
-			GestorSQL.timer(false);//Arr?te le timer d'enregistrement SQL
 			
 			//Thread.sleep(10000);
 			
 			JuegoServidor.addToLog("Sauvegarde des personnages...");
-			for(Personaje perso : Personajes.values())
-			{
+			for(Personaje perso : Personajes.values()) {
 				if(!perso.isOnline())continue;
 				Thread.sleep(100);//0.1 sec. pour 1 objets
 				GestorSQL.guardar_personaje(perso,true);//sauvegarde des persos et de leurs items
@@ -1181,8 +1178,7 @@ public class Mundo {
 			//Thread.sleep(2500);
 			
 			JuegoServidor.addToLog("Sauvegarde des guildes...");
-			for(Gremio guilde : Guildes.values())
-			{
+			for(Gremio guilde : Guildes.values()) {
 				Thread.sleep(100);//0.1 sec. pour 1 guilde
 				GestorSQL.actualizar_gremio(guilde);
 			}
@@ -1190,8 +1186,7 @@ public class Mundo {
 			//Thread.sleep(2500);
 			
 			JuegoServidor.addToLog("Sauvegarde des percepteurs...");
-			for(Recaudador perco : Percepteurs.values())
-			{
+			for(Recaudador perco : Percepteurs.values()) {
 				if(perco.get_inFight()>0)continue;
 				Thread.sleep(100);//0.1 sec. pour 1 percepteur
 				GestorSQL.actualizar_recaudador(perco);
@@ -1200,10 +1195,8 @@ public class Mundo {
 			//Thread.sleep(2500);
 			
 			JuegoServidor.addToLog("Sauvegarde des maisons...");
-			for(Casas house : Houses.values())
-			{
-				if(house.get_owner_id() > 0)
-				{
+			for(Casas house : Houses.values()) {
+				if(house.get_owner_id() > 0) {
 					Thread.sleep(100);//0.1 sec. pour 1 maison
 					GestorSQL.actualizar_casa(house);
 				}
@@ -1212,10 +1205,8 @@ public class Mundo {
 			//Thread.sleep(2500);
 			
 			JuegoServidor.addToLog("Sauvegarde des coffres...");
-			for(Cofres t : Trunks.values())
-			{
-				if(t.get_owner_id() > 0)
-				{
+			for(Cofres t : Trunks.values()) {
+				if(t.get_owner_id() > 0) {
 					Thread.sleep(100);//0.1 sec. pour 1 coffre
 					GestorSQL.actualizar_cofre(t);
 				}
@@ -1224,10 +1215,8 @@ public class Mundo {
 			//Thread.sleep(2500);
 			
 			JuegoServidor.addToLog("Sauvegarde des enclos...");
-			for(Mapa.MountPark mp : MountPark.values())
-			{
-				if(mp.get_owner() > 0 || mp.get_owner() == -1)
-				{
+			for(Mapa.MountPark mp : MountPark.values()) {
+				if(mp.get_owner() > 0 || mp.get_owner() == -1) {
 					Thread.sleep(100);//0.1 sec. pour 1 enclo
 					GestorSQL.actualizar_cercado(mp);
 				}
@@ -1237,8 +1226,7 @@ public class Mundo {
 			
 			JuegoServidor.addToLog("Sauvegarde des Hdvs...");
 			ArrayList<HdvEntry> toSave = new ArrayList<>();
-			for(Mercadillo curHdv : Hdvs.values())
-			{
+			for(Mercadillo curHdv : Hdvs.values()) {
 				toSave.addAll(curHdv.getAllEntry());
 			}
 			GestorSQL.guardar_objetos_mercadillo(toSave);
@@ -1250,18 +1238,14 @@ public class Mundo {
 			set_state((short)1);
 			//TODO : Rafraichir
 			
-		}catch(ConcurrentModificationException e)
-		{
-			if(saveTry < 10)
-			{
+		}catch(ConcurrentModificationException e) {
+			if(saveTry < 10) {
 				JuegoServidor.addToLog("Nouvelle tentative de sauvegarde");
 				if(saver != null && _out != null)
 					GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Erreur. Nouvelle tentative de sauvegarde");
 				saveTry++;
 				saveAll(saver);
-			}
-			else
-			{
+			} else {
 				set_state((short)1);
 				//TODO : Rafraichir 
 				String mess = "Echec de la sauvegarde apres " + saveTry + " tentatives";
@@ -1270,15 +1254,10 @@ public class Mundo {
 				JuegoServidor.addToLog(mess);
 			}
 				
-		}catch(Exception e)
-		{
+		}catch(Exception e) {
 			JuegoServidor.addToLog("Erreur lors de la sauvegarde : " + e.getMessage());
 			e.printStackTrace();
-		}
-		finally
-		{
-			GestorSQL.commitTransacts();
-			GestorSQL.timer(true); //Red?marre le timer d'enregistrement SQL
+		} finally {
 			MainServidor.isSaving = false;
 			saveTry = 1;
 		}
@@ -1296,10 +1275,12 @@ public class Mundo {
 	{
 		return Experiencias.get(lvl);
 	}
+
 	public static IOTemplate getIOTemplate(int id)
 	{
 		return IOTemplate.get(id);
 	}
+
 	public static Oficio getMetier(int id)
 	{
 		return Jobs.get(id);
@@ -1317,21 +1298,17 @@ public class Mundo {
 		return Crafts.get(i);
 	}
 
-	public static int getObjectByIngredientForJob( ArrayList<Integer> list, Map<Integer, Integer> ingredients)
-	{
+	public static int getObjectByIngredientForJob( ArrayList<Integer> list, Map<Integer, Integer> ingredients) {
 		if(list == null)return -1;
-		for(int tID : list)
-		{
+		for(int tID : list) {
 			ArrayList<Couple<Integer,Integer>> craft = Mundo.getCraft(tID);
-			if(craft == null)
-			{
+			if(craft == null) {
 				JuegoServidor.addToLog("/!\\Recette pour l'objet "+tID+" non existante !");
 				continue;
 			}
 			if(craft.size() != ingredients.size())continue;
 			boolean ok = true;
-			for(Couple<Integer,Integer> c : craft)
-			{
+			for(Couple<Integer,Integer> c : craft) {
 				//si ingredient non pr?sent ou mauvaise quantit?
 				if(!ingredients.get(c.first).equals(c.second))ok = false;
 			}
@@ -1339,8 +1316,8 @@ public class Mundo {
 		}
 		return -1;
 	}
-	public static Cuenta getCompteByPseudo(String p)
-	{
+
+	public static Cuenta getCompteByPseudo(String p) {
 		for(Cuenta C : Cuentas.values())if(C.get_pseudo().equals(p))return C;
 		return null;
 	}
@@ -1360,17 +1337,14 @@ public class Mundo {
 		return ItemSets.size();
 	}
 
-	public static int getNextIdForMount()
-	{
+	public static int getNextIdForMount() {
 		int max = 1;
 		for(int a : Dragodindes.keySet())if(a > max)max = a;
 		return max+1;
 	}
 
-	public static Mapa getCarteByPosAndCont(int mapX, int mapY, int contID)
-	{
-		for(Mapa map : Mapas.values())
-		{
+	public static Mapa getCarteByPosAndCont(int mapX, int mapY, int contID) {
+		for(Mapa map : Mapas.values()) {
 			if( map.getX() == mapX
 			&&	map.getY() == mapY
 			&&	map.getSubArea().get_area().get_superArea().get_id() == contID)
@@ -1378,55 +1352,53 @@ public class Mundo {
 		}
 		return null;
 	}
-	public static void addGuild(Gremio g, boolean save)
-	{
+
+	public static void addGuild(Gremio g, boolean save) {
 		Guildes.put(g.get_id(), g);
 		if(save) GestorSQL.guardar_nuevo_gremio(g);
 	}
-	public static int getNextHighestGuildID()
-	{
+
+	public static int getNextHighestGuildID() {
 		if(Guildes.isEmpty())return 1;
 		int n = 0;
 		for(int x : Guildes.keySet())if(n<x)n = x;
 		return n+1;
 	}
 
-	public static boolean guildNameIsUsed(String name)
-	{
+	public static boolean guildNameIsUsed(String name) {
 		for(Gremio g : Guildes.values())if(g.get_name().equalsIgnoreCase(name))return true;
 		return false;
 	}
-	public static boolean guildEmblemIsUsed(String emb)
-	{
-		for(Gremio g : Guildes.values())
-		{
+
+	public static boolean guildEmblemIsUsed(String emb) {
+		for(Gremio g : Guildes.values()) {
 			if(g.get_emblem().equals(emb))return true;
 		}
 		return false;
 	}
+
 	public static Gremio getGuild(int i)
 	{
 		return Guildes.get(i);
 	}
-	public static long getGuildXpMax(int _lvl)
-	{
+
+	public static long getGuildXpMax(int _lvl) {
 		if(_lvl >= 200) 	_lvl = 199;
 		if(_lvl <= 1)	 	_lvl = 1;
 		return Experiencias.get(_lvl+1).guilde;
 	}
-	public static void ReassignAccountToChar(Cuenta C)
-	{
+
+	public static void ReassignAccountToChar(Cuenta C) {
 		C.get_persos().clear();
 		GestorSQL.cargar_personaje_por_cuenta(C.get_GUID());
-		for(Personaje P : Personajes.values())
-		{
-			if(P.getAccID() == C.get_GUID())
-			{
+		for(Personaje P : Personajes.values()) {
+			if(P.getAccID() == C.get_GUID()) {
 				C.addPerso(P);
 				P.setAccount(C);
 			}
 		}
 	}
+
 	public static int getZaapCellIdByMapId(short i) {
 		for(Entry<Integer, Integer> zaap : Constantes.ZAAPS.entrySet()) {
 			if(zaap.getKey() == i)return zaap.getValue();

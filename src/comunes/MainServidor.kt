@@ -128,7 +128,7 @@ object MainServidor {
     @JvmField
     var CONFIG_HELP = ""
     @JvmField
-    var CONFIG_ALLOW_PLAYER_COMMANDS = true
+    var PERMITIR_COMANDOS_JUGADORES = true
     @JvmField
     var gameServer: JuegoServidor? = null
     @JvmField
@@ -153,37 +153,27 @@ object MainServidor {
     var isSaving = false
     @JvmField
     var MOSTRAR_AURAS = false
-
     // TIC des fights
     @JvmField
     var _passerTours: Thread? = null
-
     //Arene
     @JvmField
     var arenaMap = ArrayList<Int>(8)
     @JvmField
     var CONFIG_ARENA_TIMER = 10 * 60 * 1000 // 10 minutes
-
-    //BDD
-    @JvmField
-    var CONFIG_DB_COMMIT = 30 * 1000
     @JvmField
     var TIEMPO_DESCONECTAR_POR_AFK = 10 * 60 * 1000 // 10 minutes
-
     //HDV
     @JvmField
     var NOTINHDV = ArrayList<Int>()
-
     //UseCompactDATA
     @JvmField
     var CONFIG_SOCKET_USE_COMPACT_DATA = false
     @JvmField
     var CONFIG_SOCKET_TIME_COMPACT_DATA = 200
-
     //Guilde
     @JvmField
     var MEMBRE_MINI_GUILDE_VALIDE = 1
-
     //Challenges et Etoiles
     @JvmField
     var CONFIG_CHALLENGE_NUMBER = 1
@@ -193,17 +183,14 @@ object MainServidor {
     var CONFIG_SECONDS_FOR_BONUS = 60
     @JvmField
     var CONFIG_BONUS_MAX = 400
-
     // Temps en combat
     @JvmField
     var CONFIG_MS_PER_TURN: Long = 30000
     @JvmField
     var CONFIG_MS_FOR_START_FIGHT: Long = 45000
-
     // Taille Percepteur
     @JvmField
     var CONFIG_TAILLE_VAR = true
-
     // Qu�tes
     @JvmField
     var ari = "7695;1;1500;1500|"
@@ -462,8 +449,8 @@ object MainServidor {
                     CONFIG_SOCKET_TIME_COMPACT_DATA = value.toInt()
                 } else if (param.equals("RELOAD_MOB_DELAY", ignoreCase = true)) {
                     CONFIG_RELOAD_MOB_DELAY = value.toInt()
-                } else if (param.equals("ALLOW_PLAYER_COMMANDS", ignoreCase = true)) {
-                    CONFIG_ALLOW_PLAYER_COMMANDS = value.equals("true", ignoreCase = true)
+                } else if (param.equals("PERMITIR_COMANDOS_JUGADORES", ignoreCase = true)) {
+                    PERMITIR_COMANDOS_JUGADORES = value.equals("true", ignoreCase = true)
                 }
             }
             if (DB_ESTATICOS == null || DB_DINAMICOS == null || DB_HOST == null || DB_PASS == null || DB_USUARIO == null) {

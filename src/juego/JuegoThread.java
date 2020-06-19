@@ -3097,94 +3097,65 @@ public class JuegoThread implements Runnable {
 		} catch (IOException ignored) {}
 	}
 
-	private void Basic_chatMessage(String packet)
-	{
+	private void Basic_chatMessage(String packet) {
 		String msg = "";
-		if(_perso.isMuted())
-		{
+		if(_perso.isMuted()) {
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1124;"+_perso.get_compte()._muteTimer.getInitialDelay());//FIXME
 			return;
 		}
 		packet = packet.replace("<", "");
 		packet = packet.replace(">", "");
 		if(packet.length() == 3)return;
-		switch(packet.charAt(2))
-		{
+		switch(packet.charAt(2)) {
 			case '*'://Canal noir
 				if(!_perso.get_canaux().contains(packet.charAt(2)+""))return;
 				msg = packet.split("\\|",2)[1];
 				
-				//Commandes joueurs
-				if(msg.charAt(0) == '.')
-				{
-					if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("start"))
-					{
-						if(_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)return;
+				//Comandos de los jugadores
+				if(msg.charAt(0) == '.') {
+					if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("start")) {
+						if(_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES)return;
 						_perso.warpToSavePos();
 						return;
 					
 							
-					}else 
-						
-						if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("vie"))
-						{
-							if (_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
-							{
+					}else if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("vie")) {
+							if (_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
 								String str = "Tu ne peux pa utiliser cette commande !";
 							GestorSalida.GAME_SEND_MESSAGE(_perso, str, MainServidor.CONFIG_MOTD_COLOR);
-							}else
-							{
+							}else {
 								int count = 100;
 								Personaje perso = _perso;
 								int newPDV = (perso.get_PDVMAX() * count) / 100;
 								perso.set_PDV(newPDV);
-								if(perso.isOnline())
-								{
+								if(perso.isOnline()) {
 								GestorSalida.GAME_SEND_STATS_PACKET(perso);
 								}
 							return;
 							}
-						}else
-					if (msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("astrub"))
-					{
-						if (_perso.get_fight() != null|| !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
-						{
+					}else if (msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("astrub")) {
+						if (_perso.get_fight() != null|| !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
 							GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
-						}else
-						{
+						}else {
 							_perso.teletransportar((short)7411, 369);
-							
+							}
 						}
-					}
-						if (msg.length() > 4 && msg.substring(1, 5).equalsIgnoreCase("shop"))
-						{
-						if(_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
-						{
+					if (msg.length() > 4 && msg.substring(1, 5).equalsIgnoreCase("shop")) {
+						if(_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
 							GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
 							return;
 						}else
-					_perso.teletransportar(MainServidor.CONFIG_MAP_SHOP, MainServidor.CONFIG_CELL_SHOP);
-					return;
-				}else
-			
-			
-					    
-					    if(msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("enclos"))
-					    {
-					    	if (_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
-					    	{
-					    
-					    	
-					    		GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
+						_perso.teletransportar(MainServidor.CONFIG_MAP_SHOP, MainServidor.CONFIG_CELL_SHOP);
+						return;
+					}else if(msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("enclos")) {
+					    	if (_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
+					    GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
 					    		return;
 					    	}else
 					    		_perso.teletransportar(MainServidor.CONFIG_ENCLOS_MAP, MainServidor.CONFIG_CELL_ENCLOS);
 					    	return;
-					    }else
-					    
-					if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvm"))
-					{
-						if (_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
+					    }else if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvm")) {
+						if (_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES)
 						{
 						GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
 						return;
@@ -3194,7 +3165,7 @@ public class JuegoThread implements Runnable {
 					}
 					if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvp"))
 					{
-						if (_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
+						if (_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES)
 						{
 						GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu es en combat ou la commande est désactivée !", MainServidor.CONFIG_MOTD_COLOR);
 						return;
@@ -3202,56 +3173,44 @@ public class JuegoThread implements Runnable {
 						_perso.teletransportar(MainServidor.CONFIG_MAP_PVP, MainServidor.CONFIG_CELL_PVP);
 						return;
 					}
-						
-						
-	
-								
-							
 						 if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("staff")) // Commande .staffonline
-						    {                           
-						        String staff = "Membres du staff connectés :\n";
+						 	{
+						        StringBuilder staff = new StringBuilder("Membres du staff connectés :\n");
 						        boolean allOffline = true;
 						                                                    
-						        for(int i = 0; i < Mundo.getOnlinePersos().size(); i++)
-						        {
-						            if(Mundo.getOnlinePersos().get(i).get_compte().get_gmLvl() > 0)
-						            {
-						                staff += "- " + Mundo.getOnlinePersos().get(i).get_name() + " (";
+						        for(int i = 0; i < Mundo.getOnlinePersos().size(); i++) {
+						            if(Mundo.getOnlinePersos().get(i).get_compte().get_gmLvl() > 0) {
+						                staff.append("- ").append(Mundo.getOnlinePersos().get(i).get_name()).append(" (");
 						    
 						                if(Mundo.getOnlinePersos().get(i).get_compte().get_gmLvl() == 1)
-						                    staff += "Animateur)";
+						                    staff.append("Animateur)");
 						                else if(Mundo.getOnlinePersos().get(i).get_compte().get_gmLvl() == 2)
-						                    staff += "Modérateur)";
+						                    staff.append("Modérateur)");
 						                else if(Mundo.getOnlinePersos().get(i).get_compte().get_gmLvl() == 3)
-						                    staff += "MJ)";
+						                    staff.append("MJ)");
 						                else if(Mundo.getOnlinePersos().get(i).get_compte().get_gmLvl() == 4)
-						                    staff += "Administrateur)";
+						                    staff.append("Administrateur)");
 						                else if(Mundo.getOnlinePersos().get(i).get_compte().get_gmLvl() == 5)
-						                    staff += "Créateur)";
+						                    staff.append("Créateur)");
 						                else
-						                    staff += "Unknown";
+						                    staff.append("Unknown");
 						                                                            
-						                staff += "\n";
+						                staff.append("\n");
 						                                                                    
 						                allOffline = false;
 						            }
 						        }
-						        if(!staff.isEmpty() && !allOffline)
-						        {
-						            GestorSalida.GAME_SEND_MESSAGE(_perso, staff, MainServidor.CONFIG_MOTD_COLOR);
-						        }
-						        else if (allOffline)
-						        {
+						        if((staff.length() > 0) && !allOffline) {
+						            GestorSalida.GAME_SEND_MESSAGE(_perso, staff.toString(), MainServidor.CONFIG_MOTD_COLOR);
+						        } else if (allOffline) {
 						            GestorSalida.GAME_SEND_MESSAGE(_perso, "Aucun membre du staff est présent !", MainServidor.CONFIG_MOTD_COLOR);
 						        }
 						        return;
 						     					    }
 						if(msg.length() > 9 && msg.substring(1, 10).equalsIgnoreCase("bontarien")) //Commande bontarien
-					if (_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
-					{
+					if (_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
 						GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu es en combat ou la commande est désactivée !", MainServidor.CONFIG_MOTD_COLOR);
-					}else
-						{
+					}else {
 						byte align = 1;
 						Personaje target = _perso;
 						target.modifAlignement(align);
@@ -3259,10 +3218,8 @@ public class JuegoThread implements Runnable {
 						GestorSalida.GAME_SEND_STATS_PACKET(target);
 						GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu es désormais Bontarien", MainServidor.CONFIG_MOTD_COLOR);
 						return;
-						}else
-					if(msg.length() > 10 && msg.substring(1, 11).equalsIgnoreCase("brakmarien")) //Commande Brakmarien
-						if (_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
-						{
+				}else if(msg.length() > 10 && msg.substring(1, 11).equalsIgnoreCase("brakmarien")) //Commande Brakmarien
+						if (_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
 							GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu es en combat ou la commande est désactivée !", MainServidor.CONFIG_MOTD_COLOR);
 						}else
 					{
@@ -3276,11 +3233,9 @@ public class JuegoThread implements Runnable {
 					}
 
 					if(msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("neutre")) //Commande neutre
-						if (_perso.get_fight() != null || !MainServidor.CONFIG_ALLOW_PLAYER_COMMANDS)
-						{
+						if (_perso.get_fight() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
 							GestorSalida.GAME_SEND_MESSAGE(_perso, "Tu es en combat ou la commande est désactivée !", MainServidor.CONFIG_MOTD_COLOR);
-						}else
-					{
+						}else {
 					byte align = 0;
 					Personaje target = _perso;
 					target.modifAlignement(align);
@@ -3290,34 +3245,26 @@ public class JuegoThread implements Runnable {
 					return;
 					}
 						if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("fmcac")) //Adlesne Commande
-	                    {
+						{
 	                            Objeto obj = _perso.getObjetByPos(Constantes.ITEM_POS_ARME);
 	                            
-	                            if(_perso.get_kamas() < 500000)
-	                            {
+	                            if(_perso.get_kamas() < 500000) {
 	                                    GestorSalida.GAME_SEND_MESSAGE(_perso,  "Action impossible : vous avez moins de 500.000 k", MainServidor.CONFIG_MOTD_COLOR);
 	                                    return;
-	                            }
-	                                    
-	                            else if(_perso.get_fight() != null)
-	                            {
+	                            }else if(_perso.get_fight() != null) {
 	                                    GestorSalida.GAME_SEND_MESSAGE(_perso,  "Action impossible : vous ne devez pas être en combat", MainServidor.CONFIG_MOTD_COLOR);
 	                                    return;
-	                            }
-	                            
-	                            else if(obj == null)
-	                            {
+	                            }else if(obj == null) {
 	                                    GestorSalida.GAME_SEND_MESSAGE(_perso,  "Action impossible : vous ne portez pas d'arme", MainServidor.CONFIG_MOTD_COLOR);
 	                                    return;
 	                            }
 	                            
 	                            boolean containNeutre = false;
-	                            for(EfectoHechizo effect :  obj.getEffects())
-	                            {
-	                                    if(effect.getEffectID() == 100 || effect.getEffectID() == 95)
-	                                    {
-	                                            containNeutre = true;
-	                                    }
+	                            for(EfectoHechizo effect :  obj.getEffects()) {
+									if (effect.getEffectID() == 100 || effect.getEffectID() == 95) {
+										containNeutre = true;
+										break;
+									}
 	                            }
 	                            if(!containNeutre)
 	                            {

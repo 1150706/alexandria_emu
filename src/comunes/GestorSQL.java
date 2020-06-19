@@ -9,8 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.TreeMap;
 
 import java.sql.PreparedStatement;
@@ -33,19 +31,14 @@ public class GestorSQL {
 	private static Connection _dinamicos;
 	private static Connection _estaticos;
 	
-	private static Timer timerCommit;
-	private static boolean needCommit;
-	
 	public synchronized static ResultSet EjecutarConsulta(String query, String DBNAME) throws SQLException {
 		if(!MainServidor.isInit)
 			return null;
-		
 		Connection DB;
 		if(DBNAME.equals(MainServidor.DB_DINAMICOS))
 			DB = _dinamicos;
 		else
 			DB = _estaticos;
-		
 		Statement stat = DB.createStatement();
 		ResultSet RS = stat.executeQuery(query);
 		stat.setQueryTimeout(300);
@@ -53,31 +46,11 @@ public class GestorSQL {
 	}
 
 	public synchronized static PreparedStatement NuevaConsulta(String baseQuery, Connection dbCon) throws SQLException {
-		PreparedStatement toReturn = dbCon.prepareStatement(baseQuery);
-		
-		needCommit = true;
-		return toReturn;
-	}
-
-	public synchronized static void commitTransacts() {
-		try {
-			if(_dinamicos.isClosed() || _estaticos.isClosed()) {
-				closeCons();
-				InicarConexion();
-			}
-			_estaticos.commit();
-			_dinamicos.commit();
-		}catch(SQLException e) {
-			JuegoServidor.addToLog("SQL ERROR:"+e.getMessage());
-			e.printStackTrace();
-			commitTransacts();
-		}
+		return dbCon.prepareStatement(baseQuery);
 	}
 
 	public synchronized static void closeCons() {
 		try {
-			commitTransacts();
-			
 			_dinamicos.close();
 			_estaticos.close();
 		}catch (Exception e) {
@@ -121,10 +94,6 @@ public class GestorSQL {
 				JuegoServidor.addToLog("SQLError : Connexion a la BD invalide!");
 				return false;
 			}
-			
-			needCommit = false;
-			timer(true);
-			
 			return true;
 		}catch(SQLException e) {
 			System.out.println("SQL ERROR: "+e.getMessage());
@@ -661,8 +630,7 @@ public class GestorSQL {
 						RS.getInt("tamaño"),
 						RS.getInt("gfx"),
 						RS.getByte("alineacion"),
-						RS.getInt("cuenta"),
-						stats,
+						RS.getInt("cuenta"), stats,
 						RS.getByte("veramigos"),
 						RS.getByte("veralineacion"),
 						RS.getByte("vervendedor"),
@@ -2102,24 +2070,6 @@ public class GestorSQL {
 		      System.exit(1);
 		    }
 	}
-
-	public static void timer(boolean start) {
-			if(start) {
-				timerCommit = new Timer();
-				timerCommit.schedule(new TimerTask() {
-					
-					public void run() {
-						if(!needCommit)return;
-						
-						commitTransacts();
-						needCommit = false;
-						
-					}
-				}, MainServidor.CONFIG_DB_COMMIT, MainServidor.CONFIG_DB_COMMIT);
-			}
-			else
-				timerCommit.cancel();
-		}
 
 		public static boolean persoExist(String name) {
 			boolean exist = false;

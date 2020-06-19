@@ -42,9 +42,9 @@ object MainServidor {
     @JvmField
     var CONFIG_POLICY = false
     @JvmField
-    var CONFIG_REALM_PORT = 443
+    var PUERTO_DE_CONEXION = 443
     @JvmField
-    var CONFIG_GAME_PORT = 5555
+    var PUERTO_DE_JUEGO = 5555
     @JvmField
     var CONFIG_MAX_PERSOS = 5
     @JvmField
@@ -118,7 +118,7 @@ object MainServidor {
     @JvmField
     var CONFIG_XP_DEFI = true
     @JvmField
-    var CONFIG_USE_IP = false
+    var USAR_IP = false
     @JvmField
     var CONFIG_NOM_DD = ""
     @JvmField
@@ -242,7 +242,7 @@ object MainServidor {
         _passerTours = Thread(AllFightsTurns())
         _passerTours!!.start()
         println(" Reussi !")
-        println("Lancement du serveur de Jeu sur le port $CONFIG_GAME_PORT")
+        println("Lancement du serveur de Jeu sur le port $PUERTO_DE_JUEGO")
         var Ip: String? = ""
         try {
             Ip = InetAddress.getLocalHost().hostAddress
@@ -256,9 +256,9 @@ object MainServidor {
         }
         Ip = IP
         gameServer = JuegoServidor(Ip)
-        println("Lancement du serveur de Connexion sur le port : $CONFIG_REALM_PORT")
+        println("Lancement du serveur de Connexion sur le port : $PUERTO_DE_CONEXION")
         realmServer = RealmServer()
-        if (CONFIG_USE_IP) println("Ip du serveur $IP crypt $GAMESERVER_IP")
+        if (USAR_IP) println("Ip du serveur $IP crypt $GAMESERVER_IP")
         println("Nerf'Emu est en marche.\nEn attente de connexions")
         if (CONFIG_SOCKET_USE_COMPACT_DATA) {
             println("Lancement du FlushTimer")
@@ -387,9 +387,9 @@ object MainServidor {
                     if (value.equals("true", ignoreCase = true)) {
                         CONFIG_ZAAP = true
                     }
-                } else if (param.equals("USE_IP", ignoreCase = true)) {
+                } else if (param.equals("USAR_IP", ignoreCase = true)) {
                     if (value.equals("true", ignoreCase = true)) {
-                        CONFIG_USE_IP = true
+                        USAR_IP = true
                     }
                 } else if (param.equals("MOTD", ignoreCase = true)) {
                     CONFIG_MOTD = line.split("=".toRegex(), 2).toTypedArray()[1]
@@ -401,14 +401,14 @@ object MainServidor {
                     CONFIG_PUB_COLOR = value
                 } else if (param.equals("XP_METIER", ignoreCase = true)) {
                     XP_METIER = value.toInt()
-                } else if (param.equals("GAME_PORT", ignoreCase = true)) {
-                    CONFIG_GAME_PORT = value.toInt()
+                } else if (param.equals("PUERTO_DE_JUEGO", ignoreCase = true)) {
+                    PUERTO_DE_JUEGO = value.toInt()
                 } else if (param.equals("HELP", ignoreCase = true)) {
                     CONFIG_HELP = line.split("=".toRegex(), 2).toTypedArray()[1]
                 } else if (param.equals("NOM_DD", ignoreCase = true)) {
                     CONFIG_NOM_DD = line.split("=".toRegex(), 2).toTypedArray()[1]
-                } else if (param.equals("REALM_PORT", ignoreCase = true)) {
-                    CONFIG_REALM_PORT = value.toInt()
+                } else if (param.equals("PUERTO_DE_CONEXION", ignoreCase = true)) {
+                    PUERTO_DE_CONEXION = value.toInt()
                 } else if (param.equals("FLOODER_TIME", ignoreCase = true)) {
                     FLOOD_TIME = value.toInt().toLong()
                 } else if (param.equals("CONFIG_PUB_DELAY", ignoreCase = true)) {

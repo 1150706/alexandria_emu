@@ -86,9 +86,9 @@ public class JuegoServidor implements Runnable{
 				}
 			}, 60000,60000);
 			
-			_SS = new ServerSocket(MainServidor.CONFIG_GAME_PORT);
-			if(MainServidor.CONFIG_USE_IP)
-				MainServidor.GAMESERVER_IP = GestorEncriptador.CryptIP(Ip)+ GestorEncriptador.CryptPort(MainServidor.CONFIG_GAME_PORT);
+			_SS = new ServerSocket(MainServidor.PUERTO_DE_JUEGO);
+			if(MainServidor.USAR_IP)
+				MainServidor.GAMESERVER_IP = GestorEncriptador.CryptIP(Ip)+ GestorEncriptador.CryptPort(MainServidor.PUERTO_DE_JUEGO);
 			_startTime = System.currentTimeMillis();
 			_t = new Thread(this);
 			_t.start();

@@ -1,11 +1,13 @@
 #Fichero de configuracion Alexandria Emu
 
-#Configuracion General
-GAME_PORT = 5555
-REALM_PORT = 444
-DEBUG = true
-USE_IP = true
+#Configuracion de conexion
+PUERTO_DE_JUEGO = 5555
+PUERTO_DE_CONEXION = 444
+USAR_IP = true
 HOST_IP = 127.0.0.1
+
+#Configuracion del servidor
+DEBUG = true
 MOTD = <b>PrivateDofus! - http://privatedofus.net</b>
 MOTD_COLOR = FF0000
 SEND_POLICY = true

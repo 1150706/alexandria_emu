@@ -73,7 +73,7 @@ class RealmServer : Runnable {
 
     init {
         try {
-            serversocket = ServerSocket(MainServidor.CONFIG_REALM_PORT)
+            serversocket = ServerSocket(MainServidor.PUERTO_DE_CONEXION)
             thread = Thread(this)
             thread!!.isDaemon = true
             thread!!.start()

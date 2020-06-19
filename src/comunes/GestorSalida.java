@@ -152,12 +152,12 @@ public class GestorSalida {
 	
 	public static void REALM_SEND_GAME_SERVER_IP(PrintWriter out,int guid,boolean isHost) {
 		String packet = "A";
-		if(MainServidor.CONFIG_USE_IP) {
-			String ip = MainServidor.CONFIG_IP_LOOPBACK && isHost? GestorEncriptador.CryptIP("127.0.0.1")+ GestorEncriptador.CryptPort(MainServidor.CONFIG_GAME_PORT): MainServidor.GAMESERVER_IP;
+		if(MainServidor.USAR_IP) {
+			String ip = MainServidor.CONFIG_IP_LOOPBACK && isHost? GestorEncriptador.CryptIP("127.0.0.1")+ GestorEncriptador.CryptPort(MainServidor.PUERTO_DE_JUEGO): MainServidor.GAMESERVER_IP;
 			packet += "XK"+ip+guid;
 		}else {
 			String ip = MainServidor.CONFIG_IP_LOOPBACK && isHost?"127.0.0.1": MainServidor.IP;
-			packet += "YK"+ip+":"+ MainServidor.CONFIG_GAME_PORT+";"+guid;
+			packet += "YK"+ip+":"+ MainServidor.PUERTO_DE_JUEGO +";"+guid;
 		}
 		send(out,packet);
 		if(MainServidor.CONFIG_DEBUG)

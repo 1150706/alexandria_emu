@@ -46,7 +46,7 @@ object GestorEnvio {
                 del_BufferRemove()
                 pw!!.print(Totaldata.toString())
                 pw.flush()
-                if (MainServidor.CONFIG_DEBUG) println("Multi: Send>>$Totaldata")
+                if (MainServidor.MOSTRAR_ENVIADOS) println("Multi: Send>>$Totaldata")
             }
         }
         return Timer(MainServidor.CONFIG_SOCKET_TIME_COMPACT_DATA, action)

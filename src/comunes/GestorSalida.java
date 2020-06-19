@@ -74,7 +74,7 @@ public class GestorSalida {
         }
         String packet = "HC"+hashkey;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Realm: Send>>"+packet);
 		return hashkey.toString();
 	}
@@ -82,14 +82,14 @@ public class GestorSalida {
 	public static void REALM_SEND_REQUIRED_VERSION(PrintWriter out) {
 		String packet = "AlEv" + Constantes.CLIENT_VERSION;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet);
 	}
 	
 	public static void REALM_SEND_LOGIN_ERROR(PrintWriter out) {
 		String packet = "AlEf";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet);
 	}
 
@@ -97,7 +97,7 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("Af").append(position).append("|").append(totalAbo).append("|").append(totalNonAbo).append("|").append(subscribe).append("|").append(queueID);
 		send(out,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Serv: Send>>"+packet.toString());
 	}
 
@@ -111,21 +111,21 @@ public class GestorSalida {
 		packet.append("AQ").append(question.replace(" ", "+"));
 		
 		send(out,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet.toString());
 	}
 
 	public static void REALM_SEND_BANNED(PrintWriter out) {
 		String packet = "AlEb";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet);
 	}
 
 	public static void REALM_SEND_ALREADY_CONNECTED(PrintWriter out) {
 		String packet = "AlEc";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet);	
 	}
 
@@ -136,7 +136,7 @@ public class GestorSalida {
     	    "<site-control permitted-cross-domain-policies=\"master-only\" />"+  
     	    "</cross-domain-policy>";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -146,7 +146,7 @@ public class GestorSalida {
 			packet+= "|1," + number;//ServeurID
 		
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet);	
 	}
 	
@@ -160,14 +160,14 @@ public class GestorSalida {
 			packet += "YK"+ip+":"+ MainServidor.PUERTO_DE_JUEGO +";"+guid;
 		}
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_HELLOGAME_PACKET(PrintWriter out) {
 		String packet = "HG";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -175,28 +175,28 @@ public class GestorSalida {
 	{
 		String packet = "ATE";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_ATTRIBUTE_SUCCESS(PrintWriter out) {
 		String packet = "ATK0";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_AV0(PrintWriter out) {
 		String packet = "AV0";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_HIDE_GENERATE_NAME(PrintWriter out) {
 		String packet = "APE2";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -207,42 +207,42 @@ public class GestorSalida {
 			packet.append(entry.getValue().parseALK());
 		}
 		send(out,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 
 	public static void GAME_SEND_NAME_ALREADY_EXIST(PrintWriter out) {
 		String packet = "AAEa";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 		JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_CREATE_PERSO_FULL(PrintWriter out) {
 		String packet = "AAEf";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_CREATE_OK(PrintWriter out) {
 		String packet = "AAK";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_DELETE_PERSO_FAILED(PrintWriter out) {
 		String packet = "ADE";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_CREATE_FAILED(PrintWriter out) {
 		String packet = "AAEF";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 
 	}
@@ -250,28 +250,28 @@ public class GestorSalida {
 	public static void GAME_SEND_PERSO_SELECTION_FAILED(PrintWriter out) {
 		String packet = "ASE";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_STATS_PACKET(Personaje perso) {
         String packet = perso.getAsPacket();
         send(perso, packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_Rx_PACKET(Personaje out) {
 		String packet = "Rx"+out.getMountXpGive();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_Rn_PACKET(Personaje out, String name) {
 		String packet = "Rn"+name;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -280,7 +280,7 @@ public class GestorSalida {
 		if(sign.equals("+"))packet += DD.parse();
 		
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -294,49 +294,49 @@ public class GestorSalida {
 		packet.append(perso.parseItemToASK());
 		
 		send(out,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_ALIGNEMENT(PrintWriter out,int alliID) {
 		String packet = "ZS"+alliID;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_ADD_CANAL(PrintWriter out, String chans) {
 		String packet = "cC+"+chans;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_ZONE_ALLIGN_STATUT(PrintWriter out) {
 		String packet = "al|"+ Mundo.getSousZoneStateString();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_SEESPELL_OPTION(PrintWriter out, boolean spells) {
 		String packet = "SLo"+(spells?"+":"-");
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_RESTRICTIONS(PrintWriter out) {
 		String packet =  "AR6bk";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_Ow_PACKET(Personaje perso) {
 		String packet =  "Ow"+perso.getPodUsed()+"|"+perso.getMaxPod();
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -344,49 +344,49 @@ public class GestorSalida {
 		String packet =  "OT";
 		if(id > 0) packet += id;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_SEE_FRIEND_CONNEXION(PrintWriter out,boolean see) {
 		String packet = "FO"+(see?"+":"-");
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_GAME_CREATE(PrintWriter out, String _name) {
 		String packet = "GCK|1|"+_name;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_SERVER_HOUR(PrintWriter out) {
 		String packet = JuegoServidor.getServerTime();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_SERVER_DATE(PrintWriter out) {
 		String packet = JuegoServidor.getServerDate();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_MAPDATA(PrintWriter out, int id, String date,String key) {
 		String packet = "GDM|"+id+"|"+date+"|"+key;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_GDK_PACKET(PrintWriter out) {
 		String packet = "GDK";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -394,7 +394,7 @@ public class GestorSalida {
 		String packet = carte.getMobGroupGMsPackets();
 		if(packet.equals(""))return;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -402,7 +402,7 @@ public class GestorSalida {
 		String packet = carte.getObjectsGDsPackets();
 		if(packet.equals(""))return;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -410,7 +410,7 @@ public class GestorSalida {
 		String packet = carte.getNpcsGMsPackets(p);
 		if(packet.equals(""))return;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -418,14 +418,14 @@ public class GestorSalida {
 		String packet = Recaudador.parseGM(carte);
 		if(packet.length() < 5)return;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_MAP_GMS_PACKETS(PrintWriter out, Mapa carte) {
 		String packet = carte.getGMsPackets();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -435,7 +435,7 @@ public class GestorSalida {
 			if(z.get_compte().getGameThread() == null)continue;
 			send(z.get_compte().getGameThread().get_out(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map "+map.get_id()+": Send>>"+packet);
 	}
 	
@@ -449,7 +449,7 @@ public class GestorSalida {
 			if(f.getFighters(2).get(z).getPersonnage().get_compte().getGameThread() == null)continue;
 			send(f.getFighters(2).get(z).getPersonnage().get_compte().getGameThread().get_out(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fighter ID "+f.get_id()+": Send>>"+packet);
 	}
 	
@@ -459,7 +459,7 @@ public class GestorSalida {
 			if(F.getPersonnage() == null || F.getPersonnage().get_compte().getGameThread() == null || F.getPersonnage().get_GUID() == guid)continue;
 			send(F.getPersonnage().get_compte().getGameThread().get_out(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fighter ID "+f.get_id()+": Send>>"+packet);
 	}
 	
@@ -476,56 +476,56 @@ public class GestorSalida {
 				send(F.getPersonnage().get_compte().getGameThread().get_out(),packet.toString());
 			}
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight ID "+fight.get_id()+": Send>>"+packet);
 	}
 
 	public static void GAME_SEND_ADD_PLAYER_TO_MAP(Mapa map, Personaje perso) {
 		String packet = "GM|+"+perso.parseToGM();
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map "+map.get_id()+": Send>>"+packet);
 	}
 
 	public static void GAME_SEND_DUEL_Y_AWAY(PrintWriter out, int guid) {
 		String packet = "GA;903;"+guid+";o";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_DUEL_E_AWAY(PrintWriter out, int guid) {
 		String packet = "GA;903;"+guid+";z";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_MAP_NEW_DUEL_TO_MAP(Mapa map, int guid, int guid2) {
 		String packet = "GA;900;"+guid+";"+guid2;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map "+map.get_id()+": Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_CANCEL_DUEL_TO_MAP(Mapa map, int guid, int guid2) {
 		String packet = "GA;902;"+guid+";"+guid2;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_MAP_START_DUEL_TO_MAP(Mapa map, int guid, int guid2) {
 		String packet = "GA;901;"+guid+";"+guid2;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_MAP_FIGHT_COUNT(PrintWriter out, Mapa map) {
 		String packet = "fC"+map.getNbrFight();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -540,7 +540,7 @@ public class GestorSalida {
 				continue;
 			send(f.getPersonnage(),packet.toString());
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
 	}
 	
@@ -551,14 +551,14 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_MAP_FIGHT_COUNT_TO_MAP(Mapa map) {
 		String packet = "fC"+map.getNbrFight();
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
@@ -566,7 +566,7 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("Gc+").append(guid1).append(";").append(arg1).append("|").append(guid1).append(";").append(cell1).append(";").append(str1).append("|").append(guid2).append(";").append(cell2).append(";").append(str2);
 		for(Personaje z : map.getPersos()) send(z,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
 	}
 	
@@ -574,14 +574,14 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("Gc+").append(guid1).append(";").append(arg1).append("|").append(guid1).append(";").append(cell1).append(";").append(str1).append("|").append(guid2).append(";").append(cell2).append(";").append(str2);
 		send(p,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
 	}
 	
 	public static void GAME_SEND_GAME_REMFLAG_PACKET_TO_MAP(Mapa map, int guid) {
 		String packet = "Gc-"+guid;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
@@ -589,7 +589,7 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("Gt").append(teamID).append("|+").append(perso.getGUID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
 		for(Personaje z : map.getPersos()) send(z,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
 	}
 	
@@ -597,7 +597,7 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("Gt").append(teamID).append("|+").append(perso.getGUID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
 		send(p,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
 	}
 	
@@ -605,14 +605,14 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("Gt").append(teamID).append("|-").append(perso.getGUID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
 		for(Personaje z : map.getPersos()) send(z,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
 	}
 	
 	public static void GAME_SEND_MAP_MOBS_GMS_PACKETS_TO_MAP(Mapa map) {
 		String packet = map.getMobGroupGMsPackets(); // Un par un comme sa lors du respawn :)
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
@@ -620,7 +620,7 @@ public class GestorSalida {
 		String packet = "GM|";
 		packet += current_Mobs.parseGM();// Un par un comme sa lors du respawn :)
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
@@ -628,14 +628,14 @@ public class GestorSalida {
 		String packet = map.getGMsPackets();
 		send(_perso, packet);
 		
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_ON_EQUIP_ITEM(Mapa map, Personaje _perso) {
 		String packet = _perso.parseToOa();
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
@@ -649,7 +649,7 @@ public class GestorSalida {
 			if(z.getPersonnage() == null) continue;
 			send(z.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
@@ -662,7 +662,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 				send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -670,7 +670,7 @@ public class GestorSalida {
 	{
 		String packet = "Go"+s+option+guid;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -684,7 +684,7 @@ public class GestorSalida {
 			if(f.hasLeft())continue;
 				send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 
@@ -693,14 +693,14 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("GJK").append(state).append("|").append(cancelBtn).append("|").append(duel).append("|").append(spec).append("|").append(time).append("|").append(unknown);
 		send(out,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 
 	public static void GAME_SEND_FIGHT_PLACES_PACKET(PrintWriter out,String places, int team) {
 		String packet = "GP"+places+"|"+team;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -708,42 +708,42 @@ public class GestorSalida {
 		String packet = "Im"+str; 
 		for(Personaje perso : Mundo.getOnlinePersos())
 			send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void ENVIAR_MENSAJE_DESDE_LANG(Personaje out, String str) {
 		String packet = "Im"+str;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_ILS_PACKET(Personaje out, int i) {
 		String packet = "ILS"+i;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_ILF_PACKET(Personaje P, int i) {
 		String packet = "ILF"+i;
 		send(P,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void ENVIAR_MENSAJE_DESDE_LANG_AL_MAPA(Mapa map, String id) {
 		String packet = "Im"+id;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_eUK_PACKET_TO_MAP(Mapa map, int guid, int emote) {
 		String packet = "eUK"+guid+"|"+emote;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
@@ -754,14 +754,14 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_MESSAGE(Personaje out, String mess, String color) {
 		String packet = "cs<font color='#"+color+"'>"+mess+"</font>";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -769,7 +769,7 @@ public class GestorSalida {
 	{
 		String packet = "cs<font color='#"+color+"'>"+mess+"</font>";
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
@@ -777,7 +777,7 @@ public class GestorSalida {
 	{
 		String packet = "GA;903;"+guid+";"+c;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	public static void GAME_SEND_GIC_PACKETS_TO_FIGHT(Pelea fight, int teams)
@@ -795,7 +795,7 @@ public class GestorSalida {
 			if(perso.getPersonnage() == null || !perso.getPersonnage().isOnline())continue;
 			send(perso.getPersonnage(),packet.toString());
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet.toString());
 	}
 	public static void GAME_SEND_GIC_PACKET_TO_FIGHT(Pelea fight, int teams, Fighter f)
@@ -809,7 +809,7 @@ public class GestorSalida {
 			if(perso.getPersonnage() == null || !perso.getPersonnage().isOnline())continue;
 			send(perso.getPersonnage(),packet.toString());
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet.toString());
 	}
 	public static void GAME_SEND_GS_PACKET_TO_FIGHT(Pelea fight, int teams)
@@ -822,14 +822,14 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	public static void GAME_SEND_GS_PACKET(Personaje out)
 	{
 		String packet = "GS";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	public static void GAME_SEND_GTL_PACKET_TO_FIGHT(Pelea fight, int teams)
@@ -840,14 +840,14 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),fight.getGTL());
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+fight.getGTL());
 	}
 	public static void GAME_SEND_GTL_PACKET(Personaje out, Pelea fight)
 	{
 		String packet = fight.getGTL();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	public static void GAME_SEND_GTM_PACKET_TO_FIGHT(Pelea fight, int teams)
@@ -873,7 +873,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet.toString());
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet.toString());
 	}
 
@@ -886,35 +886,35 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	public static void GAME_SEND_GAMETURNSTART_PACKET(Personaje P, int guid, int time)
 	{
 		String packet = "GTS"+guid+"|"+time;
 		send(P,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	public static void GAME_SEND_GV_PACKET(Personaje P)
 	{
 		String packet = "GV";
 		send(P,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	public static void GAME_SEND_PONG(PrintWriter out)
 	{
 		String packet = "pong";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	public static void GAME_SEND_QPONG(PrintWriter out)
 	{
 		String packet = "qpong";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	public static void GAME_SEND_GAS_PACKET_TO_FIGHT(Pelea fight, int teams, int guid)
@@ -926,7 +926,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	
@@ -942,7 +942,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight("+fight.getFighters(teams).size()+") : Send>>"+packet);
 	}
 	
@@ -955,7 +955,7 @@ public class GestorSalida {
 			packet+=";"+s2;
 		
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -968,7 +968,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	
@@ -980,7 +980,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 
@@ -992,7 +992,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 
@@ -1000,7 +1000,7 @@ public class GestorSalida {
 	{
 		String packet = "BN";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1008,7 +1008,7 @@ public class GestorSalida {
 	{
 		String packet = "BN";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1021,7 +1021,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 
@@ -1034,7 +1034,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 
@@ -1042,7 +1042,7 @@ public class GestorSalida {
 	{
 		String packet = "cS"+guid+"|"+id;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
@@ -1050,7 +1050,7 @@ public class GestorSalida {
 	{
 		String packet = "SUE";
 		send(_out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1058,7 +1058,7 @@ public class GestorSalida {
 	{
 		String packet = "SUK"+spellID+"~"+level;
 		send(_out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1066,7 +1066,7 @@ public class GestorSalida {
 	{
 		String packet = perso.parseSpellList();
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1079,7 +1079,7 @@ public class GestorSalida {
 			if(f.getPersonnage().isOnline())
 				send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 
@@ -1092,7 +1092,7 @@ public class GestorSalida {
 			if(f.getPersonnage().isOnline())
 				send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	
@@ -1100,7 +1100,7 @@ public class GestorSalida {
 	{
 		String packet = fight.GetGE(win);
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	
@@ -1114,7 +1114,7 @@ public class GestorSalida {
 			if(f.getPersonnage().isOnline())
 			send(f.getPersonnage(),packet.toString());
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet.toString());
 	}
 	
@@ -1128,7 +1128,7 @@ public class GestorSalida {
 			send(f.getPersonnage(),packet);
 		}
 		
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 
@@ -1137,7 +1137,7 @@ public class GestorSalida {
 		String packet = map.getFightersGMsPackets();
 		send(_perso, packet);
 		
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
@@ -1155,7 +1155,7 @@ public class GestorSalida {
 			}
 		}
 		
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
@@ -1163,7 +1163,7 @@ public class GestorSalida {
 	{
 		String packet = "cMK"+suffix+"|"+guid+"|"+name+"|"+msg;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1180,7 +1180,7 @@ public class GestorSalida {
 			packet.append(entry.getValue().parseFightInfos());
 		}
 		send(out,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 	
@@ -1188,7 +1188,7 @@ public class GestorSalida {
 	{
 		String packet = "cMK"+suffix+"|"+guid+"|"+name+"|"+msg;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	public static void GAME_SEND_cMK_PACKET_TO_GUILD(Gremio g, String suffix, int guid, String name, String msg)
@@ -1199,7 +1199,7 @@ public class GestorSalida {
 			if(perso == null || !perso.isOnline())continue;
 					send(perso,packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Guild: Send>>"+packet);
 	}
 	public static void GAME_SEND_cMK_PACKET_TO_ALL(String suffix,int guid,String name,String msg)
@@ -1207,7 +1207,7 @@ public class GestorSalida {
 		String packet = "cMK"+suffix+"|"+guid+"|"+name+"|"+msg;
 		for(Personaje perso : Mundo.getOnlinePersos())
 			send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: ALL("+ Mundo.getOnlinePersos().size()+"): Send>>"+packet);
 	}
 	public static void GAME_SEND_cMK_PACKET_TO_ALIGN(String suffix,int guid,String name,String msg, Personaje _perso)
@@ -1220,14 +1220,14 @@ public class GestorSalida {
 				send(perso,packet);
 			}
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: ALL("+ Mundo.getOnlinePersos().size()+"): Send>>"+packet);
 	}
 	public static void GAME_SEND_cMK_PACKET_TO_ADMIN(String suffix,int guid,String name,String msg)
 	{
 		String packet = "cMK"+suffix+"|"+guid+"|"+name+"|"+msg;
 		for(Personaje perso : Mundo.getOnlinePersos())if(perso.isOnline())if(perso.get_compte() != null)if(perso.get_compte().get_gmLvl()>0)send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: ALL("+ Mundo.getOnlinePersos().size()+"): Send>>"+packet);
 	}
 	public static void GAME_SEND_cMK_PACKET_TO_FIGHT(Pelea fight, int teams, String suffix, int guid, String name, String msg)
@@ -1242,7 +1242,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
@@ -1256,7 +1256,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
@@ -1270,7 +1270,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
@@ -1278,7 +1278,7 @@ public class GestorSalida {
 	{
 		String packet = "GA;2;"+guid+";";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1286,7 +1286,7 @@ public class GestorSalida {
 	{
 		String packet = "cMEf"+name;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1294,7 +1294,7 @@ public class GestorSalida {
 	{
 		String packet = "eD"+guid+"|"+dir;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
@@ -1303,7 +1303,7 @@ public class GestorSalida {
 		String packet = "ECK"+type;
 		if(!str.equals(""))packet += "|"+str;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1312,7 +1312,7 @@ public class GestorSalida {
 		String packet = "ECK"+type;
 		if(!str.equals(""))packet += "|"+str;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1320,7 +1320,7 @@ public class GestorSalida {
 	{
 		String packet = "EL"+npc.get_template().getItemVendorList();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1328,7 +1328,7 @@ public class GestorSalida {
 	{
 		String packet = "EL"+perco.getItemPercepteurList();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1336,7 +1336,7 @@ public class GestorSalida {
 	{
 		String packet = "EL"+p.parseStoreItemsList();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1344,7 +1344,7 @@ public class GestorSalida {
 	{
 		String packet = "EV";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1352,7 +1352,7 @@ public class GestorSalida {
 	{
 		String packet = "DCK"+id;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1360,7 +1360,7 @@ public class GestorSalida {
 	{
 		String packet = "DQ"+str;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1368,7 +1368,7 @@ public class GestorSalida {
 	{
 		String packet = "DV";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1376,7 +1376,7 @@ public class GestorSalida {
 	{
 		String packet = "BAT2"+mess;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1384,7 +1384,7 @@ public class GestorSalida {
 	{
 		String packet = "EBE";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1392,7 +1392,7 @@ public class GestorSalida {
 	{
 		String packet = "ESE";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1400,7 +1400,7 @@ public class GestorSalida {
 	{
 		String packet = "EBK";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1408,7 +1408,7 @@ public class GestorSalida {
 	{
 		String packet = "OQ"+obj.getGuid()+"|"+obj.getQuantity();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1416,7 +1416,7 @@ public class GestorSalida {
 	{
 		String packet = "OAKO"+obj.parseItem();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1424,7 +1424,7 @@ public class GestorSalida {
 	{
 		String packet = "ESK";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1432,7 +1432,7 @@ public class GestorSalida {
 	{
 		String packet = "OR"+guid;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1440,7 +1440,7 @@ public class GestorSalida {
 	{
 		String packet = "OdE";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1451,7 +1451,7 @@ public class GestorSalida {
 			packet += obj.getPosition();
 		
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1467,7 +1467,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 				send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 
@@ -1475,7 +1475,7 @@ public class GestorSalida {
 	{
 		String packet = "OAEL";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1483,7 +1483,7 @@ public class GestorSalida {
 	{
 		String packet = "AN"+lvl;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1494,7 +1494,7 @@ public class GestorSalida {
 		{
 			send(P,packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: ALL: Send>>"+packet);
 	}
 
@@ -1502,7 +1502,7 @@ public class GestorSalida {
 	{
 		String packet = "ERK"+guid+"|"+guidT+"|"+msgID;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1510,7 +1510,7 @@ public class GestorSalida {
 	{
 		String packet = "ERE"+c;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1518,7 +1518,7 @@ public class GestorSalida {
 	{
 		String packet = "ECK"+type;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1528,7 +1528,7 @@ public class GestorSalida {
 		if(!s1.equals(""))
 			packet += s1;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1538,7 +1538,7 @@ public class GestorSalida {
 		if(!s1.equals(""))
 			packet += s1;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1546,7 +1546,7 @@ public class GestorSalida {
 	{
 		String packet = "EK"+(ok?"1":"0")+guid;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1554,14 +1554,14 @@ public class GestorSalida {
 	{
 		String packet = "EV"+c;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_GROUP_INVITATION_ERROR(PrintWriter out, String s) {
 		String packet = "PIE"+s;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1569,7 +1569,7 @@ public class GestorSalida {
 	{
 		String packet = "PIK"+n1+"|"+n2;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1577,7 +1577,7 @@ public class GestorSalida {
 	{
 		String packet = "PCK"+g.getChief().get_name();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
@@ -1585,7 +1585,7 @@ public class GestorSalida {
 	{
 		String packet = "PL"+g.getChief().get_GUID();
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 	
@@ -1593,7 +1593,7 @@ public class GestorSalida {
 	{
 		String packet = "PR";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1601,7 +1601,7 @@ public class GestorSalida {
 	{
 		String packet = "PV"+s;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1617,7 +1617,7 @@ public class GestorSalida {
 			first = false;
 		}
 		send(out,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 	
@@ -1625,7 +1625,7 @@ public class GestorSalida {
 	{
 		String packet = "PM+"+p.parseToPM();
 		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 	
@@ -1633,7 +1633,7 @@ public class GestorSalida {
 	{
 		String packet = "PM~"+p.parseToPM();
 		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
@@ -1641,7 +1641,7 @@ public class GestorSalida {
 	{
 		String packet = "PM-"+guid;
 		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
@@ -1649,7 +1649,7 @@ public class GestorSalida {
 	{
 		String packet = "cMK"+s+"|"+guid+"|"+name+"|"+msg+"|";
 		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
@@ -1662,7 +1662,7 @@ public class GestorSalida {
 		packet.append("|");
 		for(Fighter f : fight.getFighters(2))packet.append(f.getPacketsName()).append("~").append(f.get_lvl()).append(";");
 		send(out,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 
@@ -1670,14 +1670,14 @@ public class GestorSalida {
 	{
 		String packet = "IQ"+guid+"|"+qua;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	public static void GAME_SEND_JN_PACKET(Personaje perso, int jobID, int lvl)
 	{
 		String packet = "JN"+jobID+"|"+lvl;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	public static void GAME_SEND_GDF_PACKET_TO_MAP(Mapa map, Case cell)
@@ -1686,7 +1686,7 @@ public class GestorSalida {
 		InteractiveObject object = cell.getObject();
 		String packet = "GDF|"+cellID+";"+object.getState()+";"+(object.isInteractive()?"1":"0");
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
@@ -1696,7 +1696,7 @@ public class GestorSalida {
 		if(!s2.equals(""))packet += ";"+s2;
 		
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
@@ -1704,7 +1704,7 @@ public class GestorSalida {
 	{
 		String packet = "EL"+perso.parseBankPacket();
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1712,7 +1712,7 @@ public class GestorSalida {
 	{
 		String packet = "EL"+t.parseToTrunkPacket();
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1725,7 +1725,7 @@ public class GestorSalida {
 			packet.append("|").append(sm.getTemplate().getId()).append(";").append(sm.get_lvl()).append(";").append(sm.getXpString(";")).append(";");
 		}
 		send(perso,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 	public static void GAME_SEND_JO_PACKET(Personaje perso, ArrayList<StatsMetier> SMs)
@@ -1734,7 +1734,7 @@ public class GestorSalida {
 		{
 			String packet = "JO"+sm.getID()+"|"+sm.getOptBinValue()+"|2";//FIXME 2=?
 			send(perso,packet);
-			if(MainServidor.CONFIG_DEBUG)
+			if(MainServidor.MOSTRAR_ENVIADOS)
 				JuegoServidor.addToSockLog("Game: Send>>"+packet);
 		}
 	}
@@ -1746,7 +1746,7 @@ public class GestorSalida {
 			packet.append(sm.parseJS());
 		}
 		send(perso, packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1754,7 +1754,7 @@ public class GestorSalida {
 	{
 		String packet = "EsK"+str;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
@@ -1765,7 +1765,7 @@ public class GestorSalida {
 		{
 			send(PW,packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
@@ -1773,7 +1773,7 @@ public class GestorSalida {
 	{
 		String packet = "Ea"+str;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1781,7 +1781,7 @@ public class GestorSalida {
 	{
 		String packet = "EA"+str;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1789,7 +1789,7 @@ public class GestorSalida {
 	{
 		String packet = "Ec"+str;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1797,7 +1797,7 @@ public class GestorSalida {
 	{
 		String packet = "Em"+str;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1805,7 +1805,7 @@ public class GestorSalida {
 	{
 		String packet = "IO"+guid+"|"+str;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
@@ -1817,10 +1817,10 @@ public class GestorSalida {
 		{
 			String packet2 = "FS" + perso.get_wife_friendlist();
 			send(perso,packet2);
-			if(MainServidor.CONFIG_DEBUG)
+			if(MainServidor.MOSTRAR_ENVIADOS)
 				JuegoServidor.addToSockLog("Game: Send>>"+packet2);
 		} 
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1828,7 +1828,7 @@ public class GestorSalida {
 	{
 		String packet = "Im0143;"+logando.get_compte().get_pseudo()+" (<b><a href='asfunction:onHref,ShowPlayerPopupMenu,"+logando.get_name()+"'>"+logando.get_name()+"</a></b>)";
 		send(amigo, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 		JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
@@ -1836,14 +1836,14 @@ public class GestorSalida {
 	{
 		String packet = "FA"+str;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	public static void GAME_SEND_FD_PACKET(Personaje perso, String str)
 	{
 		String packet = "FD"+str;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	public static void GAME_SEND_Rp_PACKET(Personaje perso, MountPark MP)
@@ -1865,7 +1865,7 @@ public class GestorSalida {
 		}
 		
 		send(perso,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 
@@ -1892,42 +1892,42 @@ public class GestorSalida {
 			}
 		}	
 		send(perso,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 
 	public static void GAME_SEND_MOUNT_DESCRIPTION_PACKET(Personaje perso, Dragopavo DD) {
 		String packet = "Rd"+DD.parse();
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_Rr_PACKET(Personaje perso, String str) {
 		String packet = "Rr"+str;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_ALTER_GM_PACKET(Mapa map, Personaje perso) {
 		String packet = "GM|~"+perso.parseToGM();
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_Ee_PACKET(Personaje perso, char c, String s) {
 		String packet = "Ee"+c+s;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_cC_PACKET(Personaje perso, char c, String s) {
 		String packet = "cC"+c+s;
 		send(perso,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -1935,7 +1935,7 @@ public class GestorSalida {
 		for(Personaje z : map.getPersos()) {
 			String packet = "GM|"+npc.parseGM(z);
 			send(z,packet);
-			if(MainServidor.CONFIG_DEBUG)
+			if(MainServidor.MOSTRAR_ENVIADOS)
 				JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 		}
 		
@@ -1944,56 +1944,56 @@ public class GestorSalida {
 	public static void GAME_SEND_ADD_PERCO_TO_MAP(Mapa map) {
 		String packet = "GM|"+ Recaudador.parseGM(map);
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_GDO_PACKET_TO_MAP(Mapa map, char c, int cell, int itm, int i) {
 		String packet = "GDO"+c+cell+";"+itm+";"+i;
 		for(Personaje z : map.getPersos()) send(z,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_GDO_PACKET(Personaje p, char c, int cell, int itm, int i) {
 		String packet = "GDO"+c+cell+";"+itm+";"+i;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_ZC_PACKET(Personaje p, int a) {
 		String packet = "ZC"+a;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_GIP_PACKET(Personaje p, int a) {
 		String packet = "GIP"+a;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_gn_PACKET(Personaje p) {
 		String packet = "gn";
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_gC_PACKET(Personaje p, String s) {
 		String packet = "gC"+s;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_gV_PACKET(Personaje p) {
 		String packet = "gV";
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -2003,21 +2003,21 @@ public class GestorSalida {
 			packet += g.parseMembersToGM();
 		}
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_gIB_PACKET(Personaje p, String infos) {
 		String packet = "gIB"+infos;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_gIH_PACKET(Personaje p, String infos) {
 		String packet = "gIH"+infos;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -2025,14 +2025,14 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("gS").append(gm.getGuild().get_name()).append("|").append(gm.getGuild().get_emblem().replace(',', '|')).append("|").append(gm.parseRights());
 		send(p,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 	
 	public static void GAME_SEND_gJ_PACKET(Personaje p, String str) {
 		String packet = "gJ"+str;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -2040,7 +2040,7 @@ public class GestorSalida {
 	{
 		String packet = "gK"+str;
 		send(p,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -2055,28 +2055,28 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("gIG").append((g.getSize()>9?1:0)).append("|").append(g.get_lvl()).append("|").append(xpMin).append("|").append(g.get_xp()).append("|").append(xpMax);
 		send(p,packet.toString());
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 	
 	public static void REALM_SEND_MESSAGE(PrintWriter out, String args) {
 		String packet = "M"+args;
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_WC_PACKET(Personaje perso) {
 		String packet = "WC"+perso.parseZaapList();
 		send(perso.get_compte().getGameThread().get_out(),packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
 	public static void GAME_SEND_WV_PACKET(Personaje out) {
 		String packet = "WV";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -2095,28 +2095,28 @@ public class GestorSalida {
 	public static void GAME_SEND_WUE_PACKET(Personaje out) {
 		String packet = "WUE";
 		send(out,packet);
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_EMOTE_LIST(Personaje perso, String s, String s1) {
 		String packet = "eL"+s+"|"+s1;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_NO_EMOTE(Personaje out) {
 		String packet = "eUE";
 		send(out, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
 	public static void REALM_SEND_TOO_MANY_PLAYER_ERROR(PrintWriter out) {
 		String packet = "AlEw";
 		send(out, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
@@ -2132,140 +2132,140 @@ public class GestorSalida {
 	    
 		String packet = "APK"+pass;
 				send(out, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_ADD_ENEMY(Personaje out, Personaje pr) {
 		String packet = "iAK"+pr.get_compte().get_name()+";2;"+pr.get_name()+";36;10;0;100.FL.";
 		send(out, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_iAEA_PACKET(Personaje out) {
 		String packet = "iAEA.";
 		send(out, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_ENEMY_LIST(Personaje perso) {
 		String packet = "iL"+perso.get_compte().parseEnemyList();
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_iD_COMMANDE(Personaje perso, String str) {
 		String packet = "iD"+str;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_BWK(Personaje perso, String str) {
 		String packet = "BWK"+str;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
     public static void GAME_SEND_KODE(Personaje perso, String str) {
         String packet = "K" + str;
         send(perso, packet);
-        if(MainServidor.CONFIG_DEBUG)
+        if(MainServidor.MOSTRAR_ENVIADOS)
             JuegoServidor.addToSockLog("Game: Send>>" + packet);
     }
 
     public static void GAME_SEND_hOUSE(Personaje perso, String str) {
         String packet = "h" + str;
         send(perso, packet);
-        if(MainServidor.CONFIG_DEBUG)
+        if(MainServidor.MOSTRAR_ENVIADOS)
             JuegoServidor.addToSockLog("Game: Send>>" + packet);
     }
 	
 	public static void GAME_SEND_FORGETSPELL_INTERFACE(char sign, Personaje perso) {
 		String packet = "SF"+sign;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_R_PACKET(Personaje perso, String str) {
 		String packet = "R"+str;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_gIF_PACKET(Personaje perso, String str) {
 		String packet = "gIF"+str;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_gITM_PACKET(Personaje perso, String str) {
 		String packet = "gITM"+str;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_gITp_PACKET(Personaje perso, String str) {
 		String packet = "gITp"+str;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_gITP_PACKET(Personaje perso, String str) {
 		String packet = "gITP"+str;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_IH_PACKET(Personaje perso, String str) {
 		String packet = "IH"+str;
 		send(perso, packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
 	public static void GAME_SEND_FLAG_PACKET(Personaje perso, Personaje cible) {
 		String packet = "IC"+cible.getActualMapa().getX()+"|"+cible.getActualMapa().getY();
 		send(perso,packet); 
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_DELETE_FLAG_PACKET(Personaje perso) {
 		String packet = "IC|"; 
 		send(perso,packet); 
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_gT_PACKET(Personaje perso, String str) {
 		String packet = "gT"+str; 
 		send(perso,packet); 
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_GUILDHOUSE_PACKET(Personaje perso) {
 		String packet = "gUT"; 
 		send(perso,packet); 
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_GUILDENCLO_PACKET(Personaje perso) {
 		String packet = "gUF"; 
 		send(perso,packet); 
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
@@ -2273,14 +2273,14 @@ public class GestorSalida {
 	public static void GAME_SEND_EHm_PACKET(Personaje out, String sign, String str) {
 		String packet = "EHm"+sign + str;
 		send(out,packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
 	public static void GAME_SEND_EHM_PACKET(Personaje out, String sign, String str) {
 		String packet = "EHM"+sign + str;
 		send(out,packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
@@ -2288,14 +2288,14 @@ public class GestorSalida {
 	{
 		String packet = "EHP"+templateID+"|"+ Mundo.getObjTemplate(templateID).getAvgPrice();
 		send(out,packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
 	public static void GAME_SEND_EHl(Personaje out, Mercadillo seller, int templateID) {
 		String packet = "EHl" + seller.parseToEHl(templateID);
 		send(out,packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
@@ -2304,7 +2304,7 @@ public class GestorSalida {
 		String packet = "EHL"+categ+"|"+templates;
 		
 		send(out,packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
@@ -2313,7 +2313,7 @@ public class GestorSalida {
 		String packet = "EHL"+items;
 		
 		send(out,packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
@@ -2330,7 +2330,7 @@ public class GestorSalida {
 		isFirst = false;
 		}
 		send(perso, packet.toString());
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
@@ -2338,14 +2338,14 @@ public class GestorSalida {
 		String packet = "GA;"+action+";"+homme+";"+homme+","+femme+","+parlant;
 		Personaje Homme = Mundo.getPersonnage(homme);
 		send(Homme,packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
 	public static void GAME_SEND_PF(Personaje perso, String str) {
 		String packet = "PF"+str;
 		send(perso,packet);
-		if (MainServidor.CONFIG_DEBUG)
+		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
@@ -2360,7 +2360,7 @@ public class GestorSalida {
         }
         if(packet.length() < 5) return;
         send(P, packet.toString());
-        if (MainServidor.CONFIG_DEBUG)
+        if (MainServidor.MOSTRAR_ENVIADOS)
         	JuegoServidor.addToSockLog("Game: Send>>" + packet.toString());
     }
     
@@ -2373,7 +2373,7 @@ public class GestorSalida {
     	for(Personaje perso1 : Mundo.getOnlinePersos()) {
     		send(perso1, packet); 
     	} 
-    	if(MainServidor.CONFIG_DEBUG)
+    	if(MainServidor.MOSTRAR_ENVIADOS)
     		JuegoServidor.addToSockLog("Game: ALL("+ Mundo.getOnlinePersos().size()+"): Send>>"+packet);
     }
 
@@ -2383,7 +2383,7 @@ public class GestorSalida {
 			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
 			send(f.getPersonnage(),packet);
 		}
-		if(MainServidor.CONFIG_DEBUG)
+		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 }

@@ -304,7 +304,7 @@ public class EfectoHechizo
 		
 		public void applyToFight(Pelea fight, Fighter acaster, ArrayList<Fighter> cibles, boolean isCaC)
 		{
-			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Effet id: "+effectID+" Args: "+args+" turns: "+turns+" cibles: "+cibles.size()+" chance: "+chance);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Effet id: "+effectID+" Args: "+args+" turns: "+turns+" cibles: "+cibles.size()+" chance: "+chance);
 			try
 			{
 				if(turns != -1)//Si ce n'est pas un buff qu'on applique en début de tour

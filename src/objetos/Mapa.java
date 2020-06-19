@@ -1384,7 +1384,7 @@ public class Mapa {
 		group.setCondition(condition);
 		group.setIsFix(false);
 		
-		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Groupe de monstres ajoutes sur la map: "+_id+" ID: "+_nextObjectID);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Groupe de monstres ajoutes sur la map: "+_id+" ID: "+_nextObjectID);
 		
 		GestorSalida.GAME_SEND_MAP_MOBS_GM_PACKET(this, group);
 		_nextObjectID--;
@@ -1399,7 +1399,7 @@ public class Mapa {
 		_mobGroups.put(_nextObjectID, group);
 		group.setIsFix(false);
 
-		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Groupe de monstres ajoutes sur la map: "+_id+" ID: "+_nextObjectID);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Groupe de monstres ajoutes sur la map: "+_id+" ID: "+_nextObjectID);
 
 		GestorSalida.GAME_SEND_MAP_MOBS_GM_PACKET(this, group);
 		_nextObjectID--;

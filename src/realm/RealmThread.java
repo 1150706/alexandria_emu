@@ -58,9 +58,11 @@ public class RealmThread implements Runnable{
 	    		if (charCur[0] != '\u0000' && charCur[0] != '\n' && charCur[0] != '\r')
 		    	{
 	    			packet.append(charCur[0]);
-		    	}else if(packet.length() > 0)
-		    	{
-		    		RealmServer.addToSockLog("Realm: Recv << "+packet);
+		    	}else if(packet.length() > 0) {
+
+					if(MainServidor.MOSTRAR_RECIBIDOS){
+						RealmServer.addToSockLog("Realm: Recibido << "+packet);
+					}
 		    		_packetNum++;
 		    		parsePacket(packet.toString());
 		    		packet = new StringBuilder();

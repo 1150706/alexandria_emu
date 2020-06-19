@@ -988,7 +988,7 @@ public class Personaje {
 	
 	public boolean forgetSpell(int spellID) {
 		if(getSortStatBySortIfHas(spellID)== null) {
-			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(_name+" n'a pas le sort "+spellID);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(_name+" n'a pas le sort "+spellID);
 			return false;
 		}
 		int AncLevel = getSortStatBySortIfHas(spellID).getLevel();
@@ -1000,7 +1000,7 @@ public class Personaje {
 			GestorSQL.guardar_personaje(this,false);
 			return true;
 		}else {
-			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog(_name+" : Echec LearnSpell "+spellID);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(_name+" : Echec LearnSpell "+spellID);
 			return false;
 		}
 		
@@ -1136,16 +1136,13 @@ public class Personaje {
 		if(_guildMember != null)
 			_compte.setLastConnectionDate(annee+"~"+mois+"~"+jour+"~"+heure+"~"+min);
 		
-		//Actualisation dans la DB
+		//Actualizar la fecha de ultima conexion en la base de datos
 		GestorSQL.actualizar_ultima_fecha_conexion(_compte);
-		
-		if(!MainServidor.CONFIG_MOTD.equals(""))//Si le motd est notifié
-		{
-			String color = MainServidor.CONFIG_MOTD_COLOR;
-			if(color.equals(""))color = "000000";//Noir
-			
-			GestorSalida.GAME_SEND_MESSAGE(this, MainServidor.CONFIG_MOTD, color);
-		}
+
+		//Enviar mensaje de bienvenida desde el LANG
+		//Tomamos el nombre del pj, desde la config tomamos nombre y web del servidor
+		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "1239;" + this.get_name() + "~" + MainServidor.NOMBRE_DEL_SERVIDOR + "~" + MainServidor.WEB_DEL_SERVIDOR);
+
 		//on démarre le Timer pour la Regen de Pdv
 		_sitTimer.start();
 		//on le demarre coté client

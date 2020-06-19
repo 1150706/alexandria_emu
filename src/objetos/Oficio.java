@@ -1244,12 +1244,12 @@ public class Oficio {
 					
 					if(ViewActualStatsItem(obj, stats) == 1 || ViewActualStatsItem(obj, stats) == 2)//L'item possède le stats négatif ou positif
 					{
-						if(MainServidor.CONFIG_DEBUG) System.out.println("Modification d'un stat existant : "+stats+". Ajout de "+add);
+						if(MainServidor.MOSTRAR_ENVIADOS) System.out.println("Modification d'un stat existant : "+stats+". Ajout de "+add);
 						obj.setStats(obj.generateNewStatsFromTemplate(obj.parseFMStatsString(stats, obj, add, negatif).replace(";","#"), false));
 					}
 					else//L'item ne possède pas le stats.
 					{
-						if(MainServidor.CONFIG_DEBUG) System.out.println("Ajout d'un stat inexistant : "+stats+". Ajout de "+add);
+						if(MainServidor.MOSTRAR_ENVIADOS) System.out.println("Ajout d'un stat inexistant : "+stats+". Ajout de "+add);
 						if(obj.parseStatsString().isEmpty())//Si l'item est vide
 						{
 							obj.setStats(obj.generateNewStatsFromTemplate((stats+"#"+Integer.toHexString(add)+"#0#0#0d0+"+add), false));	

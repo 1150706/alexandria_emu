@@ -7,8 +7,10 @@ USAR_IP = true
 HOST_IP = 127.0.0.1
 
 #Configuracion del servidor
-DEBUG = true
-MOTD = <b>PrivateDofus! - http://privatedofus.net</b>
+MOSTRAR_ENVIADOS = true
+MOSTRAR_RECIBIDOS = true
+NOMBRE_DEL_SERVIDOR = Alexandria EMU
+WEB_DEL_SERVIDOR = http://privatedofus.net
 MOTD_COLOR = FF0000
 SEND_POLICY = true
 SAVE_TIME = 30

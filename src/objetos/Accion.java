@@ -486,7 +486,7 @@ public class Accion {
 						
 						if(Mundo.getMonstre(monsterID) == null || Mundo.getMonstre(monsterID).getGradeByLevel(monsterLevel) == null)
 						{
-							if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Monstre invalide : monsterID:"+monsterID+" monsterLevel:"+monsterLevel);
+							if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Monstre invalide : monsterID:"+monsterID+" monsterLevel:"+monsterLevel);
 							continue;
 						}
 						ValidMobGroup += monsterID+","+monsterLevel+","+monsterLevel+";";

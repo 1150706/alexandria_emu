@@ -58,7 +58,7 @@ class RealmServer : Runnable {
         @JvmStatic
 		@Synchronized
         fun addToSockLog(str: String) {
-            if (MainServidor.CONFIG_DEBUG) println(str)
+            if (MainServidor.MOSTRAR_ENVIADOS) println(str)
             if (MainServidor.canLog) {
                 try {
                     val date = Calendar.HOUR_OF_DAY.toString() + ":" + Calendar.MINUTE + ":" + Calendar.SECOND

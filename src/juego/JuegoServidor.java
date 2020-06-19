@@ -180,7 +180,7 @@ public class JuegoServidor implements Runnable{
 	}
 	
 	public synchronized static void addToSockLog(String str) {
-		if(MainServidor.CONFIG_DEBUG)System.out.println(str);
+		if(MainServidor.MOSTRAR_ENVIADOS)System.out.println(str);
 		if(MainServidor.canLog) {
 			try {
 				String date = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":"+Calendar.getInstance().get(Calendar.MINUTE)+":"+Calendar.getInstance().get(Calendar.SECOND);

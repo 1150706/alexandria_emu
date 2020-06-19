@@ -31,13 +31,17 @@ object MainServidor {
     @JvmField
     var GAMESERVER_IP: String? = null
     @JvmField
-    var CONFIG_MOTD = ""
+    var NOMBRE_DEL_SERVIDOR = ""
+    @JvmField
+    var WEB_DEL_SERVIDOR = ""
     @JvmField
     var CONFIG_MOTD_COLOR: String? = ""
     @JvmField
     var CONFIG_PUB_COLOR: String? = ""
     @JvmField
-    var CONFIG_DEBUG = false
+    var MOSTRAR_ENVIADOS = false
+    @JvmField
+    var MOSTRAR_RECIBIDOS = false
     private var PS: PrintStream? = null
     @JvmField
     var CONFIG_POLICY = false
@@ -277,9 +281,9 @@ object MainServidor {
                 if (line.split("=".toRegex()).toTypedArray().size == 1) continue
                 val param = line.split("=".toRegex()).toTypedArray()[0].trim { it <= ' ' }
                 var value = line.split("=".toRegex()).toTypedArray()[1].trim { it <= ' ' }
-                if (param.equals("DEBUG", ignoreCase = true)) {
+                if (param.equals("MOSTRAR_ENVIADOS", ignoreCase = true)) {
                     if (value.equals("true", ignoreCase = true)) {
-                        CONFIG_DEBUG = true
+                        MOSTRAR_ENVIADOS = true
                         println("Mode Debug: On")
                     }
                 } else if (param.equals("SEND_POLICY", ignoreCase = true)) {
@@ -391,8 +395,10 @@ object MainServidor {
                     if (value.equals("true", ignoreCase = true)) {
                         USAR_IP = true
                     }
-                } else if (param.equals("MOTD", ignoreCase = true)) {
-                    CONFIG_MOTD = line.split("=".toRegex(), 2).toTypedArray()[1]
+                } else if (param.equals("NOMBRE_DEL_SERVIDOR", ignoreCase = true)) {
+                    NOMBRE_DEL_SERVIDOR = line.split("=".toRegex(), 2).toTypedArray()[1]
+                } else if (param.equals("WEB_DEL_SERVIDOR", ignoreCase = true)) {
+                    WEB_DEL_SERVIDOR = line.split("=".toRegex(), 2).toTypedArray()[1]
                 } else if (param.equals("URLVOTE", ignoreCase = true)) {
                     CONFIG_URLVOTE = line.split("=".toRegex(), 2).toTypedArray()[1]
                 } else if (param.equals("MOTD_COLOR", ignoreCase = true)) {
@@ -471,7 +477,7 @@ object MainServidor {
             println("Fermeture du serveur")
             exitProcess(1)
         }
-        if (CONFIG_DEBUG)
+        if (MOSTRAR_ENVIADOS)
         try {
             val date =
                 Calendar.getInstance()[Calendar.DAY_OF_MONTH].toString() + "-" + (Calendar.getInstance()[Calendar.MONTH] + 1) + "-" + Calendar.getInstance()[Calendar.YEAR]

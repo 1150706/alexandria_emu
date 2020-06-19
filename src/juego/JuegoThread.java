@@ -77,7 +77,9 @@ public class JuegoThread implements Runnable {
 	    			packet += charCur[0];
 		    	}else if(!packet.isEmpty()) {
 		    		packet = GestorEncriptador.toUnicode(packet);
-		    		JuegoServidor.addToSockLog("Game: Recv << "+packet);
+					if(MainServidor.MOSTRAR_RECIBIDOS){
+						JuegoServidor.addToSockLog("Juego: Recibido << "+packet);
+					}
 		    		parsePacket(packet);
 		    		//System.out.println(packet);
 		    		packet = "";
@@ -510,7 +512,7 @@ public class JuegoThread implements Runnable {
 			} catch (Exception e) {
 			}
 
-			if (MainServidor.CONFIG_DEBUG)
+			if (MainServidor.MOSTRAR_ENVIADOS)
 				JuegoServidor.addToLog("[DEBUG] Percepteur INFORMATIONS : TiD:" + TiD + ", FightID:" + FightID + ", MapID:" + MapID + ", CellID" + CellID);
 			if (TiD == -1 || FightID == -1 || MapID == -1 || CellID == -1) return;
 			if (_perso.get_fight() == null && !_perso.is_away()) {
@@ -2979,11 +2981,11 @@ public class JuegoThread implements Runnable {
 		
 		int id = Integer.parseInt(packet.substring(2));
 		
-		if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Info: "+_perso.get_name()+": Tente Oublie sort id="+id);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Info: "+_perso.get_name()+": Tente Oublie sort id="+id);
 		
 		if(_perso.forgetSpell(id))
 		{
-			if(MainServidor.CONFIG_DEBUG) JuegoServidor.addToLog("Info: "+_perso.get_name()+": OK pour Oublie sort id="+id);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Info: "+_perso.get_name()+": OK pour Oublie sort id="+id);
 			GestorSalida.GAME_SEND_SPELL_UPGRADE_SUCCED(_out, id, _perso.getSortStatBySortIfHas(id).getLevel());
 			GestorSalida.GAME_SEND_STATS_PACKET(_perso);
 			_perso.setisForgetingSpell(false);

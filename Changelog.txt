@@ -26,3 +26,6 @@ v0.00.3
 - Reparado error en configuracion de la estructura en estaticos
 - Parche con la totalidad de mapas en estaticos
 - Pequeña modificacion en la organizacion de los logs
+- Nuevo sistema de publicidad automatica
+- Configurable desde la config.txt tiempo de impresion de publicidades
+- Nuevo comando de administrador nivel 4 - agregar_publicidad

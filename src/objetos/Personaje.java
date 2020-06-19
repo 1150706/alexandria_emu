@@ -634,8 +634,7 @@ public class Personaje {
 		_PDV++;
 	}
 	
-	public static Personaje CREATE_PERSONNAGE(String name, int sexe, int classe, int color1, int color2, int color3, Cuenta compte)
-	{
+	public static Personaje CREATE_PERSONNAGE(String name, int sexe, int classe, int color1, int color2, int color3, Cuenta compte) {
 		StringBuilder z = new StringBuilder();
 		if(MainServidor.CONFIG_ZAAP) {
 			for(Entry<Integer, Integer> i : Constantes.ZAAPS.entrySet()) {
@@ -643,15 +642,14 @@ public class Personaje {
 				z.append(i.getKey());
 			}
 		}
-		Personaje perso = new Personaje(
-				GestorSQL.getSiguienteIDPersonaje(),
+		Personaje perso = new Personaje(GestorSQL.getSiguienteIDPersonaje(),
 				name,
 				sexe,
 				classe,
 				color1,
 				color2,
 				color3,
-				MainServidor.KAMAS_DE_INICIO,
+				MainServidor.DAR_KAMAS_AL_INICIO,
 				((MainServidor.NIVEL_DE_INICIO - 1)),
 				((MainServidor.NIVEL_DE_INICIO -1)*5),
 				10000,
@@ -681,8 +679,7 @@ public class Personaje {
 				0,
 				z.toString(),
 				(byte)0,
-				0
-				);
+				0);
 		perso._sorts = Constantes.getStartSorts(classe);
 		for(int a = 1; a <= perso.get_lvl();a++) {
 			Constantes.onLevelUpSpells(perso, a);
@@ -1194,7 +1191,7 @@ public class Personaje {
 			str.append((_color2==-1?"-1":Integer.toHexString(_color2))).append(";");
 			str.append((_color3==-1?"-1":Integer.toHexString(_color3))).append(";");
 			str.append(getGMStuffString()).append(";");
-			if(MainServidor.AURA_SYSTEM) {
+			if(MainServidor.MOSTRAR_AURAS) {
 				str.append((_lvl>99?(_lvl>199?(2):(1)):(0))).append(";");
 			}else {
 				str.append("0;");

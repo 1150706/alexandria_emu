@@ -25,9 +25,13 @@ public class JuegoServidor implements Runnable{
 	private Timer _reloadPubTimer;
 	private long _startTime;
 	private int _maxPlayer = 0;
+	private String _publicidad;
+	private static int _nropublicidad = 0;
 	
 	public JuegoServidor(String Ip) {
 		try {
+
+			//Timer de guardado automatico
 			Timer _saveTimer = new Timer();
 			_saveTimer.schedule(new TimerTask() {
 				public void run() {
@@ -38,30 +42,61 @@ public class JuegoServidor implements Runnable{
 				}
 			}, MainServidor.TIEMPO_DE_GUARDADO, MainServidor.TIEMPO_DE_GUARDADO);
 
+			//Timer envio de publicidad automatica
+			Timer _publicidadautomatica = new Timer();
+			_publicidadautomatica.schedule(new TimerTask() {
+				public void run() {
+					//Si no tenemos publicidad agregada, no ejecutamos el script
+					if (Mundo.Publicidad.isEmpty()){
+						return;
+					}
+					//Listamos la cantidad de id desde la base de datos
+					_publicidad = Mundo.Publicidad.get(_nropublicidad);
+					//Aumentamos +1 las id
+					_nropublicidad++;
+					//Imprimimos la publicidad desde el lang
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("1241;" + _publicidad);
+					if (MainServidor.MOSTRAR_ENVIADOS){
+					JuegoServidor.addToLog("Enviando publicidad automatica");
+					}
+					//En caso de que la lista ya termine la retomamos
+					if (_nropublicidad >= Mundo.Publicidad.size()) {
+						_nropublicidad = 0;
+					}
+				}
+			}, MainServidor.TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA, MainServidor.TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA);
+
+			//Timer movimiento de moobs en mapa
 			Timer _movimientodemonsters = new Timer();
 			_movimientodemonsters.schedule(new TimerTask() {
 				public void run() {
+					//Tomamos la lista de mapas del juego
 					ArrayList<Short> mapas = new ArrayList<>();
+					//Listamos los personajes online
 					for(Personaje player: Mundo.getOnlinePersos()){
 						Mapa map = player.getActualMapa();
+						//Si el personaje esta en un mapa donde tenemos moobs los movemos
 						if(!mapas.contains(map.get_id())){
 							map.MovimientoDeMonstruosEnMapas();
 							mapas.add(map.get_id());
+							JuegoServidor.addToLog("Moviendo los monstruos en mapas donde se encuentran personajes");
 						}
 					}
-					JuegoServidor.addToLog("Moviendo los monstruos en mapas donde se encuentran personajes");
 				}
 			}, MainServidor.TIEMPO_MOVIMIENTO_MONSTRUOS, MainServidor.TIEMPO_MOVIMIENTO_MONSTRUOS);
 
+			//Timer ejecucion de acciones en tiempo real
 			Timer _loadActionTimer = new Timer();
 			_loadActionTimer.schedule(new TimerTask() {
 				public void run() {
 					GestorSQL.cargar_acciones();
-					JuegoServidor.addToLog("Les live actions ont ete appliquees");
+					JuegoServidor.addToLog("Las acciones en tiempo real se han realizado!");
 				}
-			}, MainServidor.CONFIG_LOAD_DELAY, MainServidor.CONFIG_LOAD_DELAY);
+			}, MainServidor.ACTIVAR_ACCIONES_TIEMPO_REAL, MainServidor.ACTIVAR_ACCIONES_TIEMPO_REAL);
 
-			/*Timer _reloadMobTimer = new Timer();
+			/*
+			//Timer recargar moobs global
+			Timer _reloadMobTimer = new Timer();
 			_reloadMobTimer.schedule(new TimerTask() {
 				public void run() {
 					Mundo.RefreshAllMob();
@@ -69,19 +104,19 @@ public class JuegoServidor implements Runnable{
 				}
 			}, MainServidor.CONFIG_RELOAD_MOB_DELAY, MainServidor.CONFIG_RELOAD_MOB_DELAY);*/
 
+			//Timer desconectar por AFK
 			Timer _lastPacketTimer = new Timer();
 			_lastPacketTimer.schedule(new TimerTask() {
 				public void run() {
 					for(Personaje perso : Mundo.getOnlinePersos()) {
-						if (perso.getLastPacketTime() + MainServidor.CONFIG_MAX_IDLE_TIME < System.currentTimeMillis()) {
+						if (perso.getLastPacketTime() + MainServidor.TIEMPO_DESCONECTAR_POR_AFK < System.currentTimeMillis()) {
 							
-							if(perso != null && perso.get_compte().getGameThread() != null && perso.isOnline()) {
-								JuegoServidor.addToLog("Kick pour inactiviter de : "+perso.get_name());
+							if(perso.get_compte().getGameThread() != null && perso.isOnline()) {
+								JuegoServidor.addToLog("Se ha desconectado a "+perso.get_name()+" por inactividad");
 								GestorSalida.REALM_SEND_MESSAGE(perso.get_compte().getGameThread().get_out(),"01|");
 								perso.get_compte().getGameThread().closeSocket();
 							}
 						}
-						
 					}
 				}
 			}, 60000,60000);
@@ -98,12 +133,9 @@ public class JuegoServidor implements Runnable{
 		}
 	}
 	
-	public static class SaveThread implements Runnable
-	{
-		public void run()
-		{
-			if(!MainServidor.isSaving)
-			{
+	public static class SaveThread implements Runnable {
+		public void run() {
+			if(!MainServidor.isSaving) {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("1164");
 				Mundo.saveAll(null);
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("1165");
@@ -129,39 +161,30 @@ public class JuegoServidor implements Runnable{
 	{
 		return _clients.size();
 	}
-	public void run()
-	{	
+	public void run() {
 		while(MainServidor.isRunning)//bloque sur _SS.accept()
 		{
-			try
-			{
+			try {
 				_clients.add(new JuegoThread(_SS.accept()));
 				if(_clients.size() > _maxPlayer)_maxPlayer = _clients.size();
-			}catch(IOException e)
-			{
+			}catch(IOException e) {
 				addToLog("IOException: "+e.getMessage());
-				try
-				{
+				try {
 					if(!_SS.isClosed())_SS.close();
 					MainServidor.closeServers();
-				}
-				catch(IOException ignored){}
+				} catch(IOException ignored){}
 			}
 		}
 	}
 	
-	public void kickAll()
-	{
+	public void kickAll() {
 		try {
 			_SS.close();
 		} catch (IOException ignored) {}
 		//Copie
-		ArrayList<JuegoThread> c = new ArrayList<>();
-		c.addAll(_clients);
-		for(JuegoThread GT : c)
-		{
-			try
-			{
+		ArrayList<JuegoThread> c = new ArrayList<>(_clients);
+		for(JuegoThread GT : c) {
+			try {
 				GT.closeSocket();
 			}catch(Exception ignored){}
 		}

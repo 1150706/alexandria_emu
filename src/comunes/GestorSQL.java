@@ -93,7 +93,7 @@ public class GestorSQL {
 			configDinamica.addDataSourceProperty("serverName", MainServidor.DB_HOST);
 			configDinamica.addDataSourceProperty("port", 3306);
 			configDinamica.addDataSourceProperty("databaseName", MainServidor.DB_DINAMICOS);
-			configDinamica.addDataSourceProperty("user", MainServidor.DB_USER);
+			configDinamica.addDataSourceProperty("user", MainServidor.DB_USUARIO);
 			configDinamica.addDataSourceProperty("password", MainServidor.DB_PASS);
 			configDinamica.setAutoCommit(true);
 			configDinamica.setMaximumPoolSize(50);
@@ -105,7 +105,7 @@ public class GestorSQL {
 			configEstatica.addDataSourceProperty("serverName", MainServidor.DB_HOST);
 			configEstatica.addDataSourceProperty("port", 3306);
 			configEstatica.addDataSourceProperty("databaseName", MainServidor.DB_ESTATICOS);
-			configEstatica.addDataSourceProperty("user", MainServidor.DB_USER);
+			configEstatica.addDataSourceProperty("user", MainServidor.DB_USUARIO);
 			configEstatica.addDataSourceProperty("password", MainServidor.DB_PASS);
 			configEstatica.setAutoCommit(true);
 			configEstatica.setMaximumPoolSize(10);
@@ -194,7 +194,19 @@ public class GestorSQL {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public static void cargar_publicidades_automaticas() {
+		try {
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_publicidad`;", MainServidor.DB_ESTATICOS);
+				while (RS.next())
+					Mundo.Publicidad.add(RS.getString("texto"));
+			CerrarResultado(RS);
+		}catch(SQLException e) {
+			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	public static void cargar_retos() {
 		try {
 			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_retos`;", MainServidor.DB_ESTATICOS);
@@ -1581,6 +1593,22 @@ public class GestorSQL {
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, id);
 			
+			p.execute();
+			CerrarNuevaConsulta(p);
+			return true;
+		} catch (SQLException e) {
+			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
+			JuegoServidor.addToLog("Game: Query: "+baseQuery);
+		}
+		return false;
+	}
+
+	public static boolean agregar_publicidad(String publicidad) {
+		String baseQuery = "INSERT INTO `datos_publicidad` VALUES (?, ?);";
+		try {
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
+			p.setInt(1, 0);
+			p.setString(2, publicidad);
 			p.execute();
 			CerrarNuevaConsulta(p);
 			return true;

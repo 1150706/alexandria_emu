@@ -25,3 +25,4 @@ v0.00.3
 - Movimiento de monstruos en los mapas solamente donde hay personajes online
 - Reparado error en configuracion de la estructura en estaticos
 - Parche con la totalidad de mapas en estaticos
+- Pequeña modificacion en la organizacion de los logs

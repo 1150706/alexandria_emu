@@ -12,14 +12,16 @@ MOSTRAR_RECIBIDOS = true
 NOMBRE_DEL_SERVIDOR = Alexandria EMU
 WEB_DEL_SERVIDOR = http://privatedofus.net
 MOTD_COLOR = FF0000
-SEND_POLICY = true
+ENVIAR_POLITICA_DE_PRIVACIDAD = true
 #Tiempo de guardado en minutos (defecto 30min)
 TIEMPO_DE_GUARDADO = 30
-LOCALIP_LOOPBACK = true
-LOG = true
-LOAD_ACTION_DELAY = 600
-PLAYER_LIMIT = 60
-ALLOW_MULTI_ACCOUNT = true
+MOSTRAR_IP_LOCAL = true
+#Recomendado dejar en true para ver posibles errores del emulador
+HABILITAR_LOGS = true
+#Tiempo en milisegundos de acciones en tiempo real
+ACTIVAR_ACCIONES_TIEMPO_REAL = 600
+MAXIMO_DE_CONECTADOS = 60
+HABILITAR_MULTI_CUENTA = true
 
 #Configuracion de los rates
 XP_PVP = 1
@@ -31,7 +33,7 @@ HONOR = 3
 
 #Configuracion de la base de datos
 DB_HOST = 127.0.0.1
-DB_USER = root
+DB_USUARIO = root
 DB_PASS = 
 DB_ESTATICOS = alexandria_estaticos
 DB_DINAMICOS = alexandria_dinamicos
@@ -43,12 +45,13 @@ USAR_MAPA_INICIO_PERSONALIZADO = false
 MAPA_INICIO_PERSONALIZADO = 5
 CELDA_INICIO_PERSONALIZADA = 255
 NVEL_DE_INICIO = 80
-KAMAS_DE_INICIO = 5000000
+DAR_KAMAS_AL_INICIO = 5000000
 ZAAP = true
 LVL_PVP = 5000
 ALLOW_MULE_PVP = false
-AURA_SYSTEM = true
-MAX_IDLE_TIME = 500
+MOSTRAR_AURAS = true
+#Tiempo en milisegundos (900000 = 15Min)
+TIEMPO_DESCONECTAR_POR_AFK = 900000
 NOT_IN_HDV = 4820
 
 XP_DEFI = true

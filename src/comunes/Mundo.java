@@ -56,6 +56,7 @@ public class Mundo {
 	private static final Map<Short,Collection<Integer>> Seller	= new TreeMap<>();
 	public static final Map<Integer, Quest.Step> Steps = new TreeMap<>();
 	public static final Map<Integer, Quest> Quests = new TreeMap<>();
+	public static final ArrayList<String> Publicidad = new ArrayList<>();
 	
 	 
 	private static int nextHdvID;	//Contient le derniere ID utilis? pour cr?e un HDV, pour obtenir un ID non utilis? il faut imp?rativement l'incr?menter
@@ -787,9 +788,12 @@ public class Mundo {
 		System.out.println(nbr+" BAN_IP chargees");
 		System.out.print("Cargando los mercadillos: ");
 		GestorSQL.cargar_mercadillos();
-		System.out.print("Cargando los objetos de los mercadillos: ");
+		System.out.print("\nCargando los objetos de los mercadillos: ");
 		GestorSQL.cargar_objetos_mercadillos();
 		nextObjetID = GestorSQL.siguiente_id_objeto();
+		System.out.print("Cargando publicidades automaticas: ");
+		GestorSQL.cargar_publicidades_automaticas();
+		System.out.print(Publicidad.size()+" publicidades cargadas.\n");
 	}
 	
 	public static Area getArea(int areaID)
@@ -1306,10 +1310,7 @@ public class Mundo {
 		Jobs.put(metier.getId(), metier);
 	}
 
-	public static void addCraft(int id, ArrayList<Couple<Integer, Integer>> m)
-	{
-		Crafts.put(id,m);
-	}
+	public static void addCraft(int id, ArrayList<Couple<Integer, Integer>> m) { Crafts.put(id,m); }
 	
 	public static ArrayList<Couple<Integer,Integer>> getCraft(int i)
 	{

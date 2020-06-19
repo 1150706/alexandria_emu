@@ -19,7 +19,7 @@ object MainServidor {
     @JvmField
     var DB_HOST: String? = null
     @JvmField
-    var DB_USER: String? = null
+    var DB_USUARIO: String? = null
     @JvmField
     var DB_PASS: String? = null
     @JvmField
@@ -44,13 +44,13 @@ object MainServidor {
     var MOSTRAR_RECIBIDOS = false
     private var PS: PrintStream? = null
     @JvmField
-    var CONFIG_POLICY = false
+    var ENVIAR_POLITICA_DE_PRIVACIDAD = false
     @JvmField
     var PUERTO_DE_CONEXION = 443
     @JvmField
     var PUERTO_DE_JUEGO = 5555
     @JvmField
-    var CONFIG_MAX_PERSOS = 5
+    var MAXIMO_PERSONAJES_POR_CUENTA = 5
     @JvmField
     var MAPA_INICIO_PERSONALIZADO: Short = 10298
     @JvmField
@@ -74,11 +74,11 @@ object MainServidor {
     @JvmField
     var CONFIG_CELL_PVM: Short = 368
     @JvmField
-    var CONFIG_ALLOW_MULTI = false
+    var HABILITAR_MULTI_CUENTA = false
     @JvmField
     var NIVEL_DE_INICIO = 1
     @JvmField
-    var KAMAS_DE_INICIO = 0
+    var DAR_KAMAS_AL_INICIO = 0
     @JvmField
     var CONFIG_KAMASMIN = 101
     @JvmField
@@ -86,19 +86,19 @@ object MainServidor {
     @JvmField
     var TIEMPO_DE_GUARDADO = 10 * 60 * 10000
     @JvmField
+    var TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA = 10000
+    @JvmField
     var CONFIG_DROP = 1
     @JvmField
     var CONFIG_ZAAP = false
     @JvmField
-    var CONFIG_LOAD_DELAY = 60000
+    var ACTIVAR_ACCIONES_TIEMPO_REAL = 60000
     @JvmField
     var TIEMPO_MOVIMIENTO_MONSTRUOS = 30000
     @JvmField
     var CONFIG_RELOAD_MOB_DELAY = 360000
     @JvmField
-    var CONFIG_PUB_DELAY = 50000
-    @JvmField
-    var CONFIG_PLAYER_LIMIT = 30
+    var MAXIMO_DE_CONECTADOS = 30
     @JvmField
     var CONFIG_IP_LOOPBACK = true
     @JvmField
@@ -152,7 +152,7 @@ object MainServidor {
     @JvmField
     var isSaving = false
     @JvmField
-    var AURA_SYSTEM = false
+    var MOSTRAR_AURAS = false
 
     // TIC des fights
     @JvmField
@@ -167,10 +167,8 @@ object MainServidor {
     //BDD
     @JvmField
     var CONFIG_DB_COMMIT = 30 * 1000
-
-    //Inactivit�
     @JvmField
-    var CONFIG_MAX_IDLE_TIME = 1800000 //En millisecondes
+    var TIEMPO_DESCONECTAR_POR_AFK = 10 * 60 * 1000 // 10 minutes
 
     //HDV
     @JvmField
@@ -225,28 +223,28 @@ object MainServidor {
         println("==============================================================")
         println(makeHeader())
         println("==============================================================\n")
-        println("Chargement de la configuration :")
+        println("Cargando el archivo de configuracion:")
         loadConfiguration()
         isInit = true
-        println("Configuration Ok !")
-        println("Connexion a la base de donnee :")
-        if (GestorSQL.InicarConexion()) println("Connexion Ok !") else {
-            println("Connexion invalide")
+        println("Cargado!")
+        println("Conectando a la base de datos:")
+        if (GestorSQL.InicarConexion()) println("Conectado!") else {
+            println("Conexion invalida")
             closeServers()
             exitProcess(0)
         }
-        println("Creation du Monde :")
+        println("Creando el Mundo:")
         val startTime = System.currentTimeMillis()
         Mundo.createWorld()
         val endTime = System.currentTimeMillis()
         val differenceTime = (endTime - startTime) / 1000
-        println("Monde Ok ! en : $differenceTime s")
+        println("Creado en: $differenceTime segundos")
         isRunning = true
-        print("Lancement du Timer global : ")
+        print("Lanzando el Timer global: ")
         _passerTours = Thread(AllFightsTurns())
         _passerTours!!.start()
-        println(" Reussi !")
-        println("Lancement du serveur de Jeu sur le port $PUERTO_DE_JUEGO")
+        println("Lanzado!")
+        println("Lanzamiento del server de juego con el puerto: $PUERTO_DE_JUEGO")
         var Ip: String? = ""
         try {
             Ip = InetAddress.getLocalHost().hostAddress
@@ -260,14 +258,14 @@ object MainServidor {
         }
         Ip = IP
         gameServer = JuegoServidor(Ip)
-        println("Lancement du serveur de Connexion sur le port : $PUERTO_DE_CONEXION")
+        println("Lanzamiento del servidor de conexion por el puerto: $PUERTO_DE_CONEXION")
         realmServer = RealmServer()
-        if (USAR_IP) println("Ip du serveur $IP crypt $GAMESERVER_IP")
-        println("Nerf'Emu est en marche.\nEn attente de connexions")
+        if (USAR_IP) println("IP del servidor $IP encriptada $GAMESERVER_IP")
+        println("Atento a las conexiones de nuevos usuarios")
         if (CONFIG_SOCKET_USE_COMPACT_DATA) {
-            println("Lancement du FlushTimer")
+            println("Lanzando FlushTimer")
             GestorEnvio.FlushTimer().start()
-            println("FlushTimer : Ok !")
+            println("Lanzado!")
         }
     }
 
@@ -286,9 +284,9 @@ object MainServidor {
                         MOSTRAR_ENVIADOS = true
                         println("Mode Debug: On")
                     }
-                } else if (param.equals("SEND_POLICY", ignoreCase = true)) {
+                } else if (param.equals("ENVIAR_POLITICA_DE_PRIVACIDAD", ignoreCase = true)) {
                     if (value.equals("true", ignoreCase = true)) {
-                        CONFIG_POLICY = true
+                        ENVIAR_POLITICA_DE_PRIVACIDAD = true
                     }
                 } else if (param.equals("CHALLENGE_NUMBER", ignoreCase = true)) {
                     CONFIG_CHALLENGE_NUMBER = value.toInt()
@@ -319,7 +317,7 @@ object MainServidor {
                 } else if (param.equals("MONTILIER_ID", ignoreCase = true)) {
                     CONFIG_MONTILIER_ID = value.toInt()
                     if (CONFIG_MONTILIER_ID < 1) CONFIG_MONTILIER_ID = 1
-                } else if (param.equals("LOG", ignoreCase = true)) {
+                } else if (param.equals("HABILITAR_LOGS", ignoreCase = true)) {
                     if (value.equals("true", ignoreCase = true)) {
                         log = true
                     }
@@ -331,10 +329,10 @@ object MainServidor {
                     if (value.equals("true", ignoreCase = true)) {
                         CONFIG_CUSTOM_STARTMAP = true
                     }
-                } else if (param.equals("KAMAS_DE_INICIO", ignoreCase = true)) {
-                    KAMAS_DE_INICIO = value.toInt()
-                    if (KAMAS_DE_INICIO < 0) KAMAS_DE_INICIO = 0
-                    if (KAMAS_DE_INICIO > 1000000000) KAMAS_DE_INICIO = 1000000000
+                } else if (param.equals("DAR_KAMAS_AL_INICIO", ignoreCase = true)) {
+                    DAR_KAMAS_AL_INICIO = value.toInt()
+                    if (DAR_KAMAS_AL_INICIO < 0) DAR_KAMAS_AL_INICIO = 0
+                    if (DAR_KAMAS_AL_INICIO > 1000000000) DAR_KAMAS_AL_INICIO = 1000000000
                 } else if (param.equals("KAMASMAX", ignoreCase = true)) {
                     CONFIG_KAMASMAX = value.toInt()
                     if (CONFIG_KAMASMAX < 0) CONFIG_KAMASMAX = 0
@@ -374,7 +372,7 @@ object MainServidor {
                 } else if (param.equals("HONOR", ignoreCase = true)) {
                     HONOR = value.toInt()
                 } else if (param.equals("TIEMPO_DE_GUARDADO", ignoreCase = true)) {
-                    TIEMPO_DE_GUARDADO = value.toInt() * 60 * 1000000000
+                    TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA = value.toInt() * 60 * 1000000000
                 } else if (param.equals("XP_PVM", ignoreCase = true)) {
                     XP_PVM = value.toInt()
                 } else if (param.equals("XP_PVP", ignoreCase = true)) {
@@ -383,7 +381,7 @@ object MainServidor {
                     LVL_PVP = value.toInt()
                 } else if (param.equals("DROP", ignoreCase = true)) {
                     CONFIG_DROP = value.toInt()
-                } else if (param.equals("LOCALIP_LOOPBACK", ignoreCase = true)) {
+                } else if (param.equals("MOSTRAR_IP_LOCAL", ignoreCase = true)) {
                     if (value.equals("true", ignoreCase = true)) {
                         CONFIG_IP_LOOPBACK = true
                     }
@@ -417,14 +415,12 @@ object MainServidor {
                     PUERTO_DE_CONEXION = value.toInt()
                 } else if (param.equals("FLOODER_TIME", ignoreCase = true)) {
                     FLOOD_TIME = value.toInt().toLong()
-                } else if (param.equals("CONFIG_PUB_DELAY", ignoreCase = true)) {
-                    CONFIG_PUB_DELAY = value.toInt()
                 } else if (param.equals("HOST_IP", ignoreCase = true)) {
                     IP = value
                 } else if (param.equals("DB_HOST", ignoreCase = true)) {
                     DB_HOST = value
-                } else if (param.equals("DB_USER", ignoreCase = true)) {
-                    DB_USER = value
+                } else if (param.equals("DB_USUARIO", ignoreCase = true)) {
+                    DB_USUARIO = value
                 } else if (param.equals("DB_PASS", ignoreCase = true)) {
                     if (value == null) value = ""
                     DB_PASS = value
@@ -433,27 +429,29 @@ object MainServidor {
                 } else if (param.equals("DB_DINAMICOS", ignoreCase = true)) {
                     DB_DINAMICOS = value
                 } else if (param.equals("MAXIMO_PERSONAJES_POR_CUENTA", ignoreCase = true)) {
-                    CONFIG_MAX_PERSOS = value.toInt()
+                    MAXIMO_PERSONAJES_POR_CUENTA = value.toInt()
                 } else if (param.equals("USAR_MOOBS", ignoreCase = true)) {
                     USAR_MOOBS = value.equals("true", ignoreCase = true)
-                } else if (param.equals("ALLOW_MULTI_ACCOUNT", ignoreCase = true)) {
-                    CONFIG_ALLOW_MULTI = value.equals("true", ignoreCase = true)
-                } else if (param.equals("LOAD_ACTION_DELAY", ignoreCase = true)) {
-                    CONFIG_LOAD_DELAY = value.toInt() * 1000
-                } else if (param.equals("PLAYER_LIMIT", ignoreCase = true)) {
-                    CONFIG_PLAYER_LIMIT = value.toInt()
+                } else if (param.equals("HABILITAR_MULTI_CUENTA", ignoreCase = true)) {
+                    HABILITAR_MULTI_CUENTA = value.equals("true", ignoreCase = true)
+                } else if (param.equals("ACTIVAR_ACCIONES_TIEMPO_REAL", ignoreCase = true)) {
+                    ACTIVAR_ACCIONES_TIEMPO_REAL = value.toInt() * 1000
+                } else if (param.equals("TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA", ignoreCase = true)) {
+                    TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA = value.toInt() * 1000
+                } else if (param.equals("MAXIMO_DE_CONECTADOS", ignoreCase = true)) {
+                    MAXIMO_DE_CONECTADOS = value.toInt()
                 } else if (param.equals("ARENA_MAP", ignoreCase = true)) {
                     for (curID in value.split(",".toRegex()).toTypedArray()) {
                         arenaMap.add(curID.toInt())
                     }
                 } else if (param.equals("ARENA_TIMER", ignoreCase = true)) {
                     CONFIG_ARENA_TIMER = value.toInt()
-                } else if (param.equals("AURA_SYSTEM", ignoreCase = true)) {
-                    AURA_SYSTEM = value.equals("true", ignoreCase = true)
+                } else if (param.equals("MOSTRAR_AURAS", ignoreCase = true)) {
+                    MOSTRAR_AURAS = value.equals("true", ignoreCase = true)
                 } else if (param.equals("ALLOW_MULE_PVP", ignoreCase = true)) {
                     ALLOW_MULE_PVP = value.equals("true", ignoreCase = true)
-                } else if (param.equals("MAX_IDLE_TIME", ignoreCase = true)) {
-                    CONFIG_MAX_IDLE_TIME = value.toInt() * 60000
+                } else if (param.equals("TIEMPO_DESCONECTAR_POR_AFK", ignoreCase = true)) {
+                    TIEMPO_DESCONECTAR_POR_AFK = value.toInt()
                 } else if (param.equals("NOT_IN_HDV", ignoreCase = true)) {
                     for (curID in value.split(",".toRegex()).toTypedArray()) {
                         NOTINHDV.add(curID.toInt())
@@ -468,13 +466,13 @@ object MainServidor {
                     CONFIG_ALLOW_PLAYER_COMMANDS = value.equals("true", ignoreCase = true)
                 }
             }
-            if (DB_ESTATICOS == null || DB_DINAMICOS == null || DB_HOST == null || DB_PASS == null || DB_USER == null) {
+            if (DB_ESTATICOS == null || DB_DINAMICOS == null || DB_HOST == null || DB_PASS == null || DB_USUARIO == null) {
                 throw Exception()
             }
         } catch (e: Exception) {
             println(e.message)
-            println("Fichier de configuration non existant ou illisible")
-            println("Fermeture du serveur")
+            println("Fichero de configuracion config.txt inexistente o no puede leerse")
+            println("Cerrando el servidor")
             exitProcess(1)
         }
         if (MOSTRAR_ENVIADOS)
@@ -482,18 +480,18 @@ object MainServidor {
             val date =
                 Calendar.getInstance()[Calendar.DAY_OF_MONTH].toString() + "-" + (Calendar.getInstance()[Calendar.MONTH] + 1) + "-" + Calendar.getInstance()[Calendar.YEAR]
             if (log) {
-                Log_GameSock = BufferedWriter(FileWriter("Game_logs/" + date + "_packets.txt", true))
-                Log_Game = BufferedWriter(FileWriter("Game_logs/$date.txt", true))
-                Log_Realm = BufferedWriter(FileWriter("Realm_logs/$date.txt", true))
-                Log_RealmSock = BufferedWriter(FileWriter("Realm_logs/" + date + "_packets.txt", true))
-                Log_Shop = BufferedWriter(FileWriter("Shop_logs/$date.txt", true))
-                PS = PrintStream(File("Error_logs/" + date + "_error.txt"))
-                PS!!.append("Lancement du serveur..\n")
+                Log_GameSock = BufferedWriter(FileWriter("Logs/Juego_logs/" + date + "_packets.txt", true))
+                Log_Game = BufferedWriter(FileWriter("Logs/Juego_logs/$date.txt", true))
+                Log_Realm = BufferedWriter(FileWriter("Logs/Realm_logs/$date.txt", true))
+                Log_RealmSock = BufferedWriter(FileWriter("Logs/Realm_logs/" + date + "_packets.txt", true))
+                Log_Shop = BufferedWriter(FileWriter("Logs/Ventas_logs/$date.txt", true))
+                PS = PrintStream(File("Logs/Error_logs/" + date + "_error.txt"))
+                PS!!.append("Lanzando el servidor\n")
                 PS!!.flush()
                 System.setErr(PS)
-                Log_MJ = BufferedWriter(FileWriter("Gms_logs/" + date + "_GM.txt", true))
+                Log_MJ = BufferedWriter(FileWriter("Logs/Mod_logs/" + date + "_GM.txt", true))
                 canLog = true
-                val str = "Lancement du serveur...\n"
+                val str = "Lanzando el servidor\n"
                 Log_GameSock!!.write(str)
                 Log_Game!!.write(str)
                 Log_MJ!!.write(str)
@@ -508,14 +506,15 @@ object MainServidor {
                 Log_Shop!!.flush()
             }
         } catch (e: IOException) {
-            /*On cr�er les dossiers*/
-            println("Les fichiers de logs n'ont pas pu etre creer")
-            println("Creation des dossiers")
-            File("Shop_logs").mkdir()
-            File("Game_logs").mkdir()
-            File("Realm_logs").mkdir()
-            File("Gms_logs").mkdir()
-            File("Error_logs").mkdir()
+            //Si los ficheros no existen se crean en Logs/carpetas
+            println("Los ficheros de logs no pueden ser creados")
+            println("Creacion de las carpetas y ficheros")
+            File("Logs").mkdir()
+            File("Logs/Ventas_logs").mkdir()
+            File("Logs/Juego_logs").mkdir()
+            File("Logs/Realm_logs").mkdir()
+            File("Logs/Mod_logs").mkdir()
+            File("Logs/Error_logs").mkdir()
             println(e.message)
             exitProcess(1)
         }

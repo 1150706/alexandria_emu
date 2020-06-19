@@ -4244,7 +4244,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_NAME_ALREADY_EXIST(_out);
 					return;
 				}
-				if (_compte.GET_PERSO_NUMBER() >= MainServidor.CONFIG_MAX_PERSOS) {
+				if (_compte.GET_PERSO_NUMBER() >= MainServidor.MAXIMO_PERSONAJES_POR_CUENTA) {
 					GestorSalida.GAME_SEND_CREATE_PERSO_FULL(_out);
 					return;
 				}

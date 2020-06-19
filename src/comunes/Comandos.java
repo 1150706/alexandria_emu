@@ -112,15 +112,11 @@ public class Comandos {
 		}
 	}
 	
-	public void commandGmOne(String command, String[] infos, String msg)
-	{
-		if(_compte.get_gmLvl() < 1)
-		{
+	public void commandGmOne(String command, String[] infos, String msg) {
+		if(_compte.get_gmLvl() < 1) {
 			_compte.getGameThread().closeSocket();
 			return;
-		}
-		if(command.equalsIgnoreCase("INFOS"))
-		{
+		} if(command.equalsIgnoreCase("INFOS")) {
 			long uptime = System.currentTimeMillis() - MainServidor.gameServer.getStartTime();
 			int jour = (int) (uptime/(1000*3600*24));
 			uptime %= (1000*3600*24);
@@ -137,17 +133,13 @@ public class Comandos {
 				+			"===========";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			return;
-		}else
-		if(command.equalsIgnoreCase("REFRESHMOBS"))
-		{
+		}else if(command.equalsIgnoreCase("REFRESHMOBS")) {
 			_perso.getActualMapa().refreshSpawns();
 			String mess = "Mob Spawn refreshed!";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			return;
-		}else if(command.equalsIgnoreCase("RELOAD"))
-        {
-            try
-            {
+		}else if(command.equalsIgnoreCase("RELOAD")) {
+            try {
                     GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Début du chargement :");
                     MainServidor.loadConfiguration();
                     GestorSQL.cargar_maximo_de_objetos();
@@ -159,29 +151,25 @@ public class Comandos {
             }
             catch(Exception ignored) { }
             return;
-    }else if(command.equalsIgnoreCase("MAPINFO"))
-		{
+    	}else if(command.equalsIgnoreCase("MAPINFO")) {
 			String mess = 	"==========\n"
 						+	"Liste des Npcs de la carte:";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			Mapa map = _perso.getActualMapa();
-			for(Entry<Integer,NPC> entry : map.get_npcs().entrySet())
-			{
+			for(Entry<Integer,NPC> entry : map.get_npcs().entrySet()) {
 				mess = entry.getKey()+" "+entry.getValue().get_template().get_id()+" "+entry.getValue().get_cellID()+" "+entry.getValue().get_template().get_initQuestionID();
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			}
 			mess = "Liste des groupes de monstres:";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
-			for(Entry<Integer,MobGroup> entry : map.getMobGroups().entrySet())
-			{
+			for(Entry<Integer,MobGroup> entry : map.getMobGroups().entrySet()) {
 				mess = entry.getKey()+" "+entry.getValue().getCellID()+" "+entry.getValue().getAlignement()+" "+entry.getValue().getSize();
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			}
 			mess = "==========";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			return;
-		}else
-		if(command.equalsIgnoreCase("WHO")) {
+		}else if(command.equalsIgnoreCase("WHO")) {
 			String mess = 	"==========\n"
 				+			"Liste des joueurs en ligne:";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
@@ -215,74 +203,61 @@ public class Comandos {
 				mess += P.get_fight()==null?"":"Combat ";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			}
-			if(diff >0)
-			{
+			if(diff >0) {
 				mess = 	"Et "+diff+" autres personnages";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			}
 			mess = 	"==========\n";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
 			return;
-		}else
-		if(command.equalsIgnoreCase("SHOWFIGHTPOS"))
-		{
-			String mess = "Liste des StartCell [teamID][cellID]:";
-			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
+		}else if(command.equalsIgnoreCase("SHOWFIGHTPOS")) {
+			StringBuilder mess = new StringBuilder("Liste des StartCell [teamID][cellID]:");
+			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess.toString());
 			String places = _perso.getActualMapa().get_placesStr();
 			if(places.indexOf('|') == -1 || places.length() <2)
 			{
-				mess = "Les places n'ont pas ete definies";
-				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
+				mess = new StringBuilder("Les places n'ont pas ete definies");
+				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess.toString());
 				return;
 			}
 			String team0 = "",team1 = "";
 			String[] p = places.split("\\|");
-			try
-			{
+			try {
 				team0 = p[0];
 			}catch(Exception ignored){}
-			try
-			{
+			try {
 				team1 = p[1];
 			}catch(Exception ignored){}
-			mess = "Team 0:\n";
-			for(int a = 0;a <= team0.length()-2; a+=2)
-			{
+			mess = new StringBuilder("Team 0:\n");
+			for(int a = 0;a <= team0.length()-2; a+=2) {
 				String code = team0.substring(a,a+2);
-				mess += GestorEncriptador.cellCode_To_ID(code);
+				mess.append(GestorEncriptador.cellCode_To_ID(code));
 			}
-			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
-			mess = "Team 1:\n";
-			for(int a = 0;a <= team1.length()-2; a+=2)
-			{
+			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess.toString());
+			mess = new StringBuilder("Team 1:\n");
+			for(int a = 0;a <= team1.length()-2; a+=2) {
 				String code = team1.substring(a,a+2);
-				mess += GestorEncriptador.cellCode_To_ID(code)+" , ";
+				mess.append(GestorEncriptador.cellCode_To_ID(code)).append(" , ");
 			}
-			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
+			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess.toString());
 			return;
-		}else
-		if(command.equalsIgnoreCase("CREATEGUILD"))
-		{
+		}else if(command.equalsIgnoreCase("CREATEGUILD")) {
 			Personaje perso = _perso;
-			if(infos.length >1)
-			{
+			if(infos.length >1) {
 				perso = Mundo.getPersoByName(infos[1]);
 			}
-			if(perso == null)
-			{
+			if(perso == null) {
 				String mess = "Le personnage n'existe pas.";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 				return;
 			}
 			
-			if(!perso.isOnline())
-			{
+			if(!perso.isOnline()) {
 				String mess = "Le personnage "+perso.get_name()+" n'etait pas connecte";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 				return;
 			}
-			if(perso.get_guild() != null || perso.getGuildMember() != null)
-			{
+			if(perso.get_guild() != null || perso.getGuildMember() != null) {
 				String mess = "Le personnage "+perso.get_name()+" a deja une guilde";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 				return;
@@ -291,21 +266,17 @@ public class Comandos {
 			String mess = perso.get_name()+": Panneau de creation de guilde ouvert";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 			return;
-		}else
-		if(command.equalsIgnoreCase("TOOGLEAGGRO"))
-		{
+		}else if(command.equalsIgnoreCase("TOOGLEAGGRO")) {
 			Personaje perso = _perso;
 			
 			String name = null;
-			try
-			{
+			try {
 				name = infos[1];
 			}catch(Exception ignored){}
 
 			perso = Mundo.getPersoByName(name);
 			
-			if(perso == null)
-			{
+			if(perso == null) {
 				String mess = "Le personnage n'existe pas.";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 				return;
@@ -317,26 +288,20 @@ public class Comandos {
 			else mess += " ne peut plus etre agresser";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 			
-			if(!perso.isOnline())
-			{
+			if(!perso.isOnline()) {
 				mess = "(Le personnage "+perso.get_name()+" n'etait pas connecte)";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,mess);
 			}
-		}else
-		if(command.equalsIgnoreCase("ANNOUNCE"))
-		{
+		}else if(command.equalsIgnoreCase("ANNOUNCE")) {
 			infos = msg.split(" ",2);
 			GestorSalida.GAME_SEND_MESSAGE_TO_ALL(infos[1], MainServidor.CONFIG_MOTD_COLOR);
 			return;
-		}else
-		if(command.equalsIgnoreCase("DEMORPH"))
-		{
+		}else if(command.equalsIgnoreCase("DEMORPH")) {
 			Personaje target = _perso;
 			if(infos.length > 1)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[1]);
-				if(target == null)
-				{
+				if(target == null) {
 					String str = "Le personnage n'a pas ete trouve";
 					GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 					return;
@@ -348,13 +313,9 @@ public class Comandos {
 			GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(target.getActualMapa(), target);
 			String str = "Le joueur a ete transforme";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
-		}
-		else
-		if(command.equalsIgnoreCase("GONAME") || command.equalsIgnoreCase("JOIN"))
-		{
+		} else if(command.equalsIgnoreCase("GONAME") || command.equalsIgnoreCase("JOIN")) {
 			Personaje P = Mundo.getPersoByName(infos[1]);
-			if(P == null)
-			{
+			if(P == null) {
 				String str = "Le personnage n'existe pas";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
@@ -366,14 +327,12 @@ public class Comandos {
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				target = Mundo.getPersoByName(infos[2]);
-				if(target == null)
-				{
+				if(target == null) {
 					String str = "Le personnage n'a pas ete trouve";
 					GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 					return;
 				}
-				if(target.get_fight() != null)
-				{
+				if(target.get_fight() != null) {
 					String str = "La cible est en combat";
 					GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 					return;
@@ -382,18 +341,14 @@ public class Comandos {
 			target.teletransportar(mapID, cellID);
 			String str = "Le joueur a ete teleporte";
 			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
-		}else
-		if(command.equalsIgnoreCase("NAMEGO"))
-		{
+		}else if(command.equalsIgnoreCase("NAMEGO")) {
 			Personaje target = Mundo.getPersoByName(infos[1]);
-			if(target == null)
-			{
+			if(target == null) {
 				String str = "Le personnage n'existe pas";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
 			}
-			if(target.get_fight() != null)
-			{
+			if(target.get_fight() != null) {
 				String str = "La cible est en combat";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 				return;
@@ -402,35 +357,28 @@ public class Comandos {
 			if(infos.length > 2)//Si un nom de perso est spécifié
 			{
 				P = Mundo.getPersoByName(infos[2]);
-				if(P == null)
-				{
+				if(P == null) {
 					String str = "Le personnage n'a pas ete trouve";
 					GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 					return;
 				}
 			}
-			if(P.isOnline())
-			{
+			if(P.isOnline()) {
 				short mapID = P.getActualMapa().get_id();
 				int cellID = P.getActualCelda().getID();
 				target.teletransportar(mapID, cellID);
 				String str = "Le joueur a ete teleporte";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
-			}else
-			{
+			}else {
 				String str = "Le joueur n'est pas en ligne";
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out,str);
 			}
-		}else
-		if(command.equalsIgnoreCase("NAMEANNOUNCE"))
-		{
+		}else if(command.equalsIgnoreCase("NAMEANNOUNCE")) {
 			infos = msg.split(" ",2);
 			String prefix = "["+_perso.get_name()+"]";
 			GestorSalida.GAME_SEND_MESSAGE_TO_ALL(prefix+infos[1], MainServidor.CONFIG_MOTD_COLOR);
 			return;
-		}else
-		if(command.equalsIgnoreCase("TELEPORT"))
-		{
+		}else if(command.equalsIgnoreCase("TELEPORT")) {
 			short mapID = -1;
 			int cellID = -1;
 			try
@@ -1769,8 +1717,19 @@ public class Comandos {
 			}else if(LockValue == 2) {
 				GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Serveur en sauvegarde.");
 			}
-		}else
-		if(command.equalsIgnoreCase("BLOCK")) {
+		}else if(command.equalsIgnoreCase("AGREGAR_PUBLICIDAD")) {
+		infos = msg.split(" ",2);
+		String nuevapublicidad;
+		try {
+		nuevapublicidad = String.valueOf(infos[1]);
+		}catch(Exception e){
+			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "No puedes cargar una publicidad en blanco");
+			return;
+		}
+		GestorSQL.agregar_publicidad(nuevapublicidad);
+		GestorSQL.cargar_publicidades_automaticas();
+			GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Publicidad cargada con exito");
+		}else if(command.equalsIgnoreCase("BLOCK")) {
 			byte GmAccess = 0;
 			byte KickPlayer = 0;
 			try

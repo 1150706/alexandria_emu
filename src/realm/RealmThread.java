@@ -49,7 +49,7 @@ public class RealmThread implements Runnable{
 		try {
 			StringBuilder packet = new StringBuilder();
 			char[] charCur = new char[1];
-			if(MainServidor.CONFIG_POLICY)
+			if(MainServidor.ENVIAR_POLITICA_DE_PRIVACIDAD)
 				GestorSalida.REALM_SEND_POLICY_FILE(_out);
 	        
 			_hashKey = GestorSalida.REALM_SEND_HC_PACKET(_out);
@@ -137,7 +137,7 @@ public class RealmThread implements Runnable{
 						} catch (IOException ignored) {}
 						return;
 					}
-					if(MainServidor.CONFIG_PLAYER_LIMIT != -1 && MainServidor.CONFIG_PLAYER_LIMIT <= MainServidor.gameServer.getPlayerNumber())
+					if(MainServidor.MAXIMO_DE_CONECTADOS != -1 && MainServidor.MAXIMO_DE_CONECTADOS <= MainServidor.gameServer.getPlayerNumber())
 					{
 						//Seulement si joueur
 						if(_compte.get_gmLvl() == 0  && _compte.get_vip() == 0)
@@ -161,7 +161,7 @@ public class RealmThread implements Runnable{
 						return;
 					}
 					//Verification Multi compte
-					if(!MainServidor.CONFIG_ALLOW_MULTI)
+					if(!MainServidor.HABILITAR_MULTI_CUENTA)
 					{
 						if(Mundo.ipIsUsed(ip))
 						{
@@ -196,7 +196,7 @@ public class RealmThread implements Runnable{
 							} catch (IOException ignored) {}
 							return;
 						}
-						if(MainServidor.CONFIG_PLAYER_LIMIT != -1 && MainServidor.CONFIG_PLAYER_LIMIT <= MainServidor.gameServer.getPlayerNumber()) {
+						if(MainServidor.MAXIMO_DE_CONECTADOS != -1 && MainServidor.MAXIMO_DE_CONECTADOS <= MainServidor.gameServer.getPlayerNumber()) {
 							//Seulement si joueur
 							if(_compte.get_gmLvl() == 0  && _compte.get_vip() == 0) {
 								GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
@@ -216,7 +216,7 @@ public class RealmThread implements Runnable{
 							return;
 						}
 						//Verification Multi compte
-						if(!MainServidor.CONFIG_ALLOW_MULTI) {
+						if(!MainServidor.HABILITAR_MULTI_CUENTA) {
 							if(Mundo.ipIsUsed(ip)) {
 								GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
 								try {

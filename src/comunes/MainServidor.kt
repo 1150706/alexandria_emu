@@ -9,7 +9,7 @@ import java.util.*
 import kotlin.system.exitProcess
 
 object MainServidor {
-    private const val CONFIG_FILE = "config.txt"
+    private const val ARCHIVO_DE_CONFIGURACION = "config.txt"
     @JvmField
     var CONFIG_URLVOTE = ""
     @JvmField
@@ -87,6 +87,8 @@ object MainServidor {
     var CONFIG_ZAAP = false
     @JvmField
     var CONFIG_LOAD_DELAY = 60000
+    @JvmField
+    var TIEMPO_MOVIMIENTO_MONSTRUOS = 30000
     @JvmField
     var CONFIG_RELOAD_MOB_DELAY = 360000
     @JvmField
@@ -224,7 +226,7 @@ object MainServidor {
         isInit = true
         println("Configuration Ok !")
         println("Connexion a la base de donnee :")
-        if (GestorSQL.setUpConnexion()) println("Connexion Ok !") else {
+        if (GestorSQL.InicarConexion()) println("Connexion Ok !") else {
             println("Connexion invalide")
             closeServers()
             exitProcess(0)
@@ -269,7 +271,7 @@ object MainServidor {
     fun loadConfiguration() {
         var log = false
         try {
-            val config = BufferedReader(FileReader(CONFIG_FILE))
+            val config = BufferedReader(FileReader(ARCHIVO_DE_CONFIGURACION))
             var line = config.readLine()
             while (config.readLine().also { line = it } != null) {
                 if (line.split("=".toRegex()).toTypedArray().size == 1) continue

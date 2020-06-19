@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import objetos.Cuenta;
+import objetos.Mapa;
 import objetos.Personaje;
 
 import comunes.*;
@@ -37,6 +38,21 @@ public class JuegoServidor implements Runnable{
 				}
 			}, MainServidor.CONFIG_SAVE_TIME, MainServidor.CONFIG_SAVE_TIME);
 
+			Timer _movimientodemonsters = new Timer();
+			_movimientodemonsters.schedule(new TimerTask() {
+				public void run() {
+					ArrayList<Short> mapas = new ArrayList<>();
+					for(Personaje player: Mundo.getOnlinePersos()){
+						Mapa map = player.getActualMapa();
+						if(!mapas.contains(map.get_id())){
+							map.MovimientoDeMonstruosEnMapas();
+							mapas.add(map.get_id());
+						}
+					}
+					JuegoServidor.addToLog("Moviendo los monstruos en mapas donde se encuentran personajes");
+				}
+			}, MainServidor.TIEMPO_MOVIMIENTO_MONSTRUOS, MainServidor.TIEMPO_MOVIMIENTO_MONSTRUOS);
+
 			Timer _loadActionTimer = new Timer();
 			_loadActionTimer.schedule(new TimerTask() {
 				public void run() {
@@ -45,13 +61,13 @@ public class JuegoServidor implements Runnable{
 				}
 			}, MainServidor.CONFIG_LOAD_DELAY, MainServidor.CONFIG_LOAD_DELAY);
 
-			Timer _reloadMobTimer = new Timer();
+			/*Timer _reloadMobTimer = new Timer();
 			_reloadMobTimer.schedule(new TimerTask() {
 				public void run() {
 					Mundo.RefreshAllMob();
 					JuegoServidor.addToLog("La recharge des mobs est finie");
 				}
-			}, MainServidor.CONFIG_RELOAD_MOB_DELAY, MainServidor.CONFIG_RELOAD_MOB_DELAY);
+			}, MainServidor.CONFIG_RELOAD_MOB_DELAY, MainServidor.CONFIG_RELOAD_MOB_DELAY);*/
 
 			Timer _lastPacketTimer = new Timer();
 			_lastPacketTimer.schedule(new TimerTask() {

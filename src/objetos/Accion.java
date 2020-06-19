@@ -611,11 +611,11 @@ public class Accion {
 			break;
 			case 100://Donner l'abilité 'args' à une dragodinde
                 Dragopavo dragopavo = perso.getMount();
-                Mundo.addDragodinde(new Dragopavo(
-                 dragopavo.get_id(),
-                 dragopavo.get_color(),
-                 dragopavo.get_sexe(),
-                 dragopavo.get_amour(),
+                Mundo.addDragopavo(new Dragopavo(
+                 dragopavo.getID(),
+                 dragopavo.getColor(),
+                 dragopavo.getSexo(),
+                 dragopavo.getAmor(),
                  dragopavo.get_endurance(),
                  dragopavo.get_level(),
                  dragopavo.get_exp(),
@@ -626,9 +626,9 @@ public class Accion {
                  dragopavo.get_maturite(),
                  dragopavo.get_serenite(),
                  dragopavo.getItemsId(),
-                 dragopavo.get_ancetres(), args));
-                 perso.setMount(Mundo.getDragoByID(dragopavo.get_id()));
-                 GestorSalida.GAME_SEND_Re_PACKET(perso, "+", Mundo.getDragoByID(dragopavo.get_id()));
+                 dragopavo.getAncestros(), args));
+                 perso.setMount(Mundo.getDragoByID(dragopavo.getID()));
+                 GestorSalida.GAME_SEND_Re_PACKET(perso, "+", Mundo.getDragoByID(dragopavo.getID()));
                  GestorSQL.actualizar_informacion_monturas(dragopavo);
                  break;
 

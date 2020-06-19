@@ -18,8 +18,7 @@ import objetos.hechizos.Hechizos.SortStats;
 import comunes.*;
 import comunes.Mundo.*;
 
-public class Monstruo
-{
+public class Monstruo {
 	private final int ID;
 	private final int gfxID;
 	private final int align;

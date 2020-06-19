@@ -2048,7 +2048,7 @@ public class JuegoThread implements Runnable {
 					_perso.removeItem(guid);
 					Mundo.removeItem(guid);
 					//on ajoute la dinde a l'�table
-					MP.addData(DD.get_id(), _perso.get_GUID());
+					MP.addData(DD.getID(), _perso.get_GUID());
 					GestorSQL.actualizar_cercado(MP);
 					//On envoie les packet
 					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso,obj.getGuid());
@@ -2057,15 +2057,15 @@ public class JuegoThread implements Runnable {
 				case 'c'://Etable => Parcho(Echanger)
 					Dragopavo DD1 = Mundo.getDragoByID(guid);
 					//S'il n'a pas la dinde
-					if(DD1 == null || !MP.getData().containsKey(DD1.get_id()))return;
-					if(MP.getData().get(DD1.get_id()) != _perso.get_GUID() && 
-						Mundo.getPersonnage(MP.getData().get(DD1.get_id())).get_guild() != _perso.get_guild())
+					if(DD1 == null || !MP.getData().containsKey(DD1.getID()))return;
+					if(MP.getData().get(DD1.getID()) != _perso.get_GUID() &&
+						Mundo.getPersonnage(MP.getData().get(DD1.getID())).get_guild() != _perso.get_guild())
 					{
 						//Pas la m�me guilde, pas le m�me perso
 						return;
 					}
-					if(MP.getData().get(DD1.get_id()) != _perso.get_GUID() && 
-							Mundo.getPersonnage(MP.getData().get(DD1.get_id())).get_guild() == _perso.get_guild() &&
+					if(MP.getData().get(DD1.getID()) != _perso.get_GUID() &&
+							Mundo.getPersonnage(MP.getData().get(DD1.getID())).get_guild() == _perso.get_guild() &&
 							!_perso.getGuildMember().canDo(Constantes.G_OTHDINDE))
 					{
 						//M�me guilde, pas le droit
@@ -2073,15 +2073,15 @@ public class JuegoThread implements Runnable {
 						return;
 					}
 					//on retire la dinde de l'�table
-					MP.removeData(DD1.get_id());
+					MP.removeData(DD1.getID());
 					GestorSQL.actualizar_cercado(MP);
 					//On cr�er le parcho
-					ObjTemplate T = Constantes.getParchoTemplateByMountColor(DD1.get_color());
+					ObjTemplate T = Constantes.getParchoTemplateByMountColor(DD1.getColor());
 					Objeto obj1 = T.createNewItem(1, false);
 					//On efface les stats
 					obj1.clearStats();
 					//on ajoute la possibilit� de voir la dinde
-					obj1.getStats().addOneStat(995, DD1.get_id());
+					obj1.getStats().addOneStat(995, DD1.getID());
 					obj1.addTxtStat(996, _perso.get_name());
 					obj1.addTxtStat(997, DD1.get_nom());
 					
@@ -2091,21 +2091,21 @@ public class JuegoThread implements Runnable {
 					
 					//Packets
 					GestorSalida.GAME_SEND_Ow_PACKET(_perso);
-					GestorSalida.GAME_SEND_Ee_PACKET(_perso,'-',DD1.get_id()+"");
+					GestorSalida.GAME_SEND_Ee_PACKET(_perso,'-',DD1.getID()+"");
 				break;
 				case 'g'://Equiper
 					Dragopavo DD3 = Mundo.getDragoByID(guid);
 					//S'il n'a pas la dinde
-					if(DD3 == null || !MP.getData().containsKey(DD3.get_id()) || _perso.getMount() != null)return;
+					if(DD3 == null || !MP.getData().containsKey(DD3.getID()) || _perso.getMount() != null)return;
 					
-					if(MP.getData().get(DD3.get_id()) != _perso.get_GUID() && 
-							Mundo.getPersonnage(MP.getData().get(DD3.get_id())).get_guild() != _perso.get_guild())
+					if(MP.getData().get(DD3.getID()) != _perso.get_GUID() &&
+							Mundo.getPersonnage(MP.getData().get(DD3.getID())).get_guild() != _perso.get_guild())
 					{
 						//Pas la m�me guilde, pas le m�me perso
 						return;
 					}
-					if(MP.getData().get(DD3.get_id()) != _perso.get_GUID() && 
-							Mundo.getPersonnage(MP.getData().get(DD3.get_id())).get_guild() == _perso.get_guild() &&
+					if(MP.getData().get(DD3.getID()) != _perso.get_GUID() &&
+							Mundo.getPersonnage(MP.getData().get(DD3.getID())).get_guild() == _perso.get_guild() &&
 							!_perso.getGuildMember().canDo(Constantes.G_OTHDINDE))
 					{
 						//M�me guilde, pas le droit
@@ -2113,18 +2113,18 @@ public class JuegoThread implements Runnable {
 						return;
 					}
 					
-					MP.removeData(DD3.get_id());
+					MP.removeData(DD3.getID());
 					GestorSQL.actualizar_cercado(MP);
 					_perso.setMount(DD3);
 					
 					//Packets
 					GestorSalida.GAME_SEND_Re_PACKET(_perso, "+", DD3);
-					GestorSalida.GAME_SEND_Ee_PACKET(_perso,'-',DD3.get_id()+"");
+					GestorSalida.GAME_SEND_Ee_PACKET(_perso,'-',DD3.getID()+"");
 					GestorSalida.GAME_SEND_Rx_PACKET(_perso);
 				break;
 				case 'p'://Equip� => Stocker
 					//Si c'est la dinde �quip�
-					if(_perso.getMount()!=null?_perso.getMount().get_id() == guid:false)
+					if(_perso.getMount()!=null?_perso.getMount().getID() == guid:false)
 					{
 						//Si le perso est sur la monture on le fait descendre
 						if(_perso.isOnMount())_perso.toogleOnMount();
@@ -2132,7 +2132,7 @@ public class JuegoThread implements Runnable {
 						if(_perso.isOnMount())return;
 						
 						Dragopavo DD2 = _perso.getMount();
-						MP.addData(DD2.get_id(), _perso.get_GUID());
+						MP.addData(DD2.getID(), _perso.get_GUID());
 						GestorSQL.actualizar_cercado(MP);
 						_perso.setMount(null);
 						
@@ -2455,7 +2455,7 @@ public class JuegoThread implements Runnable {
 					}
 					GestorSQL.actualizar_cofre(t);
 				}
-//Objet
+				//Objet
 				case 'O' -> {
 					int guid = 0;
 					int qua = 0;
@@ -2466,9 +2466,9 @@ public class JuegoThread implements Runnable {
 					}
 					if (guid == 0 || qua <= 0) return;
 					switch (packet.charAt(3)) {
-//Ajouter a la banque
+						//Ajouter a la banque
 						case '+' -> t.addInTrunk(guid, qua, _perso);
-//Retirer de la banque
+						//Retirer de la banque
 						case '-' -> t.removeFromTrunk(guid, qua, _perso);
 					}
 				}

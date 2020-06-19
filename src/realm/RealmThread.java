@@ -32,17 +32,12 @@ public class RealmThread implements Runnable{
 			_t = new Thread(this);
 			_t.setDaemon(true);
 			_t.start();
-		}
-		catch(IOException e)
-		{
+		} catch(IOException e) {
 			try {
 				if(!_s.isClosed())_s.close();
 			} catch (IOException ignored) {}
-		}
-		finally
-		{
-			if(_compte != null)
-			{
+		} finally {
+			if(_compte != null) {
 				_compte.setRealmThread(null);
 				_compte.setGameThread(null);
 				_compte.setCurIP("");
@@ -50,38 +45,32 @@ public class RealmThread implements Runnable{
 		}
 	}
 
-	public void run()
-	{
-		try
-    	{
-			String packet = "";
+	public void run() {
+		try {
+			StringBuilder packet = new StringBuilder();
 			char[] charCur = new char[1];
 			if(MainServidor.CONFIG_POLICY)
 				GestorSalida.REALM_SEND_POLICY_FILE(_out);
 	        
 			_hashKey = GestorSalida.REALM_SEND_HC_PACKET(_out);
 	        
-	    	while(_in.read(charCur, 0, 1)!=-1 && MainServidor.isRunning)
-	    	{
+	    	while(_in.read(charCur, 0, 1)!=-1 && MainServidor.isRunning) {
 	    		if (charCur[0] != '\u0000' && charCur[0] != '\n' && charCur[0] != '\r')
 		    	{
-	    			packet += charCur[0];
-		    	}else if(!packet.isEmpty())
+	    			packet.append(charCur[0]);
+		    	}else if(packet.length() > 0)
 		    	{
 		    		RealmServer.addToSockLog("Realm: Recv << "+packet);
 		    		_packetNum++;
-		    		parsePacket(packet);
-		    		packet = "";
+		    		parsePacket(packet.toString());
+		    		packet = new StringBuilder();
 		    	}
 	    	}
-    	}catch(IOException e)
-    	{
-    		try
-    		{
+    	}catch(IOException e) {
+    		try {
 	    		_in.close();
 	    		_out.close();
-	    		if(_compte != null)
-	    		{
+	    		if(_compte != null) {
 	    			_compte.setCurPerso(null);
 	    			_compte.setGameThread(null);
 	    			_compte.setRealmThread(null);
@@ -90,15 +79,11 @@ public class RealmThread implements Runnable{
 	    		if(!_s.isClosed())_s.close();
 	    		_t.interrupt();
 	    	}catch(IOException ignored){}
-		}
-    	finally
-    	{
-    		try
-    		{
+		} finally {
+    		try {
 	    		_in.close();
 	    		_out.close();
-	    		if(_compte != null)
-	    		{
+	    		if(_compte != null) {
 	    			_compte.setCurPerso(null);
 	    			_compte.setGameThread(null);
 	    			_compte.setRealmThread(null);
@@ -110,13 +95,10 @@ public class RealmThread implements Runnable{
 		}
 	}
 	
-	private void parsePacket(String packet)
-	{
-		switch(_packetNum)
-		{
+	private void parsePacket(String packet) {
+		switch(_packetNum) {
 			case 1://Version
-				if(!packet.equalsIgnoreCase(Constantes.CLIENT_VERSION) && !Constantes.IGNORE_VERSION)
-				{
+				if(!packet.equalsIgnoreCase(Constantes.CLIENT_VERSION) && !Constantes.IGNORE_VERSION) {
 					GestorSalida.REALM_SEND_REQUIRED_VERSION(_out);
 					try {
 						this._s.close();
@@ -127,8 +109,7 @@ public class RealmThread implements Runnable{
 				_accountName = packet.toLowerCase();
 				break;
 			case 3://HashPass
-				if(!packet.substring(0, 2).equalsIgnoreCase("#1"))
-				{
+				if(!packet.substring(0, 2).equalsIgnoreCase("#1")) {
 					try {
 						this._s.close();
 					} catch (IOException ignored) {}

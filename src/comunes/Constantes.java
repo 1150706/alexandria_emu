@@ -13,10 +13,9 @@ import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Stats;
 import objetos.hechizos.Hechizos.SortStats;
 
-public class Constantes
-{
-	//DEBUG
-	public static final int DEBUG_MAP_LIMIT 	=	20000;
+public class Constantes {
+
+	public static final int LIMITE_MAPAS = 20000;
 	//Server
 	public static final String SERVER_VERSION	=	"3.0";
 	public static final String SERVER_MAKER		=	"Skillet";
@@ -32,11 +31,9 @@ public class Constantes
 	
 	public static boolean IPcompareToBanIP(String ip) {
 		String[] split = BAN_IP.split(",");
-		for(String ipsplit : split)
-		{
+		for(String ipsplit : split) {
 			if(ip.compareTo(ipsplit) == 0) return true;
 		}
-		
 		return false;
 	}
 	

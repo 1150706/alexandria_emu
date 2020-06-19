@@ -32,8 +32,7 @@ public class Dragopavo {
 	private final List<Integer> capacite = new ArrayList<>();
 	private String _ability = ",";
 	
-	public Dragopavo(int color)
-	{
+	public Dragopavo(int color) {
 		_id = Mundo.getNextIdForMount();
 		_color = color;
 		_level = MainServidor.CONFIG_DD_LVL_DEPART;
@@ -48,7 +47,7 @@ public class Dragopavo {
 		_ancetres = ",,,,,,,,,,,,,";
 		_ability = "0";
 		
-		Mundo.addDragodinde(this);
+		Mundo.addDragopavo(this);
 		GestorSQL.crear_montura(this);
 	}
 	
@@ -76,7 +75,7 @@ public class Dragopavo {
 			if (s != null) {
 				int a = Integer.parseInt(s);
 				try {
-					this.capacite.add(Integer.valueOf(a));
+					this.capacite.add(a);
 				} catch (Exception ignored) {}
 			}
 		for(String str : items.split(";"))
@@ -89,31 +88,29 @@ public class Dragopavo {
 		}
 	}
 
-	public int get_id() {
-		return _id;
-	}
+	public int getID() { return _id; }
 
-	public int get_color() {
+	public int getColor() {
 		return _color;
 	}
 	
-	public String get_color(String a)
+	public String getColor(String a)
 	{
 		String b = "";
-		if (capacite.contains(Integer.valueOf(9))) 
+		if (capacite.contains(9))
 			b = b + "," + a;
 		return _color + b;
 	}
 
-	public int get_sexe() {
+	public int getSexo() {
 		return _sexe;
 	}
 
-	public int get_amour() {
+	public int getAmor() {
 		return _amour;
 	}
 
-	public String get_ancetres() {
+	public String getAncestros() {
 		return _ancetres;
 	}
 

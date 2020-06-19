@@ -827,8 +827,7 @@ public class Camino {
 			return false;
 	}
 	
-	public static ArrayList<Integer> getLoS (int cell1, int cell2)
-	{
+	public static ArrayList<Integer> getLoS (int cell1, int cell2) {
 		ArrayList<Integer> Los = new ArrayList<>();
 		int cell = cell1;
 		boolean next = false;
@@ -853,5 +852,32 @@ public class Camino {
 			}
 		}
 		return null;
+	}
+
+	public static String getShortestStringPathBetween(Mapa map, int start, int dest, int distMax) {
+		if (start == dest)
+			return null;
+		ArrayList<Case> path = getShortestPathBetween(map, start, dest, distMax);
+		StringBuilder pathstr = new StringBuilder();
+		int curCaseID = start;
+		char curDir = '\000';
+		for (Case c : path) {
+			char d = getDirBetweenTwoCase(curCaseID, c.getID(), map, true);
+			if (d == 0)
+				return null;
+			if (curDir != d) {
+				if (path.indexOf(c) != 0)
+					pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
+				pathstr.append(d);
+				curDir = d;
+			}
+			curCaseID = c.getID();
+		}
+		if (curCaseID != start) {
+			pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
+		}
+		if (pathstr.length() == 0)
+			return null;
+		return "a" + GestorEncriptador.cellID_To_Code(start) + pathstr;
 	}
 }

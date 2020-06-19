@@ -36,7 +36,7 @@ public class GestorSQL {
 	private static Timer timerCommit;
 	private static boolean needCommit;
 	
-	public synchronized static ResultSet executeQuery(String query,String DBNAME) throws SQLException {
+	public synchronized static ResultSet EjecutarConsulta(String query, String DBNAME) throws SQLException {
 		if(!MainServidor.isInit)
 			return null;
 		
@@ -52,7 +52,7 @@ public class GestorSQL {
 		return RS;
 	}
 
-	public synchronized static PreparedStatement newTransact(String baseQuery,Connection dbCon) throws SQLException {
+	public synchronized static PreparedStatement NuevaConsulta(String baseQuery, Connection dbCon) throws SQLException {
 		PreparedStatement toReturn = dbCon.prepareStatement(baseQuery);
 		
 		needCommit = true;
@@ -63,7 +63,7 @@ public class GestorSQL {
 		try {
 			if(_dinamicos.isClosed() || _estaticos.isClosed()) {
 				closeCons();
-				setUpConnexion();
+				InicarConexion();
 			}
 			_estaticos.commit();
 			_dinamicos.commit();
@@ -86,7 +86,7 @@ public class GestorSQL {
 		}
 	}
 
-	public static boolean setUpConnexion() {
+	public static boolean InicarConexion() {
 		try {
 			HikariConfig configDinamica = new HikariConfig();
 			configDinamica.setDataSourceClassName("org.mariadb.jdbc.MySQLDataSource");
@@ -133,35 +133,35 @@ public class GestorSQL {
 		}
 	}
 
-	private static void closeResultSet(ResultSet RS) {
+	private static void CerrarResultado(ResultSet resultado) {
 		try {
-			RS.getStatement().close();
-			RS.close();
+			resultado.getStatement().close();
+			resultado.close();
 		} catch (SQLException e) {e.printStackTrace();}
 	}
 
-	private static void closePreparedStatement(PreparedStatement p) {
+	private static void CerrarNuevaConsulta(PreparedStatement p) {
 		try {
 			p.clearParameters();
 			p.close();
 		} catch (SQLException e) {e.printStackTrace();}
 	}
 	
-	public static void actualizar_datos_cuenta(Cuenta acc) {
+	public static void actualizar_datos_cuenta(Cuenta cuenta) {
 		try {
-			String baseQuery = "UPDATE `datos_cuenta` SET `kamasbanco` = ?, `banco` = ?, `nivel` = ?, `baneado` = ?, `amigos` = ?, `enemigos` = ? WHERE `id` = ?;";
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			String consulta = "UPDATE `datos_cuenta` SET `kamasbanco` = ?, `banco` = ?, `nivel` = ?, `baneado` = ?, `amigos` = ?, `enemigos` = ? WHERE `id` = ?;";
+			PreparedStatement p = NuevaConsulta(consulta, _dinamicos);
 			
-			p.setLong(1, acc.getBankKamas());
-			p.setString(2, acc.parseBankObjetsToDB());
-			p.setInt(3, acc.get_gmLvl());
-			p.setInt(4, (acc.isBanned()?1:0));
-			p.setString(5, acc.parseFriendListToDB());
-			p.setString(6, acc.parseEnemyListToDB());
-			p.setInt(7, acc.get_GUID());
+			p.setLong(1, cuenta.getBankKamas());
+			p.setString(2, cuenta.parseBankObjetsToDB());
+			p.setInt(3, cuenta.get_gmLvl());
+			p.setInt(4, (cuenta.isBanned()?1:0));
+			p.setString(5, cuenta.parseFriendListToDB());
+			p.setString(6, cuenta.parseEnemyListToDB());
+			p.setInt(7, cuenta.get_GUID());
 			
 			p.executeUpdate();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -170,7 +170,7 @@ public class GestorSQL {
 
 	public static void cargar_recetas() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM `datos_recetas`;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_recetas`;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				ArrayList<Couple<Integer,Integer>> m = new ArrayList<>();
 				
@@ -188,7 +188,7 @@ public class GestorSQL {
 				Mundo.addCraft
 				(RS.getInt("id"), m);
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -197,7 +197,7 @@ public class GestorSQL {
 	
 	public static void cargar_retos() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM `datos_retos`;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_retos`;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				String chal = RS.getInt("id") + "," +
 						RS.getInt("gananciaxp") + "," +
@@ -206,7 +206,7 @@ public class GestorSQL {
 						RS.getInt("condiciones");
 				Mundo.addChallenge(chal);
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -215,7 +215,7 @@ public class GestorSQL {
 
 	public static void cargar_gremios() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_gremio;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_gremio;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				Mundo.addGuild
 				(new Gremio(
@@ -227,10 +227,9 @@ public class GestorSQL {
 						RS.getInt("capital"),
 						RS.getInt("recaudadoresmaximos"),
 						RS.getString("hechizos"),
-						RS.getString("caracteristicas")
-				),false);
+						RS.getString("caracteristicas")),false);
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -239,13 +238,13 @@ public class GestorSQL {
 
 	public static void cargar_miembros_gremio() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_miembros_gremio;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_miembros_gremio;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				Gremio G = Mundo.getGuild(RS.getInt("gremio"));
 				if(G == null)continue;
 				G.addMember(RS.getInt("id"), RS.getInt("rango"), RS.getByte("xpdonada"), RS.getLong("porcentajexp"), RS.getInt("derechos"));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -254,10 +253,9 @@ public class GestorSQL {
 
 	public static void cargar_montura() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_montura;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_montura;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
-				Mundo.addDragodinde
-				(new Dragopavo(
+				Mundo.addDragopavo(new Dragopavo(
 						RS.getInt("id"),
 						RS.getInt("color"),
 						RS.getInt("sexo"),
@@ -275,7 +273,7 @@ public class GestorSQL {
 						RS.getString("ancestros"),
 						RS.getString("habilidad")));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -284,7 +282,7 @@ public class GestorSQL {
 
 	public static void cargar_drops() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_drops;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_drops;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				Monstruo MT = Mundo.getMonstre(RS.getInt("monstruo"));
 				MT.addDrop(new Drop(
@@ -293,7 +291,7 @@ public class GestorSQL {
 						RS.getFloat("maximo"),
 						RS.getInt("porcentaje")));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -302,7 +300,7 @@ public class GestorSQL {
 
 	public static void cargar_sets() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_objetos_sets;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_sets;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				Mundo.addItemSet(new ItemSet(
 								RS.getInt("id"),
@@ -310,7 +308,7 @@ public class GestorSQL {
 								RS.getString("bonus")
 							));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -319,7 +317,7 @@ public class GestorSQL {
 
 	public static void LOAD_IOTEMPLATE() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_objetos_interactivos;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_interactivos;", MainServidor.STATIC_DB_NAME);
 			while(RS.next())
 			{
 				Mundo.addIOTemplate(new IOTemplate(
@@ -329,7 +327,7 @@ public class GestorSQL {
 								RS.getInt("desconocido"),
 								RS.getInt("caminable")==1));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -339,7 +337,7 @@ public class GestorSQL {
 	public static int cargar_cercados() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_cercados;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cercados;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapa"));
 				if(map == null)continue;
@@ -352,7 +350,7 @@ public class GestorSQL {
 						RS.getInt("precio")));
 					nbr++;
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -363,7 +361,7 @@ public class GestorSQL {
 
 	public static void cargar_oficios() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_oficios;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_oficios;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				Mundo.addJob(new Oficio(
 							RS.getInt("id"),
@@ -371,7 +369,7 @@ public class GestorSQL {
 							RS.getString("recetas")
 							));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -380,7 +378,7 @@ public class GestorSQL {
 	
 	public static void cargar_area() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_area;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_area;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				Area A = new Area(
 						RS.getInt("id"),
@@ -390,7 +388,7 @@ public class GestorSQL {
 				//on ajoute la zone au continent
 				A.get_superArea().addArea(A);
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -399,7 +397,7 @@ public class GestorSQL {
 
 	public static void cargar_subareas() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_subareas;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_subareas;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				SubArea SA = new SubArea(
 						RS.getInt("id"),
@@ -411,7 +409,7 @@ public class GestorSQL {
 				if(SA.get_area() != null)
 					SA.get_area().addSubArea(SA);
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -421,14 +419,14 @@ public class GestorSQL {
 	public static int cargar_npc() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_npc;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapa"));
 				if(map == null)continue;
 				map.addNpc(RS.getInt("npc"), RS.getInt("celda"), RS.getInt("orientacion"));
 				nbr ++;
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -440,7 +438,7 @@ public class GestorSQL {
 	public static int cargar_recaudadores() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_recaudadores;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_recaudadores;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapid"));
 				if(map == null)continue;
@@ -459,7 +457,7 @@ public class GestorSQL {
 						));
 				nbr ++;
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -471,7 +469,7 @@ public class GestorSQL {
 	public static int cargar_casas() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_casas;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_casas;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapa"));
 				if(map == null)continue;
@@ -491,7 +489,7 @@ public class GestorSQL {
 						));
 				nbr ++;
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -502,9 +500,9 @@ public class GestorSQL {
 
 	public static void cargar_cuentas() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_cuenta;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta;", MainServidor.OTHER_DB_NAME);
 			String baseQuery = "UPDATE datos_cuenta SET `actualizarnecesita` = 0 WHERE id = ?;";
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			while(RS.next()) {
 				Cuenta C = new Cuenta(
 						RS.getInt("id"),
@@ -529,8 +527,8 @@ public class GestorSQL {
 				p.executeUpdate();
 				
 			}
-			closePreparedStatement(p);
-			closeResultSet(RS);
+			CerrarNuevaConsulta(p);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -539,11 +537,11 @@ public class GestorSQL {
 
 	public static int getSiguienteIDPersonaje() {
 		try {
-			ResultSet RS = executeQuery("SELECT id FROM datos_personajes ORDER BY id DESC LIMIT 1;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = EjecutarConsulta("SELECT id FROM datos_personajes ORDER BY id DESC LIMIT 1;", MainServidor.OTHER_DB_NAME);
 			if(!RS.first())return 1;
 			int guid = RS.getInt("id");
 			guid++;
-			closeResultSet(RS);
+			CerrarResultado(RS);
 			return guid;
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
@@ -555,7 +553,7 @@ public class GestorSQL {
 
 	public static void cargar_personaje_por_cuenta(int accID) {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_personajes WHERE cuenta = '"+accID+"';", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_personajes WHERE cuenta = '"+accID+"';", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				TreeMap<Integer,Integer> stats = new TreeMap<>();
 				stats.put(Constantes.STATS_ADD_VITA, RS.getInt("vitalidad"));
@@ -614,7 +612,7 @@ public class GestorSQL {
 					Mundo.getCompte(accID).addPerso(perso);
 			}
 			
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -624,7 +622,7 @@ public class GestorSQL {
 
 	public static void cargar_personaje() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_personajes;", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_personajes;", MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				TreeMap<Integer,Integer> stats = new TreeMap<>();
 				stats.put(Constantes.STATS_ADD_VITA, RS.getInt("vitalidad"));
@@ -679,7 +677,7 @@ public class GestorSQL {
 				if(Mundo.getCompte(RS.getInt("cuenta")) != null)
 					Mundo.getCompte(RS.getInt("cuenta")).addPerso(perso);
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -692,35 +690,35 @@ public class GestorSQL {
 		String baseQuery = "DELETE FROM datos_personajes WHERE id = ?;";
 		
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, guid);
 			
 			p.execute();
 			
 			if(!perso.getItemsIDSplitByChar(",").equals("")) {
 				baseQuery = "DELETE FROM datos_objetos WHERE id IN (?);";
-				p = newTransact(baseQuery, _dinamicos);
+				p = NuevaConsulta(baseQuery, _dinamicos);
 				p.setString(1, perso.getItemsIDSplitByChar(","));
 				
 				p.execute();
 			}
 			if(!perso.getStoreItemsIDSplitByChar(",").equals("")) {
 				baseQuery = "DELETE FROM datos_objetos WHERE id IN (?);";
-				p = newTransact(baseQuery, _dinamicos);
+				p = NuevaConsulta(baseQuery, _dinamicos);
 				p.setString(1, perso.getStoreItemsIDSplitByChar(","));
 				
 				p.execute();
 			}
 			if(perso.getMount() != null) {
 				baseQuery = "DELETE FROM datos_montura WHERE id = ?";
-				p = newTransact(baseQuery, _dinamicos);
-				p.setInt(1, perso.getMount().get_id());
+				p = NuevaConsulta(baseQuery, _dinamicos);
+				p.setInt(1, perso.getMount().getID());
 				
 				p.execute();
-				Mundo.delDragoByID(perso.getMount().get_id());
+				Mundo.delDragoByID(perso.getMount().getID());
 			}
 			
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -734,7 +732,7 @@ public class GestorSQL {
 		String baseQuery = "INSERT INTO datos_personajes( `id` , `nombre` , `sexo` , `clase` , `color1` , `color2` , `color3` , `kamas` , `puntoshechizo` , `capital` , `energia` , `nivel` , `experiencia`, `tamaño`, `gfx`, `cuenta`, `celda`,`mapa`,`hechizos`,`objetos`, `objetosmercante`)" +
 				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'', '');";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1,perso.get_GUID());
 			p.setString(2, perso.get_name());
 			p.setInt(3,perso.get_sexe());
@@ -756,7 +754,7 @@ public class GestorSQL {
 			p.setString(19, perso.parseSpellToDB());
 			
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -768,9 +766,9 @@ public class GestorSQL {
 
 	public static void cargar_experiencias() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_experiencia;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_experiencia;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) Mundo.addExpLevel(RS.getInt("nivel"),new Mundo.ExpLevel(RS.getLong("personaje"),RS.getInt("oficio"),RS.getInt("dragopavo"),RS.getInt("alineacion")));
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.exit(1);
@@ -780,7 +778,7 @@ public class GestorSQL {
 	public static int cargar_celdas() {
 		try {
 			int nbr = 0;
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM `datos_celdas_accion`", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_celdas_accion`", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				if(Mundo.getCarte(RS.getShort("mapa")) == null) continue;
 				if(Mundo.getCarte(RS.getShort("mapa")).getCase(RS.getInt("celda")) == null) continue;
@@ -792,7 +790,7 @@ public class GestorSQL {
 				}
 				nbr++;
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 			return nbr;
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
@@ -804,7 +802,7 @@ public class GestorSQL {
 	public static void cargar_mapas() {
 		try {
 			ResultSet RS;
-			RS = GestorSQL.executeQuery("SELECT * FROM datos_mapas LIMIT "+ Constantes.DEBUG_MAP_LIMIT+";", MainServidor.STATIC_DB_NAME);
+			RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_mapas LIMIT "+ Constantes.LIMITE_MAPAS +";", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 					Mundo.addCarte(new Mapa(
 							RS.getShort("id"),
@@ -820,15 +818,15 @@ public class GestorSQL {
 							RS.getByte("numerogrupos"),
 							RS.getByte("tamañogrupo")));
 			}
-			GestorSQL.closeResultSet(RS);
-			RS = GestorSQL.executeQuery("SELECT * FROM datos_grupo_mobs;", MainServidor.STATIC_DB_NAME);
+			GestorSQL.CerrarResultado(RS);
+			RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_grupo_mobs;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 					Mapa c = Mundo.getCarte(RS.getShort("mapa"));
 					if(c == null)continue;
 					if(c.getCase(RS.getInt("celda")) == null)continue;
 					c.addStaticGroup(RS.getInt("celda"), RS.getString("grupo"));
 			}
-			GestorSQL.closeResultSet(RS);
+			GestorSQL.CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.exit(1);
@@ -877,7 +875,7 @@ public class GestorSQL {
 		
 		PreparedStatement p = null;
 		try {
-			p = newTransact(baseQuery, _dinamicos);
+			p = NuevaConsulta(baseQuery, _dinamicos);
 			
 			p.setLong(1,_perso.get_kamas());
 			p.setInt(2,_perso.get_spellPts());
@@ -912,7 +910,7 @@ public class GestorSQL {
 			p.setString(31,_perso.parseZaaps());
 			p.setString(32,_perso.parseJobData());
 			p.setInt(33,_perso.getMountXpGive());
-			p.setInt(34, (_perso.getMount()!=null?_perso.getMount().get_id():-1));
+			p.setInt(34, (_perso.getMount()!=null?_perso.getMount().getID():-1));
 			p.setByte(35,(_perso.get_title()));
 			p.setInt(36,_perso.getWife());
 			p.setInt(37,_perso.get_GUID());
@@ -933,7 +931,7 @@ public class GestorSQL {
 		if(saveItem) {
 			baseQuery = "UPDATE `datos_objetos` SET cantidad = ?, ubicacion = ?, caracteristicas = ? WHERE id = ?;";
 			try {
-				p = newTransact(baseQuery, _dinamicos);
+				p = NuevaConsulta(baseQuery, _dinamicos);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -970,12 +968,12 @@ public class GestorSQL {
 				}catch(Exception e){continue;}
 			}
 		}
-		closePreparedStatement(p);
+		CerrarNuevaConsulta(p);
 	}
 
 	public static void cargar_hechizos() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_hechizos;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_hechizos;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				int id = RS.getInt("id");
 				Hechizos sort = new Hechizos(id,RS.getInt("sprite"),RS.getString("infosprite"),RS.getString("objetivoefecto"));
@@ -997,7 +995,7 @@ public class GestorSQL {
 				sort.addSortStats(6,l6);
 				Mundo.addSort(sort);
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.exit(1);
@@ -1006,7 +1004,7 @@ public class GestorSQL {
 
 	public static void cargar_objetos_modelo() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_objeto_modelo;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objeto_modelo;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 					Mundo.addObjTemplate(new ObjTemplate(
 							RS.getInt("id"),
@@ -1022,7 +1020,7 @@ public class GestorSQL {
 							RS.getInt("vendido"),
 							RS.getInt("preciomedio")));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.exit(1);
@@ -1072,7 +1070,7 @@ public class GestorSQL {
 
 	public static void cargar_monstruo_modelo() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_monstruos;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_monstruos;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				int id = RS.getInt("id");
 				int gfxID = RS.getInt("gfx");
@@ -1092,7 +1090,7 @@ public class GestorSQL {
 				capturable = RS.getInt("capturable") == 1;
 				Mundo.addMobTemplate(id, new Monstruo(id, gfxID, align, colors, grades, spells, stats, pdvs, pts, inits, mK, MK, xp, IAType, capturable));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.exit(1);
@@ -1101,7 +1099,7 @@ public class GestorSQL {
 
 	public static void cargar_npc_modelo() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_npc_modelo;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_modelo;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				int id = RS.getInt("id");
 				int bonusValue = RS.getInt("bonificacion");
@@ -1119,7 +1117,7 @@ public class GestorSQL {
 				String ventes = RS.getString("ventas");
 				Mundo.addNpcTemplate(new NPCModelo(id, bonusValue, gfxID, scaleX, scaleY, sex, color1, color2, color3, access, extraClip, customArtWork, initQId, ventes));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.exit(1);
@@ -1129,28 +1127,28 @@ public class GestorSQL {
 	public static void guardar_nuevo_objeto(Objeto item) {
 		try {
 		String baseQuery = "REPLACE INTO `datos_objetos` VALUES(?,?,?,?,?);";
-		PreparedStatement p = newTransact(baseQuery, _dinamicos);
+		PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 		p.setInt(1,item.getGuid());
 		p.setInt(2,item.getTemplate().getID());
 		p.setInt(3,item.getQuantity());
 		p.setInt(4,item.getPosition());
 		p.setString(5,item.parseToSave());
 		p.execute();
-		closePreparedStatement(p);
+		CerrarNuevaConsulta(p);
 		} catch (SQLException e) {e.printStackTrace();}
 	}
 
 	public static boolean guardar_nuevo_grupo_monstruos(int mapID, int cellID, String groupData) {
 		try {
 		String baseQuery = "REPLACE INTO `datos_grupo_mobs` VALUES(?,?,?)";
-		PreparedStatement p = newTransact(baseQuery, _estaticos);
+		PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 		
 		p.setInt(1, mapID);
 		p.setInt(2, cellID);
 		p.setString(3, groupData);
 		
 		p.execute();
-		closePreparedStatement(p);
+		CerrarNuevaConsulta(p);
 		
 		return true;
 		} catch (SQLException e) {e.printStackTrace();}
@@ -1159,7 +1157,7 @@ public class GestorSQL {
 
 	public static void cargar_preguntas_npc() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_npc_pregunta;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_pregunta;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				Mundo.addNPCQuestion(new NPC_question(
 						RS.getInt("id"),
@@ -1168,7 +1166,7 @@ public class GestorSQL {
 						RS.getString("condicion"),
 						RS.getInt("esfalso")));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.exit(1);
@@ -1177,7 +1175,7 @@ public class GestorSQL {
 
 	public static void cargar_respuestas_npc() {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_npc_respuesta;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_npc_respuesta;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				int id = RS.getInt("id");
 				int type = RS.getInt("tipo");
@@ -1186,7 +1184,7 @@ public class GestorSQL {
 					Mundo.addNPCreponse(new NPC_reponse(id));
 				Mundo.getNPCreponse(id).addAction(new Accion(type,args,""));
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.exit(1);
@@ -1196,7 +1194,7 @@ public class GestorSQL {
 	public static int cargar_acciones_fin_pelea() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_fin_pelea_accion;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_fin_pelea_accion;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				Mapa map = Mundo.getCarte(RS.getShort("mapa"));
 				if(map == null)continue;
@@ -1204,7 +1202,7 @@ public class GestorSQL {
 						new Accion(RS.getInt("accion"),RS.getString("argumento"),RS.getString("condicion")));
 				nbr++;
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 			return nbr;
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
@@ -1216,7 +1214,7 @@ public class GestorSQL {
 	public static int cargar_accion_objetos() {
 		int nbr = 0;
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_objetos_accion;", MainServidor.STATIC_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_objetos_accion;", MainServidor.STATIC_DB_NAME);
 			while(RS.next()) {
 				int id = RS.getInt("modelo");
 				int type = RS.getInt("tipo");
@@ -1225,7 +1223,7 @@ public class GestorSQL {
 				Mundo.getObjTemplate(id).addAction(new Accion(type,args,""));
 				nbr++;
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 			return nbr;
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
@@ -1237,7 +1235,7 @@ public class GestorSQL {
 	public static void cargando_objetos(String ids) {
 		String req = "SELECT * FROM datos_objetos WHERE id IN ("+ids+");";
 		try {
-			ResultSet RS = GestorSQL.executeQuery(req, MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta(req, MainServidor.OTHER_DB_NAME);
 			while(RS.next()) {
 				int guid 	= RS.getInt("id");
 				int tempID 	= RS.getInt("modelo");
@@ -1246,7 +1244,7 @@ public class GestorSQL {
 				String stats= RS.getString("caracteristicas");
 				Mundo.addObjet(Mundo.newObjet(guid, tempID, qua, pos, stats), false);
 			}
-			closeResultSet(RS);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.out.println("Requete: \n"+req);
@@ -1257,10 +1255,10 @@ public class GestorSQL {
 	public static void eliminar_objeto(int guid) {
 		String baseQuery = "DELETE FROM datos_objetos WHERE id = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, guid);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1270,14 +1268,14 @@ public class GestorSQL {
 	public static void guardar_objeto(Objeto item) {
 		String baseQuery = "REPLACE INTO `datos_objetos` VALUES (?,?,?,?,?);";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, item.getGuid());
 			p.setInt(2, item.getTemplate().getID());
 			p.setInt(3, item.getQuantity());
 			p.setInt(4, item.getPosition());
 			p.setString(5,item.parseToSave());
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1289,25 +1287,25 @@ public class GestorSQL {
 				"`resistencia`,`amor`,`madurez`,`serenidad`,`reproduccion`,`fatiga`,`objetos`," +
 				"`ancestros`,`energia`, `habilidad`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
-			p.setInt(1,DD.get_id());
-			p.setInt(2,DD.get_color());
-			p.setInt(3,DD.get_sexe());
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
+			p.setInt(1,DD.getID());
+			p.setInt(2,DD.getColor());
+			p.setInt(3,DD.getSexo());
 			p.setString(4,DD.get_nom());
 			p.setLong(5,DD.get_exp());
 			p.setInt(6,DD.get_level());
 			p.setInt(7,DD.get_endurance());
-			p.setInt(8,DD.get_amour());
+			p.setInt(8,DD.getAmor());
 			p.setInt(9,DD.get_maturite());
 			p.setInt(10,DD.get_serenite());
 			p.setInt(11,DD.get_reprod());
 			p.setInt(12,DD.get_fatigue());
 			p.setString(13,DD.getItemsId());
-			p.setString(14,DD.get_ancetres());
+			p.setString(14,DD.getAncestros());
 			p.setInt(15,DD.get_energie());
 			p.setString(16, DD.get_ability());
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1317,10 +1315,10 @@ public class GestorSQL {
 	public static void eliminar_montura(int DID) {
 		String baseQuery = "DELETE FROM `datos_montura` WHERE `id` = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, DID);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1329,9 +1327,9 @@ public class GestorSQL {
 
 	public static void cargar_cuenta_por_id(int user) {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_cuenta WHERE `id` = '"+user+"';", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta WHERE `id` = '"+user+"';", MainServidor.OTHER_DB_NAME);
 			String baseQuery = "UPDATE datos_cuenta SET `actualizarnecesita` = 0 WHERE id = ?;";
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			while(RS.next()) {
 				//Si le compte est déjà connecté, on zap
 				if(Mundo.getCompte(RS.getInt("id")) != null)if(Mundo.getCompte(RS.getInt("id")).isOnline())continue;
@@ -1358,8 +1356,8 @@ public class GestorSQL {
 				p.executeUpdate();
 			}
 			
-			closePreparedStatement(p);
-			closeResultSet(RS);
+			CerrarNuevaConsulta(p);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -1368,9 +1366,9 @@ public class GestorSQL {
 
 	public static void Cargar_cuenta_por_usuario(String user) {
 		try {
-			ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_cuenta WHERE `cuenta` LIKE '"+user+"';", MainServidor.OTHER_DB_NAME);
+			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cuenta WHERE `cuenta` LIKE '"+user+"';", MainServidor.OTHER_DB_NAME);
 			String baseQuery = "UPDATE datos_cuenta SET `actualizarnecesita` = 0 WHERE id = ?;";
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			
 			while(RS.next()) {
 				//Si le compte est déjà connecté, on zap
@@ -1400,8 +1398,8 @@ public class GestorSQL {
 				p.setInt(1, RS.getInt("id"));
 				p.executeUpdate();
 			}
-			closePreparedStatement(p);
-			closeResultSet(RS);
+			CerrarNuevaConsulta(p);
+			CerrarResultado(RS);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -1411,14 +1409,14 @@ public class GestorSQL {
 	public static void actualizar_ultima_fecha_conexion(Cuenta compte) {
 		String baseQuery = "UPDATE datos_cuenta SET `ultimaip` = ?, `ultimafechaconexion` = ? WHERE `id` = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			
 			p.setString(1, compte.get_curIP());
 			p.setString(2, compte.getLastConnectionDate());
 			p.setInt(3, compte.get_GUID());
 			
 			p.executeUpdate();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		}catch(SQLException e) {
 			RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 			RealmServer.addToLog("Query: "+baseQuery);
@@ -1444,24 +1442,24 @@ public class GestorSQL {
 		" WHERE `id` = ?;";
 		
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setString(1,DD.get_nom());
 			p.setLong(2,DD.get_exp());
 			p.setInt(3,DD.get_level());
 			p.setInt(4,DD.get_endurance());
-			p.setInt(5,DD.get_amour());
+			p.setInt(5,DD.getAmor());
 			p.setInt(6,DD.get_maturite());
 			p.setInt(7,DD.get_serenite());
 			p.setInt(8,DD.get_reprod());
 			p.setInt(9,DD.get_fatigue());
 			p.setInt(10,DD.get_energie());
-			p.setString(11,DD.get_ancetres());
+			p.setString(11,DD.getAncestros());
 			p.setString(12,DD.getItemsId());
 			p.setString(13,DD.get_ability());
-			p.setInt(14, DD.get_id());
+			p.setInt(14, DD.getID());
 			
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 
 		}catch(SQLException e) {
 			JuegoServidor.addToLog("SQL ERROR: "+e.getMessage());
@@ -1474,7 +1472,7 @@ public class GestorSQL {
 		String baseQuery = "REPLACE INTO `datos_cercados`( `mapa` , `celda`, `tamaño` , `dueño` , `gremio` , `precio` , `monturas` ) VALUES (?,?,?,?,?,?,?);";
 				
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1,MP.get_map().get_id());
 			p.setInt(2,MP.get_cellid());
 			p.setInt(3,MP.get_size());
@@ -1484,7 +1482,7 @@ public class GestorSQL {
 			p.setString(7,MP.parseDBData());
 			
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1495,12 +1493,12 @@ public class GestorSQL {
 		String baseQuery = "UPDATE `datos_cercados` SET `monturas` = ? WHERE mapa = ?;";
 		
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setString(1, MP.parseDBData());
 			p.setShort(2, MP.get_map().get_id());
 			
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1511,7 +1509,7 @@ public class GestorSQL {
 		String baseQuery = "REPLACE INTO `datos_celdas_accion` VALUES (?,?,?,?,?,?);";
 		
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1,mapID1);
 			p.setInt(2,cellID1);
 			p.setInt(3,action);
@@ -1519,7 +1517,7 @@ public class GestorSQL {
 			p.setString(5,args);
 			p.setString(6,cond);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1531,11 +1529,11 @@ public class GestorSQL {
 	public static boolean eliminar_celdas(int mapID, int cellID) {
 		String baseQuery = "DELETE FROM `datos_celdas_accion` WHERE `mapa` = ? AND `celda` = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, mapID);
 			p.setInt(2, cellID);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1547,12 +1545,12 @@ public class GestorSQL {
 	public static boolean guardar_mapa(Mapa map) {
 		String baseQuery = "UPDATE `datos_mapas` SET `esquemapelea` = ?, `numerogrupos` = ? WHERE id = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setString(1,map.get_placesStr());
 			p.setInt(2, map.getMaxGroupNumb());
 			p.setInt(3, map.get_id());
 			p.executeUpdate();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1564,11 +1562,11 @@ public class GestorSQL {
 	public static boolean eliminar_npc_en_mapa(int m, int c) {
 		String baseQuery = "DELETE FROM datos_npc WHERE mapa = ? AND celda = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, m);
 			p.setInt(2, c);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1580,11 +1578,11 @@ public class GestorSQL {
 	public static boolean eliminar_recaudador(int id) {
 		String baseQuery = "DELETE FROM datos_recaudadores WHERE id = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, id);
 			
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1596,13 +1594,13 @@ public class GestorSQL {
 	public static boolean agregar_npc_en_mapa(int m, int id, int c, int o) {
 		String baseQuery = "INSERT INTO `datos_npc` VALUES (?,?,?,?);";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, m);
 			p.setInt(2, id);
 			p.setInt(3, c);
 			p.setInt(4, o);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1614,7 +1612,7 @@ public class GestorSQL {
 	public static boolean agregar_recaudador_en_mapa(int guid, int mapid, int guildID, int cellid, int o, short N1, short N2) {
 		String baseQuery = "INSERT INTO `datos_recaudadores` VALUES (?,?,?,?,?,?,?,?,?,?);";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, guid);
 			p.setInt(2, mapid);
 			p.setInt(3, cellid);
@@ -1626,7 +1624,7 @@ public class GestorSQL {
 			p.setLong(9, 0);
 			p.setLong(10, 0);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1638,13 +1636,13 @@ public class GestorSQL {
 	public static void actualizar_recaudador(Recaudador P) {
 		String baseQuery = "UPDATE `datos_recaudadores` SET `objetos` = ?, `kamas` = ?, `experiencia` = ? WHERE id = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setString(1, P.parseItemPercepteur());
 			p.setLong(2, P.getKamas());
 			p.setLong(3, P.getXp());
 			p.setInt(4, P.getGuid());
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1655,14 +1653,14 @@ public class GestorSQL {
 		if(!eliminar_fin_pelea_accion(mapID,type,Aid))return false;
 		String baseQuery = "INSERT INTO `datos_fin_pelea_accion` VALUES (?,?,?,?,?);";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, mapID);
 			p.setInt(2, type);
 			p.setInt(3, Aid);
 			p.setString(4,args);
 			p.setString(5, cond);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1674,12 +1672,12 @@ public class GestorSQL {
 	public static boolean eliminar_fin_pelea_accion(int mapID, int type, int aid) {
 		String baseQuery = "DELETE FROM `datos_fin_pelea_accion` WHERE mapa = ? AND tipopelea = ? AND accion = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, mapID);
 			p.setInt(2, type);
 			p.setInt(3, aid);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1691,14 +1689,14 @@ public class GestorSQL {
 	public static void guardar_nuevo_gremio(Gremio g) {
 		String baseQuery = "INSERT INTO `datos_gremio` VALUES (?,?,?,1,0,0,0,?,?);";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, g.get_id());
 			p.setString(2, g.get_name());
 			p.setString(3, g.get_emblem());
 			p.setString(4, "462;0|461;0|460;0|459;0|458;0|457;0|456;0|455;0|454;0|453;0|452;0|451;0");
 			p.setString(5, "176;100|158;1000|124;100");
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1708,10 +1706,10 @@ public class GestorSQL {
 	public static void eliminar_gremio(int id) {
 		String baseQuery = "DELETE FROM `datos_gremio` WHERE `id` = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, id);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1721,10 +1719,10 @@ public class GestorSQL {
 	public static void eliminar_todos_los_miembros_del_gremio(int guildid) {
 		String baseQuery = "DELETE FROM `datos_miembros_gremio` WHERE `gremio` = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, guildid);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1734,11 +1732,11 @@ public class GestorSQL {
 	public static void eliminar_miembro_del_gremio(int id) {
 		String baseQuery = "DELETE FROM `datos_miembros_gremio` WHERE `id` = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, id);
 			
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1748,7 +1746,7 @@ public class GestorSQL {
 	public static void actualizar_gremio(Gremio g) {
 		String baseQuery = "UPDATE `datos_gremio` SET `nivel` = ?, `experiencia` = ?,`capital` = ?, `recaudadoresmaximos` = ?, `hechizos` = ?, `caracteristicas` = ? WHERE id = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1, g.get_lvl());
 			p.setLong(2, g.get_xp());
 			p.setInt(3, g.get_Capital());
@@ -1757,7 +1755,7 @@ public class GestorSQL {
 			p.setString(6, g.compileStats());
 			p.setInt(7, g.get_id());
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1767,7 +1765,7 @@ public class GestorSQL {
 	public static void actualizar_miembro_del_gremio(GuildMember gm) {
 		String baseQuery = "REPLACE INTO `datos_miembros_gremio` VALUES(?,?,?,?,?,?);";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _dinamicos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1,gm.getGuid());
 			p.setInt(2,gm.getGuild().get_id());
 			p.setInt(3,gm.getRank());
@@ -1775,7 +1773,7 @@ public class GestorSQL {
 			p.setInt(5,gm.getPXpGive());
 			p.setInt(6,gm.getRights());
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -1785,11 +1783,11 @@ public class GestorSQL {
 	public static int isPersoInGuild(int guid) {
 		int guildId = -1;
 		try {
-			ResultSet GuildQuery = GestorSQL.executeQuery("SELECT gremio FROM `datos_miembros_gremio` WHERE id ="+guid+";", MainServidor.OTHER_DB_NAME);
+			ResultSet GuildQuery = GestorSQL.EjecutarConsulta("SELECT gremio FROM `datos_miembros_gremio` WHERE id ="+guid+";", MainServidor.OTHER_DB_NAME);
 			boolean found = GuildQuery.first();
 			if(found)
 				guildId = GuildQuery.getInt("gremio");
-			closeResultSet(GuildQuery);
+			CerrarResultado(GuildQuery);
 		}catch(SQLException e) {
 			JuegoServidor.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -1801,14 +1799,14 @@ public class GestorSQL {
 		int guildId = -1;
 		int guid = -1;
 		try {
-			ResultSet GuildQuery = GestorSQL.executeQuery("SELECT gremio,id FROM `datos_miembros_gremio` WHERE nombre ='"+name+"';", MainServidor.OTHER_DB_NAME);
+			ResultSet GuildQuery = GestorSQL.EjecutarConsulta("SELECT gremio,id FROM `datos_miembros_gremio` WHERE nombre ='"+name+"';", MainServidor.OTHER_DB_NAME);
 			boolean found = GuildQuery.first();
 			if(found) {
 				guildId = GuildQuery.getInt("gremio");
 				guid = GuildQuery.getInt("id");
 			}
 			
-			closeResultSet(GuildQuery);
+			CerrarResultado(GuildQuery);
 		}catch(SQLException e) {
 			JuegoServidor.addToLog("SQL ERROR: "+e.getMessage());
 			e.printStackTrace();
@@ -1821,23 +1819,23 @@ public class GestorSQL {
 		String baseQuery = "DELETE FROM `datos_npc_respuesta` WHERE `id` = ? AND `tipo` = ?;";
 		PreparedStatement p; 
 		try {
-			p = newTransact(baseQuery, _estaticos);
+			p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, repID);
 			p.setInt(2, type);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+baseQuery);
 		}
 		baseQuery = "INSERT INTO `datos_npc_respuesta` VALUES (?,?,?);";
 		try {
-			p = newTransact(baseQuery, _estaticos);
+			p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, repID);
 			p.setInt(2, type);
 			p.setString(3, args);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1849,11 +1847,11 @@ public class GestorSQL {
 	public static boolean actualizar_respuesta_de_npc(int id, int q) {
 		String baseQuery = "UPDATE `datos_npc_modelo` SET `pregunta` = ? WHERE `id` = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setInt(1, q);
 			p.setInt(2, id);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1865,12 +1863,12 @@ public class GestorSQL {
 	public static boolean actualizar_pregunta_npc(int id, String reps) {
 		String baseQuery = "UPDATE `datos_npc_pregunta` SET `respuestas` = ? WHERE `id` = ?;";
 		try {
-			PreparedStatement p = newTransact(baseQuery, _estaticos);
+			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
 			p.setString(1, reps);
 			p.setInt(2, id);
 			
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 			return true;
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -1893,7 +1891,7 @@ public class GestorSQL {
 			PreparedStatement p;
 			/*FIN*/
 			try {
-				ResultSet RS = executeQuery("SELECT * FROM datos_acciones_tiempo_real;", MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT * FROM datos_acciones_tiempo_real;", MainServidor.OTHER_DB_NAME);
 				while(RS.next()) {
 					perso = Mundo.getPersonnage(RS.getInt("personaje"));
 					if(perso == null) {
@@ -2012,9 +2010,9 @@ public class GestorSQL {
 					MainServidor.addToShopLog("(Commande "+id+")Action "+action+" Nombre: "+nombre+" appliquee sur le personnage "+RS.getInt("jugador")+"("+perso.get_name()+")");
 				try {
 					String query = "DELETE FROM datos_acciones_tiempo_real WHERE id="+id+";";
-					p = newTransact(query, _dinamicos);
+					p = NuevaConsulta(query, _dinamicos);
 					p.execute();
-					closePreparedStatement(p);
+					CerrarNuevaConsulta(p);
 					MainServidor.addToShopLog("Commande "+id+" supprimee.");
 				}catch(SQLException e) {
 					JuegoServidor.addToLog("SQL ERROR: "+e.getMessage());
@@ -2023,7 +2021,7 @@ public class GestorSQL {
 				}
 				GestorSQL.guardar_personaje(perso,true);
 			}
-				closeResultSet(RS);
+				CerrarResultado(RS);
 		}catch(Exception e) {
 			JuegoServidor.addToLog("ERROR: "+e.getMessage());
 			MainServidor.addToShopLog("Error: "+e.getMessage());
@@ -2035,11 +2033,11 @@ public class GestorSQL {
 		PreparedStatement p;
 		String query = "UPDATE `datos_cuenta` SET conectado = ? WHERE `id`=?;";
 		try {
-			p = newTransact(query, _dinamicos);
+			p = NuevaConsulta(query, _dinamicos);
 			p.setInt(1, logged);
 			p.setInt(2, accID);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+query);
@@ -2050,9 +2048,9 @@ public class GestorSQL {
 		PreparedStatement p;
 		String query = "UPDATE `datos_cuenta` SET conectado = 0;";
 		try {
-			p = newTransact(query, _dinamicos);
+			p = NuevaConsulta(query, _dinamicos);
 			p.execute();
-			closePreparedStatement(p);
+			CerrarNuevaConsulta(p);
 		} catch (SQLException e) {
 			JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 			JuegoServidor.addToLog("Game: Query: "+query);
@@ -2061,7 +2059,7 @@ public class GestorSQL {
 
 	public static void cargar_maximo_de_objetos() {
 		    try {
-		      ResultSet RS = executeQuery("SELECT * FROM datos_objetos;", MainServidor.OTHER_DB_NAME);
+		      ResultSet RS = EjecutarConsulta("SELECT * FROM datos_objetos;", MainServidor.OTHER_DB_NAME);
 		      while (RS.next()) {
 		        int guid = RS.getInt("id");
 		        int tempID = RS.getInt("modelo");
@@ -2070,7 +2068,7 @@ public class GestorSQL {
 		        String stats = RS.getString("caracteristicas");
 		        Mundo.addObjet(new Objeto(guid, tempID, qua, pos, stats), false);
 		      }
-		      closeResultSet(RS);
+		      CerrarResultado(RS);
 		    } catch (SQLException e) {
 		      JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 		      System.exit(1);
@@ -2100,7 +2098,7 @@ public class GestorSQL {
 			PreparedStatement p;
 			String query = "SELECT COUNT(*) AS exist FROM datos_personajes WHERE nombre LIKE ?;";
 			try {
-				p = newTransact(query, _dinamicos);
+				p = NuevaConsulta(query, _dinamicos);
 				p.setString(1, name);
 				ResultSet RS =  p.executeQuery();
 				
@@ -2111,8 +2109,8 @@ public class GestorSQL {
 						exist = true;
 				}
 				
-				closeResultSet(RS);
-				closePreparedStatement(p);
+				CerrarResultado(RS);
+				CerrarNuevaConsulta(p);
 			}catch(SQLException e) {
 				RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2124,11 +2122,11 @@ public class GestorSQL {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `venta`='0', `dueño`=?, `gremio`='0', `acceso`='0', `llave`='-', `derechosgremio`='0' WHERE `id`=?;";
 			try {
-				p = newTransact(query, _dinamicos);
+				p = NuevaConsulta(query, _dinamicos);
 				p.setInt(1, P.getAccID());
 				p.setInt(2, h.get_id());
 				p.execute();
-				closePreparedStatement(p);
+				CerrarNuevaConsulta(p);
 				h.set_sale(0);
 				h.set_owner_id(P.getAccID());
 				h.set_guild_id(0);
@@ -2148,11 +2146,11 @@ public class GestorSQL {
 			
 			query = "UPDATE `datos_cofres` SET `dueño`=?, `llave`='-' WHERE `casa`=?;";
 			try {
-				p = newTransact(query, _dinamicos);
+				p = NuevaConsulta(query, _dinamicos);
 				p.setInt(1, P.getAccID());
 				p.setInt(2, h.get_id());
 				p.execute();
-				closePreparedStatement(p);
+				CerrarNuevaConsulta(p);
 			} catch (SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 				JuegoServidor.addToLog("Game: Query: "+query);
@@ -2164,11 +2162,11 @@ public class GestorSQL {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `venta`=? WHERE `id`=?;";
 			try {
-				p = newTransact(query, _dinamicos);
+				p = NuevaConsulta(query, _dinamicos);
 				p.setInt(1, price);
 				p.setInt(2, h.get_id());
 				p.execute();
-				closePreparedStatement(p);
+				CerrarNuevaConsulta(p);
 			} catch (SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 				JuegoServidor.addToLog("Game: Query: "+query);
@@ -2179,12 +2177,12 @@ public class GestorSQL {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `llave`=? WHERE `id`=? AND dueño=?;";
 			try {
-				p = newTransact(query, _dinamicos);
+				p = NuevaConsulta(query, _dinamicos);
 				p.setString(1, packet);
 				p.setInt(2, h.get_id());
 				p.setInt(3, P.getAccID());
 				p.execute();
-				closePreparedStatement(p);
+				CerrarNuevaConsulta(p);
 				h.set_key(packet);
 			} catch (SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -2196,12 +2194,12 @@ public class GestorSQL {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `gremio`=?, `derechosgremio`=? WHERE `id`=?;";
 			try {
-				p = newTransact(query, _dinamicos);
+				p = NuevaConsulta(query, _dinamicos);
 				p.setInt(1, GuildID);
 				p.setInt(2, GuildRights);
 				p.setInt(3, h.get_id());
 				p.execute();
-				closePreparedStatement(p);
+				CerrarNuevaConsulta(p);
 				h.set_guild_id(GuildID);
 				h.set_guild_rights(GuildRights);
 			} catch (SQLException e) {
@@ -2214,10 +2212,10 @@ public class GestorSQL {
 			PreparedStatement p;
 			String query = "UPDATE `datos_casas` SET `derechosgremio`='0', `gremio`='0' WHERE `gremio`=?;";
 			try {
-				p = newTransact(query, _dinamicos);
+				p = NuevaConsulta(query, _dinamicos);
 				p.setInt(1, GuildID);
 				p.execute();
-				closePreparedStatement(p);
+				CerrarNuevaConsulta(p);
 			} catch (SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 				JuegoServidor.addToLog("Game: Query: "+query);
@@ -2227,7 +2225,7 @@ public class GestorSQL {
 		public static void actualizar_casa(House h) {
 			String baseQuery = "UPDATE `datos_casas` SET `dueño` = ?, `venta` = ?, `gremio` = ?, `acceso` = ?, `llave` = ?, `derechosgremio` = ? WHERE id = ?;";
 			try {
-				PreparedStatement p = newTransact(baseQuery, _dinamicos);
+				PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 				p.setInt(1, h.get_owner_id());
 				p.setInt(2, h.get_sale());
 				p.setInt(3, h.get_guild_id());
@@ -2236,7 +2234,7 @@ public class GestorSQL {
 				p.setInt(6, h.get_guild_rights());
 				p.setInt(7, h.get_id());
 				p.execute();
-				closePreparedStatement(p);
+				CerrarNuevaConsulta(p);
 			} catch (SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 				JuegoServidor.addToLog("Game: Query: "+baseQuery);
@@ -2247,11 +2245,11 @@ public class GestorSQL {
 			int i = -50;//Pour éviter les conflits avec touts autre NPC
 			try {
 				String query = "SELECT `id` FROM `datos_recaudadores` ORDER BY `id` ASC LIMIT 0 , 1;";
-				ResultSet RS = executeQuery(query, MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta(query, MainServidor.OTHER_DB_NAME);
 				while (RS.next()) {
 					i = RS.getInt("guid")-1; 
 				}
-				closeResultSet(RS);
+				CerrarResultado(RS);
 			}catch(SQLException e) {
 				RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2265,7 +2263,7 @@ public class GestorSQL {
 			StringBuilder brak = new StringBuilder();
 			StringBuilder neutral = new StringBuilder();
 			try {
-				ResultSet RS = GestorSQL.executeQuery("SELECT mapa, alineacion FROM datos_zappis;", MainServidor.STATIC_DB_NAME);
+				ResultSet RS = GestorSQL.EjecutarConsulta("SELECT mapa, alineacion FROM datos_zappis;", MainServidor.STATIC_DB_NAME);
 				while (RS.next()) {
 					if(RS.getInt("alineacion") == Constantes.ALIGNEMENT_BONTARIEN) {
 						bonta.append(RS.getString("mapa"));
@@ -2284,7 +2282,7 @@ public class GestorSQL {
 				Constantes.ZAAPI.put(Constantes.ALIGNEMENT_BONTARIEN, bonta.toString());
 				Constantes.ZAAPI.put(Constantes.ALIGNEMENT_BRAKMARIEN, brak.toString());
 				Constantes.ZAAPI.put(Constantes.ALIGNEMENT_NEUTRE, neutral.toString());
-				closeResultSet(RS);
+				CerrarResultado(RS);
 			}catch(SQLException e) {
 				RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2295,12 +2293,12 @@ public class GestorSQL {
 		public static int cargar_zaaps() {
 			int i = 0;
 			try {
-				ResultSet RS = GestorSQL.executeQuery("SELECT mapa, celda FROM datos_zaaps;", MainServidor.STATIC_DB_NAME);
+				ResultSet RS = GestorSQL.EjecutarConsulta("SELECT mapa, celda FROM datos_zaaps;", MainServidor.STATIC_DB_NAME);
 				while (RS.next()) {
 					Constantes.ZAAPS.put(RS.getInt("mapa"), RS.getInt("celda"));
 					i++;
 				}
-				closeResultSet(RS);
+				CerrarResultado(RS);
 			}catch(SQLException e) {
 				RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2310,12 +2308,12 @@ public class GestorSQL {
 
 		public static int siguiente_id_objeto() {
 			try {
-				ResultSet RS = executeQuery("SELECT MAX(id) AS max FROM datos_objetos;", MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT MAX(id) AS max FROM datos_objetos;", MainServidor.OTHER_DB_NAME);
 				int guid = 0;
 				boolean found = RS.first();
 				if(found)
 					guid = RS.getInt("max");
-				closeResultSet(RS);
+				CerrarResultado(RS);
 				return guid;
 			}catch(SQLException e) {
 				RealmServer.addToLog("SQL ERROR: "+e.getMessage());
@@ -2328,13 +2326,13 @@ public class GestorSQL {
 		public static int cargar_ip_baneadas() {
 			int i = 0;
 			try {
-				ResultSet RS = executeQuery("SELECT ip FROM datos_ipbaneadas;", MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT ip FROM datos_ipbaneadas;", MainServidor.OTHER_DB_NAME);
 				while (RS.next()) {
 					Constantes.BAN_IP += RS.getString("ip");
 					if(!RS.isLast()) Constantes.BAN_IP += ",";
 					i++;
 			    }
-				closeResultSet(RS);
+				CerrarResultado(RS);
 			}catch(SQLException e) {
 				RealmServer.addToLog("SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2345,10 +2343,10 @@ public class GestorSQL {
 		public static boolean agregar_ip_baneada(String ip) {
 			String baseQuery = "INSERT INTO `datos_ipbaneadas` VALUES (?);";
 			try {
-				PreparedStatement p = newTransact(baseQuery, _dinamicos);
+				PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 				p.setString(1, ip);
 				p.execute();
-				closePreparedStatement(p);
+				CerrarNuevaConsulta(p);
 				return true;
 			} catch (SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -2359,7 +2357,7 @@ public class GestorSQL {
 
 		public static void cargar_mercadillos() {
 			try {
-				ResultSet RS = executeQuery("SELECT * FROM `datos_mercadillos` ORDER BY id ASC", MainServidor.STATIC_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT * FROM `datos_mercadillos` ORDER BY id ASC", MainServidor.STATIC_DB_NAME);
 				while(RS.next()) {
 					Mundo.addHdv(new Mercadillo(
 									RS.getInt("mapa"),
@@ -2370,10 +2368,10 @@ public class GestorSQL {
 									RS.getString("categoria")));
 					
 				}
-				RS = executeQuery("SELECT id MAX FROM `datos_mercadillos`", MainServidor.STATIC_DB_NAME);
+				RS = EjecutarConsulta("SELECT id MAX FROM `datos_mercadillos`", MainServidor.STATIC_DB_NAME);
 				RS.first();
 				Mundo.setNextHdvID(RS.getInt("MAX"));
-				closeResultSet(RS);
+				CerrarResultado(RS);
 			}catch(SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2383,7 +2381,7 @@ public class GestorSQL {
 		public static void cargar_objetos_mercadillos() {
 			try {
 				long time1 = System.currentTimeMillis();	//TIME
-				ResultSet RS = executeQuery("SELECT i.* FROM `datos_objetos` AS i,`datos_objetos_mercadillo` AS h WHERE i.id = h.objeto", MainServidor.OTHER_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT i.* FROM `datos_objetos` AS i,`datos_objetos_mercadillo` AS h WHERE i.id = h.objeto", MainServidor.OTHER_DB_NAME);
 				//Load items
 				while(RS.next()) {
 					int guid 	= RS.getInt("id");
@@ -2395,7 +2393,7 @@ public class GestorSQL {
 				}
 				
 				//Load HDV entry
-				RS = executeQuery("SELECT * FROM `datos_objetos_mercadillo`", MainServidor.OTHER_DB_NAME);
+				RS = EjecutarConsulta("SELECT * FROM `datos_objetos_mercadillo`", MainServidor.OTHER_DB_NAME);
 				while(RS.next()) {
 					Mercadillo tempHdv = Mundo.getHdv(RS.getInt("mapa"));
 					if(tempHdv == null)continue;
@@ -2406,7 +2404,7 @@ public class GestorSQL {
 											Mundo.getObjet(RS.getInt("objeto"))));
 				}
 				System.out.println (System.currentTimeMillis() - time1 + "ms pour loader les HDVS items");	//TIME
-				closeResultSet(RS);
+				CerrarResultado(RS);
 			}catch(SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2417,12 +2415,12 @@ public class GestorSQL {
 			PreparedStatement queries = null;
 			try {
 				String emptyQuery = "TRUNCATE TABLE `datos_objetos_mercadillo`";
-				PreparedStatement emptyTable = newTransact(emptyQuery, _dinamicos);
+				PreparedStatement emptyTable = NuevaConsulta(emptyQuery, _dinamicos);
 				emptyTable.execute();
-				closePreparedStatement(emptyTable);
+				CerrarNuevaConsulta(emptyTable);
 				
 				String baseQuery = "INSERT INTO `datos_objetos_mercadillo` (`mapa`,`dueño`,`precio`,`cantidad`,`objeto`) VALUES (?,?,?,?,?);";
-				queries = newTransact(baseQuery, _dinamicos);
+				queries = NuevaConsulta(baseQuery, _dinamicos);
 				for(HdvEntry curEntry : liste) {
 					if(curEntry.getOwner() == -1)continue;
 					queries.setInt(1, curEntry.getHdvID());
@@ -2432,7 +2430,7 @@ public class GestorSQL {
 					queries.setInt(5, curEntry.getObjet().getGuid());
 					queries.execute();
 				}
-				closePreparedStatement(queries);
+				CerrarNuevaConsulta(queries);
 				guardar_mercadillo_precio_medio();
 				}catch(SQLException e) {
 					JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
@@ -2444,7 +2442,7 @@ public class GestorSQL {
 			String baseQuery = "UPDATE `datos_objeto_modelo` SET vendido = ?, preciomedio = ? WHERE id = ?;";
 			PreparedStatement queries = null;
 			try {
-				queries = newTransact(baseQuery, _estaticos);
+				queries = NuevaConsulta(baseQuery, _estaticos);
 				for(ObjTemplate curTemp : Mundo.getObjTemplates()) {
 					if(curTemp.getSold() == 0)
 						continue;
@@ -2453,7 +2451,7 @@ public class GestorSQL {
 					queries.setInt(3, curTemp.getID());
 					queries.executeUpdate();
 				}
-				closePreparedStatement(queries);
+				CerrarNuevaConsulta(queries);
 			}catch(SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2462,7 +2460,7 @@ public class GestorSQL {
 
 		public static void cargar_animaciones() {
 			try {
-				ResultSet RS = executeQuery("SELECT * FROM datos_animaciones;", MainServidor.STATIC_DB_NAME);
+				ResultSet RS = EjecutarConsulta("SELECT * FROM datos_animaciones;", MainServidor.STATIC_DB_NAME);
 				while(RS.next()) {
 					Mundo.addAnimation(new Animaciones(
 							RS.getInt("id"),
@@ -2472,7 +2470,7 @@ public class GestorSQL {
 							RS.getInt("accion"),
 							RS.getInt("tamaño")));
 				}
-				closeResultSet(RS);
+				CerrarResultado(RS);
 			}catch(SQLException e) {
 				JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
 				e.printStackTrace();
@@ -2482,7 +2480,7 @@ public class GestorSQL {
 	    public static int cargar_cofre() {
                 int nbr = 0;
                 try {
-                        ResultSet RS = GestorSQL.executeQuery("SELECT * FROM datos_cofres;", MainServidor.OTHER_DB_NAME);
+                        ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM datos_cofres;", MainServidor.OTHER_DB_NAME);
                         while(RS.next()) {
                                 Mundo.addTrunk(new Cofres(
                                                 RS.getInt("id"),
@@ -2495,7 +2493,7 @@ public class GestorSQL {
                                                 RS.getInt("dueño")));
                                 nbr ++;
                         }
-                        closeResultSet(RS);
+                        CerrarResultado(RS);
                 }catch(SQLException e){
                         RealmServer.addToLog("SQL ERROR: "+e.getMessage());
                         e.printStackTrace();
@@ -2508,12 +2506,12 @@ public class GestorSQL {
                 PreparedStatement p;
                 String query = "UPDATE `datos_cofres` SET `llave`=? WHERE `id`=? AND dueño=?;";
                 try {
-                        p = newTransact(query, _dinamicos);
+                        p = NuevaConsulta(query, _dinamicos);
                         p.setString(1, packet);
                         p.setInt(2, t.get_id());
                         p.setInt(3, P.getAccID());
                         p.execute();
-                        closePreparedStatement(p);
+                        CerrarNuevaConsulta(p);
                 } catch (SQLException e) {
                         JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
                         JuegoServidor.addToLog("Game: Query: "+query);
@@ -2524,12 +2522,12 @@ public class GestorSQL {
                 PreparedStatement p;
                 String query = "UPDATE `datos_cofres` SET `kamas`=?, `objeto`=? WHERE `id`=?";
                 try {
-                        p = newTransact(query, _dinamicos);
+                        p = NuevaConsulta(query, _dinamicos);
                         p.setLong(1, t.get_kamas());
                         p.setString(2, t.parseTrunkObjetsToDB());
                         p.setInt(3, t.get_id());
                         p.execute();
-                        closePreparedStatement(p);
+                        CerrarNuevaConsulta(p);
                 } catch (SQLException e) {
                         JuegoServidor.addToLog("Game: SQL ERROR: "+e.getMessage());
                         JuegoServidor.addToLog("Game: Query: "+query);

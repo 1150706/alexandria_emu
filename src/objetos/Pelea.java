@@ -428,7 +428,7 @@ public class Pelea
 					str.append(getTotalStats().getEffect(Constantes.STATS_ADD_MFLEE)).append(";");
 					str.append(_team).append(";");
 					if (_perso.isOnMount() && _perso.getMount() != null)
-						str.append(_perso.getMount().get_color(_perso.parsecolortomount()));
+						str.append(_perso.getMount().getColor(_perso.parsecolortomount()));
 					str.append(";");
 				}
 //Mob
@@ -481,7 +481,7 @@ public class Pelea
 					str.append(getTotalStats().getEffect(Constantes.STATS_ADD_MFLEE)).append(";");
 					str.append(_team).append(";");
 					if (_double.isOnMount() && _double.getMount() != null)
-						str.append(_double.getMount().get_color(_perso.parsecolortomount()));
+						str.append(_double.getMount().getColor(_perso.parsecolortomount()));
 					str.append(";");
 				}
 			}

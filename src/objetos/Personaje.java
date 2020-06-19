@@ -1210,7 +1210,7 @@ public class Personaje {
 			}
 			else str.append(";;");
 			str.append(get_Speed()).append(";");//Restriction
-			str.append((_onMount&&_mount!=null?_mount.get_color(parsecolortomount()):"")).append(";");
+			str.append((_onMount&&_mount!=null?_mount.getColor(parsecolortomount()):"")).append(";");
 			str.append(";");
 		}
 		return str.toString();
@@ -2877,7 +2877,7 @@ public class Personaje {
 		}
 		int mountID = -1;
 		if(P.getMount() != null) {
-			mountID = P.getMount().get_id();
+			mountID = P.getMount().getID();
 		}
 		
 		Personaje Clone = new Personaje(

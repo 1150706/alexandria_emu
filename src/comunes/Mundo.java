@@ -13,7 +13,6 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import objetos.*;
-//import objects.Fight.Fighter;
 import objetos.Mercadillo.HdvEntry;
 import objetos.NPCModelo.*;
 import objetos.Objeto.ObjTemplate;
@@ -24,14 +23,14 @@ import objetos.hechizos.Hechizos;
 
 public class Mundo {
 
-	private static final Map<Integer, Cuenta> 	Comptes	= new TreeMap<>();
-	private static final Map<String,Integer> 	ComptebyName	= new TreeMap<>();
-	private static final StringBuilder Challenges = new StringBuilder();
-	private static final Map<Integer, Personaje> 	Persos	= new TreeMap<>();
-	private static final Map<Short, Mapa> 	Cartes	= new TreeMap<>();
-	private static final Map<Integer, Objeto> 	Objets	= new TreeMap<>();
-	private static final Map<Integer,ExpLevel> ExpLevels = new TreeMap<>();
-	private static final Map<Integer, Hechizos>	Sorts = new TreeMap<>();
+	private static final Map<Integer, Cuenta> Cuentas = new TreeMap<>();
+	private static final Map<String,Integer> CuentaPorNombre = new TreeMap<>();
+	private static final StringBuilder Retos = new StringBuilder();
+	private static final Map<Integer, Personaje> Personajes = new TreeMap<>();
+	private static final Map<Short, Mapa> Mapas = new TreeMap<>();
+	private static final Map<Integer, Objeto> Objetos = new TreeMap<>();
+	private static final Map<Integer,ExpLevel> Experiencias = new TreeMap<>();
+	private static final Map<Integer, Hechizos> Hechizos = new TreeMap<>();
 	private static final Map<Integer,ObjTemplate> ObjTemplates = new TreeMap<>();
 	private static final Map<Integer, Monstruo> MobTemplates = new TreeMap<>();
 	private static final Map<Integer, NPCModelo> NPCTemplates = new TreeMap<>();
@@ -70,9 +69,8 @@ public class Mundo {
 	
 	private static int nextObjetID; //Contient le derniere ID utilis? pour cr?e un Objet
 	
-	public static void ticAllFightersTurns()
-	  {
-	    for (Mapa map : Cartes.values())
+	public static void ticAllFightersTurns() {
+	    for (Mapa map : Mapas.values())
 	      try {
 	        if (map != null)
 	        	if(map.get_fights() != null)
@@ -94,22 +92,22 @@ public class Mundo {
 	
 	public static void addStep(Quest.Step s)
 	{
-		Steps.put(Integer.valueOf(s.get_id()), s);
+		Steps.put(s.get_id(), s);
 	}
 	
 	public static Quest.Step getStep(int guid) {
-		return Steps.get(Integer.valueOf(guid));
+		return Steps.get(guid);
 	}
 	
 	public static void addquest(Quest q) {
-		Quests.put(Integer.valueOf(q.get_id()), q);
+		Quests.put(q.get_id(), q);
 		System.out.println("Quest ID : " + q.get_id());
 		System.out.println("Ali ID : " + q.get_ali());
 		System.out.println("Lvl : " + q.get_lvl());
 	}
 	
 	public static Quest getQuest(int q) {
-		return Quests.get(Integer.valueOf(q));
+		return Quests.get(q);
 	}
 	
 	public static class Drop
@@ -682,10 +680,10 @@ public class Mundo {
 		System.out.println("====> Cargando datos estaticos <====");
 		System.out.println("Cargando las experiencias:");
 		GestorSQL.cargar_experiencias();
-		System.out.println(ExpLevels.size()+" niveles cargados");
+		System.out.println(Experiencias.size()+" niveles cargados");
 		System.out.println("Chargement des sorts:");
 		GestorSQL.cargar_hechizos();
-		System.out.println(Sorts.size()+" sorts ont ete charges");
+		System.out.println(Hechizos.size()+" sorts ont ete charges");
 		System.out.println("Chargement des templates de monstre:");
 		GestorSQL.cargar_monstruo_modelo();
 		System.out.println(MobTemplates.size()+" templates de monstre ont ete chargees");
@@ -721,7 +719,7 @@ public class Mundo {
 		System.out.println(ItemSets.size()+" panoplies ont ete chargees");
 		System.out.println("Chargement des maps:");
 		GestorSQL.cargar_mapas();
-		System.out.println(Cartes.size()+" maps ont ete chargees");
+		System.out.println(Mapas.size()+" maps ont ete chargees");
 		System.out.println("Chargement des Triggers:");
 		int nbr = GestorSQL.cargar_celdas();
 		System.out.println(nbr+" triggers ont ete charges");
@@ -750,10 +748,10 @@ public class Mundo {
 		System.out.println("Ok !");
 		System.out.print("Chargement des comptes: ");
 		GestorSQL.cargar_cuentas();
-		System.out.println(Comptes.size()+" comptes charges");
+		System.out.println(Cuentas.size()+" comptes charges");
 		System.out.print("Chargement des personnages: ");
 		GestorSQL.cargar_personaje();
-		System.out.println(Persos.size()+" personnages charges");
+		System.out.println(Personajes.size()+" personnages charges");
 	    System.out.print("Chargement des guildes: ");
 		GestorSQL.cargar_gremios();
 		System.out.println(Guildes.size()+" guildes chargees");
@@ -762,7 +760,7 @@ public class Mundo {
 		System.out.println(Dragodindes.size()+" dragodindes chargees");
 		System.out.print("Chargement des challenges: ");
 		GestorSQL.cargar_retos();
-		System.out.println(Challenges.toString().split(";").length+" challenges charges");
+		System.out.println(Retos.toString().split(";").length+" challenges charges");
 		System.out.print("Chargement des membres de guildes: ");
 		GestorSQL.cargar_miembros_gremio();
 		System.out.println("Ok !");
@@ -836,17 +834,17 @@ public class Mundo {
 	
 	public static int getExpLevelSize()
 	{
-		return ExpLevels.size();
+		return Experiencias.size();
 	}
 	
 	public static void addExpLevel(int lvl,ExpLevel exp)
 	{
-		ExpLevels.put(lvl, exp);
+		Experiencias.put(lvl, exp);
 	}
 	
 	public static Cuenta getCompte(int guid)
 	{
-		return Comptes.get(guid);
+		return Cuentas.get(guid);
 	}
 	
 	public static void addNPCQuestion(NPC_question quest)
@@ -870,37 +868,37 @@ public class Mundo {
 	
 	public static Mapa getCarte(short id)
 	{
-		return Cartes.get(id);
+		return Mapas.get(id);
 	}
 	
 	public static  void addCarte(Mapa map) {
-		if(!Cartes.containsKey(map.get_id()))
-			Cartes.put(map.get_id(),map);
+		if(!Mapas.containsKey(map.get_id()))
+			Mapas.put(map.get_id(),map);
 	}
 	
 	public static void delCarte(Mapa map) {
-		Cartes.remove(map.get_id());
+		Mapas.remove(map.get_id());
 	}
 	
 	public static Cuenta getCompteByName(String name) {
-		return (ComptebyName.get(name.toLowerCase())!=null?Comptes.get(ComptebyName.get(name.toLowerCase())):null);
+		return (CuentaPorNombre.get(name.toLowerCase())!=null? Cuentas.get(CuentaPorNombre.get(name.toLowerCase())):null);
 	}
 	
 	public static Personaje getPersonnage(int guid)
 	{
-		return Persos.get(guid);
+		return Personajes.get(guid);
 	}
 	
 	public static void addAccount(Cuenta compte) {
-		Comptes.put(compte.get_GUID(), compte);
-		ComptebyName.put(compte.get_name().toLowerCase(), compte.get_GUID());
+		Cuentas.put(compte.get_GUID(), compte);
+		CuentaPorNombre.put(compte.get_name().toLowerCase(), compte.get_GUID());
 	}
 	
 	public static void addChallenge(String chal) {
 		//ChalID,gainXP,gainDrop,gainParMob,Conditions;...
-		if(!Challenges.toString().isEmpty())
-			Challenges.append(";");
-		Challenges.append(chal);
+		if(!Retos.toString().isEmpty())
+			Retos.append(";");
+		Retos.append(chal);
 	}
 	
 	public static String getChallengeFromConditions(boolean sevEnn, boolean sevAll, boolean bothSex, boolean EvenEnn,boolean MoreEnn,boolean hasCaw,boolean hasChaf,boolean hasRoul,boolean hasArak, boolean isBoss) {
@@ -908,7 +906,7 @@ public class Mundo {
 		StringBuilder toReturn = new StringBuilder();
 		boolean isFirst = true, isGood = false;
 		int cond = 0;
-		for(String chal : Challenges.toString().split(";")) {
+		for(String chal : Retos.toString().split(";")) {
 			if(!isFirst && isGood)
 				toReturn.append(";");
 			isGood = true;
@@ -1013,16 +1011,16 @@ public class Mundo {
 
 	public static void addAccountbyName(Cuenta compte)
 	{
-		ComptebyName.put(compte.get_name(), compte.get_GUID());
+		CuentaPorNombre.put(compte.get_name(), compte.get_GUID());
 	}
 
 	public static void addPersonnage(Personaje perso)
 	{
-		Persos.put(perso.get_GUID(), perso);
+		Personajes.put(perso.get_GUID(), perso);
 	}
 
 	public static Personaje getPersoByName(String name) {
-		ArrayList<Personaje> Ps = new ArrayList<>(Persos.values());
+		ArrayList<Personaje> Ps = new ArrayList<>(Personajes.values());
 		for(Personaje P : Ps)if(P.get_name().equalsIgnoreCase(name))return P;
 		return null;
 	}
@@ -1062,18 +1060,18 @@ public class Mundo {
 	public static long getPersoXpMin(int _lvl) {
 		if(_lvl > getExpLevelSize()) 	_lvl = getExpLevelSize();
 		if(_lvl < 1) 	_lvl = 1;
-		return ExpLevels.get(_lvl).perso;
+		return Experiencias.get(_lvl).perso;
 	}
 	
 	public static long getPersoXpMax(int _lvl) {
 		if(_lvl >= getExpLevelSize()) 	_lvl = (getExpLevelSize()-1);
 		if(_lvl <= 1)	 	_lvl = 1;
-		return ExpLevels.get(_lvl+1).perso;
+		return Experiencias.get(_lvl+1).perso;
 	}
 	
 	public static void addSort(Hechizos sort)
 	{
-		Sorts.put(sort.getSpellID(), sort);
+		Hechizos.put(sort.getSpellID(), sort);
 	}
 
 	public static void addObjTemplate(ObjTemplate obj)
@@ -1083,7 +1081,7 @@ public class Mundo {
 	
 	public static Hechizos getSort(int id)
 	{
-		return Sorts.get(id);
+		return Hechizos.get(id);
 	}
 
 	public static ObjTemplate getObjTemplate(int id)
@@ -1107,7 +1105,7 @@ public class Mundo {
 
 	public static List<Personaje> getOnlinePersos() {
 		List<Personaje> online = new ArrayList<>();
-		for(Entry<Integer, Personaje> perso : Persos.entrySet()) {
+		for(Entry<Integer, Personaje> perso : Personajes.entrySet()) {
 			if(perso.getValue().isOnline() && perso.getValue().get_compte().getGameThread() != null) {
 				if(perso.getValue().get_compte().getGameThread().get_out() != null) {
 					online.add(perso.getValue());
@@ -1118,18 +1116,18 @@ public class Mundo {
 	}
 
 	public static void addObjet(Objeto item, boolean saveSQL) {
-		Objets.put(item.getGuid(), item);
+		Objetos.put(item.getGuid(), item);
 		if(saveSQL)
 			GestorSQL.guardar_nuevo_objeto(item);
 	}
 
 	public static Objeto getObjet(int guid)
 	{
-		return Objets.get(guid);
+		return Objetos.get(guid);
 	}
 
 	public static void removeItem(int guid) {
-		Objets.remove(guid);
+		Objetos.remove(guid);
 		GestorSQL.eliminar_objeto(guid);
 	}
 
@@ -1143,9 +1141,9 @@ public class Mundo {
 		return Dragodindes.get(id);
 	}
 	
-	public static void addDragodinde(Dragopavo DD)
+	public static void addDragopavo(Dragopavo dragopavo)
 	{
-		Dragodindes.put(DD.get_id(), DD);
+		Dragodindes.put(dragopavo.getID(), dragopavo);
 	}
 	public static void removeDragodinde(int DID)
 	{
@@ -1169,7 +1167,7 @@ public class Mundo {
 			//Thread.sleep(10000);
 			
 			JuegoServidor.addToLog("Sauvegarde des personnages...");
-			for(Personaje perso : Persos.values())
+			for(Personaje perso : Personajes.values())
 			{
 				if(!perso.isOnline())continue;
 				Thread.sleep(100);//0.1 sec. pour 1 objets
@@ -1281,11 +1279,10 @@ public class Mundo {
 			saveTry = 1;
 		}
 	}
-	public static void RefreshAllMob()
-	{
+
+	public static void RefreshAllMob() {
 		GestorSalida.GAME_SEND_MESSAGE_TO_ALL("Recharge des Mobs en cours, des latences peuvent survenir.", MainServidor.CONFIG_MOTD_COLOR);
-		for(Mapa map : Cartes.values())
-		{
+		for(Mapa map : Mapas.values()) {
 			map.refreshSpawns();
 		}
 		GestorSalida.GAME_SEND_MESSAGE_TO_ALL("Recharge des Mobs finie. La prochaine recharge aura lieu dans 5heures.", MainServidor.CONFIG_MOTD_COLOR);
@@ -1293,7 +1290,7 @@ public class Mundo {
 
 	public static ExpLevel getExpLevel(int lvl)
 	{
-		return ExpLevels.get(lvl);
+		return Experiencias.get(lvl);
 	}
 	public static IOTemplate getIOTemplate(int id)
 	{
@@ -1343,7 +1340,7 @@ public class Mundo {
 	}
 	public static Cuenta getCompteByPseudo(String p)
 	{
-		for(Cuenta C : Comptes.values())if(C.get_pseudo().equals(p))return C;
+		for(Cuenta C : Cuentas.values())if(C.get_pseudo().equals(p))return C;
 		return null;
 	}
 
@@ -1371,7 +1368,7 @@ public class Mundo {
 
 	public static Mapa getCarteByPosAndCont(int mapX, int mapY, int contID)
 	{
-		for(Mapa map : Cartes.values())
+		for(Mapa map : Mapas.values())
 		{
 			if( map.getX() == mapX
 			&&	map.getY() == mapY
@@ -1414,13 +1411,13 @@ public class Mundo {
 	{
 		if(_lvl >= 200) 	_lvl = 199;
 		if(_lvl <= 1)	 	_lvl = 1;
-		return ExpLevels.get(_lvl+1).guilde;
+		return Experiencias.get(_lvl+1).guilde;
 	}
 	public static void ReassignAccountToChar(Cuenta C)
 	{
 		C.get_persos().clear();
 		GestorSQL.cargar_personaje_por_cuenta(C.get_GUID());
-		for(Personaje P : Persos.values())
+		for(Personaje P : Personajes.values())
 		{
 			if(P.getAccID() == C.get_GUID())
 			{
@@ -1465,15 +1462,15 @@ public class Mundo {
 	}
 
 	public static boolean ipIsUsed(String ip) {
-		for(Cuenta c : Comptes.values())if(c.get_curIP().compareTo(ip) == 0)return true;
+		for(Cuenta c : Cuentas.values())if(c.get_curIP().compareTo(ip) == 0)return true;
 		return false;
 	}
 
 	public static void unloadPerso(int g) {
-		Personaje toRem = Persos.get(g);
+		Personaje toRem = Personajes.get(g);
 		if(!toRem.getItems().isEmpty()) {
 			for(Entry<Integer, Objeto> curObj : toRem.getItems().entrySet()) {
-				Objets.remove(curObj.getKey());
+				Objetos.remove(curObj.getKey());
 			}
 		}
 		toRem = null;

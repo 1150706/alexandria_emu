@@ -39,8 +39,7 @@ public class Mapa {
 	private final Map<Integer,ArrayList<Accion>> _endFightAction = new TreeMap<>();
 	private byte _maxSize;
 	
-	public static class MountPark
-	{
+	public static class MountPark {
 		private int _owner;
 		private final InteractiveObject _door;
 		private final int _size;
@@ -51,8 +50,7 @@ public class Mapa {
 		private int _price;
 		private final Map<Integer,Integer> MountParkDATA = new TreeMap<>();//DragoID, IDperso
 		
-		public MountPark(int owner, Mapa map, int cellid, int size, String data, int guild, int price)
-		{
+		public MountPark(int owner, Mapa map, int cellid, int size, String data, int guild, int price) {
 			_owner = owner;
 			_door = map.getMountParkDoor();
 			_size = size;
@@ -63,8 +61,7 @@ public class Mapa {
 			if(_map != null)_map.setMountPark(this);
 			for(String firstCut : data.split(";"))//PosseseurID,DragoID;PosseseurID2,DragoID2;PosseseurID,DragoID3
 			{
-				try
-				{
+				try {
 					String[] secondCut = firstCut.split(",");
 					Dragopavo DD = Mundo.getDragoByID(Integer.parseInt(secondCut[1]));
 					if(DD == null) continue;
@@ -113,26 +110,22 @@ public class Mapa {
 			_price = price;
 		}
 
-		public int getObjectNumb()
-		{
+		public int getObjectNumb() {
 			int n = 0;
 			for(Case C : _cases)if(C.getObject() != null)n++;
 			return n;
 		}
 
-		public String parseData(int PID, boolean isPublic)
-		{
+		public String parseData(int PID, boolean isPublic) {
 			if(MountParkDATA.isEmpty())return "~";
 			
 			StringBuilder packet = new StringBuilder();
-			for(Entry<Integer, Integer> MPdata : MountParkDATA.entrySet())
-			{
+			for(Entry<Integer, Integer> MPdata : MountParkDATA.entrySet()) {
 				if(MPdata.getValue() == PID && isPublic)//Montrer que ses montures uniquement en public
 				{
 					if(packet.length() > 0)packet.append(";");
 					packet.append(Mundo.getDragoByID(MPdata.getKey()).parse());
-				}else
-				{
+				}else {
 					if(packet.length() > 0)packet.append(";");
 					packet.append(Mundo.getDragoByID(MPdata.getKey()).parse());
 				}
@@ -140,15 +133,13 @@ public class Mapa {
 			return packet.toString();
 		}
 		
-		public String parseDBData()
-		{
+		public String parseDBData() {
 			StringBuilder str = new StringBuilder();
 			if(MountParkDATA.isEmpty())return "";
 			
-			for(Entry<Integer, Integer> MPdata : MountParkDATA.entrySet())
-			{
+			for(Entry<Integer, Integer> MPdata : MountParkDATA.entrySet()) {
 				if(str.length() > 0)str.append(";");
-				str.append(MPdata.getValue()).append(",").append(Mundo.getDragoByID(MPdata.getKey()).get_id());
+				str.append(MPdata.getValue()).append(",").append(Mundo.getDragoByID(MPdata.getKey()).getID());
 			}
 			return str.toString();
 		}
@@ -173,16 +164,12 @@ public class Mapa {
 			return MountParkDATA.size();
 		}
 		
-		public static void removeMountPark(int GuildID)
-		{
+		public static void removeMountPark(int GuildID) {
 			for(Entry<Short, Mapa.MountPark> mp : Mundo.getMountPark().entrySet())//Pour chaque enclo si ils en ont plusieurs
 			{
-				if(mp.getValue().get_guild().get_id() == GuildID)
-				{
-					if(!mp.getValue().getData().isEmpty())
-					{
-						for(Entry<Integer, Integer> MPdata : mp.getValue().getData().entrySet())
-						{
+				if(mp.getValue().get_guild().get_id() == GuildID) {
+					if(!mp.getValue().getData().isEmpty()) {
+						for(Entry<Integer, Integer> MPdata : mp.getValue().getData().entrySet()) {
 							Mundo.removeDragodinde(MPdata.getKey());//Suppression des dindes dans le world
 							GestorSQL.eliminar_montura(MPdata.getKey());//Suppression des dindes dans chaque enclo
 						}
@@ -201,8 +188,7 @@ public class Mapa {
 		}
 	}
 	
-	public static class InteractiveObject
-	{
+	public static class InteractiveObject {
 		private final int _id;
 		private int _state;
 		private final Mapa _map;
@@ -211,8 +197,7 @@ public class Mapa {
 		private Timer _respawnTimer;
 		private final IOTemplate _template;
 		
-		public InteractiveObject(Mapa a_map, Case a_cell, int a_id)
-		{
+		public InteractiveObject(Mapa a_map, Case a_cell, int a_id) {
 			_id = a_id;
 			_map = a_map;
 			_cell = a_cell;
@@ -257,42 +242,35 @@ public class Mapa {
 			_state = state;
 		}
 
-		public int getUseDuration()
-		{
+		public int getUseDuration() {
 			int duration = 1500;
-			if(_template != null)
-			{
+			if(_template != null) {
 				duration = _template.getDuration();
 			}
 			return duration;
 		}
 
-		public void startTimer()
-		{
+		public void startTimer() {
 			if(_respawnTimer == null)return;
 			_state = Constantes.IOBJECT_STATE_EMPTY2;
 			_respawnTimer.restart();
 		}
 
-		public int getUnknowValue()
-		{
+		public int getUnknowValue() {
 			int unk = 4;
-			if(_template != null)
-			{
+			if(_template != null) {
 				unk = _template.getUnk();
 			}
 			return unk;
 		}
 
-		public boolean isWalkable()
-		{
+		public boolean isWalkable() {
 			if(_template == null)return false;
 			return _template.isWalkable() && _state == Constantes.IOBJECT_STATE_FULL;
 		}
 	}
 	
-	public static class Case
-	{
+	public static class Case {
 		private final int _id;
 		private Map<Integer, Personaje>	_persos;		//= new TreeMap<Integer, Personnage>();
 		private Map<Integer, Fighter> 		_fighters;	//= new TreeMap<Integer, Fighter>();
@@ -305,8 +283,7 @@ public class Mapa {
 		private InteractiveObject _object;
 		private Objeto _droppedItem;
 		
-		public Case(Mapa a_map, int id, boolean _walk, boolean LoS, int objID)
-		{
+		public Case(Mapa a_map, int id, boolean _walk, boolean LoS, int objID) {
 			_map = a_map.get_id();
 			_id = id;
 			_Walkable = _walk;
@@ -314,19 +291,21 @@ public class Mapa {
 			if(objID == -1)return;
 			_object = new InteractiveObject(a_map,this,objID);
 		}
-		
-		public InteractiveObject getObject()
-		{
+
+		public boolean getOnCellStopAction() {
+			return this._onCellStop != null;
+		}
+
+		public InteractiveObject getObject() {
 			return _object;
 		}
-		public Objeto getDroppedItem()
-		{
+
+		public Objeto getDroppedItem() {
 			return _droppedItem;
 		}
-		public boolean canDoAction(int id)
-		{
-			switch(id)
-			{
+
+		public boolean canDoAction(int id) {
+			switch(id) {
 				//Moudre et egrenner - Paysan
 				case 122:
 				case 47:
@@ -917,7 +896,7 @@ public class Mapa {
 				}
 //Zaapis
 				case 157 -> {
-					String ZaapiList = "";
+					StringBuilder ZaapiList = new StringBuilder();
 					String[] Zaapis;
 					int count = 0;
 					int price = 20;
@@ -935,13 +914,13 @@ public class Mapa {
 					if (Zaapis.length > 0) {
 						for (String s : Zaapis) {
 							if (count == Zaapis.length)
-								ZaapiList += s + ";" + price;
+								ZaapiList.append(s).append(";").append(price);
 							else
-								ZaapiList += s + ";" + price + "|";
+								ZaapiList.append(s).append(";").append(price).append("|");
 							count++;
 						}
 						perso.SetZaaping(true);
-						GestorSalida.GAME_SEND_ZAAPI_PACKET(perso, ZaapiList);
+						GestorSalida.GAME_SEND_ZAAPI_PACKET(perso, ZaapiList.toString());
 					}
 				}
 //Acceder a un enclos
@@ -1050,22 +1029,19 @@ public class Mapa {
 				default -> JuegoServidor.addToLog("Case.startAction non definie pour l'actionID = " + actionID);
 			}
 		}
-		public void finishAction(Personaje perso, GameAction GA)
-		{
+
+		public void finishAction(Personaje perso, GameAction GA) {
 			int actionID = -1;
-			try
-			{
+			try {
 				actionID = Integer.parseInt(GA._args.split(";")[1]);
 			}catch(Exception ignored){}
 			if(actionID == -1)return;
 			
-			if(Constantes.isJobAction(actionID))
-			{
+			if(Constantes.isJobAction(actionID)) {
 				perso.finishJobAction(actionID,_object,GA,this);
 				return;
 			}
-			switch(actionID)
-			{
+			switch(actionID) {
 				case 44://Sauvegarder a un zaap
 				case 81://Vérouiller maison
 				case 84://ouvrir maison
@@ -1097,8 +1073,7 @@ public class Mapa {
 			}
 		}
 
-		public void clearOnCellAction()
-		{
+		public void clearOnCellAction() {
 			//_onCellStop.clear();
 			_onCellStop = null;
 		}
@@ -1114,8 +1089,7 @@ public class Mapa {
 		}
 	}
 
-	public Mapa(short _id, String _date, byte _w, byte _h, String _key, String places, String dData, String cellsData, String monsters, String mapPos, byte maxGroup, byte maxSize)
-	{
+	public Mapa(short _id, String _date, byte _w, byte _h, String _key, String places, String dData, String cellsData, String monsters, String mapPos, byte maxGroup, byte maxSize) {
 		this._id = _id;
 		this._date = _date;
 		this._w = _w;
@@ -1125,57 +1099,48 @@ public class Mapa {
 		this._maxGroup = maxGroup;
 		this._maxSize = maxSize;
 		String[] mapInfos = mapPos.split(",");
-		try
-		{
+		try {
 			this._X = Byte.parseByte(mapInfos[0]);
 			this._Y = Byte.parseByte(mapInfos[1]);
 			int subArea = Integer.parseInt(mapInfos[2]);
 			_subArea = Mundo.getSubArea(subArea);
 			if(_subArea != null)_subArea.addMap(this);
-		}catch(Exception e)
-		{
+		}catch(Exception e) {
 			JuegoServidor.addToLog("Erreur de chargement de la map "+_id+": Le champ MapPos est invalide");
 			System.exit(0);
 		}
 		
-		if(!dData.isEmpty())
-		{
+		if(!dData.isEmpty()) {
 		_cases = GestorEncriptador.DecompileMapData(this,dData);
-		}else
-		{
+		}else {
 		String[] cellsDataArray = cellsData.split("\\|");
 		
-		for(String o : cellsDataArray)
-		{
+		for(String o : cellsDataArray) {
 			
 			boolean Walkable = true;
 			boolean LineOfSight = true;
 			int Number = -1;
 			int obj = -1;
 			String[] cellInfos = o.split(",");
-			try
-			{
+			try {
 				Walkable = cellInfos[2].equals("1");
 				LineOfSight = cellInfos[1].equals("1");
 				Number = Integer.parseInt(cellInfos[0]);
-				if(!cellInfos[3].trim().equals(""))
-				{
+				if(!cellInfos[3].trim().equals("")) {
 					obj = Integer.parseInt(cellInfos[3]);
 				}
 			}catch(Exception ignored){}
 			if(Number == -1)continue;
 			
             _cases.put(Number, new Case(this,Number,Walkable,LineOfSight,obj));	
+			}
 		}
-		}
-		for(String mob : monsters.split("\\|"))
-		{
+		for(String mob : monsters.split("\\|")) {
 			if(mob.equals(""))continue;
 			int id = 0;
 			int lvl = 0;
 			
-			try
-			{
+			try {
 				id = Integer.parseInt(mob.split(",")[0]);
 				lvl = Integer.parseInt(mob.split(",")[1]);
 			}catch(NumberFormatException e){continue;}
@@ -1186,8 +1151,7 @@ public class Mapa {
 		}
 		if(_cases.isEmpty())return;
 		
-		if (MainServidor.CONFIG_USE_MOBS)
-		{
+		if (MainServidor.CONFIG_USE_MOBS) {
 			if(_maxGroup == 0)return;
 			spawnGroup(Constantes.ALIGNEMENT_NEUTRE,_maxGroup,false,-1);//Spawn des groupes d'alignement neutre
 			spawnGroup(Constantes.ALIGNEMENT_BONTARIEN,1,false,-1);//Spawn du groupe de gardes bontarien s'il y a
@@ -1195,8 +1159,7 @@ public class Mapa {
 		}
 	}
 
-	public void applyEndFightAction(int type, Personaje perso)
-	{
+	public void applyEndFightAction(int type, Personaje perso) {
 		if(_endFightAction.get(type) == null)
 			return;
 		for(Accion A : _endFightAction.get(type))
@@ -1204,32 +1167,165 @@ public class Mapa {
 	}
 	
 	public boolean hasEndFightAction(int type) {
-		return (_endFightAction.get(type) == null ? false : true);
+		return (_endFightAction.get(type) != null);
 	}
-	public void addEndFightAction(int type, Accion A)
-	{
+
+	public void addEndFightAction(int type, Accion A) {
 		_endFightAction.computeIfAbsent(type, k -> new ArrayList<>());
 		//On retire l'action si elle existait déjà
 		delEndFightAction(type,A.getID());
 		_endFightAction.get(type).add(A);
 	}
-	public void delEndFightAction(int type,int aType)
-	{
+
+	public void delEndFightAction(int type,int aType) {
 		if(_endFightAction.get(type) == null)return;
-		ArrayList<Accion> copy = new ArrayList<>();
-		copy.addAll(_endFightAction.get(type));
+		ArrayList<Accion> copy = new ArrayList<>(_endFightAction.get(type));
 		for(Accion A : copy)if(A.getID() == aType)_endFightAction.get(type).remove(A);
 	}
+
+	public void MovimientoDeMonstruosEnMapas() {
+		if (getMobGroups().size() == 0)
+			return;
+		int RandNumb = Formulas.getRandomValue(1, getMobGroups().size());
+		int i = 0;
+		for (Monstruo.MobGroup group : getMobGroups().values()) {
+			if(group.isFix() && this._id != 8279)
+				continue;
+			if (this._id == 8279) {// W:15   H:17
+				final int cell1 = group.getCellID();
+				final Case cell2 = this.getCase((cell1 - 15)), cell3 = this.getCase((cell1 - 15 + 1));
+				final Case cell4 = this.getCase((cell1 + 15 - 1)), cell5 = this.getCase((cell1 + 15));
+				boolean case2 = (cell2 != null && (cell2.isWalkable(true) && (cell2.getPersos().isEmpty())));
+				boolean case3 = (cell3 != null && (cell3.isWalkable(true) && (cell3.getPersos().isEmpty())));
+				boolean case4 = (cell4 != null && (cell4.isWalkable(true) && (cell4.getPersos().isEmpty())));
+				boolean case5 = (cell5 != null && (cell5.isWalkable(true) && (cell5.getPersos().isEmpty())));
+				ArrayList<Boolean> array = new ArrayList<>();
+				array.add(case2);
+				array.add(case3);
+				array.add(case4);
+				array.add(case5);
+
+				int count = 0;
+				for (boolean bo : array)
+					if (bo)
+						count++;
+
+				if (count == 0)
+					return;
+				if (count == 1) {
+					Case newCell = (case2 ? cell2 : (case3 ? cell3 : (case4 ? cell4 : cell5)));
+					Case nextCell = null;
+					if (newCell == null)
+						return;
+
+					if (newCell.equals(cell2)) {
+						if (checkCell(newCell.getID() - 15)) {
+							nextCell = this.getCase(newCell.getID() - 15);
+							if (this.checkCell(nextCell.getID() - 15)) {
+								nextCell = this.getCase(nextCell.getID() - 15);
+							}
+						}
+					} else if (newCell.equals(cell3)) {
+						if (this.checkCell(newCell.getID() - 15 + 1)) {
+							nextCell = this.getCase(newCell.getID() - 15 + 1);
+							if (this.getCase(nextCell.getID() - 15 + 1) != null) {
+								nextCell = this.getCase(nextCell.getID() - 15 + 1);
+							}
+						}
+					} else if (newCell.equals(cell4)) {
+						if (this.checkCell(newCell.getID() + 15 - 1)) {
+							nextCell = this.getCase(newCell.getID() + 15 - 1);
+							if (this.checkCell(nextCell.getID() + 15 - 1)) {
+								nextCell = this.getCase(nextCell.getID() + 15 - 1);
+							}
+						}
+					} else if (newCell.equals(cell5)) {
+						if (this.checkCell(newCell.getID() + 15)) {
+							nextCell = this.getCase(newCell.getID() + 15);
+							if (this.checkCell(nextCell.getID() + 15)) {
+								nextCell = this.getCase(nextCell.getID() + 15);
+							}
+						}
+					}
+
+					String pathstr;
+					try {
+						assert nextCell != null;
+						pathstr = Camino.getShortestStringPathBetween(this, group.getCellID(), nextCell.getID(), 0);
+					} catch (Exception e) {
+						e.printStackTrace();
+						return;
+					}
+					if (pathstr == null)
+						return;
+					group.setCellID(nextCell.getID());
+					for (Personaje z : getPersos())
+						GestorSalida.GAME_SEND_GA_PACKET(z.get_compte().getGameThread().get_out(), "0", "1", group.getID()
+								+ "", pathstr);
+				} else {
+					if (group.isFix())
+						continue;
+					i++;
+					if (i != RandNumb)
+						continue;
+
+					int cell = -1;
+					while (cell == -1 || cell == 383 || cell == 384
+							|| cell == 398 || cell == 369)
+						cell = getRandomNearFreeCellId(group.getCellID());
+					String pathstr;
+					try {
+						pathstr = Camino.getShortestStringPathBetween(this, group.getCellID(), cell, 0);
+					} catch (Exception e) {
+						e.printStackTrace();
+						return;
+					}
+					if (pathstr == null)
+						return;
+					group.setCellID(cell);
+					for (Personaje z : getPersos())
+						GestorSalida.GAME_SEND_GA_PACKET(z.get_compte().getGameThread().get_out(), "0", "1", group.getID() + "", pathstr);
+				}
+			} else {
+				if (group.isFix())
+					continue;
+				i++;
+				if (i != RandNumb)
+					continue;
+				int cell = getRandomNearFreeCellId(group.getCellID());
+				String pathstr;
+				try {
+					pathstr = Camino.getShortestStringPathBetween(this, group.getCellID(), cell, 0);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
+				}
+				if (pathstr == null)
+					return;
+				group.setCellID(cell);
+				for (Personaje z : getPersos())
+					GestorSalida.GAME_SEND_GA_PACKET(z.get_compte().getGameThread().get_out(), "0", "1", group.getID()
+							+ "", pathstr);
+			}
+
+		}
+	}
+
+	public boolean checkCell(int id) {
+		return this.getCase(id - 15) != null && this.getCase(id - 15).isWalkable(true);
+	}
+
 	public void setMountPark(MountPark mountPark)
 	{
 		_mountPark = mountPark;
 	}
+
 	public MountPark getMountPark()
 	{
 		return _mountPark;
 	}
-	public Mapa(short id, String date, byte w, byte h, String key, String places)
-	{
+
+	public Mapa(short id, String date, byte w, byte h, String key, String places) {
 		_id = id;
 		_date = date;
 		_w = w;
@@ -1256,8 +1352,7 @@ public class Mapa {
 		return _npcs;
 	}
 
-	public NPC addNpc(int npcID,int cellID, int dir)
-	{
+	public NPC addNpc(int npcID,int cellID, int dir) {
 		NPCModelo temp = Mundo.getNPCTemplate(npcID);
 		if(temp == null)return null;
 		if(getCase(cellID) == null)return null;
@@ -1267,17 +1362,14 @@ public class Mapa {
 		return npc;
 	}
 	
-	public void spawnGroup(int align, int nbr,boolean log,int cellID)
-	{
+	public void spawnGroup(int align, int nbr,boolean log,int cellID) {
 		if(nbr<1)return;
 		if(_mobGroups.size() - _fixMobGroups.size() >= _maxGroup)return;
-		for(int a = 1; a<=nbr;a++)
-		{
+		for(int a = 1; a<=nbr;a++) {
 			MobGroup group  = new MobGroup(_nextObjectID,align,_mobPossibles,this,cellID,this._maxSize);
 			if(group.getMobs().isEmpty())continue;
 			_mobGroups.put(_nextObjectID, group);
-			if(log)
-			{
+			if(log) {
 				JuegoServidor.addToLog("Groupe de monstres ajoutes sur la map: "+_id+" alignement: "+align+" ID: "+_nextObjectID);
 				GestorSalida.GAME_SEND_MAP_MOBS_GM_PACKET(this, group);
 			}
@@ -1285,8 +1377,7 @@ public class Mapa {
 		}
 	}
 	
-	public void spawnNewGroup(boolean timer,int cellID,String groupData,String condition)
-	{
+	public void spawnNewGroup(boolean timer,int cellID,String groupData,String condition) {
 		MobGroup group = new MobGroup(_nextObjectID, cellID, groupData);
 		if(group.getMobs().isEmpty())return;
 		_mobGroups.put(_nextObjectID, group);
@@ -1302,8 +1393,7 @@ public class Mapa {
 			group.startCondTimer();
 	}
 	
-	public void spawnGroupOnCommand(int cellID,String groupData)
-	{
+	public void spawnGroupOnCommand(int cellID,String groupData) {
 		MobGroup group = new MobGroup(_nextObjectID, cellID, groupData);
 		if(group.getMobs().isEmpty())return;
 		_mobGroups.put(_nextObjectID, group);
@@ -1315,8 +1405,7 @@ public class Mapa {
 		_nextObjectID--;
 	}
 	
-	public void addStaticGroup(int cellID,String groupData)
-	{
+	public void addStaticGroup(int cellID,String groupData) {
 		MobGroup group = new MobGroup(_nextObjectID,cellID,groupData);
 		if(group.getMobs().isEmpty())return;
 		_mobGroups.put(_nextObjectID, group);
@@ -1329,6 +1418,7 @@ public class Mapa {
 	{
 		_placesStr = place;
 	}
+
 	public void removeFight(int id)
 	{
 		_fights.remove(id);
@@ -1349,12 +1439,10 @@ public class Mapa {
 		return _cases.get(id);
 	}
 	
-	public ArrayList<Personaje> getPersos()
-	{
+	public ArrayList<Personaje> getPersos() {
 		ArrayList<Personaje> persos = new ArrayList<>();
 		for(Case c : _cases.values())
-			for(Personaje entry : c.getPersos().values())
-				persos.add(entry);
+			persos.addAll(c.getPersos().values());
 		return persos;
 	}
 	public short get_id() {
@@ -1381,20 +1469,18 @@ public class Mapa {
 		return _placesStr;
 	}
 
-	public void addPlayer(Personaje perso)
-	{
+	public void addPlayer(Personaje perso) {
 		GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(this,perso);
 		perso.getActualCelda().addPerso(perso);
 	}
 
-	public String getGMsPackets()
-	{
+	public String getGMsPackets() {
 		StringBuilder packet = new StringBuilder();
 		for(Case cell : _cases.values())for(Personaje perso : cell.getPersos().values())packet.append("GM|+").append(perso.parseToGM()).append('\u0000');
 		return packet.toString();
 	}
-	public String getFightersGMsPackets()
-	{
+
+	public String getFightersGMsPackets() {
 		StringBuilder packet = new StringBuilder();
 		for(Entry<Integer,Case> cell : _cases.entrySet())
 		{
@@ -1405,15 +1491,14 @@ public class Mapa {
 		}
 		return packet.toString();
 	}
-	public String getMobGroupGMsPackets()
-	{
+
+	public String getMobGroupGMsPackets() {
 		if(_mobGroups.isEmpty())return "";
 		
 		StringBuilder packet = new StringBuilder();
 		packet.append("GM|");
 		boolean isFirst = true;
-		for(MobGroup entry : _mobGroups.values())
-		{
+		for(MobGroup entry : _mobGroups.values()) {
 			String GM = entry.parseGM();
 			if(GM.equals(""))continue;
 			
@@ -1427,15 +1512,13 @@ public class Mapa {
 		return packet.toString();
 	}
 	
-	public String getNpcsGMsPackets(Personaje p)
-	{
+	public String getNpcsGMsPackets(Personaje p) {
 		if(_npcs.isEmpty())return "";
 		
 		StringBuilder packet = new StringBuilder();
 		packet.append("GM|");
 		boolean isFirst = true;
-		for(Entry<Integer,NPC> entry : _npcs.entrySet())
-		{
+		for(Entry<Integer,NPC> entry : _npcs.entrySet()) {
 			String GM = entry.getValue().parseGM(p);
 			if(GM.equals(""))continue;
 			
@@ -1448,14 +1531,11 @@ public class Mapa {
 		return packet.toString();
 	}
 	
-	public String getObjectsGDsPackets()
-	{
+	public String getObjectsGDsPackets() {
 		StringBuilder toreturn = new StringBuilder();
 		boolean first = true;
-		for(Entry<Integer,Case> entry : _cases.entrySet())
-		{
-			if(entry.getValue().getObject() != null)
-			{
+		for(Entry<Integer,Case> entry : _cases.entrySet()) {
+			if(entry.getValue().getObject() != null) {
 				if(!first)toreturn.append((char)0x00);
 				first = false;
 				int cellID = entry.getValue().getID();
@@ -1475,8 +1555,7 @@ public class Mapa {
 		return _fights;
 	}
 
-	public Pelea newFight(Personaje init1, Personaje init2, int type)
-	{
+	public Pelea newFight(Personaje init1, Personaje init2, int type) {
 		int id = 1;
 		if(!_fights.isEmpty())
 			id = ((Integer)(_fights.keySet().toArray()[_fights.size()-1]))+1;
@@ -1487,27 +1566,27 @@ public class Mapa {
 		return f;
 	}
 	
-	public int getRandomFreeCellID()
-	{
+	public int getRandomFreeCellID() {
 		ArrayList<Integer> freecell = new ArrayList<>();
-		for(Entry<Integer,Case> entry : _cases.entrySet())
-		{
+		for(Entry<Integer,Case> entry : _cases.entrySet()) {
 			//Si la case n'est pas marchable
 			if(!entry.getValue().isWalkable(true))continue;
 			//Si la case est prise par un groupe de monstre
 			boolean ok = true;
-			for(Entry<Integer,MobGroup> mgEntry : _mobGroups.entrySet())
-			{
-				if(mgEntry.getValue().getCellID() == entry.getValue().getID())
+			for(Entry<Integer,MobGroup> mgEntry : _mobGroups.entrySet()) {
+				if (mgEntry.getValue().getCellID() == entry.getValue().getID()) {
 					ok = false;
+					break;
+				}
 			}
 			if(!ok)continue;
 			//Si la case est prise par un npc
 			ok = true;
-			for(Entry<Integer,NPC> npcEntry : _npcs.entrySet())
-			{
-				if(npcEntry.getValue().get_cellID() == entry.getValue().getID())
+			for(Entry<Integer,NPC> npcEntry : _npcs.entrySet()) {
+				if (npcEntry.getValue().get_cellID() == entry.getValue().getID()) {
 					ok = false;
+					break;
+				}
 			}
 			if(!ok)continue;
 			//Si la case est prise par un joueur
@@ -1515,8 +1594,7 @@ public class Mapa {
 			//Sinon
 			freecell.add(entry.getValue().getID());
 		}
-		if(freecell.isEmpty())
-		{
+		if(freecell.isEmpty()) {
 			JuegoServidor.addToLog("Aucune cellulle libre n'a ete trouve sur la map "+_id+" : groupe non spawn");
 			return -1;
 		}
@@ -1559,11 +1637,86 @@ public class Mapa {
 		return 0;
 		//*/
 	}
-	
-	public void refreshSpawns()
-	{
-		for(int id : _mobGroups.keySet())
-		{
+
+	public int getRandomNearFreeCellId(int cellid){ //obtenir une cell al?atoire et proche
+		ArrayList<Integer> freecell = new ArrayList<>();
+		ArrayList<Integer> cases = new ArrayList<>();
+		cases.add((cellid + 1));
+		cases.add((cellid - 1));
+		cases.add((cellid + 2));
+		cases.add((cellid - 2));
+		cases.add((cellid + 14));
+		cases.add((cellid - 14));
+		cases.add((cellid + 15));
+		cases.add((cellid - 15));
+		cases.add((cellid + 16));
+		cases.add((cellid - 16));
+		cases.add((cellid + 27));
+		cases.add((cellid - 27));
+		cases.add((cellid + 28));
+		cases.add((cellid - 28));
+		cases.add((cellid + 29));
+		cases.add((cellid - 29));
+		cases.add((cellid + 30));
+		cases.add((cellid - 30));
+		cases.add((cellid + 31));
+		cases.add((cellid - 31));
+		cases.add((cellid + 42));
+		cases.add((cellid - 42));
+		cases.add((cellid + 43));
+		cases.add((cellid - 43));
+		cases.add((cellid + 44));
+		cases.add((cellid - 44));
+		cases.add((cellid + 45));
+		cases.add((cellid - 45));
+		cases.add((cellid + 57));
+		cases.add((cellid - 57));
+		cases.add((cellid + 58));
+		cases.add((cellid - 58));
+		cases.add((cellid + 59));
+		cases.add((cellid - 59));
+
+		for (int entry : cases) {
+			Case gameCase = this.getCase(entry);
+			if (gameCase == null)
+				continue;
+			if(gameCase.getOnCellStopAction())
+				continue;
+			//Si la case n'est pas marchable
+			if (!gameCase.isWalkable(true))
+				continue;
+			//Si la case est prise par un groupe de monstre
+			boolean ok = true;
+			for (Entry<Integer, Monstruo.MobGroup> mgEntry : _mobGroups.entrySet())
+				if (mgEntry.getValue().getCellID() == gameCase.getID()) {
+					ok = false;
+					break;
+				}
+			if (!ok)
+				continue;
+			//Si la case est prise par un npc
+			ok = true;
+			for (Entry<Integer, NPC> npcEntry : _npcs.entrySet())
+				if (npcEntry.getValue().get_cellID() == gameCase.getID()) {
+					ok = false;
+					break;
+				}
+			if (!ok)
+				continue;
+			//Si la case est prise par un joueur
+			if (!gameCase.getPersos().isEmpty())
+				continue;
+			//Sinon
+			freecell.add(gameCase.getID());
+		}
+		if (freecell.isEmpty())
+			return -1;
+		int rand = Formulas.getRandomValue(0, freecell.size() - 1);
+		return freecell.get(rand);
+	}
+
+	public void refreshSpawns() {
+		for(int id : _mobGroups.keySet()) {
 			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(this, id);
 		}
 		_mobGroups.clear();
@@ -1575,8 +1728,7 @@ public class Mapa {
 		spawnGroup(Constantes.ALIGNEMENT_BRAKMARIEN,1,true,-1);//Spawn du groupe de gardes brakmarien s'il y a
 	}
 	
-	public void onPlayerArriveOnCell(Personaje perso, int caseID)
-	{
+	public void onPlayerArriveOnCell(Personaje perso, int caseID) {
 		if(_cases.get(caseID) == null)return;
 		Objeto obj = _cases.get(caseID).getDroppedItem();
 		if(obj != null)
@@ -1607,8 +1759,7 @@ public class Mapa {
 		}
 	}
 	
-	public void startFigthVersusMonstres(Personaje perso, MobGroup group)
-	{
+	public void startFigthVersusMonstres(Personaje perso, MobGroup group) {
 		int id = 1;
 		if(!_fights.isEmpty())
 			id = ((Integer)(_fights.keySet().toArray()[_fights.size()-1]))+1;
@@ -1619,8 +1770,7 @@ public class Mapa {
 		GestorSalida.GAME_SEND_MAP_FIGHT_COUNT_TO_MAP(this);
 	}
 	
-	public void startFigthVersusPercepteur(Personaje perso, Recaudador perco)
-	{
+	public void startFigthVersusPercepteur(Personaje perso, Recaudador perco) {
 		int id = 1;
 		if(!_fights.isEmpty())
 			id = ((Integer)(_fights.keySet().toArray()[_fights.size()-1]))+1;
@@ -1629,8 +1779,7 @@ public class Mapa {
 		GestorSalida.GAME_SEND_MAP_FIGHT_COUNT_TO_MAP(this);
 	}
 
-	public Mapa getMapCopy()
-	{
+	public Mapa getMapCopy() {
 		Map<Integer,Case> cases = new TreeMap<>();
 		
 		Mapa map = new Mapa(_id,_date,_w,_h,_key,_placesStr);
@@ -1654,8 +1803,7 @@ public class Mapa {
 		_cases = cases;
 	}
 
-	public InteractiveObject getMountParkDoor()
-	{
+	public InteractiveObject getMountParkDoor() {
 		for(Case c : _cases.values())
 		{
 			if(c.getObject() == null)continue;
@@ -1675,8 +1823,7 @@ public class Mapa {
 		return _mobGroups;
 	}
 
-	public void removeNpcOrMobGroup(int id)
-	{
+	public void removeNpcOrMobGroup(int id) {
 		_npcs.remove(id);
 		_mobGroups.remove(id);
 	}
@@ -1696,8 +1843,7 @@ public class Mapa {
 		return _fights.get(id);
 	}
 
-	public void sendFloorItems(Personaje perso)
-	{
+	public void sendFloorItems(Personaje perso) {
 		for(Case c : _cases.values())
 		{
 			if(c.getDroppedItem() != null)

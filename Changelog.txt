@@ -23,3 +23,5 @@ v0.00.2
 v0.00.3
 - Agregado NPC guardianes de mazmorras con sus respectivos dialogos
 - Movimiento de monstruos en los mapas solamente donde hay personajes online
+- Reparado error en configuracion de la estructura en estaticos
+- Parche con la totalidad de mapas en estaticos

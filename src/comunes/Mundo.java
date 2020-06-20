@@ -682,110 +682,110 @@ public class Mundo {
 		System.out.println("Cargando las experiencias:");
 		GestorSQL.cargar_experiencias();
 		System.out.println(Experiencias.size()+" niveles cargados");
-		System.out.println("Chargement des sorts:");
+		System.out.println("Cargando los hechizos:");
 		GestorSQL.cargar_hechizos();
-		System.out.println(Hechizos.size()+" sorts ont ete charges");
-		System.out.println("Chargement des templates de monstre:");
+		System.out.println(Hechizos.size()+" hechizos cargados");
+		System.out.println("Cargando los modelo de los monstruos:");
 		GestorSQL.cargar_monstruo_modelo();
-		System.out.println(MobTemplates.size()+" templates de monstre ont ete chargees");
-		System.out.println("Chargement des templates d'objet:");
+		System.out.println(MobTemplates.size()+" modelos de monstruos cargados");
+		System.out.println("Cargando los modelos de los objetos:");
 		GestorSQL.cargar_objetos_modelo();
-		System.out.println(ObjTemplates.size()+" templates d'objet ont ete chargees");
-		System.out.println("Chargement des templates de NPC:");
+		System.out.println(ObjTemplates.size()+" modelos de objetos cargados");
+		System.out.println("Cargando los modelos de los NPC:");
 		GestorSQL.cargar_npc_modelo();
-		System.out.println(NPCTemplates.size()+" templates de NPC ont ete chargees");
-		System.out.println("Chargement des questions de NPC:");
+		System.out.println(NPCTemplates.size()+" modelos de NPC cargados");
+		System.out.println("Cargando las preguntas de los NPC:");
 		GestorSQL.cargar_preguntas_npc();
-		System.out.println(NPCQuestions.size()+" questions de NPC ont ete charges");
-		System.out.println("Chargement des reponses de NPC:");
+		System.out.println(NPCQuestions.size()+" preguntas cargadas");
+		System.out.println("Cargando las respuestas de los NPC:");
 		GestorSQL.cargar_respuestas_npc();
-		System.out.println(NPCReponses.size()+" reponses de NPC ont ete chargees");
-		System.out.println("Chargement des zones:");
+		System.out.println(NPCReponses.size()+" respuestas cargadas");
+		System.out.println("Cargando las zonas:");
 		GestorSQL.cargar_area();
-		System.out.println(Areas.size()+" zones ont ete chargees");
-		System.out.println("Chargement des sous-zone:");
+		System.out.println(Areas.size()+" zonas cargadas");
+		System.out.println("Cargando las subzonas:");
 		GestorSQL.cargar_subareas();
-		System.out.println(SubAreas.size()+" sous-zones ont ete chargees");
-		System.out.println("Chargement des template d'objet interactifs:");
+		System.out.println(SubAreas.size()+" subzonas cargadas");
+		System.out.println("Cargando los objetos interactivos:");
 		GestorSQL.LOAD_IOTEMPLATE();
-		System.out.println(IOTemplate.size()+" template d'IO ont ete charges");
-		System.out.println("Chargement des recettes:");
+		System.out.println(IOTemplate.size()+" objetos interactivos cargados");
+		System.out.println("Cargando las recetas:");
 		GestorSQL.cargar_recetas();
-		System.out.println(Crafts.size()+" recettes ont ete chargses");
-		System.out.println("Chargement des metiers:");
+		System.out.println(Crafts.size()+" recetas cargadas");
+		System.out.println("Cargando los oficios:");
 		GestorSQL.cargar_oficios();
-		System.out.println(Jobs.size()+" metiers ont ete charges");
-		System.out.println("Chargement des panolies:");
+		System.out.println(Jobs.size()+" oficios cargados");
+		System.out.println("Cargando los sets:");
 		GestorSQL.cargar_sets();
-		System.out.println(ItemSets.size()+" panoplies ont ete chargees");
-		System.out.println("Chargement des maps:");
+		System.out.println(ItemSets.size()+" sets cargados");
+		System.out.println("Cargando los mapas:");
 		GestorSQL.cargar_mapas();
-		System.out.println(Mapas.size()+" maps ont ete chargees");
-		System.out.println("Chargement des Triggers:");
+		System.out.println(Mapas.size()+" mapas cargados");
+		System.out.println("Cargando las acciones de celda:");
 		int nbr = GestorSQL.cargar_celdas();
-		System.out.println(nbr+" triggers ont ete charges");
-		System.out.println("Chargement des actions de fin de combat:");
+		System.out.println(nbr+" acciones de celdas cargadas");
+		System.out.println("Cargando las acciones de fin de pelea:");
 		nbr = GestorSQL.cargar_acciones_fin_pelea();
-		System.out.println(nbr+" actions ont ete charges");
-		System.out.println("Chargement des npcs:");
+		System.out.println(nbr+" acciones cargadas");
+		System.out.println("Cargando los NPCS:");
 		nbr = GestorSQL.cargar_npc();
-		System.out.println(nbr+" npcs ont ete chargees");
-		System.out.println("Chargement des actions des objets:");
+		System.out.println(nbr+" npcs cargados");
+		System.out.println("Cargando las acciones de objetos:");
 		nbr = GestorSQL.cargar_accion_objetos();
-		System.out.println(nbr+" actions ont ete chargees");
-		System.out.print("Chargement des Drops: ");
+		System.out.println(nbr+" acciones de objetos cargadas");
+		System.out.print("Cargando los drops: ");
 		GestorSQL.cargar_drops();
-		System.out.println("Ok !");
-		System.out.println("Chargement des Animations: ");
+		System.out.println("Cargados!");
+		System.out.println("Cargando las animaciones: ");
 		GestorSQL.cargar_animaciones();
-		System.out.println(Animations.size() + " ont ete chargees");
+		System.out.println(Animations.size() + " animaciones cargadas");
 		
 		System.out.println("====> Cargando los datos dinamicos <====");
-		System.out.print("Mise a 0 des logged: ");
+		System.out.print("Actualizar a 0 los conectados: ");
 		GestorSQL.conectado_a_0();
-		System.out.println("Ok !");
-		System.out.print("Chargement des items: ");
+		System.out.println("Actualizado!");
+		System.out.print("Cargando las ID maximas: ");
 		GestorSQL.cargar_maximo_de_objetos();
-		System.out.println("Ok !");
-		System.out.print("Chargement des comptes: ");
+		System.out.println("Cargado!");
+		System.out.print("Cargando las cuentas: ");
 		GestorSQL.cargar_cuentas();
-		System.out.println(Cuentas.size()+" comptes charges");
-		System.out.print("Chargement des personnages: ");
+		System.out.println(Cuentas.size()+" cuentas cargadas");
+		System.out.print("Cargando los personajes: ");
 		GestorSQL.cargar_personaje();
-		System.out.println(Personajes.size()+" personnages charges");
-	    System.out.print("Chargement des guildes: ");
+		System.out.println(Personajes.size()+" personajes cargados");
+	    System.out.print("Cargando los gremios: ");
 		GestorSQL.cargar_gremios();
-		System.out.println(Guildes.size()+" guildes chargees");
-		System.out.print("Chargement des dragodindes: ");
+		System.out.println(Guildes.size()+" gremios cargados");
+		System.out.print("Cargando los dragopavos: ");
 		GestorSQL.cargar_montura();
-		System.out.println(Dragodindes.size()+" dragodindes chargees");
-		System.out.print("Chargement des challenges: ");
+		System.out.println(Dragodindes.size()+" dragopavos cargados");
+		System.out.print("Cargando los retos: ");
 		GestorSQL.cargar_retos();
-		System.out.println(Retos.toString().split(";").length+" challenges charges");
-		System.out.print("Chargement des membres de guildes: ");
+		System.out.println(Retos.toString().split(";").length+" retos cargados");
+		System.out.print("Cargando los miembros de los gremios: ");
 		GestorSQL.cargar_miembros_gremio();
-		System.out.println("Ok !");
-		System.out.print("Chargement des donnees d'enclos: ");
+		System.out.println("Cargados!");
+		System.out.print("Cargando los cercados: ");
 		nbr = GestorSQL.cargar_cercados();
-		System.out.println(nbr+" enclos charges");
-		System.out.print("Chargement des percepteurs: ");
+		System.out.println(nbr+" cercados cargados");
+		System.out.print("Cargando los recaudadores: ");
 		nbr = GestorSQL.cargar_recaudadores();
-		System.out.println(nbr+" percepteurs charges");
-		System.out.print("Chargement des maisons: ");
+		System.out.println(nbr+" recaudadores cargados");
+		System.out.print("Cargando las casas: ");
 		nbr = GestorSQL.cargar_casas();
-		System.out.println(nbr+" maisons chargees");
-		System.out.print("Chargement des coffres: ");
+		System.out.println(nbr+" casas cargadas");
+		System.out.print("Cargando los cofres: ");
 		nbr = GestorSQL.cargar_cofre();
-		System.out.println(nbr+" coffres chargees");
-		System.out.print("Chargement des zaaps: ");
+		System.out.println(nbr+" cofres cargados");
+		System.out.print("Cargando los zaaps: ");
 		nbr = GestorSQL.cargar_zaaps();
-		System.out.println(nbr+" zaaps chargees");
-		System.out.print("Chargement des zaapis: ");
+		System.out.println(nbr+" zaaps cargados");
+		System.out.print("Cargando los zaapis: ");
 		nbr = GestorSQL.cargar_zaapis();
-		System.out.println(nbr+" zaapis chargees");
-		System.out.print("Chargement des BAN_IP: ");
+		System.out.println(nbr+" zaapis cargados");
+		System.out.print("Cargando las IP baneadas: ");
 		nbr = GestorSQL.cargar_ip_baneadas();
-		System.out.println(nbr+" BAN_IP chargees");
+		System.out.println(nbr+" IP baneadas cargadas");
 		System.out.print("Cargando los mercadillos: ");
 		GestorSQL.cargar_mercadillos();
 		System.out.print("\nCargando los objetos de los mercadillos: ");
@@ -1165,78 +1165,53 @@ public class Mundo {
 		set_state((short)2);
 
 		try {
-			JuegoServidor.addToLog("Lancement de la sauvegarde du Monde...");
+			JuegoServidor.addToLog("Lanzando el guardado general del mundo");
 			MainServidor.isSaving = true;
-			
-			//Thread.sleep(10000);
-			
-			JuegoServidor.addToLog("Sauvegarde des personnages...");
+			JuegoServidor.addToLog("Guardando personajes");
 			for(Personaje perso : Personajes.values()) {
 				if(!perso.isConectado())continue;
 				Thread.sleep(100);//0.1 sec. pour 1 objets
 				GestorSQL.guardar_personaje(perso,true);//sauvegarde des persos et de leurs items
 			}
-			
-			//Thread.sleep(2500);
-			
-			JuegoServidor.addToLog("Sauvegarde des guildes...");
+			JuegoServidor.addToLog("Guardando los gremios");
 			for(Gremio guilde : Guildes.values()) {
 				Thread.sleep(100);//0.1 sec. pour 1 guilde
 				GestorSQL.actualizar_gremio(guilde);
 			}
-			
-			//Thread.sleep(2500);
-			
-			JuegoServidor.addToLog("Sauvegarde des percepteurs...");
+			JuegoServidor.addToLog("Guardando los recaudadores");
 			for(Recaudador perco : Percepteurs.values()) {
 				if(perco.get_inFight()>0)continue;
 				Thread.sleep(100);//0.1 sec. pour 1 percepteur
 				GestorSQL.actualizar_recaudador(perco);
 			}
-			
-			//Thread.sleep(2500);
-			
-			JuegoServidor.addToLog("Sauvegarde des maisons...");
+			JuegoServidor.addToLog("Guardando las casas");
 			for(Casas house : Houses.values()) {
 				if(house.get_owner_id() > 0) {
 					Thread.sleep(100);//0.1 sec. pour 1 maison
 					GestorSQL.actualizar_casa(house);
 				}
 			}
-			
-			//Thread.sleep(2500);
-			
-			JuegoServidor.addToLog("Sauvegarde des coffres...");
+			JuegoServidor.addToLog("Guardando los cofres");
 			for(Cofres t : Trunks.values()) {
 				if(t.get_owner_id() > 0) {
 					Thread.sleep(100);//0.1 sec. pour 1 coffre
 					GestorSQL.actualizar_cofre(t);
 				}
 			}
-			
-			//Thread.sleep(2500);
-			
-			JuegoServidor.addToLog("Sauvegarde des enclos...");
+			JuegoServidor.addToLog("Guardando los cercados");
 			for(Mapa.MountPark mp : MountPark.values()) {
 				if(mp.get_owner() > 0 || mp.get_owner() == -1) {
 					Thread.sleep(100);//0.1 sec. pour 1 enclo
 					GestorSQL.actualizar_cercado(mp);
 				}
 			}
-			
-			//Thread.sleep(2500);
-			
-			JuegoServidor.addToLog("Sauvegarde des Hdvs...");
+			JuegoServidor.addToLog("Guardando los mercadillos");
 			ArrayList<HdvEntry> toSave = new ArrayList<>();
 			for(Mercadillo curHdv : Hdvs.values()) {
 				toSave.addAll(curHdv.getAllEntry());
 			}
 			GestorSQL.guardar_objetos_mercadillo(toSave);
-			
-			//Thread.sleep(10000);
-			
-			JuegoServidor.addToLog("Sauvegarde effectuee !");
-			
+			JuegoServidor.addToLog("Guardado completado con exito");
 			set_state((short)1);
 			//TODO : Rafraichir
 			

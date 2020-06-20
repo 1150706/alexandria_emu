@@ -104,7 +104,7 @@ public class Personaje {
 	//Zaap
 	private boolean _isZaaping = false;
 	private final ArrayList<Short> _zaaps = new ArrayList<>();
-	//DisponibilitÃ©
+	//Disponibilité
 	public boolean _isAbsent = false;
 	public boolean _isInvisible = false;
 	//Sort
@@ -120,7 +120,7 @@ public class Personaje {
 	private traque _traqued = null;
 	//Titre
 	private byte _title = 0;
-	//InactivitÃ©
+	//Inactivité
 	protected long _lastPacketTime;
 	//Mariage
 	private int _wife = 0;
@@ -138,7 +138,7 @@ public class Personaje {
 	//Marchand
 	public boolean _seeSeller = false;
 	private final Map<Integer , Integer> _storeItems = new TreeMap<>();//<ObjID, Prix>
-	//QuÃªtes
+	//Quêtes
     private int savestat;
 	
 	public static class traque {
@@ -274,13 +274,13 @@ public class Personaje {
 			for(Entry<Integer,Integer> entry : Effects.entrySet()) {
 				//Si la stat n'existe pas dans l'autre map
 				if(other.getMap().get(entry.getKey()) == null)return false;
-				//Si la stat existe mais n'a pas la mÃªme valeur
+				//Si la stat existe mais n'a pas la même valeur
 				if(!other.getMap().get(entry.getKey()).equals(entry.getValue()))return false;
 			}
 			for(Entry<Integer,Integer> entry : other.getMap().entrySet()) {
 				//Si la stat n'existe pas dans l'autre map
 				if(Effects.get(entry.getKey()) == null)return false;
-				//Si la stat existe mais n'a pas la mÃªme valeur
+				//Si la stat existe mais n'a pas la même valeur
 				if(!Effects.get(entry.getKey()).equals(entry.getValue()))return false;
 			}
 			return true;
@@ -495,7 +495,7 @@ public class Personaje {
 			this._curCarte = Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO);
 			this._curCell = _curCarte.getMapa(MainServidor.CALDA_INICIO_PERSONALIZADA);
 		}else if (_curCarte == null && Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO) == null) {
-			JuegoServidor.addToLog("Personnage mal positione, et position de dÃ©part non valide. Fermeture du serveur.");
+			JuegoServidor.addToLog("Personnage mal positione, et position de départ non valide. Fermeture du serveur.");
 			MainServidor.closeServers();
 		} else if(_curCarte != null) {
 			this._curCell = _curCarte.getMapa(cell);
@@ -510,8 +510,8 @@ public class Personaje {
 			}catch(Exception ignored){}
 		}
 		if(_curCarte == null || _curCell == null) {
-			JuegoServidor.addToLog("Map ou case de dÃ©part du personnage "+_name+" invalide");
-			JuegoServidor.addToLog("Map ou case par dÃ©faut invalide");
+			JuegoServidor.addToLog("Map ou case de départ du personnage "+_name+" invalide");
+			JuegoServidor.addToLog("Map ou case par défaut invalide");
 			JuegoServidor.addToLog("Le serveur ne peut se lancer");
 			try {
 				Thread.sleep(10000);
@@ -561,7 +561,7 @@ public class Personaje {
 		
 		_exPdv = _PDV;
 		
-		//Chargement des mÃ©tiers
+		//Chargement des métiers
 		if(!jobs.equals("")) {
 			for(String aJobData : jobs.split(";")) {
 				String[] infos = aJobData.split(",");
@@ -629,7 +629,7 @@ public class Personaje {
 		if(_curCarte == null)return;
 		//Pas de regen en combat
 		if(_fight != null)return;
-		//DÃ©jÃ  Full PDV
+		//Déjà Full PDV
 		if(_PDV == _PDVMAX)return;
 		_PDV++;
 	}
@@ -872,7 +872,7 @@ public class Personaje {
 		return _size;
 	}
 
-	public void setTamaÃ±o(int _size) {
+	public void setTamaño(int _size) {
 		this._size = _size;
 	}
 
@@ -1076,7 +1076,7 @@ public class Personaje {
 			GestorSalida.GAME_SEND_OS_PACKET(this, a);
 		}
 		
-		//envoie des donnÃ©es de mÃ©tier
+		//envoie des données de métier
 		if(_metiers.size() >0) {
 			ArrayList<StatsMetier> list = new ArrayList<>(_metiers.values());
 			//packet JS
@@ -1092,9 +1092,9 @@ public class Personaje {
 						GestorSalida.GAME_SEND_OT_PACKET(_compte.getGameThread().get_out(),sm.getTemplate().getId());
 			}
 		}
-		//Fin mÃ©tier
+		//Fin métier
 		GestorSalida.GAME_SEND_ALIGNEMENT(out, _align);
-		GestorSalida.GAME_SEND_ADD_CANAL(out,_canaux+"^"+(_compte.getGMLVL()>0?"@Â¤":""));
+		GestorSalida.GAME_SEND_ADD_CANAL(out,_canaux+"^"+(_compte.getGMLVL()>0?"@¤":""));
 		if(_guildMember != null) GestorSalida.GAME_SEND_gS_PACKET(this,_guildMember);
 		GestorSalida.GAME_SEND_ZONE_ALLIGN_STATUT(out);
 		GestorSalida.GAME_SEND_SPELL_LIST(this);
@@ -1137,9 +1137,9 @@ public class Personaje {
 		//Tomamos el nombre del pj, desde la config tomamos nombre y web del servidor
 		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "1239;" + this.getNombre() + "~" + MainServidor.NOMBRE_DEL_SERVIDOR + "~" + MainServidor.WEB_DEL_SERVIDOR);
 
-		//on dÃ©marre le Timer pour la Regen de Pdv
+		//on démarre le Timer pour la Regen de Pdv
 		_sitTimer.start();
-		//on le demarre cotÃ© client
+		//on le demarre coté client
 		GestorSalida.GAME_SEND_ILS_PACKET(this, 2000);
 	}
 	
@@ -1353,7 +1353,7 @@ public class Personaje {
 			if(entry.getValue().getPosition() != Constantes.ITEM_POS_NO_EQUIPED) {
 				stats = Stats.cumulStat(stats,entry.getValue().getStats());
 				int panID = entry.getValue().getTemplate().getPanopID();
-				//Si panoplie, et si l'effet de pano n'a pas encore Ã©tÃ© ajoutÃ©
+				//Si panoplie, et si l'effet de pano n'a pas encore été ajouté
 				if(panID>0 && !itemSetApplied.contains(panID)) {
 					itemSetApplied.add(panID);
 					ItemSet IS = Mundo.getItemSet(panID);
@@ -1478,12 +1478,12 @@ public class Personaje {
 		if(_isOnline)
 		{//On envoie le message "Vous avez recuperer X pdv"
 		GestorSalida.GAME_SEND_ILF_PACKET(this, diff);
-		//On envoie la modif du Timer de regenPdv cotÃ© client
+		//On envoie la modif du Timer de regenPdv coté client
 		GestorSalida.GAME_SEND_ILS_PACKET(this, time);
 		}
-		//on modifie le delay cotÃ© Serveur du timer de regenPDV
+		//on modifie le delay coté Serveur du timer de regenPDV
 		_sitTimer.setDelay(time);
-		//Si on se leve, on desactive l'Ã©mote
+		//Si on se leve, on desactive l'émote
 		if((_emoteActive == 1 || _emoteActive == 19) && b == false)_emoteActive = 0;
 	}
 
@@ -1550,7 +1550,7 @@ public class Personaje {
 					case 13://Chance
 						this.get_baseStats().addOneStat(Constantes.STATS_ADD_CHAN, 1);
 						break;
-					case 14://Agilitï¿½
+					case 14://Agilit?
 						this.get_baseStats().addOneStat(Constantes.STATS_ADD_AGIL, 1);
 						break;
 					case 15://Intelligence
@@ -1643,9 +1643,9 @@ public class Personaje {
 				&& obj.getStats().isSameStats(newObj.getStats())
 				&& stackIfSimilar
 				&& newObj.getTemplate().getType() != 85
-				&& obj.getPosition() == Constantes.ITEM_POS_NO_EQUIPED)//Si meme Template et Memes Stats et Objet non Ã©quipÃ©
+				&& obj.getPosition() == Constantes.ITEM_POS_NO_EQUIPED)//Si meme Template et Memes Stats et Objet non équipé
 			{
-				obj.setQuantity(obj.getQuantity()+newObj.getQuantity());//On ajoute QUA item a la quantitÃ© de l'objet existant
+				obj.setQuantity(obj.getQuantity()+newObj.getQuantity());//On ajoute QUA item a la quantité de l'objet existant
 				GestorSQL.guardar_objeto(obj);
 				if(_isOnline) GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this,obj);
 				return false;
@@ -1758,7 +1758,7 @@ public class Personaje {
 				_items.remove(obj.getGuid());
 				if(deleteFromWorld)
 					Mundo.removeItem(obj.getGuid());
-				//on envoie le packet si connectÃ©
+				//on envoie le packet si connecté
 				if(send && _isOnline)
 					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, obj.getGuid());
 			}
@@ -1858,11 +1858,11 @@ public class Personaje {
 
 	public int learnJob(Oficio m) {
 		for(Entry<Integer,StatsMetier> entry : _metiers.entrySet()) {
-			if(entry.getValue().getTemplate().getId() == m.getId())//Si le joueur a dÃ©jÃ  le mÃ©tier
+			if(entry.getValue().getTemplate().getId() == m.getId())//Si le joueur a déjà le métier
 				return -1;
 		}
 		int Msize = _metiers.size();
-		if(Msize == 6)//Si le joueur a dÃ©jÃ  6 mÃ©tiers
+		if(Msize == 6)//Si le joueur a déjà 6 métiers
 			return -1;
 		int pos = 0;
 		if(Constantes.isMageJob(m.getId())) {
@@ -1876,9 +1876,9 @@ public class Personaje {
 		}
 		
 		StatsMetier sm = new StatsMetier(pos,m,1,0);
-		_metiers.put(pos, sm);//On apprend le mÃ©tier lvl 1 avec 0 xp
+		_metiers.put(pos, sm);//On apprend le métier lvl 1 avec 0 xp
 		if(_isOnline) {
-			//on crÃ©er la listes des statsMetier a envoyer (Seulement celle ci)
+			//on créer la listes des statsMetier a envoyer (Seulement celle ci)
 			ArrayList<StatsMetier> list = new ArrayList<>();
 			list.add(sm);
 			
@@ -1939,9 +1939,9 @@ public class Personaje {
 	public int getNumbEquipedItemOfPanoplie(int panID) {
 		int nb = 0;
 		for(Entry<Integer, Objeto> i : _items.entrySet()) {
-			//On ignore les objets non Ã©quipÃ©s
+			//On ignore les objets non équipés
 			if(i.getValue().getPosition() == Constantes.ITEM_POS_NO_EQUIPED)continue;
-			//On prend que les items de la pano demandÃ©e, puis on augmente le nombre si besoin
+			//On prend que les items de la pano demandée, puis on augmente le nombre si besoin
 			if(i.getValue().getTemplate().getPanopID() == panID)nb++;
 		}
 		return nb;
@@ -1991,14 +1991,14 @@ public class Personaje {
 		_curCell = _curCarte.getMapa(newCellID);
 		
 		//Verification de la carte
-		//Verifier la validitÃ© du mountpark
+		//Verifier la validité du mountpark
 		if(_curCarte.getMountPark() != null && _curCarte.getMountPark().get_owner() > 0 && _curCarte.getMountPark().get_guild().get_id() != -1) {
 			if(Mundo.getGuild(_curCarte.getMountPark().get_guild().get_id()) == null){ //Ne devrait pas arriver
 				JuegoServidor.addToLog("[MountPark] Suppression d'un MountPark a Guild invalide. GuildID : "+_curCarte.getMountPark().get_guild().get_id());
 				Mapa.MountPark.removeMountPark(_curCarte.getMountPark().get_guild().get_id());
 			}
 		}
-		//Verifier la validitÃ© du percepteur
+		//Verifier la validité du percepteur
 		if(Recaudador.GetPercoByMapID(_curCarte.getID()) != null) {
 			if(Mundo.getGuild(Recaudador.GetPercoByMapID(_curCarte.getID()).get_guildID()) == null)//Ne devrait pas arriver
 			{
@@ -2082,7 +2082,7 @@ public class Personaje {
 			JuegoServidor.addToLog("Le joueur "+_name+" a tenter d'ajouter un objet en banque qu'il n'avait pas.");
 			return;
 		}
-		//Si c'est un item Ã©quipÃ© ...
+		//Si c'est un item équipé ...
 		if(PersoObj.getPosition() != Constantes.ITEM_POS_NO_EQUIPED)return;
 		
 		Objeto BankObj = getSimilarBankItem(PersoObj);
@@ -2093,7 +2093,7 @@ public class Personaje {
 			if(newQua <= 0) {
 				//On enleve l'objet du sac du joueur
 				removeItem(PersoObj.getGuid());
-				//On met l'objet du sac dans la banque, avec la meme quantitÃ©
+				//On met l'objet du sac dans la banque, avec la meme quantité
 				_compte.getBank().put(PersoObj.getGuid(), PersoObj);
 				String str = "O+"+PersoObj.getGuid()+"|"+PersoObj.getQuantity()+"|"+PersoObj.getTemplate().getID()+"|"+PersoObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
@@ -2101,7 +2101,7 @@ public class Personaje {
 				
 			} else//S'il reste des objets au joueur
 			{
-				//on modifie la quantitÃ© d'item du sac
+				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet a la banque et au monde
 				BankObj = Objeto.getCloneObjet(PersoObj, qua);
@@ -2122,7 +2122,7 @@ public class Personaje {
 				removeItem(PersoObj.getGuid());
 				//On enleve l'objet du monde
 				Mundo.removeItem(PersoObj.getGuid());
-				//On ajoute la quantitÃ© a l'objet en banque
+				//On ajoute la quantité a l'objet en banque
 				BankObj.setQuantity(BankObj.getQuantity() + PersoObj.getQuantity());
 				//on envoie l'ajout a la banque de l'objet
 				String str = "O+"+BankObj.getGuid()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
@@ -2132,7 +2132,7 @@ public class Personaje {
 				
 			}else //S'il restait des objets
 			{
-				//on modifie la quantitÃ© d'item du sac
+				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
 				BankObj.setQuantity(BankObj.getQuantity() + qua);
 				String str = "O+"+BankObj.getGuid()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
@@ -2183,7 +2183,7 @@ public class Personaje {
 				
 			}else //S'il reste des objets en banque
 			{
-				//On crÃ©e une copy de l'item en banque
+				//On crée une copy de l'item en banque
 				PersoObj = Objeto.getCloneObjet(BankObj, qua);
 				//On l'ajoute au monde
 				Mundo.addObjet(PersoObj, true);
@@ -2204,7 +2204,7 @@ public class Personaje {
 				//On retire l'item de la banque
 				_compte.getBank().remove(BankObj.getGuid());
 				Mundo.removeItem(BankObj.getGuid());
-				//On Modifie la quantitÃ© de l'item du sac du joueur
+				//On Modifie la quantité de l'item du sac du joueur
 				PersoObj.setQuantity(PersoObj.getQuantity() + BankObj.getQuantity());
 				
 				//On envoie les packets
@@ -2301,7 +2301,7 @@ public class Personaje {
 					//on supprime de l'inventaire et du Monde
 					_items.remove(obj.getGuid());
 					Mundo.removeItem(obj.getGuid());
-					//on envoie le packet si connectÃ©
+					//on envoie le packet si connecté
 					if(_isOnline)
 						GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, obj.getGuid());
 				}
@@ -2322,12 +2322,12 @@ public class Personaje {
 						//on supprime de l'inventaire et du Monde
 						_items.remove(o.getGuid());
 						Mundo.removeItem(o.getGuid());
-						//on envoie le packet si connectÃ©
+						//on envoie le packet si connecté
 						if(_isOnline)
 							GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, o.getGuid());
 					}
 				}else {
-					// on rÃ©duit le compteur
+					// on réduit le compteur
 					tempCount -= obj.getQuantity();
 					remove.add(obj);
 				}
@@ -2365,7 +2365,7 @@ public class Personaje {
 	public int totalJobBasic() {
 		int i=0;
 		for(StatsMetier SM : _metiers.values()) {
-			// Si c'est un mÃ©tier 'basic' :
+			// Si c'est un métier 'basic' :
 			if(SM.getTemplate().getId() == 	2 || SM.getTemplate().getId() == 11 ||
 			   SM.getTemplate().getId() == 13 || SM.getTemplate().getId() == 14 ||
 			   SM.getTemplate().getId() == 15 || SM.getTemplate().getId() == 16 ||
@@ -2386,7 +2386,7 @@ public class Personaje {
 	public int totalJobFM() {
 		int i=0;
 		for(StatsMetier SM : _metiers.values()) {
-			// Si c'est une spÃ©cialisation 'FM' :
+			// Si c'est une spécialisation 'FM' :
 			if(SM.getTemplate().getId() == 	43 || SM.getTemplate().getId() == 44 ||
 			   SM.getTemplate().getId() == 45 || SM.getTemplate().getId() == 46 ||
 			   SM.getTemplate().getId() == 47 || SM.getTemplate().getId() == 48 ||
@@ -2682,9 +2682,9 @@ public class Personaje {
 	public void useZaap(short id) {
 		if(!_isZaaping)return;//S'il n'a pas ouvert l'interface Zaap(hack?)
 		if(_fight != null) return;//Si il combat
-		if(!hasZaap(id))return;//S'il n'a pas le zaap demandÃ©(ne devrais pas arriver)
+		if(!hasZaap(id))return;//S'il n'a pas le zaap demandé(ne devrais pas arriver)
 		int cost = Formulas.calculZaapCost(_curCarte, Mundo.getCarte(id));
-		if(_kamas < cost)return;//S'il n'a pas les kamas (verif cotÃ© client)
+		if(_kamas < cost)return;//S'il n'a pas les kamas (verif coté client)
 		short mapID = id;
 		int SubAreaID = _curCarte.getSubArea().get_area().get_superArea().get_id();
 		int cellID = Mundo.getZaapCellIdByMapId(id);
@@ -3258,7 +3258,7 @@ public class Personaje {
 			JuegoServidor.addToLog("Le joueur "+_name+" a tenter d'ajouter un objet au store qu'il n'avait pas.");
 			return;
 		}
-		//Si c'est un item Ã©quipÃ© ...
+		//Si c'est un item équipé ...
 		if(PersoObj.getPosition() != Constantes.ITEM_POS_NO_EQUIPED)return;
 		
 		Objeto SimilarObj = getSimilarStoreItem(PersoObj);
@@ -3270,14 +3270,14 @@ public class Personaje {
 			{
 				//On enleve l'objet du sac du joueur
 				removeItem(PersoObj.getGuid());
-				//On met l'objet du sac dans le store, avec la meme quantitÃ©
+				//On met l'objet du sac dans le store, avec la meme quantité
 				_storeItems.put(PersoObj.getGuid(), price);
 				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, PersoObj.getGuid());
                 GestorSalida.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this);
 			}
 			else//S'il reste des objets au joueur
 			{
-				//on modifie la quantitÃ© d'item du sac
+				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet a la banque et au monde
 				SimilarObj = Objeto.getCloneObjet(PersoObj, qua);
@@ -3298,7 +3298,7 @@ public class Personaje {
 				removeItem(PersoObj.getGuid());
 				//On enleve l'objet du monde
 				Mundo.removeItem(PersoObj.getGuid());
-				//On ajoute la quantitÃ© a l'objet en banque
+				//On ajoute la quantité a l'objet en banque
 				SimilarObj.setQuantity(SimilarObj.getQuantity() + PersoObj.getQuantity());
 				_storeItems.remove(SimilarObj.getGuid());
 				_storeItems.put(SimilarObj.getGuid(), price);
@@ -3308,7 +3308,7 @@ public class Personaje {
 				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, PersoObj.getGuid());
 			}else //S'il restait des objets
 			{
-				//on modifie la quantitÃ© d'item du sac
+				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
 				SimilarObj.setQuantity(SimilarObj.getQuantity() + qua);
 				_storeItems.remove(SimilarObj.getGuid());
@@ -3373,7 +3373,7 @@ public class Personaje {
 				//On retire l'item de la banque
 				_storeItems.remove(SimilarObj.getGuid());
 				Mundo.removeItem(SimilarObj.getGuid());
-				//On Modifie la quantitÃ© de l'item du sac du joueur
+				//On Modifie la quantité de l'item du sac du joueur
 				PersoObj.setQuantity(PersoObj.getQuantity() + SimilarObj.getQuantity());
 				
 				//On envoie les packets

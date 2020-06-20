@@ -211,7 +211,7 @@ object MainServidor {
         println(makeHeader())
         println("==============================================================\n")
         println("Cargando el archivo de configuracion:")
-        loadConfiguration()
+        CargarConfiguracion()
         isInit = true
         println("Cargado!")
         println("Conectando a la base de datos:")
@@ -257,7 +257,7 @@ object MainServidor {
     }
 
     @JvmStatic
-    fun loadConfiguration() {
+    fun CargarConfiguracion() {
         var log = false
         try {
             val config = BufferedReader(FileReader(ARCHIVO_DE_CONFIGURACION))
@@ -514,7 +514,7 @@ object MainServidor {
             isRunning = false
             gameServer!!.kickAll()
             Mundo.saveAll(null)
-            GestorSQL.closeCons()
+            GestorSQL.CerrarConsulta()
         }
         println("Arret du serveur: OK")
         isRunning = false

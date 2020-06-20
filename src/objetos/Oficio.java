@@ -75,7 +75,7 @@ public class Oficio {
 				ArrayList<StatsMetier> list = new ArrayList<>();
 				list.add(this);
 				GestorSalida.GAME_SEND_JS_PACKET(P, list);
-				GestorSalida.GAME_SEND_STATS_PACKET(P);
+				GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(P);
 				GestorSalida.GAME_SEND_Ow_PACKET(P);
 				GestorSalida.GAME_SEND_JN_PACKET(P,_template.getId(),_lvl);
 				GestorSalida.GAME_SEND_JO_PACKET(P, list);
@@ -118,7 +118,7 @@ public class Oficio {
 		{
 			if(_curAction == null)return;
 			_curAction.endAction(P,IO,GA,cell);
-			addXp(P,_curAction.getXpWin()* MainServidor.XP_OFICIOS);
+			AgregarExperiencia(P,_curAction.getXpWin()* MainServidor.XP_OFICIOS);
 			//Packet JX
 			//on créer la listes des statsMetier a envoyer (Seulement celle ci)
 			ArrayList<StatsMetier> list = new ArrayList<>();
@@ -126,8 +126,7 @@ public class Oficio {
 			GestorSalida.GAME_SEND_JX_PACKET(P, list);
 		}
 		
-		public void addXp(Personaje P, long xp)
-		{
+		public void AgregarExperiencia(Personaje P, long xp) {
 			if(_lvl >99)return;
 			int exLvl = _lvl;
 			_xp += xp;
@@ -137,27 +136,26 @@ public class Oficio {
 				levelUp(P,false);
 			
 			//s'il y a eu Up
-			if(_lvl > exLvl && P.isOnline())
-			{
+			if(_lvl > exLvl && P.isConectado()) {
 				//on créer la listes des statsMetier a envoyer (Seulement celle ci)
 				ArrayList<StatsMetier> list = new ArrayList<>();
 				list.add(this);
 				//on envoie le packet
 				GestorSalida.GAME_SEND_JS_PACKET(P, list);
 				GestorSalida.GAME_SEND_JN_PACKET(P,_template.getId(),_lvl);
-				GestorSalida.GAME_SEND_STATS_PACKET(P);
+				GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(P);
 				GestorSalida.GAME_SEND_Ow_PACKET(P);
 				GestorSalida.GAME_SEND_JO_PACKET(P, list);
 			}
 		}
 		
-		public String getXpString(String s)
-		{
+		public String getXpString(String s) {
 			String str = Mundo.getExpLevel(_lvl).metier + s +
 					_xp + s +
 					Mundo.getExpLevel((_lvl < 100 ? _lvl + 1 : _lvl)).metier;
 			return str;
 		}
+
 		public Oficio getTemplate() {
 			
 			return _template;
@@ -361,7 +359,7 @@ public class Oficio {
 				if(!_P.hasItemGuid(e.getKey()))
 				{
 					GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-					JuegoServidor.addToLog("/!\\ "+_P.get_name()+" essaye de crafter avec un objet qu'il n'a pas");
+					JuegoServidor.addToLog("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet qu'il n'a pas");
 					return;
 				}
 				//Si l'objet n'existe pas
@@ -369,14 +367,14 @@ public class Oficio {
 				if(obj == null)
 				{
 					GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-					JuegoServidor.addToLog("/!\\ "+_P.get_name()+" essaye de crafter avec un objet qui n'existe pas");
+					JuegoServidor.addToLog("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet qui n'existe pas");
 					return;
 				}
 				//Si la quantité est trop faible
 				if(obj.getQuantity() < e.getValue())
 				{
 					GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-					JuegoServidor.addToLog("/!\\ "+_P.get_name()+" essaye de crafter avec un objet dont la quantite est trop faible");
+					JuegoServidor.addToLog("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet dont la quantite est trop faible");
 					return;
 				}
 				//On calcule la nouvelle quantité
@@ -430,7 +428,7 @@ public class Oficio {
 			{
 				Objeto newObj = Mundo.getObjTemplate(tID).createNewItem(1, false);
 				//Si signé on ajoute la ligne de Stat "Fabriqué par:"
-				if(signed)newObj.addTxtStat(988, _P.get_name());
+				if(signed)newObj.addTxtStat(988, _P.getNombre());
 				boolean add = true;
 				int guid = newObj.getGuid();
 				
@@ -466,7 +464,7 @@ public class Oficio {
 			int winXP =  Constantes.calculXpWinCraft(SM.get_lvl(),_ingredients.size()) * MainServidor.XP_OFICIOS;
 			if(success)
 			{
-				SM.addXp(_P,winXP);
+				SM.AgregarExperiencia(_P,winXP);
 				ArrayList<StatsMetier> SMs = new ArrayList<>();
 				SMs.add(SM);
 				GestorSalida.GAME_SEND_JX_PACKET(_P, SMs);
@@ -1177,7 +1175,7 @@ public class Oficio {
 				if(isElementChanging == 25)coef = 65;
 				if(isElementChanging == 50)coef = 85;
 				//Si signé on ajoute la ligne de Stat "Modifié par: "
-				if(signed)obj.addTxtStat(985, _P.get_name());
+				if(signed)obj.addTxtStat(985, _P.getNombre());
 				
 				if(isElementChanging > 0  && isStatsChanging == 0)//Si on modifier l'élément
 				{

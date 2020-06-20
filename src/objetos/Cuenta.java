@@ -4,6 +4,7 @@ import juego.JuegoThread;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
@@ -169,7 +170,7 @@ public class Cuenta {
 		return _GUID;
 	}
 	
-	public String get_name() {
+	public String getNombre() {
 		return _name;
 	}
 
@@ -218,23 +219,19 @@ public class Cuenta {
 		_banned = banned;
 	}
 
-	public boolean isOnline()
-	{
+	public boolean isOnline() {
 		if(_gameThread != null)return true;
 		if(_realmThread != null)return true;
 		return false;
 	}
 
-	public int get_gmLvl() {
-		return _gmLvl;
-	}
+	public int getGMLVL() { return _gmLvl; }
 
-	public String get_curIP() {
+	public String getActualIP() {
 		return _curIP;
 	}
 	
-	public boolean isValidPass(String pass,String hash)
-	{
+	public boolean isValidPass(String pass,String hash) {
 		return pass.equals(GestorEncriptador.CryptPassword(hash, _pass));
 	}
 	
@@ -244,7 +241,7 @@ public class Cuenta {
 	}
 
 	public static boolean COMPTE_LOGIN(String name, String pass, String key) {
-		return Mundo.getCompteByName(name) != null && Mundo.getCompteByName(name).isValidPass(pass, key);
+		return Mundo.getCompteByName(name) != null && Objects.requireNonNull(Mundo.getCompteByName(name)).isValidPass(pass, key);
 	}
 
 	public void addPerso(Personaje perso)
@@ -306,13 +303,13 @@ public class Cuenta {
 			if(P.getActualGrupo() != null)P.getActualGrupo().leave(P);
 			
 			//Si en combat
-			if(P.get_fight() != null)P.get_fight().leftFight(P, null);
+			if(P.getPelea() != null)P.getPelea().leftFight(P, null);
 			else//Si hors combat
 			{
 				P.getActualCelda().removePlayer(P.get_GUID());
-				if(P.getActualMapa() != null && P.isOnline()) GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(P.getActualMapa(), P.get_GUID());
+				if(P.getActualMapa() != null && P.isConectado()) GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(P.getActualMapa(), P.get_GUID());
 			}
-			P.set_Online(false);
+			P.setConectado(false);
 			//Reset des vars du perso
 			P.resetVars();
 			if(save) GestorSQL.guardar_personaje(P,true);
@@ -341,7 +338,7 @@ public class Cuenta {
 		for (int i : _friendGuids) {
 			if (this.isFriendWith(i)) {
 				Personaje perso = Mundo.getPersonnage(i);
-				if (perso != null && perso.is_showFriendConnection() && perso.isOnline())
+				if (perso != null && perso.is_showFriendConnection() && perso.isConectado())
 				GestorSalida.GAME_SEND_FRIEND_ONLINE(this._curPerso, perso);
 			}
 		}
@@ -386,7 +383,7 @@ public class Cuenta {
 		}
 		if(!_EnemyGuids.contains(guid)) {
 			_EnemyGuids.add(guid);
-			Personaje Pr = Mundo.getPersoByName(packet);
+			Personaje Pr = Mundo.getPersonajePorNombre(packet);
 			GestorSalida.GAME_SEND_ADD_ENEMY(_curPerso, Pr);
 			GestorSQL.actualizar_datos_cuenta(this);
 		}

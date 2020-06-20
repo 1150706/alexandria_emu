@@ -145,7 +145,7 @@ public class Cofres {
 	public void HopIn(Personaje P)//Ouvrir coffre
 	{
 		// En gros si il fait quelque chose :)
-		if(P.get_fight() != null ||
+		if(P.getPelea() != null ||
 		   P.get_isTalkingWith() != 0 ||
 		   P.get_isTradingWith() != 0 ||
 		   P.getCurJobAction() != null ||
@@ -187,7 +187,7 @@ public class Cofres {
 		
 		if(packet.compareTo(t.get_key()) == 0 || isTrunk)//Si c'est chez lui ou que le mot de passe est bon
 		{
-			GestorSalida.GAME_SEND_ECK_PACKET(P.get_compte().getGameThread().get_out(), 5, "");
+			GestorSalida.GAME_SEND_ECK_PACKET(P.getCuenta().getGameThread().get_out(), 5, "");
 			GestorSalida.GAME_SEND_EL_TRUNK_PACKET(P, t);
 			closeCode(P);
 		}
@@ -250,7 +250,7 @@ public class Cofres {
 		//Si le joueur n'a pas l'item dans son sac ...
 		if(P.getItems().get(guid) == null)
 		{
-			JuegoServidor.addToLog("Le joueur "+P.get_name()+" a tenter d'ajouter un objet dans un coffre qu'il n'avait pas.");
+			JuegoServidor.addToLog("Le joueur "+P.getNombre()+" a tenter d'ajouter un objet dans un coffre qu'il n'avait pas.");
 			return;
 		}
 		
@@ -336,7 +336,7 @@ public class Cofres {
 		//Si le joueur n'a pas l'item dans son coffre
 		if(_object.get(guid) == null)
 		{
-			JuegoServidor.addToLog("Le joueur "+P.get_name()+" a tenter de retirer un objet dans un coffre qu'il n'avait pas.");
+			JuegoServidor.addToLog("Le joueur "+P.getNombre()+" a tenter de retirer un objet dans un coffre qu'il n'avait pas.");
 			return;
 		}
 		

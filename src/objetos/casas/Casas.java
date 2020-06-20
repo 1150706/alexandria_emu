@@ -221,7 +221,7 @@ public class Casas
 	}
 
     public void HopIn(Personaje P) {
-        if(P.get_fight() != null || P.get_isTalkingWith() != 0 || P.get_isTradingWith() != 0 || P.getCurJobAction() != null || P.get_curExchange() != null)
+        if(P.getPelea() != null || P.get_isTalkingWith() != 0 || P.get_isTradingWith() != 0 || P.getCurJobAction() != null || P.get_curExchange() != null)
             return;
         Casas h = P.getInHouse();
         if(h == null)
@@ -285,9 +285,9 @@ public class Casas
 			return;
 		}
 		//On enleve les kamas
-		if(P.get_kamas() < h.get_sale()) return;
-		long newkamas = P.get_kamas()-h.get_sale();
-		P.set_kamas(newkamas);
+		if(P.getKamas() < h.get_sale()) return;
+		long newkamas = P.getKamas()-h.get_sale();
+		P.setKamas(newkamas);
 		
 		int tKamas = 0;
 		for(Cofres t : Cofres.getTrunksByHouse(h))
@@ -318,7 +318,7 @@ public class Casas
 		
 		//On save l'acheteur
 		GestorSQL.guardar_personaje(P, true);
-		GestorSalida.GAME_SEND_STATS_PACKET(P);
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(P);
 		closeBuy(P);
 
 		//Achat de la maison
@@ -327,7 +327,7 @@ public class Casas
 		//Rafraichir la map après l'achat
 		for(Personaje z:P.getActualMapa().getPersos())
 		{
-			LoadHouse(z, z.getActualMapa().get_id());
+			LoadHouse(z, z.getActualMapa().getID());
 		}
 	}
 	
@@ -360,7 +360,7 @@ public class Casas
 			//Rafraichir la map après la mise en vente
 			for(Personaje z:P.getActualMapa().getPersos())
 			{
-				LoadHouse(z, z.getActualMapa().get_id());
+				LoadHouse(z, z.getActualMapa().getID());
 			}
 				
 			return;
@@ -418,7 +418,7 @@ public class Casas
 				if(!isFirst) packet.append("|");
 				
 				packet.append(house.getKey()).append(";");
-				packet.append(Mundo.getPersonnage(house.getValue().get_owner_id()).get_compte().get_pseudo()).append(";");
+				packet.append(Mundo.getPersonnage(house.getValue().get_owner_id()).getCuenta().get_pseudo()).append(";");
 				packet.append(Mundo.getCarte((short)house.getValue().get_mapid()).getX()).append(",").append(Mundo.getCarte((short)house.getValue().get_mapid()).getY()).append(";");
 				packet.append("0;");//TODO : Compétences ...
 				packet.append(house.getValue().get_guild_rights());	
@@ -547,9 +547,9 @@ public class Casas
 		if(!h.isHouse(P, h)) return;
 		int Pguid = Integer.parseInt(packet);
 		Personaje Target = Mundo.getPersonnage(Pguid);
-		if(Target == null || !Target.isOnline() || Target.get_fight() != null || Target.getActualMapa().get_id() != P.getActualMapa().get_id()) return;
+		if(Target == null || !Target.isConectado() || Target.getPelea() != null || Target.getActualMapa().getID() != P.getActualMapa().getID()) return;
 		Target.teletransportar(h.get_map_id(), h.get_cell_id());
-		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(Target, "018;"+P.get_name());
+		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(Target, "018;"+P.getNombre());
 	}
 	
 	

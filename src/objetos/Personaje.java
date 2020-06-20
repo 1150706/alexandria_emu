@@ -218,8 +218,8 @@ public class Personaje {
 			_persos.remove(p);
 			if(_persos.size() == 1) {
 				_persos.get(0).setGroup(null);
-				if(_persos.get(0).get_compte() == null || _persos.get(0).get_compte().getGameThread() == null)return;
-				GestorSalida.GAME_SEND_PV_PACKET(_persos.get(0).get_compte().getGameThread().get_out(),"");
+				if(_persos.get(0).getCuenta() == null || _persos.get(0).getCuenta().getGameThread() == null)return;
+				GestorSalida.GAME_SEND_PV_PACKET(_persos.get(0).getCuenta().getGameThread().get_out(),"");
 			} else
 				GestorSalida.GAME_SEND_PM_DEL_PACKET_TO_GROUP(this,p.get_GUID());
 		}
@@ -233,7 +233,7 @@ public class Personaje {
 			if(!addBases)return;
 			Effects.put(Constantes.STATS_ADD_PA,  perso.get_lvl()<100?6:7);
 			Effects.put(Constantes.STATS_ADD_PM, 3);
-			Effects.put(Constantes.STATS_ADD_PROS, perso.get_classe()== Constantes.CLASS_ENUTROF?120:100);
+			Effects.put(Constantes.STATS_ADD_PROS, perso.getClase()== Constantes.CLASS_ENUTROF?120:100);
 			Effects.put(Constantes.STATS_ADD_PODS, 1000);
 			Effects.put(Constantes.STATS_CREATURE, 1);
 			Effects.put(Constantes.STATS_ADD_INIT, 1);
@@ -244,7 +244,7 @@ public class Personaje {
 			if(!addBases)return;
 			Effects.put(Constantes.STATS_ADD_PA,  perso.get_lvl()<100?6:7);
 			Effects.put(Constantes.STATS_ADD_PM, 3);
-			Effects.put(Constantes.STATS_ADD_PROS, perso.get_classe()== Constantes.CLASS_ENUTROF?120:100);
+			Effects.put(Constantes.STATS_ADD_PROS, perso.getClase()== Constantes.CLASS_ENUTROF?120:100);
 			Effects.put(Constantes.STATS_ADD_PODS, 1000);
 			Effects.put(Constantes.STATS_CREATURE, 1);
 			Effects.put(Constantes.STATS_ADD_INIT, 1);
@@ -570,7 +570,7 @@ public class Personaje {
 					long xp = Long.parseLong(infos[1]);
 					Oficio m = Mundo.getMetier(jobID);
 					StatsMetier SM = _metiers.get(learnJob(m));
-					SM.addXp(this, xp);
+					SM.AgregarExperiencia(this, xp);
 				}catch(Exception e){e.getStackTrace();}
 			}
 		}
@@ -693,15 +693,12 @@ public class Personaje {
 		return perso;
 	}
 
-	public void set_Online(boolean d)
+	public void setConectado(boolean d)
 	{
 		_isOnline = d;
 	}
 	
-	public boolean isOnline()
-	{
-		return _isOnline;
-	}
+	public boolean isConectado() { return _isOnline; }
 	
 	public void setGroup(Grupo g)
 	{
@@ -733,7 +730,7 @@ public class Personaje {
 				int id = Integer.parseInt(e.split(";")[0]);
 				int lvl = Integer.parseInt(e.split(";")[1]);
 				char place = e.split(";")[2].charAt(0);
-				learnSpell(id,lvl,false,false);
+				AprenderHechizo(id,lvl,false,false);
 				_sortsPlaces.put(id, place);
 			}catch(NumberFormatException e1){continue;}
 		}
@@ -763,7 +760,7 @@ public class Personaje {
 		_isTalkingWith = talkingWith;
 	}
 	
-	public long get_kamas() {
+	public long getKamas() {
 		return _kamas;
 	}
 
@@ -771,12 +768,12 @@ public class Personaje {
 		return _buffs;
 	}
 
-	public void set_kamas(long l) {
+	public void setKamas(long l) {
 		this._kamas = l;
 	}
 	
 
-	public Cuenta get_compte() {
+	public Cuenta getCuenta() {
 		return _compte;
 	}
 
@@ -809,7 +806,7 @@ public class Personaje {
 		return _duelID;
 	}
 
-	public Pelea get_fight() {
+	public Pelea getPelea() {
 		return _fight;
 	}
 
@@ -875,7 +872,7 @@ public class Personaje {
 		return _size;
 	}
 
-	public void set_size(int _size) {
+	public void setTamaño(int _size) {
 		this._size = _size;
 	}
 
@@ -887,7 +884,7 @@ public class Personaje {
 		return _gfxID;
 	}
 
-	public void set_gfxID(int _gfxid) {
+	public void setGFX(int _gfxid) {
 		_gfxID = _gfxid;
 	}
 
@@ -897,7 +894,7 @@ public class Personaje {
 
 	public Mapa getActualMapa() { return _curCarte; }
 
-	public String get_name() {
+	public String getNombre() {
 		return _name;
 	}
 
@@ -913,11 +910,11 @@ public class Personaje {
 		return _sitted;
 	}
 
-	public int get_sexe() {
+	public int getSexo() {
 		return _sexe;
 	}
 
-	public int get_classe() {
+	public int getClase() {
 		return _classe;
 	}
 
@@ -941,7 +938,7 @@ public class Personaje {
 		return _capital;
 	}
 	
-	public boolean learnSpell(int spellID,int level,boolean save,boolean send) {
+	public boolean AprenderHechizo(int spellID, int level, boolean save, boolean send) {
 		if(Mundo.getSort(spellID).getStatsByLevel(level)==null) {
 			JuegoServidor.addToLog("[ERROR]Sort "+spellID+" lvl "+level+" non trouve.");
 			return false;
@@ -964,7 +961,7 @@ public class Personaje {
 		int AncLevel = getSortStatBySortIfHas(spellID).getLevel();
 		if(AncLevel == 6)return false;
 		if(_spellPts>=AncLevel && Mundo.getSort(spellID).getStatsByLevel(AncLevel+1).getReqLevel() <= _lvl) {
-			if(learnSpell(spellID,AncLevel+1,true,false)) {
+			if(AprenderHechizo(spellID,AncLevel+1,true,false)) {
 				_spellPts -= AncLevel;
 				GestorSQL.guardar_personaje(this,false);
 				return true;
@@ -991,7 +988,7 @@ public class Personaje {
 		int AncLevel = getSortStatBySortIfHas(spellID).getLevel();
 		if(AncLevel <= 1)return false;
 		
-		if(learnSpell(spellID,1,true,false)) {
+		if(AprenderHechizo(spellID,1,true,false)) {
 			_spellPts += Formulas.spellCost(AncLevel);
 			
 			GestorSQL.guardar_personaje(this,false);
@@ -1097,7 +1094,7 @@ public class Personaje {
 		}
 		//Fin métier
 		GestorSalida.GAME_SEND_ALIGNEMENT(out, _align);
-		GestorSalida.GAME_SEND_ADD_CANAL(out,_canaux+"^"+(_compte.get_gmLvl()>0?"@¤":""));
+		GestorSalida.GAME_SEND_ADD_CANAL(out,_canaux+"^"+(_compte.getGMLVL()>0?"@¤":""));
 		if(_guildMember != null) GestorSalida.GAME_SEND_gS_PACKET(this,_guildMember);
 		GestorSalida.GAME_SEND_ZONE_ALLIGN_STATUT(out);
 		GestorSalida.GAME_SEND_SPELL_LIST(this);
@@ -1112,10 +1109,10 @@ public class Personaje {
 		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "189");
 		if(!_compte.getLastConnectionDate().equals("") && !_compte.get_lastIP().equals(""))
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "0152;"+_compte.getLastConnectionDate()+"~"+_compte.get_lastIP());
-		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "0153;"+_compte.get_curIP());
+		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "0153;"+_compte.getActualIP());
 		//Fin messages
 		//Actualisation de l'ip
-		_compte.setLastIP(_compte.get_curIP());
+		_compte.setLastIP(_compte.getActualIP());
 		
 		//Mise a jour du lastConnectionDate
 		Date actDate = new Date();
@@ -1138,7 +1135,7 @@ public class Personaje {
 
 		//Enviar mensaje de bienvenida desde el LANG
 		//Tomamos el nombre del pj, desde la config tomamos nombre y web del servidor
-		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "1239;" + this.get_name() + "~" + MainServidor.NOMBRE_DEL_SERVIDOR + "~" + MainServidor.WEB_DEL_SERVIDOR);
+		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "1239;" + this.getNombre() + "~" + MainServidor.NOMBRE_DEL_SERVIDOR + "~" + MainServidor.WEB_DEL_SERVIDOR);
 
 		//on démarre le Timer pour la Regen de Pdv
 		_sitTimer.start();
@@ -1155,16 +1152,16 @@ public class Personaje {
 		if(_compte.getGameThread() == null) return;
 		PrintWriter out = _compte.getGameThread().get_out();
 		
-		if(is_showSeller() == true && Mundo.getSeller(getActualMapa().get_id()) != null && Mundo.getSeller(getActualMapa().get_id()).contains(get_GUID())) {
-			Mundo.removeSeller(get_GUID(), getActualMapa().get_id());
+		if(is_showSeller() == true && Mundo.getSeller(getActualMapa().getID()) != null && Mundo.getSeller(getActualMapa().getID()).contains(get_GUID())) {
+			Mundo.removeSeller(get_GUID(), getActualMapa().getID());
 			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), get_GUID());
 			set_showSeller(false);
 		}
 		
 		GestorSalida.GAME_SEND_GAME_CREATE(out,_name);
-		GestorSalida.GAME_SEND_STATS_PACKET(this);
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 		GestorSQL.salir_del_juego(_compte.get_GUID(), 1);
-		GestorSalida.GAME_SEND_MAPDATA(out,_curCarte.get_id(),_curCarte.get_date(),_curCarte.get_key());
+		GestorSalida.GAME_SEND_MAPDATA(out,_curCarte.getID(),_curCarte.get_date(),_curCarte.get_key());
 		GestorSalida.GAME_SEND_MAP_FIGHT_COUNT(out,this.getActualMapa());
 		_curCarte.addPlayer(this);
 		GestorSQL.guardar_personaje(this, true);
@@ -1515,7 +1512,7 @@ public class Personaje {
 	public void refreshMapAfterFight() {
 		_curCarte.addPlayer(this);
 		if(_compte.getGameThread() != null && _compte.getGameThread().get_out() != null) {
-			GestorSalida.GAME_SEND_STATS_PACKET(this);
+			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 			GestorSalida.GAME_SEND_ILS_PACKET(this, 1000);
 		}
 		_fight = null;
@@ -1535,11 +1532,11 @@ public class Personaje {
 				case 15 -> this.get_baseStats().getEffect(Constantes.STATS_ADD_INTE);
 				default -> 0;
 			};
-			int cout = Constantes.getReqPtsToBoostStatsByClass(this.get_classe(), stat, value);
+			int cout = Constantes.getReqPtsToBoostStatsByClass(this.getClase(), stat, value);
 			if (cout <= this.get_capital()) {
 				switch (stat) {
 					case 11://Vita
-						if (this.get_classe() != Constantes.CLASS_SACRIEUR)
+						if (this.getClase() != Constantes.CLASS_SACRIEUR)
 							this.get_baseStats().addOneStat(Constantes.STATS_ADD_VITA, 1);
 						else
 							this.get_baseStats().addOneStat(Constantes.STATS_ADD_VITA, 2);
@@ -1562,10 +1559,10 @@ public class Personaje {
 					default:
 						return;
 				}
-				this.addCapital(cout);
+				this.addPuntosDeCapital(cout);
 			}
 		}
-		GestorSalida.GAME_SEND_STATS_PACKET(this);
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 		GestorSQL.guardar_personaje(this, false);
 	}
 
@@ -1615,7 +1612,7 @@ public class Personaje {
                 return;
             }
             _capital -= cout;
-            GestorSalida.GAME_SEND_STATS_PACKET(this);
+            GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
         }
         // SQLManager.SAVE_PERSONNAGE(this, true);
     }
@@ -1734,7 +1731,7 @@ public class Personaje {
 			GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this, _items.get(guid));
 		}
 		_kamas = _kamas + prix;
-		GestorSalida.GAME_SEND_STATS_PACKET(this);
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 		GestorSalida.GAME_SEND_Ow_PACKET(this);
 		GestorSalida.GAME_SEND_ESK_PACKEt(this);
 	}
@@ -1804,17 +1801,17 @@ public class Personaje {
 		if(_lvl == 300)
 			_baseStats.addOneStat(Constantes.STATS_ADD_PA, 1);
 		 if(_lvl == 300)
-	            GestorSalida.GAME_SEND_MESSAGE_TO_ALL("Bravo a (<b>" + get_name() + "</b>) il vient d'atteindre le niveau <b>300</b> !", MainServidor.CONFIG_PUB_COLOR);
+	            GestorSalida.ENVIAR_MENSAJE_A_TODOS("Bravo a (<b>" + getNombre() + "</b>) il vient d'atteindre le niveau <b>300</b> !", MainServidor.CONFIG_PUB_COLOR);
 
 
 		Constantes.onLevelUpSpells(this,_lvl);
 		if(addXp)_curExp = Mundo.getExpLevel(_lvl).perso;
 		if(get_guild() != null) {
-			GestorSQL.actualizar_miembro_del_gremio(getGuildMember());
+			GestorSQL.actualizar_miembro_del_gremio(getMiembroGremio());
 		}
 		if(send && _isOnline) {
 			GestorSalida.GAME_SEND_NEW_LVL_PACKET(_compte.getGameThread().get_out(),_lvl);
-			GestorSalida.GAME_SEND_STATS_PACKET(this);
+			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 			GestorSalida.GAME_SEND_SPELL_LIST(this);
 		}
 		GestorSQL.guardar_personaje(this, true);
@@ -1827,7 +1824,7 @@ public class Personaje {
 			levelUp(true,false);
 		if(_isOnline) {
 			if(exLevel < _lvl) GestorSalida.GAME_SEND_NEW_LVL_PACKET(_compte.getGameThread().get_out(),_lvl);
-			GestorSalida.GAME_SEND_STATS_PACKET(this);
+			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 		}
 	}
 	
@@ -2002,11 +1999,11 @@ public class Personaje {
 			}
 		}
 		//Verifier la validité du percepteur
-		if(Recaudador.GetPercoByMapID(_curCarte.get_id()) != null) {
-			if(Mundo.getGuild(Recaudador.GetPercoByMapID(_curCarte.get_id()).get_guildID()) == null)//Ne devrait pas arriver
+		if(Recaudador.GetPercoByMapID(_curCarte.getID()) != null) {
+			if(Mundo.getGuild(Recaudador.GetPercoByMapID(_curCarte.getID()).get_guildID()) == null)//Ne devrait pas arriver
 			{
-				JuegoServidor.addToLog("[Percepteur] Suppression d'un Percepteur a Guild invalide. GuildID : "+ Recaudador.GetPercoByMapID(_curCarte.get_id()).get_guildID());
-				Recaudador.removePercepteur(Recaudador.GetPercoByMapID(_curCarte.get_id()).get_guildID());
+				JuegoServidor.addToLog("[Percepteur] Suppression d'un Percepteur a Guild invalide. GuildID : "+ Recaudador.GetPercoByMapID(_curCarte.getID()).get_guildID());
+				Recaudador.removePercepteur(Recaudador.GetPercoByMapID(_curCarte.getID()).get_guildID());
 			}
 		}
 		
@@ -2022,7 +2019,7 @@ public class Personaje {
 		if(!_Follower.isEmpty())//On met a jour la carte des personnages qui nous suivent
 		{
 			for(Personaje t : _Follower.values()) {
-				if(t.isOnline())
+				if(t.isConectado())
 					GestorSalida.GAME_SEND_FLAG_PACKET(t, this);
 				else
 					_Follower.remove(t.get_GUID());
@@ -2071,12 +2068,9 @@ public class Personaje {
 		return packet.toString();
 	}
 
-	public void addCapital(int pts)
-	{
-		_capital += pts;
-	}
+	public void addPuntosDeCapital(int pts) { _capital += pts; }
 
-	public void addSpellPoint(int pts)
+	public void addAgregarPuntosDeHechizo(int pts)
 	{
 		_spellPts += pts;
 	}
@@ -2252,7 +2246,7 @@ public class Personaje {
 		}else if(get_guild() != null && 
 				Mundo.getPersonnage(_inMountPark.get_owner()).get_guild() != null &&
 				Mundo.getPersonnage(_inMountPark.get_owner()).get_guild() == get_guild() &&
-				getGuildMember().canDo(Constantes.G_USEENCLOS))//Meme guilde + droits
+				getMiembroGremio().canDo(Constantes.G_USEENCLOS))//Meme guilde + droits
 		{
 			GestorSalida.GAME_SEND_ECK_PACKET(this, 16, str);
 		}else {
@@ -2405,11 +2399,11 @@ public class Personaje {
 		return i;
 	}
 	
-	public boolean canAggro() {
+	public boolean PuedeSerAgredido() {
 		return _canAggro;
 	}
 
-	public void set_canAggro(boolean canAggro) {
+	public void setPuedeSerAgredido(boolean canAggro) {
 		_canAggro = canAggro;
 	}
 
@@ -2464,7 +2458,7 @@ public class Personaje {
 		return str.toString();
 	}
 
-	public StatsMetier getMetierByID(int job) {
+	public StatsMetier getOficioPorID(int job) {
 		for(StatsMetier SM : _metiers.values())if(SM.getTemplate().getId() == job)return SM;
 		return null;
 	}
@@ -2482,14 +2476,14 @@ public class Personaje {
 			GestorSalida.GAME_SEND_OBJET_MOVE_PACKET(this, obj);
 		}
 		//on envoie les packets
-		if(get_fight() != null && get_fight().get_state() == 2) {
-			GestorSalida.GAME_SEND_ALTER_FIGHTER_MOUNT(get_fight(), get_fight().getFighterByPerso(this), get_GUID(), get_fight().getTeamID(get_GUID()), get_fight().getOtherTeamID(get_GUID()));
+		if(getPelea() != null && getPelea().get_state() == 2) {
+			GestorSalida.GAME_SEND_ALTER_FIGHTER_MOUNT(getPelea(), getPelea().getFighterByPerso(this), get_GUID(), getPelea().getTeamID(get_GUID()), getPelea().getOtherTeamID(get_GUID()));
 		}else {
 			GestorSalida.GAME_SEND_ALTER_GM_PACKET(_curCarte,this);
 		}
 		GestorSalida.GAME_SEND_Re_PACKET(this, "+", _mount);
 		GestorSalida.GAME_SEND_Rr_PACKET(this,_onMount?"+":"-");
-		GestorSalida.GAME_SEND_STATS_PACKET(this);
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 	}
 
 	public int getMountXpGive()
@@ -2561,7 +2555,7 @@ public class Personaje {
 		//envoies des packets
 		//Im022;10~42 ?
 		GestorSalida.GAME_SEND_ZC_PACKET(this, a);
-		GestorSalida.GAME_SEND_STATS_PACKET(this);
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 		//Im045;50 ?
 	}
 
@@ -2607,13 +2601,13 @@ public class Personaje {
 			}
 			case '+' -> {
 				setShowWings(true);
-				GestorSalida.GAME_SEND_STATS_PACKET(this);
+				GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 				GestorSQL.guardar_personaje(this, false);
 			}
 			case '-' -> {
 				setShowWings(false);
 				_honor -= hloose;
-				GestorSalida.GAME_SEND_STATS_PACKET(this);
+				GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 				GestorSQL.guardar_personaje(this, false);
 			}
 		}
@@ -2627,7 +2621,7 @@ public class Personaje {
 		getGrade();//TODO: Message IG
 	}
 
-	public GuildMember getGuildMember()
+	public GuildMember getMiembroGremio()
 	{
 		return _guildMember;
 	}
@@ -2644,7 +2638,7 @@ public class Personaje {
 
 	public String parseZaapList()//Pour le packet WC
 	{
-		String map = _curCarte.get_id()+"";
+		String map = _curCarte.getID()+"";
 		try {
 			map = _savePos.split(",")[0];
 		}catch(Exception ignored){}
@@ -2656,7 +2650,7 @@ public class Personaje {
 			if(Mundo.getCarte(i) == null)continue;
 			if(Mundo.getCarte(i).getSubArea().get_area().get_superArea().get_id() != SubAreaID)continue;
 			int cost = Formulas.calculZaapCost(_curCarte, Mundo.getCarte(i));
-			if(i == _curCarte.get_id()) cost = 0;
+			if(i == _curCarte.getID()) cost = 0;
 			str.append("|").append(i).append(";").append(cost);
 		}
 		return str.toString();
@@ -2675,9 +2669,9 @@ public class Personaje {
 				return;
 			}
 			_isZaaping = true;
-			if(!hasZaap(_curCarte.get_id()))//Si le joueur ne connaissait pas ce zaap
+			if(!hasZaap(_curCarte.getID()))//Si le joueur ne connaissait pas ce zaap
 			{
-				_zaaps.add(_curCarte.get_id());
+				_zaaps.add(_curCarte.getID());
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "024");
 				GestorSQL.guardar_personaje(this, false);
 			}
@@ -2715,7 +2709,7 @@ public class Personaje {
 		}
 		_kamas -= cost;
 		teletransportar(mapID,cellID);
-		GestorSalida.GAME_SEND_STATS_PACKET(this);//On envoie la perte de kamas
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);//On envoie la perte de kamas
 		GestorSalida.GAME_SEND_WV_PACKET(this);//On ferme l'interface Zaap
 		_isZaaping = false;
 	}
@@ -2767,7 +2761,7 @@ public class Personaje {
 		if (this.get_align() == 1 || this.get_align() == 2)
 		price = 10;
 		_kamas -= price;
-		GestorSalida.GAME_SEND_STATS_PACKET(this);
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 		this.teletransportar(Short.parseShort(packet.substring(2)), idcelula);
 		GestorSalida.GAME_SEND_CLOSE_ZAAPI_PACKET(this);
 		}
@@ -2799,7 +2793,7 @@ public class Personaje {
 			return false;
 		
 		if(_isInvisible) {
-			return _compte.isFriendWith(sender.get_compte().get_GUID());
+			return _compte.isFriendWith(sender.getCuenta().get_GUID());
 		}
 		
 		return true;
@@ -2876,9 +2870,9 @@ public class Personaje {
 		
 		Personaje Clone = new Personaje(
 				id, 
-				P.get_name(), 
-				P.get_sexe(), 
-				P.get_classe(), 
+				P.getNombre(),
+				P.getSexo(),
+				P.getClase(),
 				P.get_color1(), 
 				P.get_color2(), 
 				P.get_color3(), 
@@ -3061,8 +3055,8 @@ public class Personaje {
 		StringBuilder str = new StringBuilder();
 		if(wife != null)
 		{
-			str.append(wife.get_name()).append("|").append(wife.get_classe()+wife.get_sexe()).append("|").append(wife.get_color1()).append("|").append(wife.get_color2()).append("|").append(wife.get_color3()).append("|");
-			if(!wife.isOnline()){
+			str.append(wife.getNombre()).append("|").append(wife.getClase()+wife.getSexo()).append("|").append(wife.get_color1()).append("|").append(wife.get_color2()).append("|").append(wife.get_color3()).append("|");
+			if(!wife.isConectado()){
 				str.append("|");
 			}else{
 			str.append(wife.parse_towife()).append("|");
@@ -3080,7 +3074,7 @@ public class Personaje {
 		{
 			f = 1;
 		}
-		return _curCarte.get_id() + "|" + _lvl + "|" + f;
+		return _curCarte.getID() + "|" + _lvl + "|" + f;
 	}
 	
 	public void meetWife(Personaje p)// Se teleporter selon les sacro-saintes autorisations du mariage.
@@ -3091,7 +3085,7 @@ public class Personaje {
 					+ (_curCarte.getY() - p.getActualMapa().getY())*(_curCarte.getY() - p.getActualMapa().getY());
 		if(dist > 100)// La distance est trop grande...
 		{
-			if(p.get_sexe() == 0)
+			if(p.getSexo() == 0)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "178");
 			}else
@@ -3104,7 +3098,7 @@ public class Personaje {
 		int cellPositiontoadd = Constantes.getNearCellidUnused(p);
 		if(cellPositiontoadd == -1)
 		{
-			if(p.get_sexe() == 0)
+			if(p.getSexo() == 0)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "141");
 			}else
@@ -3114,13 +3108,13 @@ public class Personaje {
 			return;
 		}
 		
-		teletransportar(p.getActualMapa().get_id(), (p.getActualCelda().getID()+cellPositiontoadd));
+		teletransportar(p.getActualMapa().getID(), (p.getActualCelda().getID()+cellPositiontoadd));
 	}
 	
 	public void Divorce()
 	{
-		if(isOnline())
-			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "047;"+ Mundo.getPersonnage(_wife).get_name());
+		if(isConectado())
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "047;"+ Mundo.getPersonnage(_wife).getNombre());
 		
 		_wife = 0;
 		GestorSQL.guardar_personaje(this, true);
@@ -3163,8 +3157,8 @@ public class Personaje {
 	{
 		if(isOnMount()) toogleOnMount();
 		_isGhosts = true;
-		set_gfxID(8004);
-		set_canAggro(false);
+		setGFX(8004);
+		setPuedeSerAgredido(false);
 		set_away(true);
 		set_Speed(-40);
 		teletransportar((short)20020, 397);
@@ -3180,13 +3174,13 @@ public class Personaje {
 		if(!_isGhosts) return;
 		_isGhosts = false;
 		set_energy(1000);
-		set_gfxID(Integer.parseInt(get_classe()+""+get_sexe()));
-		set_canAggro(true);
+		setGFX(Integer.parseInt(getClase()+""+ getSexo()));
+		setPuedeSerAgredido(true);
 		set_away(false);
 		set_Speed(0);
-		GestorSalida.GAME_SEND_STATS_PACKET(this);
+		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), get_GUID());
-		GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(getActualMapa(), this);
+		GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(getActualMapa(), this);
 	}
    
     public void setInTrunk(Cofres t)

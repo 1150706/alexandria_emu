@@ -100,11 +100,11 @@ public class NPCModelo {
 			_orientation  = o;
 		}
 
-		public NPCModelo get_template() {
+		public NPCModelo getModelo() {
 			return _template;
 		}
 
-		public int get_cellID() {
+		public int getCeldaID() {
 			return _cellID;
 		}
 
@@ -124,7 +124,7 @@ public class NPCModelo {
 			sock.append(_orientation).append(";");
 			sock.append("0").append(";");
 			sock.append(_guid).append(";");
-			sock.append(_template.get_id()).append(";");
+			sock.append(_template.getID()).append(";");
 			sock.append("-4").append(";");//type = NPC
 			
 			StringBuilder taille = new StringBuilder();
@@ -195,7 +195,7 @@ public class NPCModelo {
 		{
 			ArrayList<Accion> c = new ArrayList<>();
 			c.addAll(_actions);
-			for(Accion a : c)if(a.getID() == act.getID())_actions.remove(a);
+			for(Accion a : c)if(a.get_id() == act.get_id())_actions.remove(a);
 			_actions.add(act);
 		}
 		
@@ -209,7 +209,7 @@ public class NPCModelo {
 		{
 			for(Accion curAct : _actions)
 			{
-				if(curAct.getID() == 1) //1 = Discours NPC
+				if(curAct.get_id() == 1) //1 = Discours NPC
 					return true;
 			}
 			
@@ -245,7 +245,7 @@ public class NPCModelo {
 		}
 	}
 
-	public int get_id() {
+	public int getID() {
 		return _id;
 	}
 
@@ -298,7 +298,7 @@ public class NPCModelo {
 		return _customArtWork;
 	}
 
-	public int get_initQuestionID() {
+	public int getPreguntaInicial() {
 		return _initQuestionID;
 	}
 	

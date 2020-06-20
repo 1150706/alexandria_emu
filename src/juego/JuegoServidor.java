@@ -76,9 +76,9 @@ public class JuegoServidor implements Runnable{
 					for(Personaje player: Mundo.getOnlinePersos()){
 						Mapa map = player.getActualMapa();
 						//Si el personaje esta en un mapa donde tenemos moobs los movemos
-						if(!mapas.contains(map.get_id())){
+						if(!mapas.contains(map.getID())){
 							map.MovimientoDeMonstruosEnMapas();
-							mapas.add(map.get_id());
+							mapas.add(map.getID());
 							JuegoServidor.addToLog("Moviendo los monstruos en mapas donde se encuentran personajes");
 						}
 					}
@@ -111,10 +111,10 @@ public class JuegoServidor implements Runnable{
 					for(Personaje perso : Mundo.getOnlinePersos()) {
 						if (perso.getLastPacketTime() + MainServidor.TIEMPO_DESCONECTAR_POR_AFK < System.currentTimeMillis()) {
 							
-							if(perso.get_compte().getGameThread() != null && perso.isOnline()) {
-								JuegoServidor.addToLog("Se ha desconectado a "+perso.get_name()+" por inactividad");
-								GestorSalida.REALM_SEND_MESSAGE(perso.get_compte().getGameThread().get_out(),"01|");
-								perso.get_compte().getGameThread().closeSocket();
+							if(perso.getCuenta().getGameThread() != null && perso.isConectado()) {
+								JuegoServidor.addToLog("Se ha desconectado a "+perso.getNombre()+" por inactividad");
+								GestorSalida.REALM_SEND_MESSAGE(perso.getCuenta().getGameThread().get_out(),"01|");
+								perso.getCuenta().getGameThread().closeSocket();
 							}
 						}
 					}

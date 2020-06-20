@@ -2772,8 +2772,8 @@ public class EfectoHechizo
 					int kamas = Formulas.getRandomJet(args.split(";")[5]);
 
 					if(target.getPersonnage() != null)
-						target.getPersonnage().set_kamas(kamas+target.getPersonnage().get_kamas());
-					caster.getPersonnage().set_kamas(kamas+caster.getPersonnage().get_kamas());
+						target.getPersonnage().setKamas(kamas+target.getPersonnage().getKamas());
+					caster.getPersonnage().setKamas(kamas+caster.getPersonnage().getKamas());
 					
 					//SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", target.getGUID()+","+kamas);
 					//SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, target.getGUID()+"", caster.getGUID()+","+kamas);
@@ -4078,7 +4078,7 @@ public class EfectoHechizo
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 181, target.getGUID() + "", gm);
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 999, target.getGUID()+"", gtl);
 			if(!target.isInvocation()) 
-				GestorSalida.GAME_SEND_STATS_PACKET(target.getPersonnage());
+				GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(target.getPersonnage());
 					
 			fight.delOneDead(target);
 		}

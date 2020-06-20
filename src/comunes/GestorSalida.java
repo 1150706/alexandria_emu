@@ -36,9 +36,9 @@ import realm.RealmServer;
 public class GestorSalida {
 	
 	public static void send(Personaje p, String packet) {
-		if(p == null || p.get_compte() == null)return;
-		if(p.get_compte().getGameThread() == null)return;
-		PrintWriter out = p.get_compte().getGameThread().get_out();
+		if(p == null || p.getCuenta() == null)return;
+		if(p.getCuenta().getGameThread() == null)return;
+		PrintWriter out = p.getCuenta().getGameThread().get_out();
 		if(out != null && !packet.equals("") && !packet.equals(""+(char)0x00)) {
 			packet = GestorEncriptador.toUtf(packet);
 			if(MainServidor.CONFIG_SOCKET_USE_COMPACT_DATA) {
@@ -254,7 +254,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_STATS_PACKET(Personaje perso) {
+	public static void ENVIAR_PAQUETE_CARACTERISTICAS(Personaje perso) {
         String packet = perso.getAsPacket();
         send(perso, packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -286,8 +286,8 @@ public class GestorSalida {
 
 	public static void GAME_SEND_ASK(PrintWriter out, Personaje perso) {
 		StringBuilder packet = new StringBuilder();
-		packet.append("ASK|").append(perso.get_GUID()).append("|").append(perso.get_name()).append("|");
-		packet.append(perso.get_lvl()).append("|").append(perso.get_classe()).append("|").append(perso.get_sexe());
+		packet.append("ASK|").append(perso.get_GUID()).append("|").append(perso.getNombre()).append("|");
+		packet.append(perso.get_lvl()).append("|").append(perso.getClase()).append("|").append(perso.getSexo());
 		packet.append("|").append(perso.get_gfxID()).append("|").append((perso.get_color1()==-1?"-1":Integer.toHexString(perso.get_color1())));
 		packet.append("|").append((perso.get_color2()==-1?"-1":Integer.toHexString(perso.get_color2()))).append("|");
 		packet.append((perso.get_color3()==-1?"-1":Integer.toHexString(perso.get_color3()))).append("|");
@@ -432,22 +432,22 @@ public class GestorSalida {
 	public static void GAME_SEND_ERASE_ON_MAP_TO_MAP(Mapa map, int guid) {
 		String packet = "GM|-"+guid;
 		for(Personaje z : map.getPersos()) {
-			if(z.get_compte().getGameThread() == null)continue;
-			send(z.get_compte().getGameThread().get_out(),packet);
+			if(z.getCuenta().getGameThread() == null)continue;
+			send(z.getCuenta().getGameThread().get_out(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
-			JuegoServidor.addToSockLog("Game: Map "+map.get_id()+": Send>>"+packet);
+			JuegoServidor.addToSockLog("Game: Map "+map.getID()+": Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_ERASE_ON_MAP_TO_FIGHT(Pelea f, int guid) {
 		String packet = "GM|-"+guid;
 		for(int z=0;z < f.getFighters(1).size();z++) {
-			if(f.getFighters(1).get(z).getPersonnage().get_compte().getGameThread() == null)continue;
-			send(f.getFighters(1).get(z).getPersonnage().get_compte().getGameThread().get_out(),packet);
+			if(f.getFighters(1).get(z).getPersonnage().getCuenta().getGameThread() == null)continue;
+			send(f.getFighters(1).get(z).getPersonnage().getCuenta().getGameThread().get_out(),packet);
 		}
 		for(int z=0;z < f.getFighters(2).size();z++) {
-			if(f.getFighters(2).get(z).getPersonnage().get_compte().getGameThread() == null)continue;
-			send(f.getFighters(2).get(z).getPersonnage().get_compte().getGameThread().get_out(),packet);
+			if(f.getFighters(2).get(z).getPersonnage().getCuenta().getGameThread() == null)continue;
+			send(f.getFighters(2).get(z).getPersonnage().getCuenta().getGameThread().get_out(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fighter ID "+f.get_id()+": Send>>"+packet);
@@ -456,8 +456,8 @@ public class GestorSalida {
 	public static void GAME_SEND_ON_FIGHTER_KICK(Pelea f, int guid, int team) {
 		String packet = "GM|-"+guid;
 		for(Fighter F : f.getFighters(team)) {
-			if(F.getPersonnage() == null || F.getPersonnage().get_compte().getGameThread() == null || F.getPersonnage().get_GUID() == guid)continue;
-			send(F.getPersonnage().get_compte().getGameThread().get_out(),packet);
+			if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getGameThread() == null || F.getPersonnage().get_GUID() == guid)continue;
+			send(F.getPersonnage().getCuenta().getGameThread().get_out(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fighter ID "+f.get_id()+": Send>>"+packet);
@@ -467,24 +467,24 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("GM|-").append(guid).append((char)0x00).append(fighter.getGmPacket('~'));
 		for(Fighter F : fight.getFighters(team)) {
-			if(F.getPersonnage() == null || F.getPersonnage().get_compte().getGameThread() == null || !F.getPersonnage().isOnline())continue;
-			send(F.getPersonnage().get_compte().getGameThread().get_out(),packet.toString());
+			if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getGameThread() == null || !F.getPersonnage().isConectado())continue;
+			send(F.getPersonnage().getCuenta().getGameThread().get_out(),packet.toString());
 		}
 		if(otherteam > -1) {
 			for(Fighter F : fight.getFighters(otherteam)) {
-				if(F.getPersonnage() == null || F.getPersonnage().get_compte().getGameThread() == null || !F.getPersonnage().isOnline())continue;
-				send(F.getPersonnage().get_compte().getGameThread().get_out(),packet.toString());
+				if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getGameThread() == null || !F.getPersonnage().isConectado())continue;
+				send(F.getPersonnage().getCuenta().getGameThread().get_out(),packet.toString());
 			}
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight ID "+fight.get_id()+": Send>>"+packet);
 	}
 
-	public static void GAME_SEND_ADD_PLAYER_TO_MAP(Mapa map, Personaje perso) {
+	public static void ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(Mapa map, Personaje perso) {
 		String packet = "GM|+"+perso.parseToGM();
 		for(Personaje z : map.getPersos()) send(z,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
-			JuegoServidor.addToSockLog("Game: Map "+map.get_id()+": Send>>"+packet);
+			JuegoServidor.addToSockLog("Game: Map "+map.getID()+": Send>>"+packet);
 	}
 
 	public static void GAME_SEND_DUEL_Y_AWAY(PrintWriter out, int guid) {
@@ -505,7 +505,7 @@ public class GestorSalida {
 		String packet = "GA;900;"+guid+";"+guid2;
 		for(Personaje z : map.getPersos()) send(z,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
-			JuegoServidor.addToSockLog("Game: Map "+map.get_id()+": Send>>"+packet);
+			JuegoServidor.addToSockLog("Game: Map "+map.getID()+": Send>>"+packet);
 	}
 	
 	public static void GAME_SEND_CANCEL_DUEL_TO_MAP(Mapa map, int guid, int guid2) {
@@ -548,7 +548,7 @@ public class GestorSalida {
 		String packet = "GP"+places+"|"+team;
 		for(Fighter f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -659,7 +659,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 				send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -680,7 +680,7 @@ public class GestorSalida {
 		if(fight.get_state() != 2)return;
 		for(Fighter f : fight.getFighters(teams))
 		{
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			if(f.hasLeft())continue;
 				send(f.getPersonnage(),packet);
 		}
@@ -751,7 +751,7 @@ public class GestorSalida {
 		String packet = "Im"+id;
 		for(Fighter f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -792,7 +792,7 @@ public class GestorSalida {
 		for(Fighter perso:fight.getFighters(teams))
 		{
 			if(perso.hasLeft())continue;
-			if(perso.getPersonnage() == null || !perso.getPersonnage().isOnline())continue;
+			if(perso.getPersonnage() == null || !perso.getPersonnage().isConectado())continue;
 			send(perso.getPersonnage(),packet.toString());
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -806,7 +806,7 @@ public class GestorSalida {
 		for(Fighter perso:fight.getFighters(teams))
 		{
 			if(perso.hasLeft())continue;
-			if(perso.getPersonnage() == null || !perso.getPersonnage().isOnline())continue;
+			if(perso.getPersonnage() == null || !perso.getPersonnage().isConectado())continue;
 			send(perso.getPersonnage(),packet.toString());
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -819,7 +819,7 @@ public class GestorSalida {
 		{
 			if(f.hasLeft())continue;
 			f.initBuffStats();
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -837,7 +837,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),fight.getGTL());
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -870,7 +870,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet.toString());
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -883,7 +883,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -923,7 +923,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -939,7 +939,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -965,7 +965,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -977,7 +977,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -989,7 +989,7 @@ public class GestorSalida {
 		String packet = "GAF"+i1+"|"+guid;
 		for(Fighter f : fight.getFighters(teams))
 		{
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1018,7 +1018,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1031,7 +1031,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1076,7 +1076,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft() || f.getPersonnage() == null)continue;
-			if(f.getPersonnage().isOnline())
+			if(f.getPersonnage().isConectado())
 				send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1089,7 +1089,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft() || f.getPersonnage() == null)continue;
-			if(f.getPersonnage().isOnline())
+			if(f.getPersonnage().isConectado())
 				send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1111,7 +1111,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft() || f.getPersonnage() == null)continue;
-			if(f.getPersonnage().isOnline())
+			if(f.getPersonnage().isConectado())
 			send(f.getPersonnage(),packet.toString());
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1124,7 +1124,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		
@@ -1149,8 +1149,8 @@ public class GestorSalida {
 		{
 			if (f != _fighter)
 			{
-				if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
-				if(f.getPersonnage() != null && f.getPersonnage().get_compte().getGameThread() != null)
+				if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
+				if(f.getPersonnage() != null && f.getPersonnage().getCuenta().getGameThread() != null)
 					send(f.getPersonnage(),packet);
 			}
 		}
@@ -1196,7 +1196,7 @@ public class GestorSalida {
 		String packet = "cMK"+suffix+"|"+guid+"|"+name+"|"+msg;
 		for(Personaje perso : g.getMembers())
 		{
-			if(perso == null || !perso.isOnline())continue;
+			if(perso == null || !perso.isConectado())continue;
 					send(perso,packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1210,96 +1210,83 @@ public class GestorSalida {
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: ALL("+ Mundo.getOnlinePersos().size()+"): Send>>"+packet);
 	}
-	public static void GAME_SEND_cMK_PACKET_TO_ALIGN(String suffix,int guid,String name,String msg, Personaje _perso)
-	{
+
+	public static void GAME_SEND_cMK_PACKET_TO_ALIGN(String suffix,int guid,String name,String msg, Personaje _perso) {
 		String packet = "cMK"+suffix+"|"+guid+"|"+name+"|"+msg;
-		for(Personaje perso : Mundo.getOnlinePersos())
-		{
-			if(perso.get_align() == _perso.get_align())
-			{
+		for(Personaje perso : Mundo.getOnlinePersos()) {
+			if(perso.get_align() == _perso.get_align()) {
 				send(perso,packet);
 			}
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: ALL("+ Mundo.getOnlinePersos().size()+"): Send>>"+packet);
 	}
-	public static void GAME_SEND_cMK_PACKET_TO_ADMIN(String suffix,int guid,String name,String msg)
-	{
+
+	public static void GAME_SEND_cMK_PACKET_TO_ADMIN(String suffix,int guid,String name,String msg) {
 		String packet = "cMK"+suffix+"|"+guid+"|"+name+"|"+msg;
-		for(Personaje perso : Mundo.getOnlinePersos())if(perso.isOnline())if(perso.get_compte() != null)if(perso.get_compte().get_gmLvl()>0)send(perso,packet);
+		for(Personaje perso : Mundo.getOnlinePersos())if(perso.isConectado())if(perso.getCuenta() != null)if(perso.getCuenta().getGMLVL()>0)send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: ALL("+ Mundo.getOnlinePersos().size()+"): Send>>"+packet);
 	}
-	public static void GAME_SEND_cMK_PACKET_TO_FIGHT(Pelea fight, int teams, String suffix, int guid, String name, String msg)
-	{
+
+	public static void GAME_SEND_cMK_PACKET_TO_FIGHT(Pelea fight, int teams, String suffix, int guid, String name, String msg) {
 		if(fight != null) fight.ticMyTimer();
 		
         String packet = "cMK" + suffix + "|" + guid + "|" + name + "|" + msg;
 		assert fight != null;
-		for(Fighter f : fight.getFighters(teams))
-		{
+		for(Fighter f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_GDZ_PACKET_TO_FIGHT(Pelea fight, int teams, String suffix, int cell, int size, int unk)
-	{
+	public static void GAME_SEND_GDZ_PACKET_TO_FIGHT(Pelea fight, int teams, String suffix, int cell, int size, int unk) {
 		String packet = "GDZ"+suffix+cell+";"+size+";"+unk;
-		
-		for(Fighter f : fight.getFighters(teams))
-		{
+		for(Fighter f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_GDC_PACKET_TO_FIGHT(Pelea fight, int teams, int cell)
-	{
+	public static void GAME_SEND_GDC_PACKET_TO_FIGHT(Pelea fight, int teams, int cell) {
 		String packet = "GDC"+cell;
-		
-		for(Fighter f : fight.getFighters(teams))
-		{
+		for(Fighter f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_GA2_PACKET(PrintWriter out, int guid)
-	{
+	public static void GAME_SEND_GA2_PACKET(PrintWriter out, int guid) {
 		String packet = "GA;2;"+guid+";";
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_CHAT_ERROR_PACKET(PrintWriter out,String name)
-	{
+	public static void GAME_SEND_CHAT_ERROR_PACKET(PrintWriter out,String name) {
 		String packet = "cMEf"+name;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_eD_PACKET_TO_MAP(Mapa map, int guid, int dir)
-	{
+	public static void GAME_SEND_eD_PACKET_TO_MAP(Mapa map, int guid, int dir) {
 		String packet = "eD"+guid+"|"+dir;
 		for(Personaje z : map.getPersos()) send(z,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_ECK_PACKET(Personaje out, int type, String str)
-	{
+	public static void GAME_SEND_ECK_PACKET(Personaje out, int type, String str) {
 		String packet = "ECK"+type;
 		if(!str.equals(""))packet += "|"+str;
 		send(out,packet);
@@ -1307,8 +1294,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ECK_PACKET(PrintWriter out, int type,String str)
-	{
+	public static void GAME_SEND_ECK_PACKET(PrintWriter out, int type,String str) {
 		String packet = "ECK"+type;
 		if(!str.equals(""))packet += "|"+str;
 		send(out,packet);
@@ -1316,80 +1302,70 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ITEM_VENDOR_LIST_PACKET(PrintWriter out, NPC npc)
-	{
-		String packet = "EL"+npc.get_template().getItemVendorList();
+	public static void GAME_SEND_ITEM_VENDOR_LIST_PACKET(PrintWriter out, NPC npc) {
+		String packet = "EL"+npc.getModelo().getItemVendorList();
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ITEM_LIST_PACKET_PERCEPTEUR(PrintWriter out, Recaudador perco)
-	{
+	public static void GAME_SEND_ITEM_LIST_PACKET_PERCEPTEUR(PrintWriter out, Recaudador perco) {
 		String packet = "EL"+perco.getItemPercepteurList();
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ITEM_LIST_PACKET_SELLER(Personaje p, Personaje out)
-	{
+	public static void GAME_SEND_ITEM_LIST_PACKET_SELLER(Personaje p, Personaje out) {
 		String packet = "EL"+p.parseStoreItemsList();
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_EV_PACKET(PrintWriter out)
-	{
+	public static void GAME_SEND_EV_PACKET(PrintWriter out) {
 		String packet = "EV";
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_DCK_PACKET(PrintWriter out, int id)
-	{
+	public static void GAME_SEND_DCK_PACKET(PrintWriter out, int id) {
 		String packet = "DCK"+id;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_QUESTION_PACKET(PrintWriter out,String str)
-	{
+	public static void GAME_SEND_QUESTION_PACKET(PrintWriter out,String str) {
 		String packet = "DQ"+str;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_END_DIALOG_PACKET(PrintWriter out)
-	{
+	public static void GAME_SEND_END_DIALOG_PACKET(PrintWriter out) {
 		String packet = "DV";
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_CONSOLE_MESSAGE_PACKET(PrintWriter out, String mess)
-	{
+	public static void ENVIAR_TEXTO_EN_CONSOLA(PrintWriter out, String mess) {
 		String packet = "BAT2"+mess;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_BUY_ERROR_PACKET(PrintWriter out)
-	{
+	public static void GAME_SEND_BUY_ERROR_PACKET(PrintWriter out) {
 		String packet = "EBE";
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_SELL_ERROR_PACKET(PrintWriter out)
-	{
+	public static void GAME_SEND_SELL_ERROR_PACKET(PrintWriter out) {
 		String packet = "ESE";
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1464,7 +1440,7 @@ public class GestorSalida {
 		for(Fighter f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 				send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1487,11 +1463,9 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_MESSAGE_TO_ALL(String msg,String color)
-	{
+	public static void ENVIAR_MENSAJE_A_TODOS(String msg, String color) {
 		String packet = "cs<font color='#"+color+"'>"+msg+"</font>";
-		for(Personaje P : Mundo.getOnlinePersos())
-		{
+		for(Personaje P : Mundo.getOnlinePersos()) {
 			send(P,packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1575,7 +1549,7 @@ public class GestorSalida {
 
 	public static void GAME_SEND_GROUP_CREATE(PrintWriter out, Grupo g)
 	{
-		String packet = "PCK"+g.getChief().get_name();
+		String packet = "PCK"+g.getChief().getNombre();
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
@@ -1811,7 +1785,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_FRIENDLIST_PACKET(Personaje perso)
 	{
-		String packet = "FL"+perso.get_compte().parseFriendList();
+		String packet = "FL"+perso.getCuenta().parseFriendList();
 		send(perso,packet);
 		if(perso.getWife() != 0)
 		{
@@ -1826,7 +1800,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_FRIEND_ONLINE(Personaje logando, Personaje amigo)
 	{
-		String packet = "Im0143;"+logando.get_compte().get_pseudo()+" (<b><a href='asfunction:onHref,ShowPlayerPopupMenu,"+logando.get_name()+"'>"+logando.get_name()+"</a></b>)";
+		String packet = "Im0143;"+logando.getCuenta().get_pseudo()+" (<b><a href='asfunction:onHref,ShowPlayerPopupMenu,"+logando.getNombre()+"'>"+logando.getNombre()+"</a></b>)";
 		send(amigo, packet);
 		if (MainServidor.MOSTRAR_ENVIADOS)
 		JuegoServidor.addToSockLog("Game: Send>>" + packet);
@@ -2068,7 +2042,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_WC_PACKET(Personaje perso) {
 		String packet = "WC"+perso.parseZaapList();
-		send(perso.get_compte().getGameThread().get_out(),packet);
+		send(perso.getCuenta().getGameThread().get_out(),packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
@@ -2081,7 +2055,7 @@ public class GestorSalida {
 	}
 	
 	public static void GAME_SEND_ZAAPI_PACKET(Personaje perso, String list) {
-		String packet = "Wc" + perso.getActualMapa().get_id()+ "|"+list;
+		String packet = "Wc" + perso.getActualMapa().getID()+ "|"+list;
 		send(perso, packet);
 		JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
@@ -2137,7 +2111,7 @@ public class GestorSalida {
 	}
 	
 	public static void GAME_SEND_ADD_ENEMY(Personaje out, Personaje pr) {
-		String packet = "iAK"+pr.get_compte().get_name()+";2;"+pr.get_name()+";36;10;0;100.FL.";
+		String packet = "iAK"+pr.getCuenta().getNombre()+";2;"+pr.getNombre()+";36;10;0;100.FL.";
 		send(out, packet);
 		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
@@ -2151,7 +2125,7 @@ public class GestorSalida {
 	}
 	
 	public static void GAME_SEND_ENEMY_LIST(Personaje perso) {
-		String packet = "iL"+perso.get_compte().parseEnemyList();
+		String packet = "iL"+perso.getCuenta().parseEnemyList();
 		send(perso, packet);
 		if (MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
@@ -2319,7 +2293,7 @@ public class GestorSalida {
 
 	public static void GAME_SEND_HDVITEM_SELLING(Personaje perso) {
 		StringBuilder packet = new StringBuilder("EL");
-		HdvEntry[] entries = perso.get_compte().getHdvItems(Math.abs(perso.get_isTradingWith()));	//Récupère un tableau de tout les items que le personnage à en vente dans l'HDV où il est
+		HdvEntry[] entries = perso.getCuenta().getHdvItems(Math.abs(perso.get_isTradingWith()));	//Récupère un tableau de tout les items que le personnage à en vente dans l'HDV où il est
 		boolean isFirst = true;
 		for(HdvEntry curEntry : entries) {
 			if(curEntry == null)
@@ -2352,9 +2326,9 @@ public class GestorSalida {
     public static void GAME_SEND_MERCHANT_LIST(Personaje P, short mapID) {
     	StringBuilder packet = new StringBuilder();
     	packet.append("GM|~");
-    	if(Mundo.getSeller(P.getActualMapa().get_id()) == null) return;
-        for (Integer pID : Mundo.getSeller(P.getActualMapa().get_id())) {
-        	if(!Mundo.getPersonnage(pID).isOnline() && Mundo.getPersonnage(pID).is_showSeller()) {
+    	if(Mundo.getSeller(P.getActualMapa().getID()) == null) return;
+        for (Integer pID : Mundo.getSeller(P.getActualMapa().getID())) {
+        	if(!Mundo.getPersonnage(pID).isConectado() && Mundo.getPersonnage(pID).is_showSeller()) {
         		packet.append(Mundo.getPersonnage(pID).parseToMerchant()).append("|");
             }
         }
@@ -2380,7 +2354,7 @@ public class GestorSalida {
 	public static void GAME_SEND_PACKET_TO_FIGHT(Pelea fight, int i, String packet) {
 		for(Fighter f : fight.getFighters(i)) {
 			if(f.hasLeft())continue;
-			if(f.getPersonnage() == null || !f.getPersonnage().isOnline())continue;
+			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			send(f.getPersonnage(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)

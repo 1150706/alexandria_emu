@@ -1066,462 +1066,462 @@ public class Constantes {
 	
 	public static void onLevelUpSpells(Personaje perso, int lvl)
 	{
-		switch (perso.get_classe()) {
+		switch (perso.getClase()) {
 			case CLASS_FECA -> {
 				if (lvl == 3)
-					perso.learnSpell(4, 1, true, false);//Renvoie de sort
+					perso.AprenderHechizo(4, 1, true, false);//Renvoie de sort
 				if (lvl == 6)
-					perso.learnSpell(2, 1, true, false);//Aveuglement
+					perso.AprenderHechizo(2, 1, true, false);//Aveuglement
 				if (lvl == 9)
-					perso.learnSpell(1, 1, true, false);//Armure Incandescente
+					perso.AprenderHechizo(1, 1, true, false);//Armure Incandescente
 				if (lvl == 13)
-					perso.learnSpell(9, 1, true, false);//Attaque nuageuse
+					perso.AprenderHechizo(9, 1, true, false);//Attaque nuageuse
 				if (lvl == 17)
-					perso.learnSpell(18, 1, true, false);//Armure Aqueuse
+					perso.AprenderHechizo(18, 1, true, false);//Armure Aqueuse
 				if (lvl == 21)
-					perso.learnSpell(20, 1, true, false);//Immunité
+					perso.AprenderHechizo(20, 1, true, false);//Immunité
 				if (lvl == 26)
-					perso.learnSpell(14, 1, true, false);//Armure Venteuse
+					perso.AprenderHechizo(14, 1, true, false);//Armure Venteuse
 				if (lvl == 31)
-					perso.learnSpell(19, 1, true, false);//Bulle
+					perso.AprenderHechizo(19, 1, true, false);//Bulle
 				if (lvl == 36)
-					perso.learnSpell(5, 1, true, false);//Trêve
+					perso.AprenderHechizo(5, 1, true, false);//Trêve
 				if (lvl == 42)
-					perso.learnSpell(16, 1, true, false);//Science du bâton
+					perso.AprenderHechizo(16, 1, true, false);//Science du bâton
 				if (lvl == 48)
-					perso.learnSpell(8, 1, true, false);//Retour du bâton
+					perso.AprenderHechizo(8, 1, true, false);//Retour du bâton
 				if (lvl == 54)
-					perso.learnSpell(12, 1, true, false);//glyphe d'Aveuglement
+					perso.AprenderHechizo(12, 1, true, false);//glyphe d'Aveuglement
 				if (lvl == 60)
-					perso.learnSpell(11, 1, true, false);//Téléportation
+					perso.AprenderHechizo(11, 1, true, false);//Téléportation
 				if (lvl == 70)
-					perso.learnSpell(10, 1, true, false);//Glyphe Enflammé
+					perso.AprenderHechizo(10, 1, true, false);//Glyphe Enflammé
 				if (lvl == 80)
-					perso.learnSpell(7, 1, true, false);//Bouclier Féca
+					perso.AprenderHechizo(7, 1, true, false);//Bouclier Féca
 				if (lvl == 90)
-					perso.learnSpell(15, 1, true, false);//Glyphe d'Immobilisation
+					perso.AprenderHechizo(15, 1, true, false);//Glyphe d'Immobilisation
 				if (lvl == 100)
-					perso.learnSpell(13, 1, true, false);//Glyphe de Silence
+					perso.AprenderHechizo(13, 1, true, false);//Glyphe de Silence
 				if (lvl == 200)
-					perso.learnSpell(1901, 1, true, false);//Invocation de Dopeul Féca
+					perso.AprenderHechizo(1901, 1, true, false);//Invocation de Dopeul Féca
 			}
 			case CLASS_OSAMODAS -> {
 				if (lvl == 3)
-					perso.learnSpell(26, 1, true, false);//Bénédiction Animale
+					perso.AprenderHechizo(26, 1, true, false);//Bénédiction Animale
 				if (lvl == 6)
-					perso.learnSpell(22, 1, true, false);//Déplacement Félin
+					perso.AprenderHechizo(22, 1, true, false);//Déplacement Félin
 				if (lvl == 9)
-					perso.learnSpell(35, 1, true, false);//Invocation de Bouftou
+					perso.AprenderHechizo(35, 1, true, false);//Invocation de Bouftou
 				if (lvl == 13)
-					perso.learnSpell(28, 1, true, false);//Crapaud
+					perso.AprenderHechizo(28, 1, true, false);//Crapaud
 				if (lvl == 17)
-					perso.learnSpell(37, 1, true, false);//Invocation de Prespic
+					perso.AprenderHechizo(37, 1, true, false);//Invocation de Prespic
 				if (lvl == 21)
-					perso.learnSpell(30, 1, true, false);//Fouet
+					perso.AprenderHechizo(30, 1, true, false);//Fouet
 				if (lvl == 26)
-					perso.learnSpell(27, 1, true, false);//Piqûre Motivante
+					perso.AprenderHechizo(27, 1, true, false);//Piqûre Motivante
 				if (lvl == 31)
-					perso.learnSpell(24, 1, true, false);//Corbeau
+					perso.AprenderHechizo(24, 1, true, false);//Corbeau
 				if (lvl == 36)
-					perso.learnSpell(33, 1, true, false);//Griffe Cinglante
+					perso.AprenderHechizo(33, 1, true, false);//Griffe Cinglante
 				if (lvl == 42)
-					perso.learnSpell(25, 1, true, false);//Soin Animal
+					perso.AprenderHechizo(25, 1, true, false);//Soin Animal
 				if (lvl == 48)
-					perso.learnSpell(38, 1, true, false);//Invocation de Sanglier
+					perso.AprenderHechizo(38, 1, true, false);//Invocation de Sanglier
 				if (lvl == 54)
-					perso.learnSpell(36, 1, true, false);//Frappe du Craqueleur
+					perso.AprenderHechizo(36, 1, true, false);//Frappe du Craqueleur
 				if (lvl == 60)
-					perso.learnSpell(32, 1, true, false);//Résistance Naturelle
+					perso.AprenderHechizo(32, 1, true, false);//Résistance Naturelle
 				if (lvl == 70)
-					perso.learnSpell(29, 1, true, false);//Crocs du Mulou
+					perso.AprenderHechizo(29, 1, true, false);//Crocs du Mulou
 				if (lvl == 80)
-					perso.learnSpell(39, 1, true, false);//Invocation de Bwork Mage
+					perso.AprenderHechizo(39, 1, true, false);//Invocation de Bwork Mage
 				if (lvl == 90)
-					perso.learnSpell(40, 1, true, false);//Invocation de Craqueleur
+					perso.AprenderHechizo(40, 1, true, false);//Invocation de Craqueleur
 				if (lvl == 100)
-					perso.learnSpell(31, 1, true, false);//Invocation de Dragonnet Rouge
+					perso.AprenderHechizo(31, 1, true, false);//Invocation de Dragonnet Rouge
 				if (lvl == 200)
-					perso.learnSpell(1902, 1, true, false);//Invocation de Dopeul Osamodas
+					perso.AprenderHechizo(1902, 1, true, false);//Invocation de Dopeul Osamodas
 			}
 			case CLASS_ENUTROF -> {
 				if (lvl == 3)
-					perso.learnSpell(49, 1, true, false);//Pelle Fantomatique
+					perso.AprenderHechizo(49, 1, true, false);//Pelle Fantomatique
 				if (lvl == 6)
-					perso.learnSpell(42, 1, true, false);//Chance
+					perso.AprenderHechizo(42, 1, true, false);//Chance
 				if (lvl == 9)
-					perso.learnSpell(47, 1, true, false);//Boîte de Pandore
+					perso.AprenderHechizo(47, 1, true, false);//Boîte de Pandore
 				if (lvl == 13)
-					perso.learnSpell(48, 1, true, false);//Remblai
+					perso.AprenderHechizo(48, 1, true, false);//Remblai
 				if (lvl == 17)
-					perso.learnSpell(45, 1, true, false);//Clé Réductrice
+					perso.AprenderHechizo(45, 1, true, false);//Clé Réductrice
 				if (lvl == 21)
-					perso.learnSpell(53, 1, true, false);//Force de l'Age
+					perso.AprenderHechizo(53, 1, true, false);//Force de l'Age
 				if (lvl == 26)
-					perso.learnSpell(46, 1, true, false);//Désinvocation
+					perso.AprenderHechizo(46, 1, true, false);//Désinvocation
 				if (lvl == 31)
-					perso.learnSpell(52, 1, true, false);//Cupidité
+					perso.AprenderHechizo(52, 1, true, false);//Cupidité
 				if (lvl == 36)
-					perso.learnSpell(44, 1, true, false);//Roulage de Pelle
+					perso.AprenderHechizo(44, 1, true, false);//Roulage de Pelle
 				if (lvl == 42)
-					perso.learnSpell(50, 1, true, false);//Maladresse
+					perso.AprenderHechizo(50, 1, true, false);//Maladresse
 				if (lvl == 48)
-					perso.learnSpell(54, 1, true, false);//Maladresse de Masse
+					perso.AprenderHechizo(54, 1, true, false);//Maladresse de Masse
 				if (lvl == 54)
-					perso.learnSpell(55, 1, true, false);//Accélération
+					perso.AprenderHechizo(55, 1, true, false);//Accélération
 				if (lvl == 60)
-					perso.learnSpell(56, 1, true, false);//Pelle du Jugement
+					perso.AprenderHechizo(56, 1, true, false);//Pelle du Jugement
 				if (lvl == 70)
-					perso.learnSpell(58, 1, true, false);//Pelle Massacrante
+					perso.AprenderHechizo(58, 1, true, false);//Pelle Massacrante
 				if (lvl == 80)
-					perso.learnSpell(59, 1, true, false);//Corruption
+					perso.AprenderHechizo(59, 1, true, false);//Corruption
 				if (lvl == 90)
-					perso.learnSpell(57, 1, true, false);//Pelle Animée
+					perso.AprenderHechizo(57, 1, true, false);//Pelle Animée
 				if (lvl == 100)
-					perso.learnSpell(60, 1, true, false);//Coffre Animé
+					perso.AprenderHechizo(60, 1, true, false);//Coffre Animé
 				if (lvl == 200)
-					perso.learnSpell(1903, 1, true, false);//Invocation de Dopeul Enutrof
+					perso.AprenderHechizo(1903, 1, true, false);//Invocation de Dopeul Enutrof
 			}
 			case CLASS_SRAM -> {
 				if (lvl == 3)
-					perso.learnSpell(66, 1, true, false);//Poison insidieux
+					perso.AprenderHechizo(66, 1, true, false);//Poison insidieux
 				if (lvl == 6)
-					perso.learnSpell(68, 1, true, false);//Fourvoiement
+					perso.AprenderHechizo(68, 1, true, false);//Fourvoiement
 				if (lvl == 9)
-					perso.learnSpell(63, 1, true, false);//Coup Sournois
+					perso.AprenderHechizo(63, 1, true, false);//Coup Sournois
 				if (lvl == 13)
-					perso.learnSpell(74, 1, true, false);//Double
+					perso.AprenderHechizo(74, 1, true, false);//Double
 				if (lvl == 17)
-					perso.learnSpell(64, 1, true, false);//Repérage
+					perso.AprenderHechizo(64, 1, true, false);//Repérage
 				if (lvl == 21)
-					perso.learnSpell(79, 1, true, false);//Piège de Masse
+					perso.AprenderHechizo(79, 1, true, false);//Piège de Masse
 				if (lvl == 26)
-					perso.learnSpell(78, 1, true, false);//Invisibilité d'Autrui
+					perso.AprenderHechizo(78, 1, true, false);//Invisibilité d'Autrui
 				if (lvl == 31)
-					perso.learnSpell(71, 1, true, false);//Piège Empoisonné
+					perso.AprenderHechizo(71, 1, true, false);//Piège Empoisonné
 				if (lvl == 36)
-					perso.learnSpell(62, 1, true, false);//Concentration de Chakra
+					perso.AprenderHechizo(62, 1, true, false);//Concentration de Chakra
 				if (lvl == 42)
-					perso.learnSpell(69, 1, true, false);//Piège d'Immobilisation
+					perso.AprenderHechizo(69, 1, true, false);//Piège d'Immobilisation
 				if (lvl == 48)
-					perso.learnSpell(77, 1, true, false);//Piège de Silence
+					perso.AprenderHechizo(77, 1, true, false);//Piège de Silence
 				if (lvl == 54)
-					perso.learnSpell(73, 1, true, false);//Piège répulsif
+					perso.AprenderHechizo(73, 1, true, false);//Piège répulsif
 				if (lvl == 60)
-					perso.learnSpell(67, 1, true, false);//Peur
+					perso.AprenderHechizo(67, 1, true, false);//Peur
 				if (lvl == 70)
-					perso.learnSpell(70, 1, true, false);//Arnaque
+					perso.AprenderHechizo(70, 1, true, false);//Arnaque
 				if (lvl == 80)
-					perso.learnSpell(75, 1, true, false);//Pulsion de Chakra
+					perso.AprenderHechizo(75, 1, true, false);//Pulsion de Chakra
 				if (lvl == 90)
-					perso.learnSpell(76, 1, true, false);//Attaque Mortelle
+					perso.AprenderHechizo(76, 1, true, false);//Attaque Mortelle
 				if (lvl == 100)
-					perso.learnSpell(80, 1, true, false);//Piège Mortel
+					perso.AprenderHechizo(80, 1, true, false);//Piège Mortel
 				if (lvl == 200)
-					perso.learnSpell(1904, 1, true, false);//Invocation de Dopeul Sram
+					perso.AprenderHechizo(1904, 1, true, false);//Invocation de Dopeul Sram
 			}
 			case CLASS_XELOR -> {
 				if (lvl == 3)
-					perso.learnSpell(84, 1, true, false);//Gelure
+					perso.AprenderHechizo(84, 1, true, false);//Gelure
 				if (lvl == 6)
-					perso.learnSpell(100, 1, true, false);//Sablier de Xélor
+					perso.AprenderHechizo(100, 1, true, false);//Sablier de Xélor
 				if (lvl == 9)
-					perso.learnSpell(92, 1, true, false);//Rayon Obscur
+					perso.AprenderHechizo(92, 1, true, false);//Rayon Obscur
 				if (lvl == 13)
-					perso.learnSpell(88, 1, true, false);//Téléportation
+					perso.AprenderHechizo(88, 1, true, false);//Téléportation
 				if (lvl == 17)
-					perso.learnSpell(93, 1, true, false);//Flétrissement
+					perso.AprenderHechizo(93, 1, true, false);//Flétrissement
 				if (lvl == 21)
-					perso.learnSpell(85, 1, true, false);//Flou
+					perso.AprenderHechizo(85, 1, true, false);//Flou
 				if (lvl == 26)
-					perso.learnSpell(96, 1, true, false);//Poussière Temporelle
+					perso.AprenderHechizo(96, 1, true, false);//Poussière Temporelle
 				if (lvl == 31)
-					perso.learnSpell(98, 1, true, false);//Vol du Temps
+					perso.AprenderHechizo(98, 1, true, false);//Vol du Temps
 				if (lvl == 36)
-					perso.learnSpell(86, 1, true, false);//Aiguille Chercheuse
+					perso.AprenderHechizo(86, 1, true, false);//Aiguille Chercheuse
 				if (lvl == 42)
-					perso.learnSpell(89, 1, true, false);//Dévouement
+					perso.AprenderHechizo(89, 1, true, false);//Dévouement
 				if (lvl == 48)
-					perso.learnSpell(90, 1, true, false);//Fuite
+					perso.AprenderHechizo(90, 1, true, false);//Fuite
 				if (lvl == 54)
-					perso.learnSpell(87, 1, true, false);//Démotivation
+					perso.AprenderHechizo(87, 1, true, false);//Démotivation
 				if (lvl == 60)
-					perso.learnSpell(94, 1, true, false);//Protection Aveuglante
+					perso.AprenderHechizo(94, 1, true, false);//Protection Aveuglante
 				if (lvl == 70)
-					perso.learnSpell(99, 1, true, false);//Momification
+					perso.AprenderHechizo(99, 1, true, false);//Momification
 				if (lvl == 80)
-					perso.learnSpell(95, 1, true, false);//Horloge
+					perso.AprenderHechizo(95, 1, true, false);//Horloge
 				if (lvl == 90)
-					perso.learnSpell(91, 1, true, false);//Frappe de Xélor
+					perso.AprenderHechizo(91, 1, true, false);//Frappe de Xélor
 				if (lvl == 100)
-					perso.learnSpell(97, 1, true, false);//Cadran de Xélor
+					perso.AprenderHechizo(97, 1, true, false);//Cadran de Xélor
 				if (lvl == 200)
-					perso.learnSpell(1905, 1, true, false);//Invocation de Dopeul Xélor
+					perso.AprenderHechizo(1905, 1, true, false);//Invocation de Dopeul Xélor
 			}
 			case CLASS_ECAFLIP -> {
 				if (lvl == 3)
-					perso.learnSpell(109, 1, true, false);//Bluff
+					perso.AprenderHechizo(109, 1, true, false);//Bluff
 				if (lvl == 6)
-					perso.learnSpell(113, 1, true, false);//Perception
+					perso.AprenderHechizo(113, 1, true, false);//Perception
 				if (lvl == 9)
-					perso.learnSpell(111, 1, true, false);//Contrecoup
+					perso.AprenderHechizo(111, 1, true, false);//Contrecoup
 				if (lvl == 13)
-					perso.learnSpell(104, 1, true, false);//Trèfle
+					perso.AprenderHechizo(104, 1, true, false);//Trèfle
 				if (lvl == 17)
-					perso.learnSpell(119, 1, true, false);//Tout ou rien
+					perso.AprenderHechizo(119, 1, true, false);//Tout ou rien
 				if (lvl == 21)
-					perso.learnSpell(101, 1, true, false);//Roulette
+					perso.AprenderHechizo(101, 1, true, false);//Roulette
 				if (lvl == 26)
-					perso.learnSpell(107, 1, true, false);//Topkaj
+					perso.AprenderHechizo(107, 1, true, false);//Topkaj
 				if (lvl == 31)
-					perso.learnSpell(116, 1, true, false);//Langue Râpeuse
+					perso.AprenderHechizo(116, 1, true, false);//Langue Râpeuse
 				if (lvl == 36)
-					perso.learnSpell(106, 1, true, false);//Roue de la Fortune
+					perso.AprenderHechizo(106, 1, true, false);//Roue de la Fortune
 				if (lvl == 42)
-					perso.learnSpell(117, 1, true, false);//Griffe Invocatrice
+					perso.AprenderHechizo(117, 1, true, false);//Griffe Invocatrice
 				if (lvl == 48)
-					perso.learnSpell(108, 1, true, false);//Esprit Félin
+					perso.AprenderHechizo(108, 1, true, false);//Esprit Félin
 				if (lvl == 54)
-					perso.learnSpell(115, 1, true, false);//Odorat
+					perso.AprenderHechizo(115, 1, true, false);//Odorat
 				if (lvl == 60)
-					perso.learnSpell(118, 1, true, false);//Réflexes
+					perso.AprenderHechizo(118, 1, true, false);//Réflexes
 				if (lvl == 70)
-					perso.learnSpell(110, 1, true, false);//Griffe Joueuse
+					perso.AprenderHechizo(110, 1, true, false);//Griffe Joueuse
 				if (lvl == 80)
-					perso.learnSpell(112, 1, true, false);//Griffe de Ceangal
+					perso.AprenderHechizo(112, 1, true, false);//Griffe de Ceangal
 				if (lvl == 90)
-					perso.learnSpell(114, 1, true, false);//Rekop
+					perso.AprenderHechizo(114, 1, true, false);//Rekop
 				if (lvl == 100)
-					perso.learnSpell(120, 1, true, false);//Destin d'Ecaflip
+					perso.AprenderHechizo(120, 1, true, false);//Destin d'Ecaflip
 				if (lvl == 200)
-					perso.learnSpell(1906, 1, true, false);//Invocation de Dopeul Ecaflip
+					perso.AprenderHechizo(1906, 1, true, false);//Invocation de Dopeul Ecaflip
 			}
 			case CLASS_ENIRIPSA -> {
 				if (lvl == 3)
-					perso.learnSpell(124, 1, true, false);//Mot Soignant
+					perso.AprenderHechizo(124, 1, true, false);//Mot Soignant
 				if (lvl == 6)
-					perso.learnSpell(122, 1, true, false);//Mot Blessant
+					perso.AprenderHechizo(122, 1, true, false);//Mot Blessant
 				if (lvl == 9)
-					perso.learnSpell(126, 1, true, false);//Mot Stimulant
+					perso.AprenderHechizo(126, 1, true, false);//Mot Stimulant
 				if (lvl == 13)
-					perso.learnSpell(127, 1, true, false);//Mot de Prévention
+					perso.AprenderHechizo(127, 1, true, false);//Mot de Prévention
 				if (lvl == 17)
-					perso.learnSpell(123, 1, true, false);//Mot Drainant
+					perso.AprenderHechizo(123, 1, true, false);//Mot Drainant
 				if (lvl == 21)
-					perso.learnSpell(130, 1, true, false);//Mot Revitalisant
+					perso.AprenderHechizo(130, 1, true, false);//Mot Revitalisant
 				if (lvl == 26)
-					perso.learnSpell(131, 1, true, false);//Mot de Régénération
+					perso.AprenderHechizo(131, 1, true, false);//Mot de Régénération
 				if (lvl == 31)
-					perso.learnSpell(132, 1, true, false);//Mot d'Epine
+					perso.AprenderHechizo(132, 1, true, false);//Mot d'Epine
 				if (lvl == 36)
-					perso.learnSpell(133, 1, true, false);//Mot de Jouvence
+					perso.AprenderHechizo(133, 1, true, false);//Mot de Jouvence
 				if (lvl == 42)
-					perso.learnSpell(134, 1, true, false);//Mot Vampirique
+					perso.AprenderHechizo(134, 1, true, false);//Mot Vampirique
 				if (lvl == 48)
-					perso.learnSpell(135, 1, true, false);//Mot de Sacrifice
+					perso.AprenderHechizo(135, 1, true, false);//Mot de Sacrifice
 				if (lvl == 54)
-					perso.learnSpell(129, 1, true, false);//Mot d'Amitié
+					perso.AprenderHechizo(129, 1, true, false);//Mot d'Amitié
 				if (lvl == 60)
-					perso.learnSpell(136, 1, true, false);//Mot d'Immobilisation
+					perso.AprenderHechizo(136, 1, true, false);//Mot d'Immobilisation
 				if (lvl == 70)
-					perso.learnSpell(137, 1, true, false);//Mot d'Envol
+					perso.AprenderHechizo(137, 1, true, false);//Mot d'Envol
 				if (lvl == 80)
-					perso.learnSpell(138, 1, true, false);//Mot de Silence
+					perso.AprenderHechizo(138, 1, true, false);//Mot de Silence
 				if (lvl == 90)
-					perso.learnSpell(139, 1, true, false);//Mot d'Altruisme
+					perso.AprenderHechizo(139, 1, true, false);//Mot d'Altruisme
 				if (lvl == 100)
-					perso.learnSpell(140, 1, true, false);//Mot de Reconstitution
+					perso.AprenderHechizo(140, 1, true, false);//Mot de Reconstitution
 				if (lvl == 200)
-					perso.learnSpell(1907, 1, true, false);//Invocation de Dopeul Eniripsa
+					perso.AprenderHechizo(1907, 1, true, false);//Invocation de Dopeul Eniripsa
 			}
 			case CLASS_IOP -> {
 				if (lvl == 3)
-					perso.learnSpell(144, 1, true, false);//Compulsion
+					perso.AprenderHechizo(144, 1, true, false);//Compulsion
 				if (lvl == 6)
-					perso.learnSpell(145, 1, true, false);//Epée Divine
+					perso.AprenderHechizo(145, 1, true, false);//Epée Divine
 				if (lvl == 9)
-					perso.learnSpell(146, 1, true, false);//Epée du Destin
+					perso.AprenderHechizo(146, 1, true, false);//Epée du Destin
 				if (lvl == 13)
-					perso.learnSpell(147, 1, true, false);//Guide de Bravoure
+					perso.AprenderHechizo(147, 1, true, false);//Guide de Bravoure
 				if (lvl == 17)
-					perso.learnSpell(148, 1, true, false);//Amplification
+					perso.AprenderHechizo(148, 1, true, false);//Amplification
 				if (lvl == 21)
-					perso.learnSpell(154, 1, true, false);//Epée Destructrice
+					perso.AprenderHechizo(154, 1, true, false);//Epée Destructrice
 				if (lvl == 26)
-					perso.learnSpell(150, 1, true, false);//Couper
+					perso.AprenderHechizo(150, 1, true, false);//Couper
 				if (lvl == 31)
-					perso.learnSpell(151, 1, true, false);//Souffle
+					perso.AprenderHechizo(151, 1, true, false);//Souffle
 				if (lvl == 36)
-					perso.learnSpell(155, 1, true, false);//Vitalité
+					perso.AprenderHechizo(155, 1, true, false);//Vitalité
 				if (lvl == 42)
-					perso.learnSpell(152, 1, true, false);//Epée du Jugement
+					perso.AprenderHechizo(152, 1, true, false);//Epée du Jugement
 				if (lvl == 48)
-					perso.learnSpell(153, 1, true, false);//Puissance
+					perso.AprenderHechizo(153, 1, true, false);//Puissance
 				if (lvl == 54)
-					perso.learnSpell(149, 1, true, false);//Mutilation
+					perso.AprenderHechizo(149, 1, true, false);//Mutilation
 				if (lvl == 60)
-					perso.learnSpell(156, 1, true, false);//Tempête de Puissance
+					perso.AprenderHechizo(156, 1, true, false);//Tempête de Puissance
 				if (lvl == 70)
-					perso.learnSpell(157, 1, true, false);//Epée Céleste
+					perso.AprenderHechizo(157, 1, true, false);//Epée Céleste
 				if (lvl == 80)
-					perso.learnSpell(158, 1, true, false);//Concentration
+					perso.AprenderHechizo(158, 1, true, false);//Concentration
 				if (lvl == 90)
-					perso.learnSpell(160, 1, true, false);//Epée de Iop
+					perso.AprenderHechizo(160, 1, true, false);//Epée de Iop
 				if (lvl == 100)
-					perso.learnSpell(159, 1, true, false);//Colère de Iop
+					perso.AprenderHechizo(159, 1, true, false);//Colère de Iop
 				if (lvl == 200)
-					perso.learnSpell(1908, 1, true, false);//Invocation de Dopeul Iop
+					perso.AprenderHechizo(1908, 1, true, false);//Invocation de Dopeul Iop
 			}
 			case CLASS_CRA -> {
 				if (lvl == 3)
-					perso.learnSpell(163, 1, true, false);//Flèche Glacée
+					perso.AprenderHechizo(163, 1, true, false);//Flèche Glacée
 				if (lvl == 6)
-					perso.learnSpell(165, 1, true, false);//Flèche enflammée
+					perso.AprenderHechizo(165, 1, true, false);//Flèche enflammée
 				if (lvl == 9)
-					perso.learnSpell(172, 1, true, false);//Tir Eloigné
+					perso.AprenderHechizo(172, 1, true, false);//Tir Eloigné
 				if (lvl == 13)
-					perso.learnSpell(167, 1, true, false);//Flèche d'Expiation
+					perso.AprenderHechizo(167, 1, true, false);//Flèche d'Expiation
 				if (lvl == 17)
-					perso.learnSpell(168, 1, true, false);//Oeil de Taupe
+					perso.AprenderHechizo(168, 1, true, false);//Oeil de Taupe
 				if (lvl == 21)
-					perso.learnSpell(162, 1, true, false);//Tir Critique
+					perso.AprenderHechizo(162, 1, true, false);//Tir Critique
 				if (lvl == 26)
-					perso.learnSpell(170, 1, true, false);//Flèche d'Immobilisation
+					perso.AprenderHechizo(170, 1, true, false);//Flèche d'Immobilisation
 				if (lvl == 31)
-					perso.learnSpell(171, 1, true, false);//Flèche Punitive
+					perso.AprenderHechizo(171, 1, true, false);//Flèche Punitive
 				if (lvl == 36)
-					perso.learnSpell(166, 1, true, false);//Tir Puissant
+					perso.AprenderHechizo(166, 1, true, false);//Tir Puissant
 				if (lvl == 42)
-					perso.learnSpell(173, 1, true, false);//Flèche Harcelante
+					perso.AprenderHechizo(173, 1, true, false);//Flèche Harcelante
 				if (lvl == 48)
-					perso.learnSpell(174, 1, true, false);//Flèche Cinglante
+					perso.AprenderHechizo(174, 1, true, false);//Flèche Cinglante
 				if (lvl == 54)
-					perso.learnSpell(176, 1, true, false);//Flèche Persécutrice
+					perso.AprenderHechizo(176, 1, true, false);//Flèche Persécutrice
 				if (lvl == 60)
-					perso.learnSpell(175, 1, true, false);//Flèche Destructrice
+					perso.AprenderHechizo(175, 1, true, false);//Flèche Destructrice
 				if (lvl == 70)
-					perso.learnSpell(178, 1, true, false);//Flèche Absorbante
+					perso.AprenderHechizo(178, 1, true, false);//Flèche Absorbante
 				if (lvl == 80)
-					perso.learnSpell(177, 1, true, false);//Flèche Ralentissante
+					perso.AprenderHechizo(177, 1, true, false);//Flèche Ralentissante
 				if (lvl == 90)
-					perso.learnSpell(179, 1, true, false);//Flèche Explosive
+					perso.AprenderHechizo(179, 1, true, false);//Flèche Explosive
 				if (lvl == 100)
-					perso.learnSpell(180, 1, true, false);//Maîtrise de l'Arc
+					perso.AprenderHechizo(180, 1, true, false);//Maîtrise de l'Arc
 				if (lvl == 200)
-					perso.learnSpell(1909, 1, true, false);//Invocation de Dopeul Cra
+					perso.AprenderHechizo(1909, 1, true, false);//Invocation de Dopeul Cra
 			}
 			case CLASS_SADIDA -> {
 				if (lvl == 3)
-					perso.learnSpell(198, 1, true, false);//Sacrifice Poupesque
+					perso.AprenderHechizo(198, 1, true, false);//Sacrifice Poupesque
 				if (lvl == 6)
-					perso.learnSpell(195, 1, true, false);//Larme
+					perso.AprenderHechizo(195, 1, true, false);//Larme
 				if (lvl == 9)
-					perso.learnSpell(182, 1, true, false);//Invocation de la Folle
+					perso.AprenderHechizo(182, 1, true, false);//Invocation de la Folle
 				if (lvl == 13)
-					perso.learnSpell(192, 1, true, false);//Ronce Apaisante
+					perso.AprenderHechizo(192, 1, true, false);//Ronce Apaisante
 				if (lvl == 17)
-					perso.learnSpell(197, 1, true, false);//Puissance Sylvestre
+					perso.AprenderHechizo(197, 1, true, false);//Puissance Sylvestre
 				if (lvl == 21)
-					perso.learnSpell(189, 1, true, false);//Invocation de la Sacrifiée
+					perso.AprenderHechizo(189, 1, true, false);//Invocation de la Sacrifiée
 				if (lvl == 26)
-					perso.learnSpell(181, 1, true, false);//Tremblement
+					perso.AprenderHechizo(181, 1, true, false);//Tremblement
 				if (lvl == 31)
-					perso.learnSpell(199, 1, true, false);//Connaissance des Poupées
+					perso.AprenderHechizo(199, 1, true, false);//Connaissance des Poupées
 				if (lvl == 36)
-					perso.learnSpell(191, 1, true, false);//Ronce Multiples
+					perso.AprenderHechizo(191, 1, true, false);//Ronce Multiples
 				if (lvl == 42)
-					perso.learnSpell(186, 1, true, false);//Arbre
+					perso.AprenderHechizo(186, 1, true, false);//Arbre
 				if (lvl == 48)
-					perso.learnSpell(196, 1, true, false);//Vent Empoisonné
+					perso.AprenderHechizo(196, 1, true, false);//Vent Empoisonné
 				if (lvl == 54)
-					perso.learnSpell(190, 1, true, false);//Invocation de la Gonflable
+					perso.AprenderHechizo(190, 1, true, false);//Invocation de la Gonflable
 				if (lvl == 60)
-					perso.learnSpell(194, 1, true, false);//Ronces Agressives
+					perso.AprenderHechizo(194, 1, true, false);//Ronces Agressives
 				if (lvl == 70)
-					perso.learnSpell(185, 1, true, false);//Herbe Folle
+					perso.AprenderHechizo(185, 1, true, false);//Herbe Folle
 				if (lvl == 80)
-					perso.learnSpell(184, 1, true, false);//Feu de Brousse
+					perso.AprenderHechizo(184, 1, true, false);//Feu de Brousse
 				if (lvl == 90)
-					perso.learnSpell(188, 1, true, false);//Ronce Insolente
+					perso.AprenderHechizo(188, 1, true, false);//Ronce Insolente
 				if (lvl == 100)
-					perso.learnSpell(187, 1, true, false);//Invocation de la Surpuissante
+					perso.AprenderHechizo(187, 1, true, false);//Invocation de la Surpuissante
 				if (lvl == 200)
-					perso.learnSpell(1910, 1, true, false);//Invocation de Dopeul Sadida
+					perso.AprenderHechizo(1910, 1, true, false);//Invocation de Dopeul Sadida
 			}
 			case CLASS_SACRIEUR -> {
 				if (lvl == 3)
-					perso.learnSpell(444, 1, true, false);//Dérobade
+					perso.AprenderHechizo(444, 1, true, false);//Dérobade
 				if (lvl == 6)
-					perso.learnSpell(449, 1, true, false);//Détour
+					perso.AprenderHechizo(449, 1, true, false);//Détour
 				if (lvl == 9)
-					perso.learnSpell(436, 1, true, false);//Assaut
+					perso.AprenderHechizo(436, 1, true, false);//Assaut
 				if (lvl == 13)
-					perso.learnSpell(437, 1, true, false);//Châtiment Agile
+					perso.AprenderHechizo(437, 1, true, false);//Châtiment Agile
 				if (lvl == 17)
-					perso.learnSpell(439, 1, true, false);//Dissolution
+					perso.AprenderHechizo(439, 1, true, false);//Dissolution
 				if (lvl == 21)
-					perso.learnSpell(433, 1, true, false);//Châtiment Osé
+					perso.AprenderHechizo(433, 1, true, false);//Châtiment Osé
 				if (lvl == 26)
-					perso.learnSpell(443, 1, true, false);//Châtiment Spirituel
+					perso.AprenderHechizo(443, 1, true, false);//Châtiment Spirituel
 				if (lvl == 31)
-					perso.learnSpell(440, 1, true, false);//Sacrifice
+					perso.AprenderHechizo(440, 1, true, false);//Sacrifice
 				if (lvl == 36)
-					perso.learnSpell(442, 1, true, false);//Absorption
+					perso.AprenderHechizo(442, 1, true, false);//Absorption
 				if (lvl == 42)
-					perso.learnSpell(441, 1, true, false);//Châtiment Vilatesque
+					perso.AprenderHechizo(441, 1, true, false);//Châtiment Vilatesque
 				if (lvl == 48)
-					perso.learnSpell(445, 1, true, false);//Coopération
+					perso.AprenderHechizo(445, 1, true, false);//Coopération
 				if (lvl == 54)
-					perso.learnSpell(438, 1, true, false);//Transposition
+					perso.AprenderHechizo(438, 1, true, false);//Transposition
 				if (lvl == 60)
-					perso.learnSpell(446, 1, true, false);//Punition
+					perso.AprenderHechizo(446, 1, true, false);//Punition
 				if (lvl == 70)
-					perso.learnSpell(447, 1, true, false);//Furie
+					perso.AprenderHechizo(447, 1, true, false);//Furie
 				if (lvl == 80)
-					perso.learnSpell(448, 1, true, false);//Epée Volante
+					perso.AprenderHechizo(448, 1, true, false);//Epée Volante
 				if (lvl == 90)
-					perso.learnSpell(435, 1, true, false);//Tansfert de Vie
+					perso.AprenderHechizo(435, 1, true, false);//Tansfert de Vie
 				if (lvl == 100)
-					perso.learnSpell(450, 1, true, false);//Folie Sanguinaire
+					perso.AprenderHechizo(450, 1, true, false);//Folie Sanguinaire
 				if (lvl == 200)
-					perso.learnSpell(1911, 1, true, false);//Invocation de Dopeul Sacrieur
+					perso.AprenderHechizo(1911, 1, true, false);//Invocation de Dopeul Sacrieur
 			}
 			case CLASS_PANDAWA -> {
 				if (lvl == 3)
-					perso.learnSpell(689, 1, true, false);//Epouvante
+					perso.AprenderHechizo(689, 1, true, false);//Epouvante
 				if (lvl == 6)
-					perso.learnSpell(690, 1, true, false);//Souffle Alcoolisé
+					perso.AprenderHechizo(690, 1, true, false);//Souffle Alcoolisé
 				if (lvl == 9)
-					perso.learnSpell(691, 1, true, false);//Vulnérabilité Aqueuse
+					perso.AprenderHechizo(691, 1, true, false);//Vulnérabilité Aqueuse
 				if (lvl == 13)
-					perso.learnSpell(688, 1, true, false);//Vulnérabilité Incandescente
+					perso.AprenderHechizo(688, 1, true, false);//Vulnérabilité Incandescente
 				if (lvl == 17)
-					perso.learnSpell(693, 1, true, false);//Karcham
+					perso.AprenderHechizo(693, 1, true, false);//Karcham
 				if (lvl == 21)
-					perso.learnSpell(694, 1, true, false);//Vulnérabilité Venteuse
+					perso.AprenderHechizo(694, 1, true, false);//Vulnérabilité Venteuse
 				if (lvl == 26)
-					perso.learnSpell(695, 1, true, false);//Stabilisation
+					perso.AprenderHechizo(695, 1, true, false);//Stabilisation
 				if (lvl == 31)
-					perso.learnSpell(696, 1, true, false);//Chamrak
+					perso.AprenderHechizo(696, 1, true, false);//Chamrak
 				if (lvl == 36)
-					perso.learnSpell(697, 1, true, false);//Vulnérabilité Terrestre
+					perso.AprenderHechizo(697, 1, true, false);//Vulnérabilité Terrestre
 				if (lvl == 42)
-					perso.learnSpell(698, 1, true, false);//Souillure
+					perso.AprenderHechizo(698, 1, true, false);//Souillure
 				if (lvl == 48)
-					perso.learnSpell(699, 1, true, false);//Lait de Bambou
+					perso.AprenderHechizo(699, 1, true, false);//Lait de Bambou
 				if (lvl == 54)
-					perso.learnSpell(700, 1, true, false);//Vague à Lame
+					perso.AprenderHechizo(700, 1, true, false);//Vague à Lame
 				if (lvl == 60)
-					perso.learnSpell(701, 1, true, false);//Colère de Zatoïshwan
+					perso.AprenderHechizo(701, 1, true, false);//Colère de Zatoïshwan
 				if (lvl == 70)
-					perso.learnSpell(702, 1, true, false);//Flasque Explosive
+					perso.AprenderHechizo(702, 1, true, false);//Flasque Explosive
 				if (lvl == 80)
-					perso.learnSpell(703, 1, true, false);//Pandatak
+					perso.AprenderHechizo(703, 1, true, false);//Pandatak
 				if (lvl == 90)
-					perso.learnSpell(704, 1, true, false);//Pandanlku
+					perso.AprenderHechizo(704, 1, true, false);//Pandanlku
 				if (lvl == 100)
-					perso.learnSpell(705, 1, true, false);//Lien Spiritueux
+					perso.AprenderHechizo(705, 1, true, false);//Lien Spiritueux
 				if (lvl == 200)
-					perso.learnSpell(1912, 1, true, false);//Invocation de Dopeul Pandawa
+					perso.AprenderHechizo(1912, 1, true, false);//Invocation de Dopeul Pandawa
 			}
 		}
 	}
@@ -2556,7 +2556,7 @@ public class Constantes {
 		//Gère les differentes actions des "bornes" (IO des émotes)
 		if (mID == 2196) {//Création de guilde
 			if (perso.is_away()) return;
-			if (perso.get_guild() != null || perso.getGuildMember() != null) {
+			if (perso.get_guild() != null || perso.getMiembroGremio() != null) {
 				GestorSalida.GAME_SEND_gC_PACKET(perso, "Ea");
 				return;
 			}

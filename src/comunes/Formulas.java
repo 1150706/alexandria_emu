@@ -805,10 +805,10 @@ public class Formulas {
 	public static long getGuildXpWin(Fighter perso, AtomicReference<Long> xpWin)
 	{
 		if(perso.getPersonnage()== null)return 0;
-		if(perso.getPersonnage().getGuildMember() == null)return 0;
+		if(perso.getPersonnage().getMiembroGremio() == null)return 0;
 		
 
-		GuildMember gm = perso.getPersonnage().getGuildMember();
+		GuildMember gm = perso.getPersonnage().getMiembroGremio();
 		
 		double xp = (double)xpWin.get(), Lvl = perso.get_lvl(),LvlGuild = perso.getPersonnage().get_guild().get_lvl(),pXpGive = (double)gm.getPXpGive()/100;
 		

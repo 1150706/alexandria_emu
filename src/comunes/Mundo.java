@@ -82,12 +82,12 @@ public class Mundo {
 	        					f.ticMyTimer();
 	        				} catch (Exception e2) {
 	        					GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC-N2", "ERREUR FATALE !!! Inside ticAllFightersTurns().f.ticMyTimer(); " + e2.getMessage());
-	        					GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC-N2", ", mapID: " + map.get_id());
+	        					GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC-N2", ", mapID: " + map.getID());
 	        				}
 	        			}
 	      	} catch (Exception e) {
 	      		GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", "ERREUR FATALE !!! Inside ticAllFightersTurns(); " + e.getMessage());
-	      		GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", ", mapID: " + map.get_id());
+	      		GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", ", mapID: " + map.getID());
 	      	}
 	  	}
 	
@@ -403,14 +403,14 @@ public class Mundo {
 			if(i == 1)
 			{
 				ok1 = !ok1;
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.get_compte().getGameThread().get_out(),ok1,guid);
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.get_compte().getGameThread().get_out(),ok1,guid);
+				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok1,guid);
+				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok1,guid);
 			}
 			else if (i == 2)
 			{
 				ok2 = !ok2;
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.get_compte().getGameThread().get_out(),ok2,guid);
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.get_compte().getGameThread().get_out(),ok2,guid);
+				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok2,guid);
+				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok2,guid);
 			}
 			else 
 				return;
@@ -430,28 +430,28 @@ public class Mundo {
 				i = 1;
 			else if(perso2.get_GUID() == guid)
 				i = 2;
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.get_compte().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.get_compte().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.get_compte().getGameThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.get_compte().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
 			
 			if(i == 1)
 			{
 				kamas1 = k;
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'G', "", k+"");
-				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.get_compte().getGameThread().get_out(), 'G', "", k+"");
+				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'G', "", k+"");
 			}else if (i == 2)
 			{
 				kamas2 = k;
-				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.get_compte().getGameThread().get_out(), 'G', "", k+"");
+				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'G', "", k+"");
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'G', "", k+"");
 			}
 		}
 		
 		synchronized public void cancel()
 		{
-			if(perso1.get_compte() != null)if(perso1.get_compte().getGameThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso1.get_compte().getGameThread().get_out());
-			if(perso2.get_compte() != null)if(perso2.get_compte().getGameThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso2.get_compte().getGameThread().get_out());
+			if(perso1.getCuenta() != null)if(perso1.getCuenta().getGameThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso1.getCuenta().getGameThread().get_out());
+			if(perso2.getCuenta() != null)if(perso2.getCuenta().getGameThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso2.getCuenta().getGameThread().get_out());
 			perso1.set_isTradingWith(0);
 			perso2.set_isTradingWith(0);
 			perso1.setCurExchange(null);
@@ -520,10 +520,10 @@ public class Mundo {
 			perso2.setCurExchange(null);
 			GestorSalida.GAME_SEND_Ow_PACKET(perso1);
 			GestorSalida.GAME_SEND_Ow_PACKET(perso2);
-			GestorSalida.GAME_SEND_STATS_PACKET(perso1);
-			GestorSalida.GAME_SEND_STATS_PACKET(perso2);
-			GestorSalida.GAME_SEND_EXCHANGE_VALID(perso1.get_compte().getGameThread().get_out(),'a');
-			GestorSalida.GAME_SEND_EXCHANGE_VALID(perso2.get_compte().getGameThread().get_out(),'a');
+			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso1);
+			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso2);
+			GestorSalida.GAME_SEND_EXCHANGE_VALID(perso1.getCuenta().getGameThread().get_out(),'a');
+			GestorSalida.GAME_SEND_EXCHANGE_VALID(perso2.getCuenta().getGameThread().get_out(),'a');
 			GestorSQL.guardar_personaje(perso1,true);
 			GestorSQL.guardar_personaje(perso2,true);
 		}
@@ -543,10 +543,10 @@ public class Mundo {
 			String str = guid+"|"+qua;
 			if(obj == null)return;
 			String add = "|"+obj.getTemplate().getID()+"|"+obj.parseStatsString();
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.get_compte().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.get_compte().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.get_compte().getGameThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.get_compte().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
 			if(i == 1)
 			{
 				Couple<Integer,Integer> couple = getCoupleInList(items1,guid);
@@ -554,11 +554,11 @@ public class Mundo {
 				{
 					couple.second += qua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+couple.second);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.get_compte().getGameThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
 					return;
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", str);
-				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.get_compte().getGameThread().get_out(), 'O', "+", str+add);
+				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'O', "+", str+add);
 				items1.add(new Couple<>(guid, qua));
 			}else if(i == 2)
 			{
@@ -567,11 +567,11 @@ public class Mundo {
 				{
 					couple.second += qua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+couple.second);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.get_compte().getGameThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
 					return;
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", str);
-				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.get_compte().getGameThread().get_out(), 'O', "+", str+add);
+				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'O', "+", str+add);
 				items2.add(new Couple<>(guid, qua));
 			}
 		}
@@ -587,10 +587,10 @@ public class Mundo {
 			ok1 = false;
 			ok2 = false;
 			
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.get_compte().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.get_compte().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.get_compte().getGameThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.get_compte().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
 			
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null)return;
@@ -603,12 +603,12 @@ public class Mundo {
 				{
 					items1.remove(couple);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "-", ""+guid);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.get_compte().getGameThread().get_out(), 'O', "-", ""+guid);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'O', "-", ""+guid);
 				}else
 				{
 					couple.second = newQua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+newQua);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.get_compte().getGameThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
 				}
 			}else if(i ==2)
 			{
@@ -618,12 +618,12 @@ public class Mundo {
 				if(newQua <1)//Si il n'y a pu d'item
 				{
 					items2.remove(couple);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.get_compte().getGameThread().get_out(), 'O', "-", ""+guid);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'O', "-", ""+guid);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "-", ""+guid);
 				}else
 				{
 					couple.second = newQua;
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.get_compte().getGameThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+newQua);
 				}
 			}
@@ -867,7 +867,7 @@ public class Mundo {
 	
 	public static void addNpcTemplate(NPCModelo temp)
 	{
-		NPCTemplates.put(temp.get_id(), temp);
+		NPCTemplates.put(temp.getID(), temp);
 	}
 	
 	public static Mapa getCarte(short id)
@@ -876,12 +876,12 @@ public class Mundo {
 	}
 	
 	public static  void addCarte(Mapa map) {
-		if(!Mapas.containsKey(map.get_id()))
-			Mapas.put(map.get_id(),map);
+		if(!Mapas.containsKey(map.getID()))
+			Mapas.put(map.getID(),map);
 	}
 	
 	public static void delCarte(Mapa map) {
-		Mapas.remove(map.get_id());
+		Mapas.remove(map.getID());
 	}
 	
 	public static Cuenta getCompteByName(String name) {
@@ -895,7 +895,7 @@ public class Mundo {
 	
 	public static void addAccount(Cuenta compte) {
 		Cuentas.put(compte.get_GUID(), compte);
-		CuentaPorNombre.put(compte.get_name().toLowerCase(), compte.get_GUID());
+		CuentaPorNombre.put(compte.getNombre().toLowerCase(), compte.get_GUID());
 	}
 	
 	public static void addChallenge(String chal) {
@@ -1015,7 +1015,7 @@ public class Mundo {
 
 	public static void addAccountbyName(Cuenta compte)
 	{
-		CuentaPorNombre.put(compte.get_name(), compte.get_GUID());
+		CuentaPorNombre.put(compte.getNombre(), compte.get_GUID());
 	}
 
 	public static void addPersonnage(Personaje perso)
@@ -1023,9 +1023,11 @@ public class Mundo {
 		Personajes.put(perso.get_GUID(), perso);
 	}
 
-	public static Personaje getPersoByName(String name) {
-		ArrayList<Personaje> Ps = new ArrayList<>(Personajes.values());
-		for(Personaje P : Ps)if(P.get_name().equalsIgnoreCase(name))return P;
+	public static Personaje getPersonajePorNombre(String nombre) {
+		ArrayList<Personaje> personajes = new ArrayList<>(Personajes.values());
+		for(Personaje personaje : personajes)
+			if(personaje.getNombre().equalsIgnoreCase(nombre))
+				return personaje;
 		return null;
 	}
 
@@ -1034,18 +1036,18 @@ public class Mundo {
 			if(perso.get_guild().getMembers().size() <= 1)//Il est tout seul dans la guilde : Supression
 			{
 				Mundo.removeGuild(perso.get_guild().get_id());
-			}else if(perso.getGuildMember().getRank() == 1)//On passe les pouvoir a celui qui a le plus de droits si il est meneur
+			}else if(perso.getMiembroGremio().getRank() == 1)//On passe les pouvoir a celui qui a le plus de droits si il est meneur
 			{
 				int curMaxRight = 0;
 				Personaje Meneur = null;
 				for(Personaje newMeneur : perso.get_guild().getMembers()) {
 					if(newMeneur == perso) continue;
-					if(newMeneur.getGuildMember().getRights() < curMaxRight) {
+					if(newMeneur.getMiembroGremio().getRights() < curMaxRight) {
 						Meneur = newMeneur;
 					}
 				}
 				perso.get_guild().removeMember(perso);
-				Meneur.getGuildMember().setRank(1);
+				Meneur.getMiembroGremio().setRank(1);
 			}else//Supression simple
 			{
 				perso.get_guild().removeMember(perso);
@@ -1110,8 +1112,8 @@ public class Mundo {
 	public static List<Personaje> getOnlinePersos() {
 		List<Personaje> online = new ArrayList<>();
 		for(Entry<Integer, Personaje> perso : Personajes.entrySet()) {
-			if(perso.getValue().isOnline() && perso.getValue().get_compte().getGameThread() != null) {
-				if(perso.getValue().get_compte().getGameThread().get_out() != null) {
+			if(perso.getValue().isConectado() && perso.getValue().getCuenta().getGameThread() != null) {
+				if(perso.getValue().getCuenta().getGameThread().get_out() != null) {
 					online.add(perso.getValue());
 				}
 			}
@@ -1158,7 +1160,7 @@ public class Mundo {
 	public static void saveAll(Personaje saver) {
 		PrintWriter _out = null;
 		if(saver != null)
-		_out = saver.get_compte().getGameThread().get_out();
+		_out = saver.getCuenta().getGameThread().get_out();
 		
 		set_state((short)2);
 
@@ -1170,7 +1172,7 @@ public class Mundo {
 			
 			JuegoServidor.addToLog("Sauvegarde des personnages...");
 			for(Personaje perso : Personajes.values()) {
-				if(!perso.isOnline())continue;
+				if(!perso.isConectado())continue;
 				Thread.sleep(100);//0.1 sec. pour 1 objets
 				GestorSQL.guardar_personaje(perso,true);//sauvegarde des persos et de leurs items
 			}
@@ -1242,7 +1244,7 @@ public class Mundo {
 			if(saveTry < 10) {
 				JuegoServidor.addToLog("Nouvelle tentative de sauvegarde");
 				if(saver != null && _out != null)
-					GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, "Erreur. Nouvelle tentative de sauvegarde");
+					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_out, "Erreur. Nouvelle tentative de sauvegarde");
 				saveTry++;
 				saveAll(saver);
 			} else {
@@ -1250,7 +1252,7 @@ public class Mundo {
 				//TODO : Rafraichir 
 				String mess = "Echec de la sauvegarde apres " + saveTry + " tentatives";
 				if(saver != null && _out != null)
-					GestorSalida.GAME_SEND_CONSOLE_MESSAGE_PACKET(_out, mess);
+					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_out, mess);
 				JuegoServidor.addToLog(mess);
 			}
 				
@@ -1264,11 +1266,11 @@ public class Mundo {
 	}
 
 	public static void RefreshAllMob() {
-		GestorSalida.GAME_SEND_MESSAGE_TO_ALL("Recharge des Mobs en cours, des latences peuvent survenir.", MainServidor.CONFIG_MOTD_COLOR);
+		GestorSalida.ENVIAR_MENSAJE_A_TODOS("Recharge des Mobs en cours, des latences peuvent survenir.", MainServidor.CONFIG_MOTD_COLOR);
 		for(Mapa map : Mapas.values()) {
 			map.refreshSpawns();
 		}
-		GestorSalida.GAME_SEND_MESSAGE_TO_ALL("Recharge des Mobs finie. La prochaine recharge aura lieu dans 5heures.", MainServidor.CONFIG_MOTD_COLOR);
+		GestorSalida.ENVIAR_MENSAJE_A_TODOS("Recharge des Mobs finie. La prochaine recharge aura lieu dans 5heures.", MainServidor.CONFIG_MOTD_COLOR);
 	}
 
 	public static ExpLevel getExpLevel(int lvl)
@@ -1435,7 +1437,7 @@ public class Mundo {
 	}
 
 	public static boolean ipIsUsed(String ip) {
-		for(Cuenta c : Cuentas.values())if(c.get_curIP().compareTo(ip) == 0)return true;
+		for(Cuenta c : Cuentas.values())if(c.getActualIP().compareTo(ip) == 0)return true;
 		return false;
 	}
 
@@ -1588,7 +1590,7 @@ public class Mundo {
 		{
 			if(perso.get_GUID() == Perso.get_GUID()) // Si c'est le meme joueur...
 				return;
-			if(Perso.isOnline())// Si perso en ligne...
+			if(Perso.isConectado())// Si perso en ligne...
 			{
 				Married.remove(ordre);
 				Married.put(ordre, perso);
@@ -1608,14 +1610,14 @@ public class Mundo {
 		Personaje Homme = Married.get(0);
 		Personaje Femme = Married.get(1);
 		if(Homme.getWife() != 0){
-			GestorSalida.GAME_SEND_MESSAGE_TO_MAP(carte, Homme.get_name()+" est deja marier!", MainServidor.CONFIG_MOTD_COLOR);
+			GestorSalida.GAME_SEND_MESSAGE_TO_MAP(carte, Homme.getNombre()+" est deja marier!", MainServidor.CONFIG_MOTD_COLOR);
 			return;
 		}
 		if(Femme.getWife() != 0){
-			GestorSalida.GAME_SEND_MESSAGE_TO_MAP(carte, Femme.get_name()+" est deja marier!", MainServidor.CONFIG_MOTD_COLOR);
+			GestorSalida.GAME_SEND_MESSAGE_TO_MAP(carte, Femme.getNombre()+" est deja marier!", MainServidor.CONFIG_MOTD_COLOR);
 			return;
 		}
-		GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(perso.getActualMapa(), "", -1, "Pr?tre", perso.get_name()+" acceptez-vous d'?pouser "+getMarried((perso.get_sexe()==1?0:1)).get_name()+" ?");
+		GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(perso.getActualMapa(), "", -1, "Pr?tre", perso.getNombre()+" acceptez-vous d'?pouser "+getMarried((perso.getSexo()==1?0:1)).getNombre()+" ?");
 		GestorSalida.GAME_SEND_WEDDING(carte, 617, (Homme==perso?Homme.get_GUID():Femme.get_GUID()), (Homme==perso?Femme.get_GUID():Homme.get_GUID()), IdPretre);
 	}
 	
@@ -1623,12 +1625,12 @@ public class Mundo {
 	{
 		if(isOK > 0)
 		{
-			GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(Homme.getActualMapa(), "", -1, "Pr?tre", "Je d?clare "+Homme.get_name()+" et "+Femme.get_name()+" unis par les liens sacr?s du mariage.");
+			GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(Homme.getActualMapa(), "", -1, "Pr?tre", "Je d?clare "+Homme.getNombre()+" et "+Femme.getNombre()+" unis par les liens sacr?s du mariage.");
 			Homme.MarryTo(Femme);
 			Femme.MarryTo(Homme);
 		}else
 		{
-			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_AL_MAPA(Homme.getActualMapa(), "048;"+Homme.get_name()+"~"+Femme.get_name());
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_AL_MAPA(Homme.getActualMapa(), "048;"+Homme.getNombre()+"~"+Femme.getNombre());
 		}
 		Married.get(0).setisOK(0);
 		Married.get(1).setisOK(0);
@@ -1692,7 +1694,7 @@ public class Mundo {
 	
 	public static void addMountPark(Mapa.MountPark mp)
 	{
-		MountPark.put(mp.get_map().get_id(), mp);
+		MountPark.put(mp.get_map().getID(), mp);
 	}
 	
 	public static Map<Short, Mapa.MountPark> getMountPark()
@@ -1711,7 +1713,7 @@ public class Mundo {
 		{
 			if(mp.getValue().get_guild() != null && mp.getValue().get_guild().get_id() == GuildID)
 			{
-				packet.append("|").append(mp.getValue().get_map().get_id()).append(";").append(mp.getValue().get_size()).append(";").append(mp.getValue().getObjectNumb());// Nombre d'objets pour le dernier
+				packet.append("|").append(mp.getValue().get_map().getID()).append(";").append(mp.getValue().get_size()).append(";").append(mp.getValue().getObjectNumb());// Nombre d'objets pour le dernier
 			}else
 			{
 				continue;
@@ -1738,18 +1740,18 @@ public class Mundo {
 	
 	public static void addSeller(Personaje p)
 	{
-		if(Seller.get(p.getActualMapa().get_id()) == null)
+		if(Seller.get(p.getActualMapa().getID()) == null)
 		{
 			ArrayList<Integer> PersoID = new ArrayList<>();
 			PersoID.add(p.get_GUID());
-			Seller.put(p.getActualMapa().get_id(), PersoID);
+			Seller.put(p.getActualMapa().getID(), PersoID);
 		}else
 		{
 			ArrayList<Integer> PersoID = new ArrayList<>();
-			PersoID.addAll(Seller.get(p.getActualMapa().get_id()));
+			PersoID.addAll(Seller.get(p.getActualMapa().getID()));
 			PersoID.add(p.get_GUID());
-			Seller.remove(p.getActualMapa().get_id());
-			Seller.put(p.getActualMapa().get_id(), PersoID);
+			Seller.remove(p.getActualMapa().getID());
+			Seller.put(p.getActualMapa().getID(), PersoID);
 		}
 	}
 	

@@ -86,7 +86,7 @@ public class Gremio {
 		}
 		
 		public int getHoursFromLastCo() {
-			String[] strDate = getPerso().get_compte().getLastConnectionDate().split("~");
+			String[] strDate = getPerso().getCuenta().getLastConnectionDate().split("~");
 			LocalDate lastCo = new LocalDate(Integer.parseInt(strDate[0]),Integer.parseInt(strDate[1]),Integer.parseInt(strDate[2]));
 			LocalDate now = new LocalDate();
 			
@@ -298,10 +298,10 @@ public class Gremio {
 		StringBuilder str = new StringBuilder();
 		for(GuildMember GM : _members.values()) {
 			String online = "0";
-			if(GM.getPerso() != null)if(GM.getPerso().isOnline())online = "1";
+			if(GM.getPerso() != null)if(GM.getPerso().isConectado())online = "1";
 			if(str.length() != 0)str.append("|");
 			str.append(GM.getGuid()).append(";");
-			str.append(GM.getPerso().get_name()).append(";");
+			str.append(GM.getPerso().getNombre()).append(";");
 			str.append(GM.getPerso().get_lvl()).append(";");
 			str.append(GM.getPerso().get_gfxID()).append(";");
 			str.append(GM.getRank()).append(";");

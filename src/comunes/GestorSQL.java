@@ -49,7 +49,7 @@ public class GestorSQL {
 		return dbCon.prepareStatement(baseQuery);
 	}
 
-	public synchronized static void closeCons() {
+	public synchronized static void CerrarConsulta() {
 		try {
 			_dinamicos.close();
 			_estaticos.close();
@@ -120,15 +120,13 @@ public class GestorSQL {
 		try {
 			String consulta = "UPDATE `datos_cuenta` SET `kamasbanco` = ?, `banco` = ?, `nivel` = ?, `baneado` = ?, `amigos` = ?, `enemigos` = ? WHERE `id` = ?;";
 			PreparedStatement p = NuevaConsulta(consulta, _dinamicos);
-			
 			p.setLong(1, cuenta.getBankKamas());
 			p.setString(2, cuenta.parseBankObjetsToDB());
-			p.setInt(3, cuenta.get_gmLvl());
+			p.setInt(3, cuenta.getGMLVL());
 			p.setInt(4, (cuenta.isBanned()?1:0));
 			p.setString(5, cuenta.parseFriendListToDB());
 			p.setString(6, cuenta.parseEnemyListToDB());
 			p.setInt(7, cuenta.get_GUID());
-			
 			p.executeUpdate();
 			CerrarNuevaConsulta(p);
 		}catch(SQLException e) {
@@ -142,7 +140,6 @@ public class GestorSQL {
 			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_recetas`;", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				ArrayList<Couple<Integer,Integer>> m = new ArrayList<>();
-				
 				boolean cont = true;
 				for(String str : RS.getString("recetas").split(";")) {
 					try {
@@ -153,9 +150,7 @@ public class GestorSQL {
 				}
 				//s'il y a eu une erreur de parsing, on ignore cette recette
 				if(!cont)continue;
-				
-				Mundo.addCraft
-				(RS.getInt("id"), m);
+				Mundo.addCraft(RS.getInt("id"), m);
 			}
 			CerrarResultado(RS);
 		}catch(SQLException e) {
@@ -714,13 +709,13 @@ public class GestorSQL {
 		try {
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setInt(1,perso.get_GUID());
-			p.setString(2, perso.get_name());
-			p.setInt(3,perso.get_sexe());
-			p.setInt(4,perso.get_classe());
+			p.setString(2, perso.getNombre());
+			p.setInt(3,perso.getSexo());
+			p.setInt(4,perso.getClase());
 			p.setInt(5,perso.get_color1());
 			p.setInt(6,perso.get_color2());
 			p.setInt(7,perso.get_color3());
-			p.setLong(8,perso.get_kamas());
+			p.setLong(8,perso.getKamas());
 			p.setInt(9,perso.get_spellPts());
 			p.setInt(10,perso.get_capital());
 			p.setInt(11,perso.get_energy());
@@ -730,7 +725,7 @@ public class GestorSQL {
 			p.setInt(15,perso.get_gfxID());
 			p.setInt(16,perso.getAccID());
 			p.setInt(17,perso.getActualCelda().getID());
-			p.setInt(18,perso.getActualMapa().get_id());
+			p.setInt(18,perso.getActualMapa().getID());
 			p.setString(19, perso.parseSpellToDB());
 			
 			p.execute();
@@ -857,7 +852,7 @@ public class GestorSQL {
 		try {
 			p = NuevaConsulta(baseQuery, _dinamicos);
 			
-			p.setLong(1,_perso.get_kamas());
+			p.setLong(1,_perso.getKamas());
 			p.setInt(2,_perso.get_spellPts());
 			p.setInt(3,_perso.get_capital());
 			p.setInt(4,_perso.get_energy());
@@ -880,7 +875,7 @@ public class GestorSQL {
 			p.setInt(21,(_perso.is_showWings()?1:0));
 			p.setInt(22,(_perso.is_showSeller()?1:0));
 			p.setString(23,_perso.get_canaux());
-			p.setInt(24,_perso.getActualMapa().get_id());
+			p.setInt(24,_perso.getActualMapa().getID());
 			p.setInt(25,_perso.getActualCelda().getID());
 			p.setInt(26,_perso.get_pdvper());
 			p.setString(27,_perso.parseSpellToDB());
@@ -897,11 +892,11 @@ public class GestorSQL {
 			
 			p.executeUpdate();
 			
-			if(_perso.getGuildMember() != null)
-				actualizar_miembro_del_gremio(_perso.getGuildMember());
+			if(_perso.getMiembroGremio() != null)
+				actualizar_miembro_del_gremio(_perso.getMiembroGremio());
 			if(_perso.getMount() != null)
 				actualizar_informacion_monturas(_perso.getMount());
-			JuegoServidor.addToLog("Personaje "+_perso.get_name()+" guardado");
+			JuegoServidor.addToLog("Personaje "+_perso.getNombre()+" guardado");
 		}catch(Exception e) {
 			System.out.println("Game: SQL ERROR: "+e.getMessage());
 			System.out.println("Requete: "+baseQuery);
@@ -931,7 +926,7 @@ public class GestorSQL {
 				}catch(Exception e){continue;}
 			}
 			
-			if(_perso.get_compte() == null)
+			if(_perso.getCuenta() == null)
 				return;
 			for(String idStr : _perso.getBankItemsIDSplitByChar(":").split(":")) {
 				try {
@@ -1391,7 +1386,7 @@ public class GestorSQL {
 		try {
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			
-			p.setString(1, compte.get_curIP());
+			p.setString(1, compte.getActualIP());
 			p.setString(2, compte.getLastConnectionDate());
 			p.setInt(3, compte.get_GUID());
 			
@@ -1453,7 +1448,7 @@ public class GestorSQL {
 				
 		try {
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
-			p.setInt(1,MP.get_map().get_id());
+			p.setInt(1,MP.get_map().getID());
 			p.setInt(2,MP.get_cellid());
 			p.setInt(3,MP.get_size());
 			p.setInt(4,MP.get_owner());
@@ -1475,7 +1470,7 @@ public class GestorSQL {
 		try {
 			PreparedStatement p = NuevaConsulta(baseQuery, _dinamicos);
 			p.setString(1, MP.parseDBData());
-			p.setShort(2, MP.get_map().get_id());
+			p.setShort(2, MP.get_map().getID());
 			
 			p.execute();
 			CerrarNuevaConsulta(p);
@@ -1526,9 +1521,9 @@ public class GestorSQL {
 		String baseQuery = "UPDATE `datos_mapas` SET `esquemapelea` = ?, `numerogrupos` = ? WHERE id = ?;";
 		try {
 			PreparedStatement p = NuevaConsulta(baseQuery, _estaticos);
-			p.setString(1,map.get_placesStr());
+			p.setString(1,map.getEsquemaPelea());
 			p.setInt(2, map.getMaxGroupNumb());
-			p.setInt(3, map.get_id());
+			p.setInt(3, map.getID());
 			p.executeUpdate();
 			CerrarNuevaConsulta(p);
 			return true;
@@ -1894,19 +1889,19 @@ public class GestorSQL {
 						MainServidor.addToShopLog("Personnage "+RS.getInt("personaje")+" non trouve, personnage non charge ?");
 						continue;
 					}
-					if(!perso.isOnline()) {
+					if(!perso.isConectado()) {
 						MainServidor.addToShopLog("Personnage "+RS.getInt("personaje")+" hors ligne");
 						continue;
 					}
-					if(perso.get_compte() == null) {
+					if(perso.getCuenta() == null) {
 						MainServidor.addToShopLog("Le Personnage "+RS.getInt("personaje")+" n'est attribue a aucun compte charge");
 						continue;
 					}
-					if(perso.get_compte().getGameThread() == null) {
+					if(perso.getCuenta().getGameThread() == null) {
 						MainServidor.addToShopLog("Le Personnage "+RS.getInt("personaje")+" n'a pas thread associe, le personnage est il hors ligne ?");
 						continue;
 					}
-					if(perso.get_fight() != null) continue; // Perso en combat  @ Nami-Doc
+					if(perso.getPelea() != null) continue; // Perso en combat  @ Nami-Doc
 					action = RS.getInt("accion");
 					nombre = RS.getInt("nombre");
 					id = RS.getInt("id");
@@ -1933,12 +1928,12 @@ public class GestorSQL {
 						}
 						//Ajouter X point de capital
 						case 4 -> {
-							perso.addCapital(nombre);
+							perso.addPuntosDeCapital(nombre);
 							sortie += nombre + " Point(s) de capital";
 						}
 						//Ajouter X point de sort
 						case 5 -> {
-							perso.addSpellPoint(nombre);
+							perso.addAgregarPuntosDeHechizo(nombre);
 							sortie += nombre + " Point(s) de sort";
 						}
 						//Ajouter un item avec des jets aléatoire
@@ -1949,7 +1944,7 @@ public class GestorSQL {
 							if (obj == null) continue;
 							if (perso.addObjet(obj, true))//Si le joueur n'avait pas d'item similaire
 								Mundo.addObjet(obj, true);
-							JuegoServidor.addToSockLog("Objet " + nombre + " ajouter a " + perso.get_name() + " avec des stats aleatoire");
+							JuegoServidor.addToSockLog("Objet " + nombre + " ajouter a " + perso.getNombre() + " avec des stats aleatoire");
 							GestorSalida.GAME_SEND_MESSAGE(perso, "L'objet \"" + t.getName() + "\" viens d'etre ajouter a votre personnage", couleur);
 						}
 						//Ajouter un item avec des jets MAX
@@ -1960,50 +1955,50 @@ public class GestorSQL {
 							if (obj == null) continue;
 							if (perso.addObjet(obj, true))//Si le joueur n'avait pas d'item similaire
 								Mundo.addObjet(obj, true);
-							JuegoServidor.addToSockLog("Objet " + nombre + " ajoute a " + perso.get_name() + " avec des stats MAX");
+							JuegoServidor.addToSockLog("Objet " + nombre + " ajoute a " + perso.getNombre() + " avec des stats MAX");
 							GestorSalida.GAME_SEND_MESSAGE(perso, "L'objet \"" + t.getName() + "\" avec des stats maximum, viens d'etre ajoute a votre personnage", couleur);
 						}
 						//Force
 						case 118 -> {
 							perso.get_baseStats().addOneStat(action, nombre);
-							GestorSalida.GAME_SEND_STATS_PACKET(perso);
+							GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 							sortie += nombre + " force";
 						}
 						//Agilite
 						case 119 -> {
 							perso.get_baseStats().addOneStat(action, nombre);
-							GestorSalida.GAME_SEND_STATS_PACKET(perso);
+							GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 							sortie += nombre + " agilite";
 						}
 						//Chance
 						case 123 -> {
 							perso.get_baseStats().addOneStat(action, nombre);
-							GestorSalida.GAME_SEND_STATS_PACKET(perso);
+							GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 							sortie += nombre + " chance";
 						}
 						//Sagesse
 						case 124 -> {
 							perso.get_baseStats().addOneStat(action, nombre);
-							GestorSalida.GAME_SEND_STATS_PACKET(perso);
+							GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 							sortie += nombre + " sagesse";
 						}
 						//Vita
 						case 125 -> {
 							perso.get_baseStats().addOneStat(action, nombre);
-							GestorSalida.GAME_SEND_STATS_PACKET(perso);
+							GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 							sortie += nombre + " vita";
 						}
 						//Intelligence
 						case 126 -> {
 							int statID = action;
 							perso.get_baseStats().addOneStat(statID, nombre);
-							GestorSalida.GAME_SEND_STATS_PACKET(perso);
+							GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 							sortie += nombre + " intelligence";
 						}
 					}
-					GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					if(action < 20 || action >100) GestorSalida.GAME_SEND_MESSAGE(perso,sortie+" a votre personnage",couleur); //Si l'action n'est pas un ajout d'objet on envoye un message a l'utilisateur
-					MainServidor.addToShopLog("(Commande "+id+")Action "+action+" Nombre: "+nombre+" appliquee sur le personnage "+RS.getInt("jugador")+"("+perso.get_name()+")");
+					MainServidor.addToShopLog("(Commande "+id+")Action "+action+" Nombre: "+nombre+" appliquee sur le personnage "+RS.getInt("jugador")+"("+perso.getNombre()+")");
 				try {
 					String query = "DELETE FROM datos_acciones_tiempo_real WHERE id="+id+";";
 					p = NuevaConsulta(query, _dinamicos);

@@ -284,7 +284,7 @@ public class Mapa {
 		private Objeto _droppedItem;
 		
 		public Case(Mapa a_map, int id, boolean _walk, boolean LoS, int objID) {
-			_map = a_map.get_id();
+			_map = a_map.getID();
 			_id = id;
 			_Walkable = _walk;
 			_LoS = LoS;
@@ -892,7 +892,7 @@ public class Mapa {
 //Utiliser (zaap)
 				case 114 -> {
 					perso.openZaapMenu();
-					perso.get_compte().getGameThread().removeAction(GA);
+					perso.getCuenta().getGameThread().removeAction(GA);
 				}
 //Zaapis
 				case 157 -> {
@@ -946,7 +946,7 @@ public class Mapa {
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1135");
 						return;
 					}
-					if (perso.getGuildMember().getRank() != 1)//Non meneur
+					if (perso.getMiembroGremio().getRank() != 1)//Non meneur
 					{
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "198");
 						return;
@@ -970,40 +970,40 @@ public class Mapa {
 				case 183 -> {
 					if (perso.get_lvl() > 15) {
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1127");
-						perso.get_compte().getGameThread().removeAction(GA);
+						perso.getCuenta().getGameThread().removeAction(GA);
 						return;
 					}
-					short mapID = Constantes.getStartMap(perso.get_classe());
-					int cellID = Constantes.getStartCell(perso.get_classe());
+					short mapID = Constantes.getStartMap(perso.getClase());
+					int cellID = Constantes.getStartCell(perso.getClase());
 					perso.teletransportar(mapID, cellID);
-					perso.get_compte().getGameThread().removeAction(GA);
+					perso.getCuenta().getGameThread().removeAction(GA);
 				}
 //Vérouiller maison
 				case 81 -> {
-					Casas h = Casas.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Casas h = Casas.get_house_id_by_coord(perso.getActualMapa().getID(), CcellID);
 					if (h == null) return;
 					perso.setInHouse(h);
 					h.Lock(perso);
 				}
 //Rentrer dans une maison
 				case 84 -> {
-					Casas h2 = Casas.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Casas h2 = Casas.get_house_id_by_coord(perso.getActualMapa().getID(), CcellID);
 					if (h2 == null) return;
 					perso.setInHouse(h2);
 					h2.HopIn(perso);
 				}
 //Acheter maison
 				case 97 -> {
-					Casas h3 = Casas.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Casas h3 = Casas.get_house_id_by_coord(perso.getActualMapa().getID(), CcellID);
 					if (h3 == null) return;
 					perso.setInHouse(h3);
 					h3.BuyIt(perso);
 				}
 //Ouvrir coffre privé
 				case 104 -> {
-					Cofres trunk = Cofres.get_trunk_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Cofres trunk = Cofres.get_trunk_id_by_coord(perso.getActualMapa().getID(), CcellID);
 					if (trunk == null) {
-						JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().get_id() + " CELLID : " + CcellID);
+						JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().getID() + " CELLID : " + CcellID);
 						return;
 					}
 					perso.setInTrunk(trunk);
@@ -1011,9 +1011,9 @@ public class Mapa {
 				}
 //Vérouiller coffre
 				case 105 -> {
-					Cofres t = Cofres.get_trunk_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Cofres t = Cofres.get_trunk_id_by_coord(perso.getActualMapa().getID(), CcellID);
 					if (t == null) {
-						JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().get_id() + " CELLID : " + CcellID);
+						JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().getID() + " CELLID : " + CcellID);
 						return;
 					}
 					perso.setInTrunk(t);
@@ -1021,7 +1021,7 @@ public class Mapa {
 				}
 //Modifier prix de vente
 				case 98, 108 -> {
-					Casas h4 = Casas.get_house_id_by_coord(perso.getActualMapa().get_id(), CcellID);
+					Casas h4 = Casas.get_house_id_by_coord(perso.getActualMapa().getID(), CcellID);
 					if (h4 == null) return;
 					perso.setInHouse(h4);
 					h4.SellIt(perso);
@@ -1173,14 +1173,14 @@ public class Mapa {
 	public void addEndFightAction(int type, Accion A) {
 		_endFightAction.computeIfAbsent(type, k -> new ArrayList<>());
 		//On retire l'action si elle existait déjà
-		delEndFightAction(type,A.getID());
+		delEndFightAction(type,A.get_id());
 		_endFightAction.get(type).add(A);
 	}
 
 	public void delEndFightAction(int type,int aType) {
 		if(_endFightAction.get(type) == null)return;
 		ArrayList<Accion> copy = new ArrayList<>(_endFightAction.get(type));
-		for(Accion A : copy)if(A.getID() == aType)_endFightAction.get(type).remove(A);
+		for(Accion A : copy)if(A.get_id() == aType)_endFightAction.get(type).remove(A);
 	}
 
 	public void MovimientoDeMonstruosEnMapas() {
@@ -1192,7 +1192,7 @@ public class Mapa {
 			if(group.isFix() && this._id != 8279)
 				continue;
 			if (this._id == 8279) {// W:15   H:17
-				final int cell1 = group.getCellID();
+				final int cell1 = group.getCeldaID();
 				final Case cell2 = this.getCase((cell1 - 15)), cell3 = this.getCase((cell1 - 15 + 1));
 				final Case cell4 = this.getCase((cell1 + 15 - 1)), cell5 = this.getCase((cell1 + 15));
 				boolean case2 = (cell2 != null && (cell2.isWalkable(true) && (cell2.getPersos().isEmpty())));
@@ -1251,7 +1251,7 @@ public class Mapa {
 					String pathstr;
 					try {
 						assert nextCell != null;
-						pathstr = Camino.getShortestStringPathBetween(this, group.getCellID(), nextCell.getID(), 0);
+						pathstr = Camino.getShortestStringPathBetween(this, group.getCeldaID(), nextCell.getID(), 0);
 					} catch (Exception e) {
 						e.printStackTrace();
 						return;
@@ -1260,7 +1260,7 @@ public class Mapa {
 						return;
 					group.setCellID(nextCell.getID());
 					for (Personaje z : getPersos())
-						GestorSalida.GAME_SEND_GA_PACKET(z.get_compte().getGameThread().get_out(), "0", "1", group.getID()
+						GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getGameThread().get_out(), "0", "1", group.getID()
 								+ "", pathstr);
 				} else {
 					if (group.isFix())
@@ -1272,10 +1272,10 @@ public class Mapa {
 					int cell = -1;
 					while (cell == -1 || cell == 383 || cell == 384
 							|| cell == 398 || cell == 369)
-						cell = getRandomNearFreeCellId(group.getCellID());
+						cell = getRandomNearFreeCellId(group.getCeldaID());
 					String pathstr;
 					try {
-						pathstr = Camino.getShortestStringPathBetween(this, group.getCellID(), cell, 0);
+						pathstr = Camino.getShortestStringPathBetween(this, group.getCeldaID(), cell, 0);
 					} catch (Exception e) {
 						e.printStackTrace();
 						return;
@@ -1284,7 +1284,7 @@ public class Mapa {
 						return;
 					group.setCellID(cell);
 					for (Personaje z : getPersos())
-						GestorSalida.GAME_SEND_GA_PACKET(z.get_compte().getGameThread().get_out(), "0", "1", group.getID() + "", pathstr);
+						GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getGameThread().get_out(), "0", "1", group.getID() + "", pathstr);
 				}
 			} else {
 				if (group.isFix())
@@ -1292,10 +1292,10 @@ public class Mapa {
 				i++;
 				if (i != RandNumb)
 					continue;
-				int cell = getRandomNearFreeCellId(group.getCellID());
+				int cell = getRandomNearFreeCellId(group.getCeldaID());
 				String pathstr;
 				try {
-					pathstr = Camino.getShortestStringPathBetween(this, group.getCellID(), cell, 0);
+					pathstr = Camino.getShortestStringPathBetween(this, group.getCeldaID(), cell, 0);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return;
@@ -1304,7 +1304,7 @@ public class Mapa {
 					return;
 				group.setCellID(cell);
 				for (Personaje z : getPersos())
-					GestorSalida.GAME_SEND_GA_PACKET(z.get_compte().getGameThread().get_out(), "0", "1", group.getID()
+					GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getGameThread().get_out(), "0", "1", group.getID()
 							+ "", pathstr);
 			}
 
@@ -1348,9 +1348,7 @@ public class Mapa {
 		return _Y;
 	}
 	
-	public Map<Integer, NPC> get_npcs() {
-		return _npcs;
-	}
+	public Map<Integer, NPC> getNPCS() { return _npcs; }
 
 	public NPC addNpc(int npcID,int cellID, int dir) {
 		NPCModelo temp = Mundo.getNPCTemplate(npcID);
@@ -1445,7 +1443,7 @@ public class Mapa {
 			persos.addAll(c.getPersos().values());
 		return persos;
 	}
-	public short get_id() {
+	public short getID() {
 		return _id;
 	}
 
@@ -1465,12 +1463,10 @@ public class Mapa {
 		return _key;
 	}
 
-	public String get_placesStr() {
-		return _placesStr;
-	}
+	public String getEsquemaPelea() { return _placesStr; }
 
 	public void addPlayer(Personaje perso) {
-		GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(this,perso);
+		GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(this,perso);
 		perso.getActualCelda().addPerso(perso);
 	}
 
@@ -1574,7 +1570,7 @@ public class Mapa {
 			//Si la case est prise par un groupe de monstre
 			boolean ok = true;
 			for(Entry<Integer,MobGroup> mgEntry : _mobGroups.entrySet()) {
-				if (mgEntry.getValue().getCellID() == entry.getValue().getID()) {
+				if (mgEntry.getValue().getCeldaID() == entry.getValue().getID()) {
 					ok = false;
 					break;
 				}
@@ -1583,7 +1579,7 @@ public class Mapa {
 			//Si la case est prise par un npc
 			ok = true;
 			for(Entry<Integer,NPC> npcEntry : _npcs.entrySet()) {
-				if (npcEntry.getValue().get_cellID() == entry.getValue().getID()) {
+				if (npcEntry.getValue().getCeldaID() == entry.getValue().getID()) {
 					ok = false;
 					break;
 				}
@@ -1688,7 +1684,7 @@ public class Mapa {
 			//Si la case est prise par un groupe de monstre
 			boolean ok = true;
 			for (Entry<Integer, Monstruo.MobGroup> mgEntry : _mobGroups.entrySet())
-				if (mgEntry.getValue().getCellID() == gameCase.getID()) {
+				if (mgEntry.getValue().getCeldaID() == gameCase.getID()) {
 					ok = false;
 					break;
 				}
@@ -1697,7 +1693,7 @@ public class Mapa {
 			//Si la case est prise par un npc
 			ok = true;
 			for (Entry<Integer, NPC> npcEntry : _npcs.entrySet())
-				if (npcEntry.getValue().get_cellID() == gameCase.getID()) {
+				if (npcEntry.getValue().getCeldaID() == gameCase.getID()) {
 					ok = false;
 					break;
 				}
@@ -1743,15 +1739,15 @@ public class Mapa {
 		
 		if(_placesStr.equalsIgnoreCase("|")) return;
 		//Si le joueur a changer de map ou ne peut etre aggro
-		if(perso.getActualMapa().get_id() != _id || !perso.canAggro())return;
+		if(perso.getActualMapa().getID() != _id || !perso.PuedeSerAgredido())return;
 		
 		for(MobGroup group : _mobGroups.values())
 		{
-			if(Camino.getDistanceBetween(this,caseID,group.getCellID()) <= group.getAggroDistance())//S'il y aggro
+			if(Camino.getDistanceBetween(this,caseID,group.getCeldaID()) <= group.getAggroDistance())//S'il y aggro
 			{
-				if((group.getAlignement() == -1 || ((perso.get_align() == 1 || perso.get_align() == 2) && (perso.get_align() != group.getAlignement()))) && Condiciones.ValidarCondicion(perso, group.getCondition()))
+				if((group.getAlineacion() == -1 || ((perso.get_align() == 1 || perso.get_align() == 2) && (perso.get_align() != group.getAlineacion()))) && Condiciones.ValidarCondicion(perso, group.getCondition()))
 				{
-					JuegoServidor.addToLog(perso.get_name()+" lance un combat contre le groupe "+group.getID()+" sur la map "+_id);
+					JuegoServidor.addToLog(perso.getNombre()+" lance un combat contre le groupe "+group.getID()+" sur la map "+_id);
 					startFigthVersusMonstres(perso,group);
 					return;
 				}
@@ -1857,6 +1853,6 @@ public class Mapa {
 	
 	public int getStoreCount()
 	{
-		return (Mundo.getSeller(get_id()) == null?0: Mundo.getSeller(get_id()).size());
+		return (Mundo.getSeller(getID()) == null?0: Mundo.getSeller(getID()).size());
 	}
 }

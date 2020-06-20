@@ -130,7 +130,7 @@ public class Recaudador
 		for(Entry<Integer, Recaudador> perco :  Mundo.getPercos().entrySet())
 		{
 			if(perco.getValue()._inFight > 0) continue;//On affiche pas le perco si il est en combat
-			if(perco.getValue()._MapID == map.get_id())
+			if(perco.getValue()._MapID == map.getID())
 			{
 				if(!isFirst) sock.append("|");
 				sock.append("+");
@@ -227,7 +227,7 @@ public class Recaudador
 	    			if(!isFirst) packet.append("|");
 	    			packet.append(perco.getValue().getGuid()).append(";").append(perco.getValue().get_N1()).append(",").append(perco.getValue().get_N2()).append(";");
 	    			
-	    			packet.append(Integer.toString(map.get_id(), 36)).append(",").append(map.getX()).append(",").append(map.getY()).append(";");
+	    			packet.append(Integer.toString(map.getID(), 36)).append(",").append(map.getX()).append(",").append(map.getY()).append(";");
 	    			packet.append(perco.getValue().get_inFight()).append(";");
 	    			if(perco.getValue().get_inFight() == 1)
 	    			{
@@ -339,7 +339,7 @@ public class Recaudador
 					{
 						str.append("|");
 						str.append(Integer.toString(f.getPersonnage().get_GUID(), 36)).append(";");
-						str.append(f.getPersonnage().get_name()).append(";");
+						str.append(f.getPersonnage().getNombre()).append(";");
 						str.append(f.getPersonnage().get_lvl()).append(";");
 						str.append("0;");
 					}
@@ -364,7 +364,7 @@ public class Recaudador
 						if(f.getPersonnage() == null) continue;//On sort le percepteur
 						str.append("|");
 						str.append(Integer.toString(f.getPersonnage().get_GUID(), 36)).append(";");
-						str.append(f.getPersonnage().get_name()).append(";");
+						str.append(f.getPersonnage().getNombre()).append(";");
 						str.append(f.getPersonnage().get_gfxID()).append(";");
 						str.append(f.getPersonnage().get_lvl()).append(";");
 						str.append(Integer.toString(f.getPersonnage().get_color1(), 36)).append(";");

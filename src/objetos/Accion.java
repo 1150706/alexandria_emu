@@ -23,31 +23,29 @@ import objetos.casas.Casas;
 
 public class Accion {
 
-	private final int ID;
-	private final String args;
-	private final String cond;
+	private final int _id;
+	private final String _argumento;
+	private final String _condicion;
 	
-	public Accion(int id, String args, String cond)
-	{
-		this.ID = id;
-		this.args = args;
-		this.cond = cond;
+	public Accion(int id, String argumento, String condicion) {
+		this._id = id;
+		this._argumento = argumento;
+		this._condicion = condicion;
 	}
-
 
 	public void apply(Personaje perso, Personaje target, int itemID, int cellid) {
 		if(perso == null)return;
-		if(!cond.equalsIgnoreCase("") && !cond.equalsIgnoreCase("-1")&& !Condiciones.ValidarCondicion(perso,cond)) {
+		if(!_condicion.equalsIgnoreCase("") && !_condicion.equalsIgnoreCase("-1")&& !Condiciones.ValidarCondicion(perso, _condicion)) {
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "119");
 			return;
 		}
-		if(perso.get_compte().getGameThread() == null) return;
-		PrintWriter out = perso.get_compte().getGameThread().get_out();	
-		switch(ID) {
+		if(perso.getCuenta().getGameThread() == null) return;
+		PrintWriter out = perso.getCuenta().getGameThread().get_out();
+		switch(_id) {
 
 			case -2://Crear un gremio
 				if(perso.is_away())return;
-				if(perso.get_guild() != null || perso.getGuildMember() != null) {
+				if(perso.get_guild() != null || perso.getMiembroGremio() != null) {
 					GestorSalida.GAME_SEND_gC_PACKET(perso, "Ea");
 					return;
 				}
@@ -65,17 +63,17 @@ public class Accion {
 				//Sacamos la cantidad de kamas necesarias para abrir el banco
 				int cost = perso.getCostoAbrirBanco();
 				if(cost > 0) {
-					long nKamas = perso.get_kamas() - cost;
+					long nKamas = perso.getKamas() - cost;
 					//Si el jugador no tiene las suficientes kamas para abrir el banco
 					if(nKamas <0){
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1128;"+cost);
 						return;
 					}
-					perso.set_kamas(nKamas);
-					GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					perso.setKamas(nKamas);
+					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "020;"+cost);
 				}
-				GestorSalida.GAME_SEND_ECK_PACKET(perso.get_compte().getGameThread().get_out(), 5, "");
+				GestorSalida.GAME_SEND_ECK_PACKET(perso.getCuenta().getGameThread().get_out(), 5, "");
 				GestorSalida.GAME_SEND_EL_BANK_PACKET(perso);
 				perso.set_away(true);
 				perso.setInBank(true);
@@ -83,21 +81,21 @@ public class Accion {
 			
 			case 0://Teletransportacion
 				try {
-					short nuevomapa = Short.parseShort(args.split(",",2)[0]);
-					int nuevacelda = Integer.parseInt(args.split(",",2)[1]);
+					short nuevomapa = Short.parseShort(_argumento.split(",",2)[0]);
+					int nuevacelda = Integer.parseInt(_argumento.split(",",2)[1]);
 					perso.teletransportar(nuevomapa,nuevacelda);
 				}catch(Exception e ){return;}
 				break;
 			
 			case 1://Discusion con un NPC
-				out = perso.get_compte().getGameThread().get_out();
-				if(args.equalsIgnoreCase("DV")) {
+				out = perso.getCuenta().getGameThread().get_out();
+				if(_argumento.equalsIgnoreCase("DV")) {
 					GestorSalida.GAME_SEND_END_DIALOG_PACKET(out);
 					perso.set_isTalkingWith(0);
 				}else {
 					int qID = -1;
 					try {
-						qID = Integer.parseInt(args);
+						qID = Integer.parseInt(_argumento);
 					}catch(NumberFormatException ignored){}
 
 					NPC_question  quest = Mundo.getNPCQuestion(qID);
@@ -112,24 +110,24 @@ public class Accion {
 			
 			case 4://Kamas
 				try {
-					int count = Integer.parseInt(args);
-					long curKamas = perso.get_kamas();
+					int count = Integer.parseInt(_argumento);
+					long curKamas = perso.getKamas();
 					long newKamas = curKamas + count;
 					if(newKamas <0) newKamas = 0;
-					perso.set_kamas(newKamas);
+					perso.setKamas(newKamas);
 					//Si en ligne (normalement oui)
-					if(perso.isOnline())
-						GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					if(perso.isConectado())
+						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
 
 			case 5://Objeto
 				try {
-					int tID = Integer.parseInt(args.split(",")[0]);
-					int count = Integer.parseInt(args.split(",")[1]);
+					int tID = Integer.parseInt(_argumento.split(",")[0]);
+					int count = Integer.parseInt(_argumento.split(",")[1]);
 					boolean send = true;
-					if(args.split(",").length >2)send = args.split(",")[2].equals("1");
+					if(_argumento.split(",").length >2)send = _argumento.split(",")[2].equals("1");
 					
 					//Si on ajoute
 					if(count > 0) {
@@ -143,7 +141,7 @@ public class Accion {
 						perso.removeByTemplateID(tID,-count);
 					}
 					//Si en ligne (normalement oui)
-					if(perso.isOnline())//on envoie le packet qui indique l'ajout//retrait d'un item
+					if(perso.isConectado())//on envoie le packet qui indique l'ajout//retrait d'un item
 					{
 						GestorSalida.GAME_SEND_Ow_PACKET(perso);
 						if(send) {
@@ -161,7 +159,7 @@ public class Accion {
 
 			case 6://Aprender un oficio
 				try {
-					int oficioid = Integer.parseInt(args);
+					int oficioid = Integer.parseInt(_argumento);
 					if(Mundo.getMetier(oficioid) == null)return;
 					//Si es un oficio basico
 					if(oficioid == 	2 || oficioid == 11 ||
@@ -175,7 +173,7 @@ public class Accion {
 					   oficioid == 36 || oficioid == 41 ||
 					   oficioid == 56 || oficioid == 58 ||
 					   oficioid == 60 || oficioid == 65) {
-						if(perso.getMetierByID(oficioid) != null)//Métier déjà appris
+						if(perso.getOficioPorID(oficioid) != null)//Métier déjà appris
 						{
 							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "111");
 						}
@@ -196,19 +194,19 @@ public class Accion {
 					   oficioid == 62 || oficioid == 63 ||
 					   oficioid == 64) {
 						//Requiere nivel 65 de un oficio simple
-						if(perso.getMetierByID(17) != null && perso.getMetierByID(17).get_lvl() >= 65 && oficioid == 43
-						|| perso.getMetierByID(11) != null && perso.getMetierByID(11).get_lvl() >= 65 && oficioid == 44
-						|| perso.getMetierByID(14) != null && perso.getMetierByID(14).get_lvl() >= 65 && oficioid == 45
-						|| perso.getMetierByID(20) != null && perso.getMetierByID(20).get_lvl() >= 65 && oficioid == 46
-						|| perso.getMetierByID(31) != null && perso.getMetierByID(31).get_lvl() >= 65 && oficioid == 47
-						|| perso.getMetierByID(13) != null && perso.getMetierByID(13).get_lvl() >= 65 && oficioid == 48
-						|| perso.getMetierByID(19) != null && perso.getMetierByID(19).get_lvl() >= 65 && oficioid == 49
-						|| perso.getMetierByID(18) != null && perso.getMetierByID(18).get_lvl() >= 65 && oficioid == 50
-						|| perso.getMetierByID(15) != null && perso.getMetierByID(15).get_lvl() >= 65 && oficioid == 62
-						|| perso.getMetierByID(16) != null && perso.getMetierByID(16).get_lvl() >= 65 && oficioid == 63
-						|| perso.getMetierByID(27) != null && perso.getMetierByID(27).get_lvl() >= 65 && oficioid == 64) {
+						if(perso.getOficioPorID(17) != null && perso.getOficioPorID(17).get_lvl() >= 65 && oficioid == 43
+						|| perso.getOficioPorID(11) != null && perso.getOficioPorID(11).get_lvl() >= 65 && oficioid == 44
+						|| perso.getOficioPorID(14) != null && perso.getOficioPorID(14).get_lvl() >= 65 && oficioid == 45
+						|| perso.getOficioPorID(20) != null && perso.getOficioPorID(20).get_lvl() >= 65 && oficioid == 46
+						|| perso.getOficioPorID(31) != null && perso.getOficioPorID(31).get_lvl() >= 65 && oficioid == 47
+						|| perso.getOficioPorID(13) != null && perso.getOficioPorID(13).get_lvl() >= 65 && oficioid == 48
+						|| perso.getOficioPorID(19) != null && perso.getOficioPorID(19).get_lvl() >= 65 && oficioid == 49
+						|| perso.getOficioPorID(18) != null && perso.getOficioPorID(18).get_lvl() >= 65 && oficioid == 50
+						|| perso.getOficioPorID(15) != null && perso.getOficioPorID(15).get_lvl() >= 65 && oficioid == 62
+						|| perso.getOficioPorID(16) != null && perso.getOficioPorID(16).get_lvl() >= 65 && oficioid == 63
+						|| perso.getOficioPorID(27) != null && perso.getOficioPorID(27).get_lvl() >= 65 && oficioid == 64) {
 							//On compte les specialisations déja acquis si c'est supérieur a 2 on ignore
-							if(perso.getMetierByID(oficioid) != null)//Métier déjà appris
+							if(perso.getOficioPorID(oficioid) != null)//Métier déjà appris
 							{
 								GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "111");
 							}
@@ -220,7 +218,7 @@ public class Accion {
 							else//Si c'est < ou = à 2 on apprend
 							{
 								perso.learnJob(Mundo.getMetier(oficioid));
-								perso.getMetierByID(oficioid).addXp(perso, 582000);//Level 100 direct
+								perso.getOficioPorID(oficioid).AgregarExperiencia(perso, 582000);//Level 100 direct
 							}	
 						}else {
 							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "12");
@@ -235,10 +233,10 @@ public class Accion {
 			break;
 
 			case 8://Ajustar las estadisticas
-		            int statID = Integer.parseInt(args.split(",", 2)[0]);
-		            int number = Integer.parseInt(args.split(",", 2)[1]);
+		            int statID = Integer.parseInt(_argumento.split(",", 2)[0]);
+		            int number = Integer.parseInt(_argumento.split(",", 2)[1]);
 		            perso.get_baseStats().addOneStat(statID, number);
-		            GestorSalida.GAME_SEND_STATS_PACKET(perso);
+		            GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 		            int messID = 0;
 				if (statID == 126) { // '~'
 					messID = 14;
@@ -249,27 +247,27 @@ public class Accion {
 
 			case 9://Aprender un hechizo
 				try {
-					int sID = Integer.parseInt(args);
+					int sID = Integer.parseInt(_argumento);
 					if(Mundo.getSort(sID) == null)return;
-					perso.learnSpell(sID,1, true,true);
+					perso.AprenderHechizo(sID,1, true,true);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
 
 			case 10://Pain/potion/viande/poisson
 				try {
-					int min = Integer.parseInt(args.split(",",2)[0]);
-					int max = Integer.parseInt(args.split(",",2)[1]);
+					int min = Integer.parseInt(_argumento.split(",",2)[0]);
+					int max = Integer.parseInt(_argumento.split(",",2)[1]);
 					if(max == 0) max = min;
 					int val = Formulas.getRandomValue(min, max);
 					if(target != null) {
 						if(target.get_PDV() + val > target.get_PDVMAX())val = target.get_PDVMAX()-target.get_PDV();
 						target.set_PDV(target.get_PDV()+val);
-						GestorSalida.GAME_SEND_STATS_PACKET(target);
+						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(target);
 					} else {
 						if(perso.get_PDV() + val > perso.get_PDVMAX())val = perso.get_PDVMAX()-perso.get_PDV();
 						perso.set_PDV(perso.get_PDV()+val);
-						GestorSalida.GAME_SEND_STATS_PACKET(perso);
+						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					}
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
@@ -277,8 +275,8 @@ public class Accion {
 
 			case 11://Definir la alineacion
 				try {
-					byte newAlign = Byte.parseByte(args.split(",",2)[0]);
-					boolean replace = Integer.parseInt(args.split(",",2)[1]) == 1;
+					byte newAlign = Byte.parseByte(_argumento.split(",",2)[0]);
+					boolean replace = Integer.parseInt(_argumento.split(",",2)[1]) == 1;
 					//Si le perso n'est pas neutre, et qu'on doit pas remplacer, on passe
 					if(perso.get_align() != Constantes.ALIGNEMENT_NEUTRE && !replace)return;
 					perso.modifAlignement(newAlign);
@@ -288,9 +286,9 @@ public class Accion {
 
 			case 12://Refrescar un grupo de monstruos
 				try {
-					boolean delObj = args.split(",")[0].equals("true");
-					boolean inArena = args.split(",")[1].equals("true");
-					if(inArena && !Mundo.isArenaMap(perso.getActualMapa().get_id()))return;	//Si la map du personnage n'est pas classé comme étant dans l'arène
+					boolean delObj = _argumento.split(",")[0].equals("true");
+					boolean inArena = _argumento.split(",")[1].equals("true");
+					if(inArena && !Mundo.isArenaMap(perso.getActualMapa().getID()))return;	//Si la map du personnage n'est pas classé comme étant dans l'arène
 					PiedraAlma pierrePleine = (PiedraAlma) Mundo.getObjet(itemID);
 					String groupData = pierrePleine.parseGroupData();
 					String condition = "MiS = "+perso.get_GUID();	//Condition pour que le groupe ne soit lançable que par le personnage qui à utiliser l'objet
@@ -310,8 +308,8 @@ public class Accion {
 		          perso.get_baseStats().addOneStat(123, -perso._baseStats.getEffect(123));
 		          perso.get_baseStats().addOneStat(119, -perso._baseStats.getEffect(119));
 		          perso.get_baseStats().addOneStat(126, -perso._baseStats.getEffect(126));
-		          perso.addCapital((perso.get_lvl() - 1) * 5 - perso.get_capital());
-		          GestorSalida.GAME_SEND_STATS_PACKET(perso);
+		          perso.addPuntosDeCapital((perso.get_lvl() - 1) * 5 - perso.get_capital());
+		          GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 		        }catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
@@ -323,10 +321,10 @@ public class Accion {
 			case 15://Téléportation donjon
 				try
 				{
-					short newMapID = Short.parseShort(args.split(",")[0]);
-					int newCellID = Integer.parseInt(args.split(",")[1]);
-					int ObjetNeed = Integer.parseInt(args.split(",")[2]);
-					int MapNeed = Integer.parseInt(args.split(",")[3]);
+					short newMapID = Short.parseShort(_argumento.split(",")[0]);
+					int newCellID = Integer.parseInt(_argumento.split(",")[1]);
+					int ObjetNeed = Integer.parseInt(_argumento.split(",")[2]);
+					int MapNeed = Integer.parseInt(_argumento.split(",")[3]);
 					if(ObjetNeed == 0)
 					{
 						//Téléportation sans objets
@@ -339,7 +337,7 @@ public class Accion {
 						perso.teletransportar(newMapID,newCellID);
 					}else if(MapNeed > 0)
 					{
-					if (perso.hasItemTemplate(ObjetNeed, 1) && perso.getActualMapa().get_id() == MapNeed)
+					if (perso.hasItemTemplate(ObjetNeed, 1) && perso.getActualMapa().getID() == MapNeed)
 					{
 						//Le perso a l'item
 						//Le perso est sur la bonne map
@@ -348,7 +346,7 @@ public class Accion {
 						perso.removeByTemplateID(ObjetNeed, 1);
 						GestorSalida.GAME_SEND_Ow_PACKET(perso);
 					}
-					else if(perso.getActualMapa().get_id() != MapNeed)
+					else if(perso.getActualMapa().getID() != MapNeed)
 					{
 						//Le perso n'est pas sur la bonne map
 						GestorSalida.GAME_SEND_MESSAGE(perso, "Vous n'etes pas sur la bonne map du donjon pour etre teleporter.", "009900");
@@ -368,7 +366,7 @@ public class Accion {
 				{
 					if(perso.get_align() != 0)
 					{
-						int AddHonor = Integer.parseInt(args);
+						int AddHonor = Integer.parseInt(_argumento);
 						int ActualHonor = perso.get_honor();
 						perso.set_honor(ActualHonor+AddHonor);
 					}
@@ -378,11 +376,11 @@ public class Accion {
 			case 17://Xp métier JobID,XpValue
 				try
 				{
-					int JobID = Integer.parseInt(args.split(",")[0]);
-					int XpValue = Integer.parseInt(args.split(",")[1]);
-					if(perso.getMetierByID(JobID) != null)
+					int JobID = Integer.parseInt(_argumento.split(",")[0]);
+					int XpValue = Integer.parseInt(_argumento.split(",")[1]);
+					if(perso.getOficioPorID(JobID) != null)
 					{
-						perso.getMetierByID(JobID).addXp(perso, XpValue);
+						perso.getOficioPorID(JobID).AgregarExperiencia(perso, XpValue);
 					}
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
@@ -406,48 +404,48 @@ public class Accion {
 			case 20://+Points de sorts
 				try
 				{
-					int pts = Integer.parseInt(args);
+					int pts = Integer.parseInt(_argumento);
 					if(pts < 1) return;
-					perso.addSpellPoint(pts);
-					GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					perso.addAgregarPuntosDeHechizo(pts);
+					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
 			case 21://+Energie
 				try
 				{
-					int Energy = Integer.parseInt(args);
+					int Energy = Integer.parseInt(_argumento);
 					if(Energy < 1) return;
 					
 					int EnergyTotal = perso.get_energy()+Energy;
 					if(EnergyTotal > 10000) EnergyTotal = 10000;
 					
 					perso.set_energy(EnergyTotal);
-					GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
 			case 22://+Xp
 				try
 				{
-					long XpAdd = Integer.parseInt(args);
+					long XpAdd = Integer.parseInt(_argumento);
 					if(XpAdd < 1) return;
 					
 					long TotalXp = perso.get_curExp()+XpAdd;
 					perso.set_curExp(TotalXp);
-					GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
 			case 23://UnlearnJob
 				try
 				{
-					int Job = Integer.parseInt(args);
+					int Job = Integer.parseInt(_argumento);
 					if(Job < 1) return;
-					StatsMetier m = perso.getMetierByID(Job);
+					StatsMetier m = perso.getOficioPorID(Job);
 					if(m == null) return;
 					perso.unlearnJob(m.getID());
-					GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					GestorSQL.guardar_personaje(perso, false);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
@@ -455,19 +453,19 @@ public class Accion {
 			case 24://SimpleMorph
 				try
 				{
-					int morphID = Integer.parseInt(args);
+					int morphID = Integer.parseInt(_argumento);
 					if(morphID < 0)return;
-					perso.set_gfxID(morphID);
+					perso.setGFX(morphID);
 					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
-					GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(perso.getActualMapa(), perso);
+					GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(perso.getActualMapa(), perso);
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
 			case 25://SimpleUnMorph
-				int UnMorphID = perso.get_classe()*10 + perso.get_sexe();
-				perso.set_gfxID(UnMorphID);
+				int UnMorphID = perso.getClase()*10 + perso.getSexo();
+				perso.setGFX(UnMorphID);
 				GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
-				GestorSalida.GAME_SEND_ADD_PLAYER_TO_MAP(perso.getActualMapa(), perso);
+				GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(perso.getActualMapa(), perso);
 			break;
 			case 26://Téléportation enclo de guilde (ouverture du panneau de guilde)
 				GestorSalida.GAME_SEND_GUILDENCLO_PACKET(perso);
@@ -476,7 +474,7 @@ public class Accion {
 				String ValidMobGroup = "";
 				try
 		        {
-					for(String MobAndLevel : args.split("\\|"))
+					for(String MobAndLevel : _argumento.split("\\|"))
 					{
 						int monsterID = -1;
 						int monsterLevel = -1;
@@ -514,7 +512,7 @@ public class Accion {
 					JuegoThread GT = MainServidor.gameServer.getClients().get(b);
 					Personaje P = GT.getPerso();
 					if(P == null || P == perso)continue;
-					if(P.get_compte().get_curIP().compareTo(perso.get_compte().get_curIP()) == 0)continue;
+					if(P.getCuenta().getActualIP().compareTo(perso.getCuenta().getActualIP()) == 0)continue;
 					//SI pas sériane ni neutre et si alignement opposé
 					if(P.get_align() == perso.get_align() || P.get_align() == 0 || P.get_align() == 3)continue;
 					
@@ -529,7 +527,7 @@ public class Accion {
 					}
 					
 					
-					GestorSalida.GAME_SEND_MESSAGE(perso, "Vous etes desormais en chasse de "+tempP.get_name()+"." , "000000");
+					GestorSalida.GAME_SEND_MESSAGE(perso, "Vous etes desormais en chasse de "+tempP.getNombre()+"." , "000000");
 					
 					perso.get_traque().set_traqued(tempP);
 					perso.get_traque().set_time(System.currentTimeMillis());
@@ -563,7 +561,7 @@ public class Accion {
 					}
 					newObj.addTxtStat(960, align);
 					
-					newObj.addTxtStat(989, tempP.get_name());
+					newObj.addTxtStat(989, tempP.getNombre());
 					
 					//Si retourne true, on l'ajoute au monde
 					if(perso.addObjet(newObj, true)){
@@ -586,9 +584,9 @@ public class Accion {
 				{
 					break;	
 				}
-				Personaje cible = Mundo.getPersoByName(perr);
+				Personaje cible = Mundo.getPersonajePorNombre(perr);
 				if(cible==null)break;
-				if(!cible.isOnline())
+				if(!cible.isConectado())
 				{
 					GestorSalida.GAME_SEND_MESSAGE(perso, "Ce joueur n'est pas connecte." , "000000");
 					break;
@@ -626,15 +624,15 @@ public class Accion {
                  dragopavo.get_maturite(),
                  dragopavo.get_serenite(),
                  dragopavo.getItemsId(),
-                 dragopavo.getAncestros(), args));
+                 dragopavo.getAncestros(), _argumento));
                  perso.setMount(Mundo.getDragoByID(dragopavo.getID()));
                  GestorSalida.GAME_SEND_Re_PACKET(perso, "+", Mundo.getDragoByID(dragopavo.getID()));
                  GestorSQL.actualizar_informacion_monturas(dragopavo);
                  break;
 
 			case 101://Arriver sur case de mariage
-				if((perso.get_sexe() == 0 && perso.getActualCelda().getID() == 282) || (perso.get_sexe() == 1 && perso.getActualCelda().getID() == 297)) {
-					Mundo.AddMarried(perso.get_sexe(), perso);
+				if((perso.getSexo() == 0 && perso.getActualCelda().getID() == 282) || (perso.getSexo() == 1 && perso.getActualCelda().getID() == 297)) {
+					Mundo.AddMarried(perso.getSexo(), perso);
 				}else {
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1102");
 				}
@@ -645,10 +643,10 @@ public class Accion {
 			break;
 
 			case 103://Divorsiarse
-				if(perso.get_kamas() < 50000) {
+				if(perso.getKamas() < 50000) {
 					return;
 				}else {
-					perso.set_kamas(perso.get_kamas()-50000);
+					perso.setKamas(perso.getKamas()-50000);
 					Personaje wife = Mundo.getPersonnage(perso.getWife());
 					wife.Divorce();
 					perso.Divorce();
@@ -657,7 +655,7 @@ public class Accion {
 
 			case 104://Cliqueador
 				try {
-					int caracteristica = Integer.parseInt(args);
+					int caracteristica = Integer.parseInt(_argumento);
 					int valor = 0;
 					int cantidad = 0;
 					while(cantidad <= perso.get_capital()){
@@ -671,11 +669,11 @@ public class Accion {
 							//Inteligencia
 							case 15 -> valor = perso._baseStats.getEffect(Constantes.STATS_ADD_INTE);
 						}
-						cantidad = Constantes.getReqPtsToBoostStatsByClass(perso.get_classe(), caracteristica, valor);
+						cantidad = Constantes.getReqPtsToBoostStatsByClass(perso.getClase(), caracteristica, valor);
 						switch(caracteristica) {
 							case 11://Vitalidad
 								//Si es sacrogrito se modifica
-								if(perso.get_classe() != Constantes.CLASS_SACRIEUR)
+								if(perso.getClase() != Constantes.CLASS_SACRIEUR)
 									perso._baseStats.addOneStat(Constantes.STATS_ADD_VITA, 1);
 								else
 									perso._baseStats.addOneStat(Constantes.STATS_ADD_VITA, 2);
@@ -698,9 +696,9 @@ public class Accion {
 							default:
 								return;
 						}
-						perso.addCapital(-cantidad);
+						perso.addPuntosDeCapital(-cantidad);
 					}
-					GestorSalida.GAME_SEND_STATS_PACKET(perso);
+					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					GestorSQL.guardar_personaje(perso, false);
 				}catch(Exception e){JuegoServidor.addToLog(e.getMessage());}
 				break;
@@ -713,7 +711,7 @@ public class Accion {
 					return;
 				}
 				//Vemos la ID del mapa y celda del jugador a crear la accion
-				short idmapa = perso.getActualMapa().get_id();
+				short idmapa = perso.getActualMapa().getID();
 				int idcelda = perso.getActualCelda().getID();
 				//Listamos los miembros del grupo
 				ArrayList<Personaje> miembros = perso.getActualGrupo().getMiembrosGrupo();
@@ -725,23 +723,23 @@ public class Accion {
 			case 228://Faire animation Hors Combat
 				try
 				{
-					int AnimationId = Integer.parseInt(args);
+					int AnimationId = Integer.parseInt(_argumento);
 					Animaciones animation = Mundo.getAnimation(AnimationId);
-					if(perso.get_fight() != null) return;
+					if(perso.getPelea() != null) return;
 					perso.changeOrientation(1);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "0", 228, perso.get_GUID()+";"+cellid+","+ Animaciones.PrepareToGA(animation), "");
 				}catch(Exception e){
 					JuegoServidor.addToLog(e.getMessage());}
 				break;
 			default:
-				JuegoServidor.addToLog("Action ID="+ID+" non implantee");
+				JuegoServidor.addToLog("Action ID="+ _id +" non implantee");
 			break;
 		}
 	}
 
 
-	public int getID()
+	public int get_id()
 	{
-		return ID;
+		return _id;
 	}
 }

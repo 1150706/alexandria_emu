@@ -226,7 +226,7 @@ public class Monstruo {
 			return id;
 		}
 		
-		public int getCellID()
+		public int getCeldaID()
 		{
 			return cellID;
 		}
@@ -240,10 +240,12 @@ public class Monstruo {
 		{
 			return aggroDistance;
 		}
+
 		public boolean isFix()
 		{
 			return isFix;
 		}
+
 		public void setOrientation(int o)
 		{
 			orientation = o;
@@ -254,23 +256,16 @@ public class Monstruo {
 			cellID = id;
 		}
 		
-		public int getAlignement()
-		{
-			return align;
-		}
+		public int getAlineacion() { return align; }
 		
 		public MobGrade getMobGradeByID(int id)
 		{
 			return _Mobs.get(id);
 		}
 		
-		public int getSize()
-		{
-			return _Mobs.size();
-		}
+		public int getTamaño() { return _Mobs.size(); }
 
-		public String parseGM()
-		{
+		public String parseGM() {
 			StringBuilder mobIDs = new StringBuilder();
 			StringBuilder mobGFX = new StringBuilder();
 			StringBuilder mobLevels = new StringBuilder();

@@ -41,15 +41,15 @@ public class Condiciones {
 			 	jep.addVariable("Pa", personaje.getALvl());
 			 	jep.addVariable("PP", personaje.getGrade());
 			 	jep.addVariable("PL", personaje.get_lvl());
-			 	jep.addVariable("PK", personaje.get_kamas());
-			 	jep.addVariable("PG", personaje.get_classe());
-			 	jep.addVariable("PS", personaje.get_sexe());
+			 	jep.addVariable("PK", personaje.getKamas());
+			 	jep.addVariable("PG", personaje.getClase());
+			 	jep.addVariable("PS", personaje.getSexo());
 			 	jep.addVariable("PZ", 1);//Abonado
-			 	jep.addVariable("PX", personaje.get_compte().get_gmLvl());
+			 	jep.addVariable("PX", personaje.getCuenta().getGMLVL());
 			 	jep.addVariable("PW", personaje.getMaxPod());
 			 	jep.addVariable("PB", personaje.getActualMapa().getSubArea().get_id());
 			 	jep.addVariable("PR", (personaje.getWife()>0?1:0));
-			 	jep.addVariable("SI", personaje.getActualMapa().get_id());
+			 	jep.addVariable("SI", personaje.getActualMapa().getID());
 			 	//Les pierres d'ames sont lancables uniquement par le lanceur.
 			 	jep.addVariable("MiS",personaje.get_GUID());
 			 	
@@ -227,7 +227,7 @@ public class Condiciones {
 				copyCond.append("1==");
 				continue;
 			}
-			if(perso.get_name().toLowerCase().compareTo(cur) == 0) {
+			if(perso.getNombre().toLowerCase().compareTo(cur) == 0) {
 				copyCond.append("1");
 			}else {
 				copyCond.append("0");

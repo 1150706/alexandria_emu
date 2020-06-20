@@ -549,7 +549,7 @@ public class Mercadillo {
 		
 		try
 		{
-			if(newOwner.get_kamas() < price)
+			if(newOwner.getKamas() < price)
 				return false;
 			
 			Ligne ligne = getLigne(ligneID);
@@ -566,7 +566,7 @@ public class Mercadillo {
 					C.setBankKamas(C.getBankKamas()+toBuy.getPrice());//Ajoute l'argent au vendeur
 				}
 			}
-			GestorSalida.GAME_SEND_STATS_PACKET(newOwner);//Met a jour les kamas de l'acheteur
+			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(newOwner);//Met a jour les kamas de l'acheteur
 			
 			newOwner.addObjet(toBuy.getObjet(), true);//Ajoute l'objet au nouveau propriétaire
 			toBuy.getObjet().getTemplate().newSold(toBuy.getAmount(true),price);//Ajoute la ventes au statistiques

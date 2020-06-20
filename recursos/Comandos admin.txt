@@ -1,0 +1,61 @@
+----------- Comandos GM LVL 1 -----------
+INFORMACION: Muestra la informacion actual del servidor
+REFRESCAR_MONSTRUOS: Actualiza los monstruos del mapa
+ACTUALIZAR_SERVIDOR: Actualiza los datos generales del server en tiempo real
+RECARGAR_CONFIGURACION: Recarga los datos de la configuracion
+INFORMACION_DEL_MAPA: Nos muestra la informacion del mapa actual
+QUIEN_ONLINE: Muestra los personajes online actualmente
+VER_CELDAS_PELEA: Muestra las celdas actuales del mapa para pelea, aliado y enemigos
+CREAR_GREMIO: Crear un gremio desde consola
+CAMBIAR_AGRESION: Habilita un personaje a ser agredido o no
+ANUNCIO: Enviar un mensaje con nombre Server a todos los usuarios
+DESTRANSFORMAR: Quitar cualquier transformacion que tengo el personaje
+IR_NOMBRE: Te lleva donde este el personaje objetivo
+TRAER_HACIA_MI: Teletransporta a un personaje hacia ti
+NOMBRE_ANUNCIO: Enviar mensaje global con tu nombre
+TELETRANSPORTAR: Teletransportar a un mapa y celda espesifica
+IR_MAPA: Ir a un mapa espesifico
+ACCION: Ejecutar una accion
+
+----------- Comandos GM LVL 2 -----------
+SILENCIAR: Mutear a un personaje
+DEJAR_DE_SILENCIAR: Sacar muteo de un personaje
+EXPULSAR: Sacar a un personaje del servidor
+DAR_PUNTOS_DE_HECHIZO: Dar al personaje la cantidad de puntos de hechizo que quieras
+APRENDER_HECHIZO: Aprende un hechizo o dar un hechizo a un personaje
+DAR_ALINEACION: Dar la alineacion que quieras a alguien o a ti mismo
+AGREGAR_RESPUESTA: Agregar una repuesta inicial a un NPC
+VER_RESPUESTAS: Ver las respuestas de una pregunta de un npc
+DAR_HONOR: Agregar honor a un personaje
+DAR_EXPERIENCIA_OFICIO: Agrega la experiencia a un oficio
+APRENDER_OFICIO: Aprender el oficio indicado
+DAR_CAPITAL: Agregar puntos de capital
+TAMAÑO: Cambiar el tamaño de un personaje
+TRANSFORMAR: Transformar a un personaje
+MOVER_NPC: Mueve un npc de un lugar a otro
+AGREGAR_SET: Agregar un set completo
+DAR_NIVEL: Dar nivel espesifico a un jugador
+CURAR: Da el 100% de los puntos de vida del personaje
+DAR_KAMAS: Agregar kamas a un personaje
+AGREGAR_ITEM: Agregar un item desde consola
+REFRESCAR: Actualiza el grupo de moobs de un mapa
+DAR_TITULO: Agregar un titulo a un personaje
+
+----------- Comandos GM LVL 3 -----------
+REINICIAR: Lanza el reinicio del servidor
+DESCONGELAR_TURNOS: Descongela todos los turnos bugueados
+EXPULSAR_A_TODOS: Expulsa a todos los personajes
+FINALIZAR_TURNOS: Finaliza todos los turnos en combate
+GUARDAR: Lanzar el guardado general del servidor
+IR_COORDENADAS: Ir a las coordenadas espesificas
+ELIMINAR_CELDA_PELEA: Eliminar una celda de pelea
+BANEAR_PERSONAJE: Banear a un personaje en espesifico
+DESBANEAR_PERSONAJE: Desbanear a un personaje
+AGREGAR_ESQUEMA_DE_PELEA: Agregar una celda del esquema de pelea
+MODIFICAR_GRUPOS_MAXIMO_MOOBS: Modificar el tamaño de los grupo de moobs del mapa
+AGREGAR_ACCION_RESPUESTA: Agregar accion a las respuestas de la base de datos
+AGREGAR_PREGUNTA_PRINCIPAL: Agregar pregunta principal a un NPC
+AGREGAR_ACCION_FIN_PELEA: Agregar una accion al final del combate en el mapa
+AGREGAR_NPC: Agregar un npc en el mapa
+ACTUALIZAR_GRUPO_FIX: Agregar los moobs especiales como de mazmorras por ejemplo
+ELIMINAR_NPC: Eliminar un NPC del mapa

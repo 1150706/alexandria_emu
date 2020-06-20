@@ -8,8 +8,7 @@ import java.util.List;
 
 import objetos.Pelea.Fighter;
 
-public class Retos
-{
+public class Retos {
   private final int _type;
   private final Pelea _fight;
   private boolean _challengeAlive = false;
@@ -23,8 +22,7 @@ public class Retos
   private long _lastActions_time;
   private final List<Pelea.Fighter> _ordreJeu = new ArrayList<>();
 
-  public Retos(Pelea fight, int challengeType, int gainXp, int gainDrop)
-  {
+  public Retos(Pelea fight, int challengeType, int gainXp, int gainDrop) {
     _lastActions = "";
     _lastActions_time = System.currentTimeMillis();
 
@@ -104,7 +102,7 @@ public class Retos
 	public void challenge_Foirer(Fighter graceAqui) {
 		String nom = "";
 		try {
-			nom = graceAqui.getPersonnage().get_name();
+			nom = graceAqui.getPersonnage().getNombre();
 		} catch (Exception ignored) {}
 		_challengeAlive = false;
 		GestorSalida.GAME_SEND_PACKET_TO_FIGHT(_fight, 7, "GdKO" + _type);
@@ -362,14 +360,14 @@ public class Retos
 			
 		case 28: // Ni Pioutes ni Soumises
 			if(isKiller && killer.getPersonnage() != null)
-				if(killer.getPersonnage().get_sexe() == 0) {
+				if(killer.getPersonnage().getSexo() == 0) {
 					challenge_Foirer(_fight.getCurFighter());
 				}
 			break;
 		
 		case 29: // Ni Pious ni Soumis
 			if(isKiller && killer.getPersonnage() != null)
-				if(killer.getPersonnage().get_sexe() == 1) {
+				if(killer.getPersonnage().getSexo() == 1) {
 					challenge_Foirer(_fight.getCurFighter());
 				}
 			break;

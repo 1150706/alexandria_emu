@@ -576,7 +576,7 @@ public class JuegoThread implements Runnable {
 		int id = GestorSQL.nueva_id_recaudador();
 		Recaudador perco = new Recaudador(id, _perso.getActualMapa().getID(), _perso.getActualCelda().getID(), (byte)3, _perso.get_guild().get_id(), random1, random2, "", 0, 0);
 		Mundo.addPerco(perco);
-		GestorSalida.GAME_SEND_ADD_PERCO_TO_MAP(_perso.getActualMapa());
+		GestorSalida.ENVIAR_AGREGAR_RECAUDADOR_EN_MAPA(_perso.getActualMapa());
 		GestorSQL.agregar_recaudador_en_mapa(id, _perso.getActualMapa().getID(), _perso.get_guild().get_id(), _perso.getActualCelda().getID(), 3, random1, random2);
 		for(Personaje z : _perso.get_guild().getMembers())
 		{
@@ -1149,18 +1149,16 @@ public class JuegoThread implements Runnable {
 		_perso.toogleOnMount();
 	}
 	
-	private void Mount_description(String packet)
-	{
+	private void Mount_description(String packet) {
 		int DDid = -1;
-		try
-		{
+		try {
 			DDid = Integer.parseInt(packet.substring(2).split("\\|")[0]);
 			//on ignore le temps?
 		}catch(Exception ignored){}
 		if(DDid == -1)return;
-		Dragopavo DD = Mundo.getDragoByID(DDid);
-		if(DD == null)return;
-		GestorSalida.GAME_SEND_MOUNT_DESCRIPTION_PACKET(_perso,DD);
+		Dragopavo dragopavo = Mundo.getDragopavoPorID(DDid);
+		if(dragopavo == null)return;
+		GestorSalida.ENVIAR_PAQUETE_DESCRIPCION_DE_MONTURA(_perso,dragopavo);
 	}
 
 	private void parse_friendPacket(String packet)
@@ -1563,7 +1561,7 @@ public class JuegoThread implements Runnable {
 		if(qua >= obj.getQuantity())
 		{
 			_perso.removeItem(guid);
-			_perso.getActualMapa().getCase(_perso.getActualCelda().getID()+cellPosition).addDroppedItem(obj);
+			_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()+cellPosition).addDroppedItem(obj);
 			obj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 			GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso, guid);
 		}else
@@ -1571,11 +1569,11 @@ public class JuegoThread implements Runnable {
 			obj.setQuantity(obj.getQuantity() - qua);
 			Objeto obj2 = Objeto.getCloneObjet(obj, qua);
 			obj2.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
-			_perso.getActualMapa().getCase(_perso.getActualCelda().getID()+cellPosition).addDroppedItem(obj2);
+			_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()+cellPosition).addDroppedItem(obj2);
 			GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
 		}
 		GestorSalida.GAME_SEND_Ow_PACKET(_perso);
-		GestorSalida.GAME_SEND_GDO_PACKET_TO_MAP(_perso.getActualMapa(),'+',_perso.getActualMapa().getCase(_perso.getActualCelda().getID()+cellPosition).getID(),obj.getTemplate().getID(),0);
+		GestorSalida.GAME_SEND_GDO_PACKET_TO_MAP(_perso.getActualMapa(),'+',_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()+cellPosition).getID(),obj.getTemplate().getID(),0);
 		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_perso);
 	}
 
@@ -2038,7 +2036,7 @@ public class JuegoThread implements Runnable {
 					Objeto obj = Mundo.getObjet(guid);
 					//on prend la DD demand�e
 					int DDid = obj.getStats().getEffect(995);
-					Dragopavo DD = Mundo.getDragoByID(DDid);
+					Dragopavo DD = Mundo.getDragopavoPorID(DDid);
 					//FIXME mettre return au if pour ne pas cr�er des nouvelles dindes
 					if(DD == null)
 					{
@@ -2057,7 +2055,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_Ee_PACKET(_perso, '+', DD.parse());
 				break;
 				case 'c'://Etable => Parcho(Echanger)
-					Dragopavo DD1 = Mundo.getDragoByID(guid);
+					Dragopavo DD1 = Mundo.getDragopavoPorID(guid);
 					//S'il n'a pas la dinde
 					if(DD1 == null || !MP.getData().containsKey(DD1.getID()))return;
 					if(MP.getData().get(DD1.getID()) != _perso.get_GUID() &&
@@ -2096,7 +2094,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_Ee_PACKET(_perso,'-',DD1.getID()+"");
 				break;
 				case 'g'://Equiper
-					Dragopavo DD3 = Mundo.getDragoByID(guid);
+					Dragopavo DD3 = Mundo.getDragopavoPorID(guid);
 					//S'il n'a pas la dinde
 					if(DD3 == null || !MP.getData().containsKey(DD3.getID()) || _perso.getMount() != null)return;
 					
@@ -3728,8 +3726,8 @@ public class JuegoThread implements Runnable {
 						GestorSalida.GAME_SEND_BN(_out);
 						String path = GA._args;
 						//On prend la case cibl�e
-						Case nextCell = _perso.getActualMapa().getCase(GestorEncriptador.cellCode_To_ID(path.substring(path.length()-2)));
-						Case targetCell = _perso.getActualMapa().getCase(GestorEncriptador.cellCode_To_ID(GA._packet.substring(GA._packet.length()-2)));
+						Case nextCell = _perso.getActualMapa().getMapa(GestorEncriptador.cellCode_To_ID(path.substring(path.length()-2)));
+						Case targetCell = _perso.getActualMapa().getMapa(GestorEncriptador.cellCode_To_ID(GA._packet.substring(GA._packet.length()-2)));
 						
 						//On d�finie la case et on ajoute le personnage sur la case
 						_perso.set_curCell(nextCell);
@@ -3770,7 +3768,7 @@ public class JuegoThread implements Runnable {
 					if(newCellID == -1)return;
 					String path = GA._args;
 					_perso.getActualCelda().removePlayer(_perso.get_GUID());
-					_perso.set_curCell(_perso.getActualMapa().getCase(newCellID));
+					_perso.set_curCell(_perso.getActualMapa().getMapa(newCellID));
 					_perso.set_orientation(GestorEncriptador.getIntByHashedValue(path.charAt(path.length()-3)));
 					_perso.getActualCelda().addPerso(_perso);
 					GestorSalida.GAME_SEND_BN(_out);
@@ -3956,7 +3954,7 @@ public class JuegoThread implements Runnable {
 		}catch(Exception ignored){}
 		//Si packet invalide, ou cellule introuvable
 		if(cellID == -1 || actionID == -1 || _perso == null || _perso.getActualMapa() == null ||
-				_perso.getActualMapa().getCase(cellID) == null)
+				_perso.getActualMapa().getMapa(cellID) == null)
 			return;
 		GA._args = cellID+";"+actionID;
 		_perso.getCuenta().getGameThread().addAction(GA);
@@ -4099,7 +4097,7 @@ public class JuegoThread implements Runnable {
 			if(result == -1000)
 			{
 				JuegoServidor.addToLog(_perso.getNombre()+"("+_perso.get_GUID()+") Tentative de  deplacement avec un path invalide");
-				path = GestorEncriptador.getHashedValueByInt(_perso.get_orientation())+ GestorEncriptador.cellID_To_Code(_perso.getActualCelda().getID());
+				path = GestorEncriptador.getHashedValueByInt(_perso.getOrientacion())+ GestorEncriptador.cellID_To_Code(_perso.getActualCelda().getID());
 			}
 			//On sauvegarde le path dans la variable
 			GA._args = path;

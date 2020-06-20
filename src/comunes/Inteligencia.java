@@ -429,7 +429,7 @@ public class Inteligencia {
 				}
 			}
 			System.out.println("Test MOVEFAR : cell = " + destCase);
-			if(destCase < 0 || destCase > 478 || destCase == F.get_fightCell().getID() || !fight.get_map().getCase(destCase).isWalkable(false))return false;
+			if(destCase < 0 || destCase > 478 || destCase == F.get_fightCell().getID() || !fight.get_map().getMapa(destCase).isWalkable(false))return false;
 			if(F.getPM() <= 0)return false;
 			ArrayList<Case> path = Camino.getShortestPathBetween(fight.get_map(),F.get_fightCell().getID(),destCase, 0);
 			if(path == null)return false;
@@ -517,7 +517,7 @@ public class Inteligencia {
 			if(fighter.getMob() == null)return null;
 			for(Entry<Integer, SortStats> SS : fighter.getMob().getSpells().entrySet())
 			{
-				if(!fight.CanCastSpell(fighter, SS.getValue(), fight.get_map().getCase(nearestCell), -1))
+				if(!fight.CanCastSpell(fighter, SS.getValue(), fight.get_map().getMapa(nearestCell), -1))
 					continue;
 				for(EfectoHechizo SE : SS.getValue().getEffects())
 				{
@@ -976,9 +976,9 @@ public class Inteligencia {
 						{
 							int nbTarget = targetVal / 1000;
 							int cellID = targetVal - nbTarget * 1000;
-							if(fight.get_map().getCase(cellID) != null)
+							if(fight.get_map().getMapa(cellID) != null)
 							{
-								if(fight.CanCastSpell(fighter,S,fight.get_map().getCase(cellID),i))
+								if(fight.CanCastSpell(fighter,S,fight.get_map().getMapa(cellID),i))
 								{
 									CellDest = i;
 									found = true;
@@ -1245,7 +1245,7 @@ public class Inteligencia {
 			}
 			else
 			{
-				possibleLaunch.add(fight.get_map().getCase(launchCell));
+				possibleLaunch.add(fight.get_map().getMapa(launchCell));
 			}
 			
 			if(possibleLaunch == null)

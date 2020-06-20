@@ -163,7 +163,7 @@ public class GestorEncriptador {
             list = new ArrayList<>();
             while( a < infos.length())
             {
-                list.add(map.getCase( (getIntByHashedValue(infos.charAt(a))<<6) + getIntByHashedValue( infos.charAt (a+1) ) ) );
+                list.add(map.getMapa( (getIntByHashedValue(infos.charAt(a))<<6) + getIntByHashedValue( infos.charAt (a+1) ) ) );
                 a = a+2;
             }
         }

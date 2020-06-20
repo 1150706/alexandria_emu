@@ -16,7 +16,6 @@ NOMBRE_ANUNCIO: Enviar mensaje global con tu nombre
 TELETRANSPORTAR: Teletransportar a un mapa y celda espesifica
 IR_MAPA: Ir a un mapa espesifico
 ACCION: Ejecutar una accion
-AGREGAR_PUBLICIDAD: Agrega una publicidad automatica a la base de datos y la actualiza en tiempo real
 
 ----------- Comandos GM LVL 2 -----------
 SILENCIAR: Mutear a un personaje
@@ -60,3 +59,17 @@ AGREGAR_ACCION_FIN_PELEA: Agregar una accion al final del combate en el mapa
 AGREGAR_NPC: Agregar un npc en el mapa
 ACTUALIZAR_GRUPO_FIX: Agregar los moobs especiales como de mazmorras por ejemplo
 ELIMINAR_NPC: Eliminar un NPC del mapa
+ELIMINAR_ACCION_DE_CELDA: Elimina la accion de la celda donde estas parado
+AGREGAR_ACCION_DE_CELDA: Agregar una accion a la celda donde estas parado
+ELIMINAR_OBJETO_NPC_VENTA: Eliminar un objeto en venta de un npc
+AGREGAR_OBJETO_NPC_VENTA: Agrega un objeto a las ventas de un npc espesificado
+AGREGAR_CERCADO: Comando para desbuguear o agregar un cercado en el mapa
+PROGRAMAR_REINICIO: Programa un reinicio en X tiempo
+
+----------- Comandos GM LVL 4 -----------
+DAR_ADMIN: Crear un nuevo administrador
+BLOQUEAR_SERVIDOR: Cambia el estado del servidor
+AGREGAR_PUBLICIDAD: Agrega una publicidad automatica a la base de datos y la actualiza en tiempo real
+SOLO_ADMIN: Bloqeuar el servidor para que solo los admin se puedan conectar
+BANEAR_IP: Banear una IP espesifica
+VER_MERCADILLO_TOTAL: Muestra los items de los mercadillos actuales

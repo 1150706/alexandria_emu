@@ -1142,7 +1142,7 @@ public class Mundo {
 		IOTemplate.put(IOT.getId(), IOT);
 	}
 	
-	public static Dragopavo getDragoByID(int id)
+	public static Dragopavo getDragopavoPorID(int id)
 	{
 		return Dragodindes.get(id);
 	}

@@ -756,10 +756,10 @@ public class GestorSQL {
 			ResultSet RS = GestorSQL.EjecutarConsulta("SELECT * FROM `datos_celdas_accion`", MainServidor.DB_ESTATICOS);
 			while(RS.next()) {
 				if(Mundo.getCarte(RS.getShort("mapa")) == null) continue;
-				if(Mundo.getCarte(RS.getShort("mapa")).getCase(RS.getInt("celda")) == null) continue;
+				if(Mundo.getCarte(RS.getShort("mapa")).getMapa(RS.getInt("celda")) == null) continue;
 
 				if (RS.getInt("tipo") == 1) {//Stop sur la case(triggers)
-					Mundo.getCarte(RS.getShort("mapa")).getCase(RS.getInt("celda")).addOnCellStopAction(RS.getInt("accion"), RS.getString("argumento"), RS.getString("condicion"));
+					Mundo.getCarte(RS.getShort("mapa")).getMapa(RS.getInt("celda")).addOnCellStopAction(RS.getInt("accion"), RS.getString("argumento"), RS.getString("condicion"));
 				} else {
 					JuegoServidor.addToLog("Action Event " + RS.getInt("tipo") + " non implante");
 				}
@@ -798,7 +798,7 @@ public class GestorSQL {
 			while(RS.next()) {
 					Mapa c = Mundo.getCarte(RS.getShort("mapa"));
 					if(c == null)continue;
-					if(c.getCase(RS.getInt("celda")) == null)continue;
+					if(c.getMapa(RS.getInt("celda")) == null)continue;
 					c.addStaticGroup(RS.getInt("celda"), RS.getString("grupo"));
 			}
 			GestorSQL.CerrarResultado(RS);

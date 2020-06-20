@@ -63,7 +63,7 @@ public class Mapa {
 			{
 				try {
 					String[] secondCut = firstCut.split(",");
-					Dragopavo DD = Mundo.getDragoByID(Integer.parseInt(secondCut[1]));
+					Dragopavo DD = Mundo.getDragopavoPorID(Integer.parseInt(secondCut[1]));
 					if(DD == null) continue;
 					MountParkDATA.put(Integer.parseInt(secondCut[1]), Integer.parseInt(secondCut[0]));
 				}catch(Exception ignored){}
@@ -124,10 +124,10 @@ public class Mapa {
 				if(MPdata.getValue() == PID && isPublic)//Montrer que ses montures uniquement en public
 				{
 					if(packet.length() > 0)packet.append(";");
-					packet.append(Mundo.getDragoByID(MPdata.getKey()).parse());
+					packet.append(Mundo.getDragopavoPorID(MPdata.getKey()).parse());
 				}else {
 					if(packet.length() > 0)packet.append(";");
-					packet.append(Mundo.getDragoByID(MPdata.getKey()).parse());
+					packet.append(Mundo.getDragopavoPorID(MPdata.getKey()).parse());
 				}
 			}
 			return packet.toString();
@@ -139,7 +139,7 @@ public class Mapa {
 			
 			for(Entry<Integer, Integer> MPdata : MountParkDATA.entrySet()) {
 				if(str.length() > 0)str.append(";");
-				str.append(MPdata.getValue()).append(",").append(Mundo.getDragoByID(MPdata.getKey()).getID());
+				str.append(MPdata.getValue()).append(",").append(Mundo.getDragopavoPorID(MPdata.getKey()).getID());
 			}
 			return str.toString();
 		}
@@ -1073,7 +1073,7 @@ public class Mapa {
 			}
 		}
 
-		public void clearOnCellAction() {
+		public void EliminarAccionDeCelda() {
 			//_onCellStop.clear();
 			_onCellStop = null;
 		}
@@ -1193,8 +1193,8 @@ public class Mapa {
 				continue;
 			if (this._id == 8279) {// W:15   H:17
 				final int cell1 = group.getCeldaID();
-				final Case cell2 = this.getCase((cell1 - 15)), cell3 = this.getCase((cell1 - 15 + 1));
-				final Case cell4 = this.getCase((cell1 + 15 - 1)), cell5 = this.getCase((cell1 + 15));
+				final Case cell2 = this.getMapa((cell1 - 15)), cell3 = this.getMapa((cell1 - 15 + 1));
+				final Case cell4 = this.getMapa((cell1 + 15 - 1)), cell5 = this.getMapa((cell1 + 15));
 				boolean case2 = (cell2 != null && (cell2.isWalkable(true) && (cell2.getPersos().isEmpty())));
 				boolean case3 = (cell3 != null && (cell3.isWalkable(true) && (cell3.getPersos().isEmpty())));
 				boolean case4 = (cell4 != null && (cell4.isWalkable(true) && (cell4.getPersos().isEmpty())));
@@ -1220,30 +1220,30 @@ public class Mapa {
 
 					if (newCell.equals(cell2)) {
 						if (checkCell(newCell.getID() - 15)) {
-							nextCell = this.getCase(newCell.getID() - 15);
+							nextCell = this.getMapa(newCell.getID() - 15);
 							if (this.checkCell(nextCell.getID() - 15)) {
-								nextCell = this.getCase(nextCell.getID() - 15);
+								nextCell = this.getMapa(nextCell.getID() - 15);
 							}
 						}
 					} else if (newCell.equals(cell3)) {
 						if (this.checkCell(newCell.getID() - 15 + 1)) {
-							nextCell = this.getCase(newCell.getID() - 15 + 1);
-							if (this.getCase(nextCell.getID() - 15 + 1) != null) {
-								nextCell = this.getCase(nextCell.getID() - 15 + 1);
+							nextCell = this.getMapa(newCell.getID() - 15 + 1);
+							if (this.getMapa(nextCell.getID() - 15 + 1) != null) {
+								nextCell = this.getMapa(nextCell.getID() - 15 + 1);
 							}
 						}
 					} else if (newCell.equals(cell4)) {
 						if (this.checkCell(newCell.getID() + 15 - 1)) {
-							nextCell = this.getCase(newCell.getID() + 15 - 1);
+							nextCell = this.getMapa(newCell.getID() + 15 - 1);
 							if (this.checkCell(nextCell.getID() + 15 - 1)) {
-								nextCell = this.getCase(nextCell.getID() + 15 - 1);
+								nextCell = this.getMapa(nextCell.getID() + 15 - 1);
 							}
 						}
 					} else if (newCell.equals(cell5)) {
 						if (this.checkCell(newCell.getID() + 15)) {
-							nextCell = this.getCase(newCell.getID() + 15);
+							nextCell = this.getMapa(newCell.getID() + 15);
 							if (this.checkCell(nextCell.getID() + 15)) {
-								nextCell = this.getCase(nextCell.getID() + 15);
+								nextCell = this.getMapa(nextCell.getID() + 15);
 							}
 						}
 					}
@@ -1312,7 +1312,7 @@ public class Mapa {
 	}
 
 	public boolean checkCell(int id) {
-		return this.getCase(id - 15) != null && this.getCase(id - 15).isWalkable(true);
+		return this.getMapa(id - 15) != null && this.getMapa(id - 15).isWalkable(true);
 	}
 
 	public void setMountPark(MountPark mountPark)
@@ -1353,7 +1353,7 @@ public class Mapa {
 	public NPC addNpc(int npcID,int cellID, int dir) {
 		NPCModelo temp = Mundo.getNPCTemplate(npcID);
 		if(temp == null)return null;
-		if(getCase(cellID) == null)return null;
+		if(getMapa(cellID) == null)return null;
 		NPC npc = new NPC(temp,_nextObjectID,cellID,(byte)dir);
 		_npcs.put(_nextObjectID, npc);
 		_nextObjectID--;
@@ -1432,7 +1432,7 @@ public class Mapa {
 		return _npcs.remove(id);
 	}
 	
-	public Case getCase(int id)
+	public Case getMapa(int id)
 	{
 		return _cases.get(id);
 	}
@@ -1673,7 +1673,7 @@ public class Mapa {
 		cases.add((cellid - 59));
 
 		for (int entry : cases) {
-			Case gameCase = this.getCase(entry);
+			Case gameCase = this.getMapa(entry);
 			if (gameCase == null)
 				continue;
 			if(gameCase.getOnCellStopAction())

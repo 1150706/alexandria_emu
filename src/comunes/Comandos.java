@@ -369,7 +369,7 @@ public class Comandos {
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
-			if(Mundo.getCarte(mapID).getCase(cellID) == null) {
+			if(Mundo.getCarte(mapID).getMapa(cellID) == null) {
 				String str = "Mapa o celda invalida";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
@@ -405,7 +405,7 @@ public class Comandos {
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
-			if(map.getCase(cellID) == null) {
+			if(map.getMapa(cellID) == null) {
 				String str = "Celda invalida";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
@@ -834,17 +834,17 @@ public class Comandos {
 			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(_personaje.getActualMapa(), id);
 			//on change sa position/orientation
 			npc.setCellID(_personaje.getActualCelda().getID());
-			npc.setOrientation((byte) _personaje.get_orientation());
+			npc.setOrientation((byte) _personaje.getOrientacion());
 			//on envoie la modif
-			GestorSalida.GAME_SEND_ADD_NPC_TO_MAP(_personaje.getActualMapa(),npc);
+			GestorSalida.ENVIAR_AGREGAR_NPC_EN_MAPA(_personaje.getActualMapa(),npc);
 			String str = "El personaje se ha desplazado";
-			if(_personaje.get_orientation() == 0
-			|| _personaje.get_orientation() == 2
-			|| _personaje.get_orientation() == 4
-			|| _personaje.get_orientation() == 6)
+			if(_personaje.getOrientacion() == 0
+			|| _personaje.getOrientacion() == 2
+			|| _personaje.getOrientacion() == 4
+			|| _personaje.getOrientacion() == 6)
 				str += " pero se ha vuelto invisible, la orientacion no es valida.";
 			if(GestorSQL.eliminar_npc_en_mapa(_personaje.getActualMapa().getID(),exC)
-			&& GestorSQL.agregar_npc_en_mapa(_personaje.getActualMapa().getID(),npc.getModelo().getID(), _personaje.getActualCelda().getID(), _personaje.get_orientation()))
+			&& GestorSQL.agregar_npc_en_mapa(_personaje.getActualMapa().getID(),npc.getModelo().getID(), _personaje.getActualCelda().getID(), _personaje.getOrientacion()))
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 			else
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,"Error al momento de guardar la posicion");
@@ -1084,7 +1084,7 @@ public class Comandos {
 			try {
 				cell = Integer.parseInt(infos[2]);
 			}catch(Exception ignored){}
-			if(cell < 0 || _personaje.getActualMapa().getCase(cell) == null) {
+			if(cell < 0 || _personaje.getActualMapa().getMapa(cell) == null) {
 				cell = _personaje.getActualCelda().getID();
 			}
 			String places = _personaje.getActualMapa().getEsquemaPelea();
@@ -1159,7 +1159,7 @@ public class Comandos {
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
-			if(cell <0 || _personaje.getActualMapa().getCase(cell) == null || !_personaje.getActualMapa().getCase(cell).isWalkable(true)) {
+			if(cell <0 || _personaje.getActualMapa().getMapa(cell) == null || !_personaje.getActualMapa().getMapa(cell).isWalkable(true)) {
 				cell = _personaje.getActualCelda().getID();
 			}
 			String places = _personaje.getActualMapa().getEsquemaPelea();
@@ -1297,16 +1297,16 @@ public class Comandos {
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
-			NPC npc = _personaje.getActualMapa().addNpc(id, _personaje.getActualCelda().getID(), _personaje.get_orientation());
-			GestorSalida.GAME_SEND_ADD_NPC_TO_MAP(_personaje.getActualMapa(), npc);
-			String str = "El personaje se ha agregado";
-			if(_personaje.get_orientation() == 0
-					|| _personaje.get_orientation() == 2
-					|| _personaje.get_orientation() == 4
-					|| _personaje.get_orientation() == 6)
+			NPC npc = _personaje.getActualMapa().addNpc(id, _personaje.getActualCelda().getID(), _personaje.getOrientacion());
+			GestorSalida.ENVIAR_AGREGAR_NPC_EN_MAPA(_personaje.getActualMapa(), npc);
+			String str = "El NPC se ha agregado";
+			if(_personaje.getOrientacion() == 0
+					|| _personaje.getOrientacion() == 2
+					|| _personaje.getOrientacion() == 4
+					|| _personaje.getOrientacion() == 6)
 						str += " pero esta invisible, ya que la orientacion no es valida.";
 			
-			if(GestorSQL.agregar_npc_en_mapa(_personaje.getActualMapa().getID(), id, _personaje.getActualCelda().getID(), _personaje.get_orientation()))
+			if(GestorSQL.agregar_npc_en_mapa(_personaje.getActualMapa().getID(), id, _personaje.getActualCelda().getID(), _personaje.getOrientacion()))
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 			else
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,"Error al momento de guardar la posicion del npc");
@@ -1336,25 +1336,25 @@ public class Comandos {
 			else
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,"error al guardar la posicion");
 		}else
-		if(command.equalsIgnoreCase("DELTRIGGER")) {
+		if(command.equalsIgnoreCase("ELIMINAR_ACCION_DE_CELDA")) {
 			int cellID = -1;
 			try {
 				cellID = Integer.parseInt(infos[1]);
 			}catch(Exception ignored){}
-			if(cellID == -1 || _personaje.getActualMapa().getCase(cellID) == null) {
-				String str = "CellID invalide";
+			if(cellID == -1 || _personaje.getActualMapa().getMapa(cellID) == null) {
+				String str = "Celda invalida";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
 			
-			_personaje.getActualMapa().getCase(cellID).clearOnCellAction();
+			_personaje.getActualMapa().getMapa(cellID).EliminarAccionDeCelda();
 			boolean success = GestorSQL.eliminar_celdas(_personaje.getActualMapa().getID(),cellID);
 			String str = "";
-			if(success)	str = "Le trigger a ete retire";
-			else 		str = "Le trigger n'a pas ete retire";
+			if(success)	str = "La accion de la celda ha sido eliminada";
+			else 		str = "La accion de la celda no puede ser eliminada";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 		}else
-		if(command.equalsIgnoreCase("ADDTRIGGER")) {
+		if(command.equalsIgnoreCase("AGREGAR_ACCION_DE_CELDA")) {
 			int actionID = -1;
 			String args = "",cond = "";
 			try
@@ -1364,7 +1364,7 @@ public class Comandos {
 				cond = infos[3];
 			}catch(Exception ignored){}
 			if(args.equals("") || actionID <= -3) {
-				String str = "Valeur invalide";
+				String str = "Celda invalida";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
@@ -1372,33 +1372,30 @@ public class Comandos {
 			_personaje.getActualCelda().addOnCellStopAction(actionID,args, cond);
 			boolean success = GestorSQL.guardar_celdas(_personaje.getActualMapa().getID(), _personaje.getActualCelda().getID(),actionID,1,args,cond);
 			String str = "";
-			if(success)	str = "Le trigger a ete ajoute";
-			else 		str = "Le trigger n'a pas ete ajoute";
+			if(success)	str = "La accion de celda se ha agregado";
+			else 		str = "La accion de celda no puede ser agregada";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 		}else
-		if(command.equalsIgnoreCase("DELNPCITEM")) {
+		if(command.equalsIgnoreCase("ELIMINAR_OBJETO_NPC_VENTA")) {
 			if(_cuenta.getGMLVL() <3)return;
 			int npcGUID = 0;
 			int itmID = -1;
-			try
-			{
+			try {
 				npcGUID = Integer.parseInt(infos[1]);
 				itmID = Integer.parseInt(infos[2]);
 			}catch(Exception ignored){}
 			NPCModelo npc =  _personaje.getActualMapa().getNPC(npcGUID).getModelo();
 			if(npcGUID == 0 || itmID == -1 || npc == null) {
-				String str = "NpcGUID ou itmID invalide";
+				String str = "Id negativa del NPC o ID del item invalida";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
-			
-			
 			String str = "";
-			if(npc.delItemVendor(itmID))str = "L'objet a ete retire";
-			else str = "L'objet n'a pas ete retire";
+			if(npc.delItemVendor(itmID))str = "El objeto se ha eliminado";
+			else str = "El objeto no puede ser retirado";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 		}else
-		if(command.equalsIgnoreCase("ADDNPCITEM")) {
+		if(command.equalsIgnoreCase("AGREGAR_OBJETO_NPC_VENTA")) {
 			if(_cuenta.getGMLVL() <3)return;
 			int npcGUID = 0;
 			int itmID = -1;
@@ -1409,18 +1406,16 @@ public class Comandos {
 			NPCModelo npc =  _personaje.getActualMapa().getNPC(npcGUID).getModelo();
 			ObjTemplate item =  Mundo.getObjTemplate(itmID);
 			if(npcGUID == 0 || itmID == -1 || npc == null || item == null) {
-				String str = "NpcGUID ou itmID invalide";
+				String str = "ID negativa del NPC o ID del item invalida";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
-			
-			
 			String str = "";
-			if(npc.addItemVendor(item))str = "L'objet a ete rajoute";
-			else str = "L'objet n'a pas ete rajoute";
+			if(npc.addItemVendor(item))str = "El objeto se ha agregado con exito";
+			else str = "El objeto no puede ser agregado";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 		}else
-		if(command.equalsIgnoreCase("ADDMOUNTPARK")) {
+		if(command.equalsIgnoreCase("AGREGAR_CERCADO")) {
 			int size = -1;
 			int owner = -2;
 			int price = -1;
@@ -1432,17 +1427,17 @@ public class Comandos {
 				if(price <0)price = 0;
 			}catch(Exception ignored){}
 			if(size == -1 || owner == -2 || price == -1 || _personaje.getActualMapa().getMountPark() != null) {
-				String str = "Infos invalides ou map deja config.";
+				String str = "Informacion invalida, no se puede configurar";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
 			MountPark MP = new MountPark(owner, _personaje.getActualMapa(), _personaje.getActualCelda().getID(), size, "", -1, price);
 			_personaje.getActualMapa().setMountPark(MP);
 			GestorSQL.guardar_cercados(MP);
-			String str = "L'enclos a ete config. avec succes";
+			String str = "La configuracion del cercado ha sido un exito";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 		}else 
-		if (command.equalsIgnoreCase("SHUTDOWN")) {
+		if (command.equalsIgnoreCase("PROGRAMAR_REINICIO")) {
 			int time = 30, OffOn = 0;
 			try {
 				OffOn = Integer.parseInt(infos[1]);
@@ -1451,42 +1446,42 @@ public class Comandos {
 
 			if(OffOn == 1 && _TimerStart)// demande de démarer le reboot
 			{
-				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Un shutdown est deja programmer.");
+				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Un reinicio se ha programado.");
 			}else if(OffOn == 1 && !_TimerStart) {
 				_timer = createTimer(time);
 				_timer.start();
 				_TimerStart = true;
-				String timeMSG = "minutes";
+				String timeMSG = "minutos";
 				if(time <= 1) {
-					timeMSG = "minute";
+					timeMSG = "minuto";
 				}
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("115;"+time+" "+timeMSG);
-				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Shutdown lance.");
+				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Reinicio lanzado.");
 			}else if(OffOn == 0 && _TimerStart) {
 				_timer.stop();
 				_TimerStart = false;
-				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Shutdown arrete.");
+				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Reinicio se ha detenido.");
 			}else if(OffOn == 0 && !_TimerStart) {
-				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Aucun shutdown n'est lance.");
+				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "No se puede reiniciar.");
 			}
 		}else {
 			this.ComandosGmNivelDos(command, infos, msg);
 		}
 	}
 	
-	public void ComandosGmNivelCuatro(String command, String[] infos, String msg) {
+	public void ComandosGmNivelCuatro(String comandos, String[] infos, String mensaje) {
 		if(_cuenta.getGMLVL() < 4) {
 			_cuenta.getGameThread().closeSocket();
 			return;
 		}
 		
-		if(command.equalsIgnoreCase("SETADMIN")) {
+		if(comandos.equalsIgnoreCase("DAR_ADMIN")) {
 			int gmLvl = -100;
 			try {
 				gmLvl = Integer.parseInt(infos[1]);
 			}catch(Exception ignored){}
 			if(gmLvl == -100) {
-				String str = "Valeur incorrecte";
+				String str = "Valor incorrecto";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
@@ -1494,17 +1489,17 @@ public class Comandos {
 			if(infos.length > 2){ //Si un nom de perso est spécifié
 				target = Mundo.getPersonajePorNombre(infos[2]);
 				if(target == null) {
-					String str = "Le personnage n'a pas ete trouve";
+					String str = "El personaje no existe";
 					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 					return;
 				}
 			}
 			target.getCuenta().setGmLvl(gmLvl);
 			GestorSQL.actualizar_datos_cuenta(target.getCuenta());
-			String str = "Le niveau GM du joueur a ete modifie";
+			String str = "El nivel de admin de "+_personaje.getNombre()+" se ha modificado";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 		}else
-		if(command.equalsIgnoreCase("LOCK")) {
+		if(comandos.equalsIgnoreCase("BLOQUEAR_SERVIDOR")) {
 			byte LockValue = 1;//Accessible
 			try {
 				LockValue = Byte.parseByte(infos[1]);
@@ -1514,14 +1509,14 @@ public class Comandos {
 			if(LockValue < 0) LockValue = 0;
 			Mundo.set_state(LockValue);
 			if(LockValue == 1) {
-				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Serveur accessible.");
+				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Servidor accesible.");
 			}else if(LockValue == 0) {
-				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Serveur inaccessible.");
+				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Servidor inaccesible.");
 			}else if(LockValue == 2) {
-				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Serveur en sauvegarde.");
+				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Servidor en modo guardado.");
 			}
-		}else if(command.equalsIgnoreCase("AGREGAR_PUBLICIDAD")) {
-		infos = msg.split(" ",2);
+		}else if(comandos.equalsIgnoreCase("AGREGAR_PUBLICIDAD")) {
+		infos = mensaje.split(" ",2);
 		String nuevapublicidad;
 		try {
 		nuevapublicidad = String.valueOf(infos[1]);
@@ -1532,32 +1527,31 @@ public class Comandos {
 		GestorSQL.agregar_publicidad(nuevapublicidad);
 		GestorSQL.cargar_publicidades_automaticas();
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Publicidad cargada con exito");
-		}else if(command.equalsIgnoreCase("BLOCK")) {
+		}else if(comandos.equalsIgnoreCase("SOLO_ADMIN")) {
 			byte GmAccess = 0;
 			byte KickPlayer = 0;
-			try
-			{
+			try {
 				GmAccess = Byte.parseByte(infos[1]);
 				KickPlayer = Byte.parseByte(infos[2]);
 			}catch(Exception ignored){}
 
 			Mundo.setGmAccess(GmAccess);
-			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Serveur bloque au GmLevel : "+GmAccess);
+			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Server solo para admin nivel: "+GmAccess);
 			if(KickPlayer > 0) {
 				for(Personaje z : Mundo.getOnlinePersos()) {
 					if(z.getCuenta().getGMLVL() < GmAccess)
 						z.getCuenta().getGameThread().closeSocket();
 				}
-				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Les joueurs de GmLevel inferieur a "+GmAccess+" ont ete kicks.");
+				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Lo jugadores con nivel de admin inferior a "+GmAccess+" seran expulsados.");
 			}
 		}else
-		if(command.equalsIgnoreCase("BANIP")) {
+		if(comandos.equalsIgnoreCase("BANEAR_IP")) {
 			Personaje P = null;
 			try {
 				P = Mundo.getPersonajePorNombre(infos[1]);
 			}catch(Exception ignored){}
 			if(P == null || !P.isConectado()) {
-				String str = "Le personnage n'a pas ete trouve.";
+				String str = "El personaje no existe.";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
@@ -1565,27 +1559,27 @@ public class Comandos {
 			if(!Constantes.IPcompareToBanIP(P.getCuenta().getActualIP())) {
 				Constantes.BAN_IP += ","+P.getCuenta().getActualIP();
 				if(GestorSQL.agregar_ip_baneada(P.getCuenta().getActualIP())) {
-					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "L'IP a ete banni.");
+					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "La IP ha sido baneada.");
 				}
 				if(P.isConectado()){
 					P.getCuenta().getGameThread().kick();
-					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Le joueur a ete kick.");
+					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "El jugador ha sido expulsado.");
 				}
 			}else {
-				String str = "L'IP existe deja.";
+				String str = "La IP no existe.";
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
 			
 		}else
-		if(command.equalsIgnoreCase("FULLHDV")) {
+		if(comandos.equalsIgnoreCase("VER_MERCADILLO_TOTAL")) {
 			int numb = 1;
 			try {
 				numb = Integer.parseInt(infos[1]);
 			}catch(Exception ignored){}
 			fullHdv(numb);
 		}else {
-			this.ComandosGmNivelTres(command, infos, msg);
+			this.ComandosGmNivelTres(comandos, infos, mensaje);
 		}
 	}
 	
@@ -1634,6 +1628,7 @@ public class Comandos {
 		Mundo.saveAll(null);
 		GestorSalida.ENVIAR_MENSAJE_A_TODOS("HDV remplis!", MainServidor.CONFIG_MOTD_COLOR);
 	}
+
 	private int getHdv(int type) {
 		int rand = Formulas.getRandomValue(1, 4);
 		int map = -1;
@@ -1898,13 +1893,12 @@ public class Comandos {
 				return -1;
 		}
 	}
-	private int calculPrice(Objeto obj, int logAmount)
-	{
+
+	private int calculPrice(Objeto obj, int logAmount) {
 		int amount = (byte)(Math.pow(10, logAmount) / 10);
 		int stats = 0;
 		
-		for(int curStat : obj.getStats().getMap().values())
-		{
+		for(int curStat : obj.getStats().getMap().values()) {
 			stats += curStat;
 		}
 		if(stats > 0)

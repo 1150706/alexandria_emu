@@ -136,7 +136,7 @@ public class Pelea
 				{
 					for(char d : dirs)
 					{
-						Case cell = _fight.get_map().getCase(Camino.GetCaseIDFromDirrection(aCell.getID(), d, _fight.get_map(), true));
+						Case cell = _fight.get_map().getMapa(Camino.GetCaseIDFromDirrection(aCell.getID(), d, _fight.get_map(), true));
 						if(cell == null)continue;
 						if(!cells.contains(cell))
 						{
@@ -1610,9 +1610,9 @@ public class Pelea
 		if(get_state() != 2 || isOccuped(cell) || perso.is_ready() || (team == 0 && !groupCellContains(_start0,cell)) || (team == 1 && !groupCellContains(_start1,cell)))return;
 
 		fighter.get_fightCell().getFighters().clear();
-		fighter.set_fightCell(_map.getCase(cell));
+		fighter.set_fightCell(_map.getMapa(cell));
 		
-		_map.getCase(cell).addFighter(fighter);
+		_map.getMapa(cell).addFighter(fighter);
 		GestorSalida.GAME_SEND_FIGHT_CHANGE_PLACE_PACKET_TO_FIGHT(this,3,_map,perso.get_GUID(),cell);
 	}
 
@@ -1632,7 +1632,7 @@ public class Pelea
 				return true;
 		}
 		//*/
-		return _map.getCase(cell).getFighters().size() > 0;
+		return _map.getMapa(cell).getFighters().size() > 0;
 	}
 
 	private boolean groupCellContains(ArrayList<Case> cells, int cell)
@@ -2466,7 +2466,7 @@ public class Pelea
         
 		_ordreJeu.get(_curPlayer).get_fightCell().getFighters().clear();
 		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID= "+f.getGUID()+" se deplace de la case "+_ordreJeu.get(_curPlayer).get_fightCell().getID()+" vers "+ GestorEncriptador.cellCode_To_ID(encriptarcelda));
-        _ordreJeu.get(_curPlayer).set_fightCell(_map.getCase(nextCellID));
+        _ordreJeu.get(_curPlayer).set_fightCell(_map.getMapa(nextCellID));
         _ordreJeu.get(_curPlayer).get_fightCell().addFighter(_ordreJeu.get(_curPlayer));
         if(po != null) po.get_fightCell().addFighter(po);// m�me erreur que tant�t, bug ou plus de fighter sur la case
        if(nStep < 0) 
@@ -2558,7 +2558,7 @@ public class Pelea
 		if(!_curAction.equals(""))return 10;
 		if(Spell == null)return 10;
 		
-		Case Cell = _map.getCase(caseID);
+		Case Cell = _map.getMapa(caseID);
 		
 		if(CanCastSpell(fighter,Spell,Cell, -1))
 		{
@@ -3684,7 +3684,7 @@ public class Pelea
 			if(caster.isHide())
 				caster.unHide(-1);
 			
-			Fighter target = _map.getCase(cellID).getFirstFighter();
+			Fighter target = _map.getMapa(cellID).getFirstFighter();
 			
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 303, perso.get_GUID()+"", cellID+"");
 			
@@ -3757,7 +3757,7 @@ public class Pelea
 				for(EfectoHechizo SE : effets)
 				{
 					if(_state != Constantes.FIGHT_STATE_ACTIVE)break;
-					ArrayList<Fighter> cibles = Camino.getCiblesByZoneByWeapon(this,arme.getTemplate().getType(),_map.getCase(cellID),caster.get_fightCell().getID());
+					ArrayList<Fighter> cibles = Camino.getCiblesByZoneByWeapon(this,arme.getTemplate().getType(),_map.getMapa(cellID),caster.get_fightCell().getID());
 					SE.setTurn(0);
 					SE.applyToFight(this, caster, cibles, true);
 				}

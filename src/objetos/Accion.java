@@ -625,8 +625,8 @@ public class Accion {
                  dragopavo.get_serenite(),
                  dragopavo.getItemsId(),
                  dragopavo.getAncestros(), _argumento));
-                 perso.setMount(Mundo.getDragoByID(dragopavo.getID()));
-                 GestorSalida.GAME_SEND_Re_PACKET(perso, "+", Mundo.getDragoByID(dragopavo.getID()));
+                 perso.setMount(Mundo.getDragopavoPorID(dragopavo.getID()));
+                 GestorSalida.GAME_SEND_Re_PACKET(perso, "+", Mundo.getDragopavoPorID(dragopavo.getID()));
                  GestorSQL.actualizar_informacion_monturas(dragopavo);
                  break;
 

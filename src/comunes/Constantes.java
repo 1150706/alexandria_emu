@@ -2589,25 +2589,25 @@ public class Constantes {
 			cellRight = 14;
 			cellLeft = -14;
 		}
-		if(_perso.getActualMapa().getCase(_perso.getActualCelda().getID()+cellFront).getDroppedItem() == null
+		if(_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()+cellFront).getDroppedItem() == null
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellFront).getPersos().isEmpty()
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellFront).isWalkable(false))
 		{
 			return cellFront;
 		}else
-		if(_perso.getActualMapa().getCase(_perso.getActualCelda().getID()-cellBack).getDroppedItem() == null
+		if(_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()-cellBack).getDroppedItem() == null
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellBack).getPersos().isEmpty()
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellBack).isWalkable(false))
 		{
 			return cellBack;
 		}else
-		if(_perso.getActualMapa().getCase(_perso.getActualCelda().getID()+cellRight).getDroppedItem() == null
+		if(_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()+cellRight).getDroppedItem() == null
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellRight).getPersos().isEmpty()
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellRight).isWalkable(false))
 		{
 			return cellRight;
 		}else
-		if(_perso.getActualMapa().getCase(_perso.getActualCelda().getID()-cellLeft).getDroppedItem() == null
+		if(_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()-cellLeft).getDroppedItem() == null
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellLeft).getPersos().isEmpty()
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellLeft).isWalkable(false))
 		{

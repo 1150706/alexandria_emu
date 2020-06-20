@@ -474,7 +474,7 @@ public class Personaje {
 		this._energy = _energy;
 		this._lvl = _lvl;
 		this._curExp = exp;
-		if(mount != -1)this._mount = Mundo.getDragoByID(mount);
+		if(mount != -1)this._mount = Mundo.getDragopavoPorID(mount);
 		this._size = _size;
 		this._gfxID = _gfxid;
 		this._mountXpGive = mountXp;
@@ -493,15 +493,15 @@ public class Personaje {
 		this._savePos = savePos;
 		if(_curCarte == null && Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO) != null) {
 			this._curCarte = Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO);
-			this._curCell = _curCarte.getCase(MainServidor.CALDA_INICIO_PERSONALIZADA);
+			this._curCell = _curCarte.getMapa(MainServidor.CALDA_INICIO_PERSONALIZADA);
 		}else if (_curCarte == null && Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO) == null) {
 			JuegoServidor.addToLog("Personnage mal positione, et position de départ non valide. Fermeture du serveur.");
 			MainServidor.closeServers();
 		} else if(_curCarte != null) {
-			this._curCell = _curCarte.getCase(cell);
+			this._curCell = _curCarte.getMapa(cell);
 			if(_curCell == null) {
 				this._curCarte = Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO);
-				this._curCell = _curCarte.getCase(MainServidor.CALDA_INICIO_PERSONALIZADA);
+				this._curCell = _curCarte.getMapa(MainServidor.CALDA_INICIO_PERSONALIZADA);
 			}
 		}
 		for(String str : z.split(",")) {
@@ -621,7 +621,7 @@ public class Personaje {
 		}else {
 			this._showWings = false;
 		}
-		if(mount != -1)this._mount = Mundo.getDragoByID(mount);
+		if(mount != -1)this._mount = Mundo.getDragopavoPorID(mount);
 	}
 
 	public void regenLife() {
@@ -1379,7 +1379,7 @@ public class Personaje {
 		return stats;
 	}
 
-	public int get_orientation() {
+	public int getOrientacion() {
 		return _orientation;
 	}
 
@@ -1956,8 +1956,8 @@ public class Personaje {
 		}catch(Exception ignored){}
 		if(cellID == -1 || action == -1)return;
 		//Si case invalide
-		if(!_curCarte.getCase(cellID).canDoAction(action))return;
-		_curCarte.getCase(cellID).startAction(this,GA);
+		if(!_curCarte.getMapa(cellID).canDoAction(action))return;
+		_curCarte.getMapa(cellID).startAction(this,GA);
 	}
 
 	public void finishActionOnCell(GameAction GA) {
@@ -1966,7 +1966,7 @@ public class Personaje {
 			cellID = Integer.parseInt(GA._args.split(";")[0]);
 		}catch(Exception ignored){}
 		if(cellID == -1)return;
-		_curCarte.getCase(cellID).finishAction(this,GA);
+		_curCarte.getMapa(cellID).finishAction(this,GA);
 	}
 	
 	public void teletransportar(short newMapID, int newCellID) {
@@ -1978,7 +1978,7 @@ public class Personaje {
 			JuegoServidor.addToLog("Game: INVALID MAP : "+newMapID);
 			return;
 		}
-		if(Mundo.getCarte(newMapID).getCase(newCellID) == null) {
+		if(Mundo.getCarte(newMapID).getMapa(newCellID) == null) {
 			JuegoServidor.addToLog("Game: INVALID CELL : "+newCellID+" ON MAP : "+newMapID);
 			return;
 		}
@@ -1988,7 +1988,7 @@ public class Personaje {
 		}
 		_curCell.removePlayer(_GUID);
 		_curCarte = Mundo.getCarte(newMapID);
-		_curCell = _curCarte.getCase(newCellID);
+		_curCell = _curCarte.getMapa(newCellID);
 		
 		//Verification de la carte
 		//Verifier la validité du mountpark
@@ -2693,12 +2693,12 @@ public class Personaje {
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
-		if(Mundo.getCarte(mapID).getCase(cellID) == null) {
+		if(Mundo.getCarte(mapID).getMapa(cellID) == null) {
 			JuegoServidor.addToLog("La cellule associee au zaap "+id+" n'est pas implantee, Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
-		if(!Mundo.getCarte(mapID).getCase(cellID).isWalkable(true)) {
+		if(!Mundo.getCarte(mapID).getMapa(cellID).isWalkable(true)) {
 			JuegoServidor.addToLog("La cellule associee au zaap "+id+" n'est pas 'walkable', Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
@@ -3137,10 +3137,10 @@ public class Personaje {
 	
 	public void changeOrientation(int toOrientation)
 	{
-		if(this.get_orientation() == 0 
-				|| this.get_orientation() == 2 
-				|| this.get_orientation() == 4 
-				|| this.get_orientation() == 6)
+		if(this.getOrientacion() == 0
+				|| this.getOrientacion() == 2
+				|| this.getOrientacion() == 4
+				|| this.getOrientacion() == 6)
 		{
 			this.set_orientation(toOrientation);
 			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(getActualMapa(), this.get_GUID(), toOrientation);

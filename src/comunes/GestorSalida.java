@@ -1870,9 +1870,9 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 
-	public static void GAME_SEND_MOUNT_DESCRIPTION_PACKET(Personaje perso, Dragopavo DD) {
-		String packet = "Rd"+DD.parse();
-		send(perso,packet);
+	public static void ENVIAR_PAQUETE_DESCRIPCION_DE_MONTURA(Personaje personaje, Dragopavo dragopavo) {
+		String packet = "Rd"+dragopavo.parse();
+		send(personaje,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
@@ -1905,17 +1905,16 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ADD_NPC_TO_MAP(Mapa map, NPC npc) {
+	public static void ENVIAR_AGREGAR_NPC_EN_MAPA(Mapa map, NPC npc) {
 		for(Personaje z : map.getPersos()) {
 			String packet = "GM|"+npc.parseGM(z);
 			send(z,packet);
 			if(MainServidor.MOSTRAR_ENVIADOS)
 				JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 		}
-		
 	}
 	
-	public static void GAME_SEND_ADD_PERCO_TO_MAP(Mapa map) {
+	public static void ENVIAR_AGREGAR_RECAUDADOR_EN_MAPA(Mapa map) {
 		String packet = "GM|"+ Recaudador.parseGM(map);
 		for(Personaje z : map.getPersos()) send(z,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)

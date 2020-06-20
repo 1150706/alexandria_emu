@@ -190,11 +190,11 @@ public class EfectoHechizo
 								newCellID =	Camino.newCaseAfterPush(fight,caster.get_fightCell(),target.get_fightCell(),a);
 								if(newCellID == 0)
 									continue;
-								if(fight.get_map().getCase(newCellID) == null)
+								if(fight.get_map().getMapa(newCellID) == null)
 									continue;
 							}
 							target.get_fightCell().getFighters().clear();
-							target.set_fightCell(fight.get_map().getCase(newCellID));
+							target.set_fightCell(fight.get_map().getMapa(newCellID));
 							target.get_fightCell().addFighter(target);
 							GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, target.getGUID()+"", target.getGUID()+","+newCellID);
 							
@@ -946,8 +946,8 @@ public class EfectoHechizo
 			Fighter F = new Fighter(fight,MG);
 			F.setTeam(caster.getTeam());
 			F.setInvocator(caster);
-			fight.get_map().getCase(cellID).addFighter(F);
-			F.set_fightCell(fight.get_map().getCase(cellID));
+			fight.get_map().getMapa(cellID).addFighter(F);
+			F.set_fightCell(fight.get_map().getMapa(cellID));
 			fight.addFighterInTeam(F,caster.getTeam());
 			String gm = F.getGmPacket('+').substring(3);
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 181, caster.getGUID() + "", gm);
@@ -1071,7 +1071,7 @@ public class EfectoHechizo
 			//On calcule l'id de la case a coté du lanceur dans la direction obtenue
 			int tcellID = Camino.GetCaseIDFromDirrection(ccase.getID(), d, fight.get_map(), true);
 			//on prend la case corespondante
-			Case tcase = fight.get_map().getCase(tcellID);
+			Case tcase = fight.get_map().getMapa(tcellID);
 			if(tcase == null)return;
 			//S'il n'y a personne sur la case, on arrete
 			if(tcase.getFighters().isEmpty())return;
@@ -1082,7 +1082,7 @@ public class EfectoHechizo
 			
 			tcase = cell;
 			if(isBlocked > 0)
-				tcase = fight.get_map().getCase(isBlocked);
+				tcase = fight.get_map().getMapa(isBlocked);
 			if(tcase == null)
 				tcase = cell;
 			target.get_fightCell().getFighters().clear();
@@ -1920,8 +1920,8 @@ public class EfectoHechizo
 			Fighter F = new Fighter(fight,Clone);
 			F.setTeam(caster.getTeam());
 			F.setInvocator(caster);
-			fight.get_map().getCase(cell).addFighter(F);
-			F.set_fightCell(fight.get_map().getCase(cell));
+			fight.get_map().getMapa(cell).addFighter(F);
+			F.set_fightCell(fight.get_map().getMapa(cell));
 			fight.get_ordreJeu().add((fight.get_ordreJeu().indexOf(caster)+1),F);
 			fight.addFighterInTeam(F,caster.getTeam());
 			String gm = F.getGmPacket('+').substring(3);
@@ -1965,8 +1965,8 @@ public class EfectoHechizo
 			Fighter F = new Fighter(fight,MG);
 			F.setTeam(caster.getTeam());
 			F.setInvocator(caster);
-			fight.get_map().getCase(cell).addFighter(F);
-			F.set_fightCell(fight.get_map().getCase(cell));
+			fight.get_map().getMapa(cell).addFighter(F);
+			F.set_fightCell(fight.get_map().getMapa(cell));
 			fight.get_ordreJeu().add((fight.get_ordreJeu().indexOf(caster)+1),F);
 			fight.addFighterInTeam(F,caster.getTeam());
 			String gm = F.getGmPacket('+').substring(3);
@@ -2578,12 +2578,12 @@ public class EfectoHechizo
 						newCellID =	Camino.newCaseAfterPush(fight,caster.get_fightCell(),target.get_fightCell(),a);
 						if(newCellID == 0)
 							return;
-						if(fight.get_map().getCase(newCellID) == null)
+						if(fight.get_map().getMapa(newCellID) == null)
 							return;
 					}
 					
 					target.get_fightCell().getFighters().clear();
-					target.set_fightCell(fight.get_map().getCase(newCellID));
+					target.set_fightCell(fight.get_map().getMapa(newCellID));
 					target.get_fightCell().addFighter(target);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, caster.getGUID()+"", target.getGUID()+","+newCellID);
 					
@@ -2629,10 +2629,10 @@ public class EfectoHechizo
 						newCellID =	Camino.newCaseAfterPush(fight,caster.get_fightCell(),target.get_fightCell(),value-a);
 						if(newCellID == 0)
 							return;
-						if(fight.get_map().getCase(newCellID) == null)
+						if(fight.get_map().getMapa(newCellID) == null)
 							return;
 						target.get_fightCell().getFighters().clear();
-						target.set_fightCell(fight.get_map().getCase(newCellID));
+						target.set_fightCell(fight.get_map().getMapa(newCellID));
 						target.get_fightCell().addFighter(target);
 						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, caster.getGUID()+"", target.getGUID()+","+newCellID);
 					
@@ -2665,10 +2665,10 @@ public class EfectoHechizo
 							}
 						}
 					} else {
-						if(fight.get_map().getCase(newCellID) == null)
+						if(fight.get_map().getMapa(newCellID) == null)
 							return;
 						target.get_fightCell().getFighters().clear();
-						target.set_fightCell(fight.get_map().getCase(newCellID));
+						target.set_fightCell(fight.get_map().getMapa(newCellID));
 						target.get_fightCell().addFighter(target);
 						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 5, caster.getGUID()+"", target.getGUID()+","+newCellID);
 					}

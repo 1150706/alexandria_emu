@@ -1448,7 +1448,7 @@ object GestorSQL {
             p.setInt(2, MP._cellid)
             p.setInt(3, MP._size)
             p.setInt(4, MP._owner)
-            p.setInt(5, if (MP._guild == null) -1 else MP._guild._id)
+            p.setInt(5, if (MP.gremio == null) -1 else MP.gremio._id)
             p.setInt(6, MP._price)
             p.setString(7, MP.parseDBData())
             p.execute()

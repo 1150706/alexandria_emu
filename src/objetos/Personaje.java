@@ -1992,10 +1992,10 @@ public class Personaje {
 		
 		//Verification de la carte
 		//Verifier la validité du mountpark
-		if(_curCarte.getMountPark() != null && _curCarte.getMountPark().get_owner() > 0 && _curCarte.getMountPark().get_guild().get_id() != -1) {
-			if(Mundo.getGuild(_curCarte.getMountPark().get_guild().get_id()) == null){ //Ne devrait pas arriver
-				JuegoServidor.agregar_a_los_logs("[MountPark] Suppression d'un MountPark a Guild invalide. GuildID : "+_curCarte.getMountPark().get_guild().get_id());
-				Mapa.MountPark.removeMountPark(_curCarte.getMountPark().get_guild().get_id());
+		if(_curCarte.getMountPark() != null && _curCarte.getMountPark().get_owner() > 0 && _curCarte.getMountPark().getGremio().get_id() != -1) {
+			if(Mundo.getGuild(_curCarte.getMountPark().getGremio().get_id()) == null){ //Ne devrait pas arriver
+				JuegoServidor.agregar_a_los_logs("[MountPark] Suppression d'un MountPark a Guild invalide. GuildID : "+_curCarte.getMountPark().getGremio().get_id());
+				Mapa.MountPark.removeMountPark(_curCarte.getMountPark().getGremio().get_id());
 			}
 		}
 		//Verifier la validité du percepteur

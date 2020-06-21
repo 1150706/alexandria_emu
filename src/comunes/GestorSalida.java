@@ -1516,16 +1516,14 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_EXCHANGE_OK(PrintWriter out,boolean ok, int guid)
-	{
+	public static void ENVIAR_INTERCAMBIO_EXITOSO(PrintWriter out, boolean ok, int guid) {
 		String packet = "EK"+(ok?"1":"0")+guid;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_EXCHANGE_VALID(PrintWriter out, char c)
-	{
+	public static void GAME_SEND_EXCHANGE_VALID(PrintWriter out, char c) {
 		String packet = "EV"+c;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1539,53 +1537,46 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_GROUP_INVITATION(PrintWriter out,String n1, String n2)
-	{
+	public static void GAME_SEND_GROUP_INVITATION(PrintWriter out,String n1, String n2) {
 		String packet = "PIK"+n1+"|"+n2;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_GROUP_CREATE(PrintWriter out, Grupo g)
-	{
+	public static void GAME_SEND_GROUP_CREATE(PrintWriter out, Grupo g) {
 		String packet = "PCK"+g.getChief().getNombre();
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_PL_PACKET(PrintWriter out, Grupo g)
-	{
+	public static void GAME_SEND_PL_PACKET(PrintWriter out, Grupo g) {
 		String packet = "PL"+g.getChief().get_GUID();
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_PR_PACKET(Personaje out)
-	{
+	public static void GAME_SEND_PR_PACKET(Personaje out) {
 		String packet = "PR";
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_PV_PACKET(PrintWriter out,String s)
-	{
+	public static void GAME_SEND_PV_PACKET(PrintWriter out,String s) {
 		String packet = "PV"+s;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ALL_PM_ADD_PACKET(PrintWriter out, Grupo g)
-	{
+	public static void GAME_SEND_ALL_PM_ADD_PACKET(PrintWriter out, Grupo g) {
 		StringBuilder packet = new StringBuilder();
 		packet.append("PM+");
 		boolean first = true;
-		for(Personaje p : g.getMiembrosGrupo())
-		{
+		for(Personaje p : g.getMiembrosGrupo()) {
 			if(!first) packet.append("|");
 			packet.append(p.parseToPM());
 			first = false;
@@ -1595,40 +1586,35 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 	
-	public static void GAME_SEND_PM_ADD_PACKET_TO_GROUP(Grupo g, Personaje p)
-	{
+	public static void GAME_SEND_PM_ADD_PACKET_TO_GROUP(Grupo g, Personaje p) {
 		String packet = "PM+"+p.parseToPM();
 		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_PM_MOD_PACKET_TO_GROUP(Grupo g, Personaje p)
-	{
+	public static void GAME_SEND_PM_MOD_PACKET_TO_GROUP(Grupo g, Personaje p) {
 		String packet = "PM~"+p.parseToPM();
 		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_PM_DEL_PACKET_TO_GROUP(Grupo g, int guid)
-	{
+	public static void GAME_SEND_PM_DEL_PACKET_TO_GROUP(Grupo g, int guid) {
 		String packet = "PM-"+guid;
 		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_cMK_PACKET_TO_GROUP(Grupo g, String s, int guid, String name, String msg)
-	{
+	public static void GAME_SEND_cMK_PACKET_TO_GROUP(Grupo g, String s, int guid, String name, String msg) {
 		String packet = "cMK"+s+"|"+guid+"|"+name+"|"+msg+"|";
 		for(Personaje P : g.getMiembrosGrupo())send(P,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Groupe: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_FIGHT_DETAILS(PrintWriter out, Pelea fight)
-	{
+	public static void GAME_SEND_FIGHT_DETAILS(PrintWriter out, Pelea fight) {
 		if(fight == null)return;
 		StringBuilder packet = new StringBuilder();
 		packet.append("fD").append(fight.get_id()).append("|");
@@ -1640,22 +1626,21 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
 
-	public static void GAME_SEND_IQ_PACKET(Personaje perso, int guid, int qua)
-	{
+	public static void GAME_SEND_IQ_PACKET(Personaje perso, int guid, int qua) {
 		String packet = "IQ"+guid+"|"+qua;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
-	public static void GAME_SEND_JN_PACKET(Personaje perso, int jobID, int lvl)
-	{
+
+	public static void GAME_SEND_JN_PACKET(Personaje perso, int jobID, int lvl) {
 		String packet = "JN"+jobID+"|"+lvl;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
-	public static void GAME_SEND_GDF_PACKET_TO_MAP(Mapa map, Case cell)
-	{
+
+	public static void GAME_SEND_GDF_PACKET_TO_MAP(Mapa map, Case cell) {
 		int cellID = cell.getID();
 		InteractiveObject object = cell.getObject();
 		String packet = "GDF|"+cellID+";"+object.getState()+";"+(object.isInteractive()?"1":"0");
@@ -1664,8 +1649,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_GA_PACKET_TO_MAP(Mapa map, String gameActionID, int actionID, String s1, String s2)
-	{
+	public static void GAME_SEND_GA_PACKET_TO_MAP(Mapa map, String gameActionID, int actionID, String s1, String s2) {
 		String packet = "GA"+gameActionID+";"+actionID+";"+s1;
 		if(!s2.equals(""))packet += ";"+s2;
 		
@@ -1674,24 +1658,21 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_EL_BANK_PACKET(Personaje perso)
-	{
+	public static void GAME_SEND_EL_BANK_PACKET(Personaje perso) {
 		String packet = "EL"+perso.parseBankPacket();
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_EL_TRUNK_PACKET(Personaje perso, Cofres t)
-	{
+	public static void GAME_SEND_EL_TRUNK_PACKET(Personaje perso, Cofres t) {
 		String packet = "EL"+t.parseToTrunkPacket();
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_JX_PACKET(Personaje perso, ArrayList<StatsMetier> SMs)
-	{
+	public static void GAME_SEND_JX_PACKET(Personaje perso, ArrayList<StatsMetier> SMs) {
 		StringBuilder packet = new StringBuilder();
 		packet.append("JX");
 		for(StatsMetier sm : SMs)
@@ -1702,8 +1683,8 @@ public class GestorSalida {
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
 	}
-	public static void GAME_SEND_JO_PACKET(Personaje perso, ArrayList<StatsMetier> SMs)
-	{
+
+	public static void GAME_SEND_JO_PACKET(Personaje perso, ArrayList<StatsMetier> SMs) {
 		for(StatsMetier sm : SMs)
 		{
 			String packet = "JO"+sm.getID()+"|"+sm.getOptBinValue()+"|2";//FIXME 2=?
@@ -1712,11 +1693,10 @@ public class GestorSalida {
 				JuegoServidor.addToSockLog("Game: Send>>"+packet);
 		}
 	}
-	public static void GAME_SEND_JS_PACKET(Personaje perso, ArrayList<StatsMetier> SMs)
-	{
+
+	public static void GAME_SEND_JS_PACKET(Personaje perso, ArrayList<StatsMetier> SMs) {
 		StringBuilder packet = new StringBuilder("JS");
-		for(StatsMetier sm : SMs)
-		{
+		for(StatsMetier sm : SMs) {
 			packet.append(sm.parseJS());
 		}
 		send(perso, packet.toString());
@@ -1724,71 +1704,61 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_EsK_PACKET(Personaje perso, String str)
-	{
+	public static void GAME_SEND_EsK_PACKET(Personaje perso, String str) {
 		String packet = "EsK"+str;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 
-	public static void GAME_SEND_FIGHT_SHOW_CASE(ArrayList<PrintWriter> PWs, int guid, int cellID)
-	{
+	public static void GAME_SEND_FIGHT_SHOW_CASE(ArrayList<PrintWriter> PWs, int guid, int cellID) {
 		String packet = "Gf"+guid+"|"+cellID;
-		for(PrintWriter PW : PWs)
-		{
+		for(PrintWriter PW : PWs) {
 			send(PW,packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_Ea_PACKET(Personaje perso, String str)
-	{
+	public static void GAME_SEND_Ea_PACKET(Personaje perso, String str) {
 		String packet = "Ea"+str;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_EA_PACKET(Personaje perso, String str)
-	{
+	public static void GAME_SEND_EA_PACKET(Personaje perso, String str) {
 		String packet = "EA"+str;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_Ec_PACKET(Personaje perso, String str)
-	{
+	public static void GAME_SEND_Ec_PACKET(Personaje perso, String str) {
 		String packet = "Ec"+str;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_Em_PACKET(Personaje perso, String str)
-	{
+	public static void GAME_SEND_Em_PACKET(Personaje perso, String str) {
 		String packet = "Em"+str;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_IO_PACKET_TO_MAP(Mapa map, int guid, String str)
-	{
+	public static void GAME_SEND_IO_PACKET_TO_MAP(Mapa map, int guid, String str) {
 		String packet = "IO"+guid+"|"+str;
 		for(Personaje z : map.getPersos()) send(z,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_FRIENDLIST_PACKET(Personaje perso)
-	{
+	public static void GAME_SEND_FRIENDLIST_PACKET(Personaje perso) {
 		String packet = "FL"+perso.getCuenta().parseFriendList();
 		send(perso,packet);
-		if(perso.getWife() != 0)
-		{
+		if(perso.getWife() != 0) {
 			String packet2 = "FS" + perso.get_wife_friendlist();
 			send(perso,packet2);
 			if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1798,36 +1768,32 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_FRIEND_ONLINE(Personaje logando, Personaje amigo)
-	{
+	public static void GAME_SEND_FRIEND_ONLINE(Personaje logando, Personaje amigo) {
 		String packet = "Im0143;"+logando.getCuenta().getApodo()+" (<b><a href='asfunction:onHref,ShowPlayerPopupMenu,"+logando.getNombre()+"'>"+logando.getNombre()+"</a></b>)";
 		send(amigo, packet);
 		if (MainServidor.MOSTRAR_ENVIADOS)
 		JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 
-	public static void GAME_SEND_FA_PACKET(Personaje perso, String str)
-	{
+	public static void GAME_SEND_FA_PACKET(Personaje perso, String str) {
 		String packet = "FA"+str;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
-	public static void GAME_SEND_FD_PACKET(Personaje perso, String str)
-	{
+
+	public static void GAME_SEND_FD_PACKET(Personaje perso, String str) {
 		String packet = "FD"+str;
 		send(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
-	public static void GAME_SEND_Rp_PACKET(Personaje perso, MountPark MP)
-	{
+
+	public static void GAME_SEND_Rp_PACKET(Personaje perso, MountPark MP) {
 		StringBuilder packet = new StringBuilder();
 		if(MP == null)return;
-		
 		packet.append("Rp").append(MP.get_owner()).append(";").append(MP.get_price()).append(";").append(MP.get_size()).append(";").append(MP.getObjectNumb()).append(";");
-			
-		Gremio G = MP.get_guild();
+		Gremio G = MP.getGremio();
 		//Si une guilde est definie
 		if(G != null)
 		{

@@ -57,7 +57,6 @@ public class Mundo {
 	public static final Map<Integer, Quest.Step> Steps = new TreeMap<>();
 	public static final Map<Integer, Quest> Quests = new TreeMap<>();
 	public static final ArrayList<String> Publicidad = new ArrayList<>();
-	
 	 
 	private static int nextHdvID;	//Contient le derniere ID utilis? pour cr?e un HDV, pour obtenir un ID non utilis? il faut imp?rativement l'incr?menter
 	private static int nextLigneID;	//Contient le derniere ID utilis? pour cr?e une ligne dans un HDV
@@ -111,24 +110,24 @@ public class Mundo {
 		return Quests.get(q);
 	}
 	
-	public static class Drop
-	{
+	public static class Drop {
 		private final int _itemID;
 		private final int _prosp;
 		private final float _taux;
 		private int _max;
 		
-		public Drop(int itm,int p,float t,int m)
-		{
+		public Drop(int itm,int p,float t,int m) {
 			_itemID = itm;
 			_prosp = p;
 			_taux = t;
 			_max = m;
 		}
+
 		public void setMax(int m)
 		{
 			_max = m;
 		}
+
 		public int get_itemID() {
 			return _itemID;
 		}
@@ -146,20 +145,16 @@ public class Mundo {
 		}
 	}
 
-	public static class ItemSet
-	{
+	public static class ItemSet {
 		private final int _id;
 		private final ArrayList<ObjTemplate> _itemTemplates = new ArrayList<>();
 		private final ArrayList<Stats> _bonuses = new ArrayList<>();
 		
-		public ItemSet (int id,String items, String bonuses)
-		{
+		public ItemSet (int id,String items, String bonuses) {
 			_id = id;
 			//parse items String
-			for(String str : items.split(","))
-			{
-				try
-				{
+			for(String str : items.split(",")) {
+				try {
 					ObjTemplate t = Mundo.getObjTemplate(Integer.parseInt(str.trim()));
 					if(t == null)continue;
 					_itemTemplates.add(t);
@@ -169,14 +164,11 @@ public class Mundo {
 			//on ajoute un bonus vide pour 1 item
 			_bonuses.add(new Stats());
 			//parse bonuses String
-			for(String str : bonuses.split(";"))
-			{
+			for(String str : bonuses.split(";")) {
 				Stats S = new Stats();
 				//s?paration des bonus pour un m?me nombre d'item
-				for(String str2 : str.split(","))
-				{
-					try
-					{
+				for(String str2 : str.split(",")) {
+					try {
 						String[] infos = str2.split(":");
 						int stat = Integer.parseInt(infos[0]);
 						int value = Integer.parseInt(infos[1]);
@@ -194,8 +186,7 @@ public class Mundo {
 			return _id;
 		}
 		
-		public Stats getBonusStatByItemNumb(int numb)
-		{
+		public Stats getBonusStatByItemNumb(int numb) {
 			if(numb>_bonuses.size())return new Stats();
 			return _bonuses.get(numb-1);
 		}
@@ -206,11 +197,10 @@ public class Mundo {
 		}
 	}
 	
-	public static class SuperArea
-	{
+	public static class SuperArea {
 		private final int _id;
 		private final ArrayList<Area> _areas = new ArrayList<>();
-		
+
 		public SuperArea(int a_id)
 		{
 			_id = a_id;
@@ -227,29 +217,28 @@ public class Mundo {
 		}
 	}
 	
-	public static class Area
-	{
+	public static class Area {
 		private final int _id;
 		private SuperArea _superArea;
 		private final String _name;
 		private final ArrayList<SubArea> _subAreas = new ArrayList<>();
 		
-		public Area(int id, int superArea,String name)
-		{
+		public Area(int id, int superArea,String name) {
 			_id = id;
 			_name = name;
 			_superArea = Mundo.getSuperArea(superArea);
 			//Si le continent n'est pas encore cr?er, on le cr?er et on l'ajoute au monde
-			if(_superArea == null)
-			{
+			if(_superArea == null) {
 				_superArea = new SuperArea(superArea);
 				Mundo.addSuperArea(_superArea);
 			}
 		}
+
 		public String get_name()
 		{
 			return _name;
 		}
+
 		public int get_id()
 		{
 			return _id;
@@ -265,24 +254,21 @@ public class Mundo {
 			_subAreas.add(sa);
 		}
 		
-		public ArrayList<Mapa> getMaps()
-		{
+		public ArrayList<Mapa> getMaps() {
 			ArrayList<Mapa> maps = new ArrayList<>();
 			for(SubArea SA : _subAreas)maps.addAll(SA.getMaps());
 			return maps;
 		}
 	}
 	
-	public static class SubArea
-	{
+	public static class SubArea {
 		private final int _id;
 		private final Area _area;
 		private final int _alignement;
 		private final String _name;
 		private final ArrayList<Mapa> _maps = new ArrayList<>();
 		
-		public SubArea(int id, int areaID, int alignement,String name)
-		{
+		public SubArea(int id, int areaID, int alignement,String name) {
 			_id = id;
 			_name = name;
 			_area =  Mundo.getArea(areaID);
@@ -293,15 +279,19 @@ public class Mundo {
 		{
 			return _name;
 		}
+
 		public int get_id() {
 			return _id;
 		}
+
 		public Area get_area() {
 			return _area;
 		}
+
 		public int get_alignement() {
 			return _alignement;
 		}
+
 		public ArrayList<Mapa> getMaps() {
 			return _maps;
 		}
@@ -310,31 +300,26 @@ public class Mundo {
 		{
 			_maps.add(carte);
 		}
-		
 	}
 	
-	public static class Couple<L,R>
-	{
+	public static class Couple<L,R> {
 	    public final L first;
 	    public R second;
 
-	    public Couple(L s, R i)
-	    {
+	    public Couple(L s, R i) {
 	         this.first = s;
 	         this.second = i;
 	    }
 	}
 
-	public static class IOTemplate
-	{
+	public static class IOTemplate {
 		private final int _id;
 		private final int _respawnTime;
 		private final int _duration;
 		private final int _unk;
 		private final boolean _walkable;
 		
-		public IOTemplate(int a_i,int a_r,int a_d,int a_u, boolean a_w)
-		{
+		public IOTemplate(int a_i,int a_r,int a_d,int a_u, boolean a_w) {
 			_id = a_i;
 			_respawnTime = a_r;
 			_duration = a_d;
@@ -360,8 +345,7 @@ public class Mundo {
 		}
 	}
 	
-	public static class Exchange
-	{
+	public static class Exchange {
 		private final Personaje perso1;
 		private final Personaje perso2;
 		private long kamas1 = 0;
@@ -371,14 +355,12 @@ public class Mundo {
 		private boolean ok1;
 		private boolean ok2;
 		
-		public Exchange(Personaje p1, Personaje p2)
-		{
+		public Exchange(Personaje p1, Personaje p2) {
 			perso1 = p1;
 			perso2 = p2;
 		}
 		
-		synchronized public long getKamas(int guid)
-		{
+		synchronized public long getKamas(int guid) {
 			int i = 0;
 			if(perso1.get_GUID() == guid)
 				i = 1;
@@ -392,36 +374,29 @@ public class Mundo {
 			return 0;
 		}
 		
-		synchronized public void toogleOK(int guid)
-		{
+		synchronized public void toogleOK(int guid) {
 			int i = 0;
 			if(perso1.get_GUID() == guid)
 				i = 1;
 			else if(perso2.get_GUID() == guid)
 				i = 2;
 			
-			if(i == 1)
-			{
+			if(i == 1) {
 				ok1 = !ok1;
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok1,guid);
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok1,guid);
-			}
-			else if (i == 2)
-			{
+				GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,guid);
+				GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,guid);
+			} else if (i == 2) {
 				ok2 = !ok2;
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok2,guid);
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok2,guid);
-			}
-			else 
+				GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,guid);
+				GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,guid);
+			} else
 				return;
-			
 			
 			if(ok1 && ok2)
 				apply();
 		}
 		
-		synchronized public void setKamas(int guid, long k)
-		{
+		synchronized public void setKamas(int guid, long k) {
 			ok1 = false;
 			ok2 = false;
 			
@@ -430,26 +405,24 @@ public class Mundo {
 				i = 1;
 			else if(perso2.get_GUID() == guid)
 				i = 2;
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
 			
 			if(i == 1)
 			{
 				kamas1 = k;
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'G', "", k+"");
 				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'G', "", k+"");
-			}else if (i == 2)
-			{
+			}else if (i == 2) {
 				kamas2 = k;
 				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'G', "", k+"");
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'G', "", k+"");
 			}
 		}
 		
-		synchronized public void cancel()
-		{
+		synchronized public void cancel() {
 			if(perso1.getCuenta() != null)if(perso1.getCuenta().getJuegoThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso1.getCuenta().getJuegoThread().get_out());
 			if(perso2.getCuenta() != null)if(perso2.getCuenta().getJuegoThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso2.getCuenta().getJuegoThread().get_out());
 			perso1.set_isTradingWith(0);
@@ -458,13 +431,11 @@ public class Mundo {
 			perso2.setCurExchange(null);
 		}
 		
-		synchronized public void apply()
-		{
+		synchronized public void apply() {
 			//Gestion des Kamas
 			perso1.addKamas((-kamas1+kamas2));
 			perso2.addKamas((-kamas2+kamas1));
-			for(Couple<Integer, Integer> couple : items1)
-			{
+			for(Couple<Integer, Integer> couple : items1) {
 				if(couple.second == 0)continue;
 				if(!perso1.hasItemGuid(couple.first))//Si le perso n'a pas l'item (Ne devrait pas arriver)
 				{
@@ -479,8 +450,7 @@ public class Mundo {
 					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(perso1, couple.first);
 					if(!perso2.addObjet(obj, true))//Si le joueur avait un item similaire
 						Mundo.removeItem(couple.first);//On supprime l'item inutile
-				}else
-				{
+				}else {
 					obj.setQuantity(obj.getQuantity()-couple.second);
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(perso1, obj);
 					Objeto newObj = Objeto.getCloneObjet(obj, couple.second);
@@ -488,8 +458,7 @@ public class Mundo {
 						Mundo.addObjet(newObj,true);//On ajoute l'item au World
 				}
 			}
-			for(Couple<Integer, Integer> couple : items2)
-			{
+			for(Couple<Integer, Integer> couple : items2) {
 				if(couple.second == 0)continue;
 				if(!perso2.hasItemGuid(couple.first))//Si le perso n'a pas l'item (Ne devrait pas arriver)
 				{
@@ -504,8 +473,7 @@ public class Mundo {
 					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(perso2, couple.first);
 					if(!perso1.addObjet(obj, true))//Si le joueur avait un item similaire
 						Mundo.removeItem(couple.first);//On supprime l'item inutile
-				}else
-				{
+				}else {
 					obj.setQuantity(obj.getQuantity()-couple.second);
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(perso2, obj);
 					Objeto newObj = Objeto.getCloneObjet(obj, couple.second);
@@ -528,8 +496,7 @@ public class Mundo {
 			GestorSQL.guardar_personaje(perso2,true);
 		}
 
-		synchronized public void addItem(int guid, int qua, int pguid)
-		{
+		synchronized public void addItem(int guid, int qua, int pguid) {
 			ok1 = false;
 			ok2 = false;
 			
@@ -543,15 +510,13 @@ public class Mundo {
 			String str = guid+"|"+qua;
 			if(obj == null)return;
 			String add = "|"+obj.getTemplate().getID()+"|"+obj.parseStatsString();
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
-			if(i == 1)
-			{
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			if(i == 1) {
 				Couple<Integer,Integer> couple = getCoupleInList(items1,guid);
-				if(couple != null)
-				{
+				if(couple != null) {
 					couple.second += qua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+couple.second);
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
@@ -560,11 +525,9 @@ public class Mundo {
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", str);
 				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", str+add);
 				items1.add(new Couple<>(guid, qua));
-			}else if(i == 2)
-			{
+			}else if(i == 2) {
 				Couple<Integer,Integer> couple = getCoupleInList(items2,guid);
-				if(couple != null)
-				{
+				if(couple != null) {
 					couple.second += qua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+couple.second);
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
@@ -577,8 +540,7 @@ public class Mundo {
 		}
 
 		
-		synchronized public void removeItem(int guid, int qua, int pguid)
-		{
+		synchronized public void removeItem(int guid, int qua, int pguid) {
 			int i = 0;
 			if(perso1.get_GUID() == pguid)
 				i = 1;
@@ -587,16 +549,15 @@ public class Mundo {
 			ok1 = false;
 			ok2 = false;
 			
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
 			
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null)return;
 			String add = "|"+obj.getTemplate().getID()+"|"+obj.parseStatsString();
-			if(i == 1)
-			{
+			if(i == 1) {
 				Couple<Integer,Integer> couple = getCoupleInList(items1,guid);
 				int newQua = couple.second - qua;
 				if(newQua <1)//Si il n'y a pu d'item
@@ -604,14 +565,12 @@ public class Mundo {
 					items1.remove(couple);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "-", ""+guid);
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "-", ""+guid);
-				}else
-				{
+				}else {
 					couple.second = newQua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+newQua);
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
 				}
-			}else if(i ==2)
-			{
+			}else if(i ==2) {
 				Couple<Integer,Integer> couple = getCoupleInList(items2,guid);
 				int newQua = couple.second - qua;
 				
@@ -620,8 +579,7 @@ public class Mundo {
 					items2.remove(couple);
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "-", ""+guid);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "-", ""+guid);
-				}else
-				{
+				}else {
 					couple.second = newQua;
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+newQua);
@@ -629,35 +587,27 @@ public class Mundo {
 			}
 		}
 
-		synchronized private Couple<Integer, Integer> getCoupleInList(ArrayList<Couple<Integer, Integer>> items,int guid)
-		{
-			for(Couple<Integer, Integer> couple : items)
-			{
+		synchronized private Couple<Integer, Integer> getCoupleInList(ArrayList<Couple<Integer, Integer>> items,int guid) {
+			for(Couple<Integer, Integer> couple : items) {
 				if(couple.first == guid)
 					return couple;
 			}
 			return null;
 		}
 		
-		public synchronized int getQuaItem(int itemID, int playerGuid)
-		{
+		public synchronized int getQuaItem(int itemID, int playerGuid) {
 			ArrayList<Couple<Integer, Integer>> items;
 			if(perso1.get_GUID() == playerGuid)
 				items = items1;
 			else
 				items = items2;
-			
-			for(Couple<Integer, Integer> curCoupl : items)
-			{
-				if(curCoupl.first == itemID)
-				{
+			for(Couple<Integer, Integer> curCoupl : items) {
+				if(curCoupl.first == itemID) {
 					return curCoupl.second;
 				}
 			}
-			
 			return 0;
 		}
-		
 	}
 
 	public static class ExpLevel {
@@ -677,7 +627,7 @@ public class Mundo {
 		
 	}
 	
-	public static void createWorld() {
+	public static void crear_el_mundo() {
 		System.out.println("====> Cargando datos estaticos <====");
 		System.out.println("Cargando las experiencias:");
 		GestorSQL.cargar_experiencias();
@@ -1478,12 +1428,13 @@ public class Mundo {
 		nextHdvID++;
 		return nextHdvID;
 	}
+
 	public synchronized static void setNextHdvID(int nextID)
 	{
 		nextHdvID = nextID;
 	}
-	public synchronized static int getNextLigneID()
-	{
+
+	public synchronized static int getNextLigneID() {
 		nextLigneID++;
 		return nextLigneID;
 	}
@@ -1492,8 +1443,7 @@ public class Mundo {
 		nextLigneID = ligneID;
 	}
 	
-	public static void addHdvItem(int compteID, int hdvID, HdvEntry toAdd)
-	{
+	public static void addHdvItem(int compteID, int hdvID, HdvEntry toAdd) {
         //Si le compte n'est pas dans la memoire
         _hdvsItems.computeIfAbsent(compteID, k -> new HashMap<>());    //Ajout du compte cl?:compteID et un nouveau map<hdvID,items<>>
 
@@ -1502,8 +1452,7 @@ public class Mundo {
 		_hdvsItems.get(compteID).get(hdvID).add(toAdd);
 	}
 	
-	public static void removeHdvItem(int compteID,int hdvID,HdvEntry toDel)
-	{
+	public static void removeHdvItem(int compteID,int hdvID,HdvEntry toDel) {
 		_hdvsItems.get(compteID).get(hdvID).remove(toDel);
 	}
 	
@@ -1511,30 +1460,30 @@ public class Mundo {
 	{
 		return Hdvs.size();
 	}
-	public static int getHdvObjetsNumber()
-	{
+
+	public static int getHdvObjetsNumber() {
 		int size = 0;
 		
-		for(Map<Integer,ArrayList<HdvEntry>> curCompte : _hdvsItems.values())
-		{
-			for(ArrayList<HdvEntry> curHdv : curCompte.values())
-			{
+		for(Map<Integer,ArrayList<HdvEntry>> curCompte : _hdvsItems.values()) {
+			for(ArrayList<HdvEntry> curHdv : curCompte.values()) {
 				size += curHdv.size();
 			}
 		}
 		return size;
 	}
+
 	public static void addHdv(Mercadillo toAdd)
 	{
 		Hdvs.put(toAdd.getHdvID(),toAdd);
 	}
-	public static Map<Integer, ArrayList<HdvEntry>> getMyItems(int compteID)
-	{
+
+	public static Map<Integer, ArrayList<HdvEntry>> getMyItems(int compteID) {
         //Si le compte n'est pas dans la memoire
         _hdvsItems.computeIfAbsent(compteID, k -> new HashMap<>());//Ajout du compte cl?:compteID et un nouveau map<hdvID,items
 			
 		return _hdvsItems.get(compteID);
 	}
+
 	public static Collection<ObjTemplate> getObjTemplates()
 	{
 		return ObjTemplates.values();
@@ -1558,11 +1507,9 @@ public class Mundo {
 		return Married.get(ordre);
 	}
 	
-	public static void AddMarried(int ordre, Personaje perso)
-	{
+	public static void AddMarried(int ordre, Personaje perso) {
 		Personaje Perso = Married.get(ordre);
-		if(Perso != null)
-		{
+		if(Perso != null) {
 			if(perso.get_GUID() == Perso.get_GUID()) // Si c'est le meme joueur...
 				return;
 			if(Perso.isConectado())// Si perso en ligne...
@@ -1573,15 +1520,13 @@ public class Mundo {
 			}
 			
 			return;
-		}else
-		{
+		}else {
 			Married.put(ordre, perso);
 			return;
 		}
 	}
 	
-	public static void PriestRequest(Personaje perso, Mapa carte, int IdPretre)
-	{
+	public static void PriestRequest(Personaje perso, Mapa carte, int IdPretre) {
 		Personaje Homme = Married.get(0);
 		Personaje Femme = Married.get(1);
 		if(Homme.getWife() != 0){
@@ -1596,15 +1541,12 @@ public class Mundo {
 		GestorSalida.GAME_SEND_WEDDING(carte, 617, (Homme==perso?Homme.get_GUID():Femme.get_GUID()), (Homme==perso?Femme.get_GUID():Homme.get_GUID()), IdPretre);
 	}
 	
-	public static void Wedding(Personaje Homme, Personaje Femme, int isOK)
-	{
-		if(isOK > 0)
-		{
+	public static void Wedding(Personaje Homme, Personaje Femme, int isOK) {
+		if(isOK > 0) {
 			GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(Homme.getActualMapa(), "", -1, "Pr?tre", "Je d?clare "+Homme.getNombre()+" et "+Femme.getNombre()+" unis par les liens sacr?s du mariage.");
 			Homme.MarryTo(Femme);
 			Femme.MarryTo(Homme);
-		}else
-		{
+		}else {
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_AL_MAPA(Homme.getActualMapa(), "048;"+Homme.getNombre()+"~"+Femme.getNombre());
 		}
 		Married.get(0).setisOK(0);
@@ -1677,53 +1619,41 @@ public class Mundo {
 		return MountPark;
 	}
 	
-	public static String parseMPtoGuild(int GuildID)
-	{
+	public static String parseMPtoGuild(int GuildID) {
 		Gremio G = Mundo.getGuild(GuildID);
 		byte enclosMax = (byte)Math.floor(G.get_lvl()/10);
 		StringBuilder packet = new StringBuilder();
 		packet.append(enclosMax);
 		
-		for(Entry<Short, Mapa.MountPark> mp : MountPark.entrySet())
-		{
-			if(mp.getValue().get_guild() != null && mp.getValue().get_guild().get_id() == GuildID)
-			{
+		for(Entry<Short, Mapa.MountPark> mp : MountPark.entrySet()) {
+			if(mp.getValue().getGremio() != null && mp.getValue().getGremio().get_id() == GuildID) {
 				packet.append("|").append(mp.getValue().get_map().getID()).append(";").append(mp.getValue().get_size()).append(";").append(mp.getValue().getObjectNumb());// Nombre d'objets pour le dernier
-			}else
-			{
+			}else {
 				continue;
 			}
 		}
 		return packet.toString();
 	}
 	
-	public static int totalMPGuild(int GuildID)
-	{
+	public static int totalMPGuild(int GuildID) {
 		int i = 0;
-		for(Entry<Short, Mapa.MountPark> mp : MountPark.entrySet())
-		{
-			if(mp.getValue().get_guild().get_id() == GuildID)
-			{
+		for(Entry<Short, Mapa.MountPark> mp : MountPark.entrySet()) {
+			if(mp.getValue().getGremio().get_id() == GuildID) {
 				i++;
-			}else
-			{
+			}else {
 				continue;
 			}
 		}
 		return i;
 	}
 	
-	public static void addSeller(Personaje p)
-	{
-		if(Seller.get(p.getActualMapa().getID()) == null)
-		{
+	public static void addSeller(Personaje p) {
+		if(Seller.get(p.getActualMapa().getID()) == null) {
 			ArrayList<Integer> PersoID = new ArrayList<>();
 			PersoID.add(p.get_GUID());
 			Seller.put(p.getActualMapa().getID(), PersoID);
-		}else
-		{
-			ArrayList<Integer> PersoID = new ArrayList<>();
-			PersoID.addAll(Seller.get(p.getActualMapa().getID()));
+		}else {
+			ArrayList<Integer> PersoID = new ArrayList<>(Seller.get(p.getActualMapa().getID()));
 			PersoID.add(p.get_GUID());
 			Seller.remove(p.getActualMapa().getID());
 			Seller.put(p.getActualMapa().getID(), PersoID);

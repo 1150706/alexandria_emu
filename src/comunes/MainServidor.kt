@@ -228,7 +228,7 @@ object MainServidor {
         }
         println("Creando el Mundo:")
         val startTime = System.currentTimeMillis()
-        Mundo.createWorld()
+        Mundo.crear_el_mundo()
         val endTime = System.currentTimeMillis()
         val differenceTime = (endTime - startTime) / 1000
         println("Creado en: $differenceTime segundos")

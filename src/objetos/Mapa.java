@@ -86,7 +86,7 @@ public class Mapa {
 			return _size;
 		}
 
-		public Gremio get_guild() {
+		public Gremio getGremio() {
 			return _guild;
 		}
 		
@@ -167,7 +167,7 @@ public class Mapa {
 		public static void removeMountPark(int GuildID) {
 			for(Entry<Short, Mapa.MountPark> mp : Mundo.getMountPark().entrySet())//Pour chaque enclo si ils en ont plusieurs
 			{
-				if(mp.getValue().get_guild().get_id() == GuildID) {
+				if(mp.getValue().getGremio().get_id() == GuildID) {
 					if(!mp.getValue().getData().isEmpty()) {
 						for(Entry<Integer, Integer> MPdata : mp.getValue().getData().entrySet()) {
 							Mundo.removeDragodinde(MPdata.getKey());//Suppression des dindes dans le world

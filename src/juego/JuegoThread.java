@@ -603,7 +603,7 @@ public class JuegoThread implements Runnable {
 		if(_perso.getPelea() != null || _perso.is_away())return;
 		short MapID = Short.parseShort(packet);
 		MountPark MP = Mundo.getCarte(MapID).getMountPark();
-		if(MP.get_guild().get_id() != _perso.get_guild().get_id())
+		if(MP.getGremio().get_id() != _perso.get_guild().get_id())
 		{
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1135");
 			return;

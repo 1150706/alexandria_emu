@@ -39,8 +39,8 @@ public class Accion {
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "119");
 			return;
 		}
-		if(perso.getCuenta().getGameThread() == null) return;
-		PrintWriter out = perso.getCuenta().getGameThread().get_out();
+		if(perso.getCuenta().getJuegoThread() == null) return;
+		PrintWriter out = perso.getCuenta().getJuegoThread().get_out();
 		switch(_id) {
 
 			case -2://Crear un gremio
@@ -73,7 +73,7 @@ public class Accion {
 					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "020;"+cost);
 				}
-				GestorSalida.GAME_SEND_ECK_PACKET(perso.getCuenta().getGameThread().get_out(), 5, "");
+				GestorSalida.GAME_SEND_ECK_PACKET(perso.getCuenta().getJuegoThread().get_out(), 5, "");
 				GestorSalida.GAME_SEND_EL_BANK_PACKET(perso);
 				perso.set_away(true);
 				perso.setInBank(true);
@@ -88,7 +88,7 @@ public class Accion {
 				break;
 			
 			case 1://Discusion con un NPC
-				out = perso.getCuenta().getGameThread().get_out();
+				out = perso.getCuenta().getJuegoThread().get_out();
 				if(_argumento.equalsIgnoreCase("DV")) {
 					GestorSalida.GAME_SEND_END_DIALOG_PACKET(out);
 					perso.set_isTalkingWith(0);

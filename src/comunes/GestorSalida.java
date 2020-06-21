@@ -37,8 +37,8 @@ public class GestorSalida {
 	
 	public static void send(Personaje p, String packet) {
 		if(p == null || p.getCuenta() == null)return;
-		if(p.getCuenta().getGameThread() == null)return;
-		PrintWriter out = p.getCuenta().getGameThread().get_out();
+		if(p.getCuenta().getJuegoThread() == null)return;
+		PrintWriter out = p.getCuenta().getJuegoThread().get_out();
 		if(out != null && !packet.equals("") && !packet.equals(""+(char)0x00)) {
 			packet = GestorEncriptador.toUtf(packet);
 			if(MainServidor.CONFIG_SOCKET_USE_COMPACT_DATA) {
@@ -122,7 +122,7 @@ public class GestorSalida {
 			RealmServer.addToSockLog("Conn: Send>>"+packet);
 	}
 
-	public static void REALM_SEND_ALREADY_CONNECTED(PrintWriter out) {
+	public static void ENVIAR_ESTA_CONECTADO(PrintWriter out) {
 		String packet = "AlEc";
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -432,8 +432,8 @@ public class GestorSalida {
 	public static void GAME_SEND_ERASE_ON_MAP_TO_MAP(Mapa map, int guid) {
 		String packet = "GM|-"+guid;
 		for(Personaje z : map.getPersos()) {
-			if(z.getCuenta().getGameThread() == null)continue;
-			send(z.getCuenta().getGameThread().get_out(),packet);
+			if(z.getCuenta().getJuegoThread() == null)continue;
+			send(z.getCuenta().getJuegoThread().get_out(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map "+map.getID()+": Send>>"+packet);
@@ -442,12 +442,12 @@ public class GestorSalida {
 	public static void GAME_SEND_ERASE_ON_MAP_TO_FIGHT(Pelea f, int guid) {
 		String packet = "GM|-"+guid;
 		for(int z=0;z < f.getFighters(1).size();z++) {
-			if(f.getFighters(1).get(z).getPersonnage().getCuenta().getGameThread() == null)continue;
-			send(f.getFighters(1).get(z).getPersonnage().getCuenta().getGameThread().get_out(),packet);
+			if(f.getFighters(1).get(z).getPersonnage().getCuenta().getJuegoThread() == null)continue;
+			send(f.getFighters(1).get(z).getPersonnage().getCuenta().getJuegoThread().get_out(),packet);
 		}
 		for(int z=0;z < f.getFighters(2).size();z++) {
-			if(f.getFighters(2).get(z).getPersonnage().getCuenta().getGameThread() == null)continue;
-			send(f.getFighters(2).get(z).getPersonnage().getCuenta().getGameThread().get_out(),packet);
+			if(f.getFighters(2).get(z).getPersonnage().getCuenta().getJuegoThread() == null)continue;
+			send(f.getFighters(2).get(z).getPersonnage().getCuenta().getJuegoThread().get_out(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fighter ID "+f.get_id()+": Send>>"+packet);
@@ -456,8 +456,8 @@ public class GestorSalida {
 	public static void GAME_SEND_ON_FIGHTER_KICK(Pelea f, int guid, int team) {
 		String packet = "GM|-"+guid;
 		for(Fighter F : f.getFighters(team)) {
-			if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getGameThread() == null || F.getPersonnage().get_GUID() == guid)continue;
-			send(F.getPersonnage().getCuenta().getGameThread().get_out(),packet);
+			if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getJuegoThread() == null || F.getPersonnage().get_GUID() == guid)continue;
+			send(F.getPersonnage().getCuenta().getJuegoThread().get_out(),packet);
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fighter ID "+f.get_id()+": Send>>"+packet);
@@ -467,13 +467,13 @@ public class GestorSalida {
 		StringBuilder packet = new StringBuilder();
 		packet.append("GM|-").append(guid).append((char)0x00).append(fighter.getGmPacket('~'));
 		for(Fighter F : fight.getFighters(team)) {
-			if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getGameThread() == null || !F.getPersonnage().isConectado())continue;
-			send(F.getPersonnage().getCuenta().getGameThread().get_out(),packet.toString());
+			if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getJuegoThread() == null || !F.getPersonnage().isConectado())continue;
+			send(F.getPersonnage().getCuenta().getJuegoThread().get_out(),packet.toString());
 		}
 		if(otherteam > -1) {
 			for(Fighter F : fight.getFighters(otherteam)) {
-				if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getGameThread() == null || !F.getPersonnage().isConectado())continue;
-				send(F.getPersonnage().getCuenta().getGameThread().get_out(),packet.toString());
+				if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getJuegoThread() == null || !F.getPersonnage().isConectado())continue;
+				send(F.getPersonnage().getCuenta().getJuegoThread().get_out(),packet.toString());
 			}
 		}
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -1150,7 +1150,7 @@ public class GestorSalida {
 			if (f != _fighter)
 			{
 				if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
-				if(f.getPersonnage() != null && f.getPersonnage().getCuenta().getGameThread() != null)
+				if(f.getPersonnage() != null && f.getPersonnage().getCuenta().getJuegoThread() != null)
 					send(f.getPersonnage(),packet);
 			}
 		}
@@ -1800,7 +1800,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_FRIEND_ONLINE(Personaje logando, Personaje amigo)
 	{
-		String packet = "Im0143;"+logando.getCuenta().get_pseudo()+" (<b><a href='asfunction:onHref,ShowPlayerPopupMenu,"+logando.getNombre()+"'>"+logando.getNombre()+"</a></b>)";
+		String packet = "Im0143;"+logando.getCuenta().getApodo()+" (<b><a href='asfunction:onHref,ShowPlayerPopupMenu,"+logando.getNombre()+"'>"+logando.getNombre()+"</a></b>)";
 		send(amigo, packet);
 		if (MainServidor.MOSTRAR_ENVIADOS)
 		JuegoServidor.addToSockLog("Game: Send>>" + packet);
@@ -2041,7 +2041,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_WC_PACKET(Personaje perso) {
 		String packet = "WC"+perso.parseZaapList();
-		send(perso.getCuenta().getGameThread().get_out(),packet);
+		send(perso.getCuenta().getJuegoThread().get_out(),packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
@@ -2292,7 +2292,7 @@ public class GestorSalida {
 
 	public static void GAME_SEND_HDVITEM_SELLING(Personaje perso) {
 		StringBuilder packet = new StringBuilder("EL");
-		HdvEntry[] entries = perso.getCuenta().getHdvItems(Math.abs(perso.get_isTradingWith()));	//Récupère un tableau de tout les items que le personnage à en vente dans l'HDV où il est
+		HdvEntry[] entries = perso.getCuenta().getMercadilloObjetos(Math.abs(perso.get_isTradingWith()));	//Récupère un tableau de tout les items que le personnage à en vente dans l'HDV où il est
 		boolean isFirst = true;
 		for(HdvEntry curEntry : entries) {
 			if(curEntry == null)

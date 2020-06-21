@@ -403,14 +403,14 @@ public class Mundo {
 			if(i == 1)
 			{
 				ok1 = !ok1;
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok1,guid);
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok1,guid);
+				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok1,guid);
+				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok1,guid);
 			}
 			else if (i == 2)
 			{
 				ok2 = !ok2;
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok2,guid);
-				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok2,guid);
+				GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok2,guid);
+				GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok2,guid);
 			}
 			else 
 				return;
@@ -430,28 +430,28 @@ public class Mundo {
 				i = 1;
 			else if(perso2.get_GUID() == guid)
 				i = 2;
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
 			
 			if(i == 1)
 			{
 				kamas1 = k;
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'G', "", k+"");
-				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'G', "", k+"");
+				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'G', "", k+"");
 			}else if (i == 2)
 			{
 				kamas2 = k;
-				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'G', "", k+"");
+				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'G', "", k+"");
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'G', "", k+"");
 			}
 		}
 		
 		synchronized public void cancel()
 		{
-			if(perso1.getCuenta() != null)if(perso1.getCuenta().getGameThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso1.getCuenta().getGameThread().get_out());
-			if(perso2.getCuenta() != null)if(perso2.getCuenta().getGameThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso2.getCuenta().getGameThread().get_out());
+			if(perso1.getCuenta() != null)if(perso1.getCuenta().getJuegoThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso1.getCuenta().getJuegoThread().get_out());
+			if(perso2.getCuenta() != null)if(perso2.getCuenta().getJuegoThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso2.getCuenta().getJuegoThread().get_out());
 			perso1.set_isTradingWith(0);
 			perso2.set_isTradingWith(0);
 			perso1.setCurExchange(null);
@@ -522,8 +522,8 @@ public class Mundo {
 			GestorSalida.GAME_SEND_Ow_PACKET(perso2);
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso1);
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso2);
-			GestorSalida.GAME_SEND_EXCHANGE_VALID(perso1.getCuenta().getGameThread().get_out(),'a');
-			GestorSalida.GAME_SEND_EXCHANGE_VALID(perso2.getCuenta().getGameThread().get_out(),'a');
+			GestorSalida.GAME_SEND_EXCHANGE_VALID(perso1.getCuenta().getJuegoThread().get_out(),'a');
+			GestorSalida.GAME_SEND_EXCHANGE_VALID(perso2.getCuenta().getJuegoThread().get_out(),'a');
 			GestorSQL.guardar_personaje(perso1,true);
 			GestorSQL.guardar_personaje(perso2,true);
 		}
@@ -543,10 +543,10 @@ public class Mundo {
 			String str = guid+"|"+qua;
 			if(obj == null)return;
 			String add = "|"+obj.getTemplate().getID()+"|"+obj.parseStatsString();
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
 			if(i == 1)
 			{
 				Couple<Integer,Integer> couple = getCoupleInList(items1,guid);
@@ -554,11 +554,11 @@ public class Mundo {
 				{
 					couple.second += qua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+couple.second);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
 					return;
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", str);
-				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'O', "+", str+add);
+				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", str+add);
 				items1.add(new Couple<>(guid, qua));
 			}else if(i == 2)
 			{
@@ -567,11 +567,11 @@ public class Mundo {
 				{
 					couple.second += qua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+couple.second);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
 					return;
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", str);
-				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'O', "+", str+add);
+				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", str+add);
 				items2.add(new Couple<>(guid, qua));
 			}
 		}
@@ -587,10 +587,10 @@ public class Mundo {
 			ok1 = false;
 			ok2 = false;
 			
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getGameThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.GAME_SEND_EXCHANGE_OK(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
 			
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null)return;
@@ -603,12 +603,12 @@ public class Mundo {
 				{
 					items1.remove(couple);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "-", ""+guid);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'O', "-", ""+guid);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "-", ""+guid);
 				}else
 				{
 					couple.second = newQua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+newQua);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getGameThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
 				}
 			}else if(i ==2)
 			{
@@ -618,12 +618,12 @@ public class Mundo {
 				if(newQua <1)//Si il n'y a pu d'item
 				{
 					items2.remove(couple);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'O', "-", ""+guid);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "-", ""+guid);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "-", ""+guid);
 				}else
 				{
 					couple.second = newQua;
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getGameThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+newQua);
 				}
 			}
@@ -894,8 +894,8 @@ public class Mundo {
 	}
 	
 	public static void addAccount(Cuenta compte) {
-		Cuentas.put(compte.get_GUID(), compte);
-		CuentaPorNombre.put(compte.getNombre().toLowerCase(), compte.get_GUID());
+		Cuentas.put(compte.getID(), compte);
+		CuentaPorNombre.put(compte.getNombre().toLowerCase(), compte.getID());
 	}
 	
 	public static void addChallenge(String chal) {
@@ -1015,7 +1015,7 @@ public class Mundo {
 
 	public static void addAccountbyName(Cuenta compte)
 	{
-		CuentaPorNombre.put(compte.getNombre(), compte.get_GUID());
+		CuentaPorNombre.put(compte.getNombre(), compte.getID());
 	}
 
 	public static void agregar_personaje(Personaje perso)
@@ -1112,8 +1112,8 @@ public class Mundo {
 	public static List<Personaje> getOnlinePersos() {
 		List<Personaje> online = new ArrayList<>();
 		for(Entry<Integer, Personaje> perso : Personajes.entrySet()) {
-			if(perso.getValue().isConectado() && perso.getValue().getCuenta().getGameThread() != null) {
-				if(perso.getValue().getCuenta().getGameThread().get_out() != null) {
+			if(perso.getValue().isConectado() && perso.getValue().getCuenta().getJuegoThread() != null) {
+				if(perso.getValue().getCuenta().getJuegoThread().get_out() != null) {
 					online.add(perso.getValue());
 				}
 			}
@@ -1160,7 +1160,7 @@ public class Mundo {
 	public static void saveAll(Personaje saver) {
 		PrintWriter _out = null;
 		if(saver != null)
-		_out = saver.getCuenta().getGameThread().get_out();
+		_out = saver.getCuenta().getJuegoThread().get_out();
 		
 		set_state((short)2);
 
@@ -1295,7 +1295,7 @@ public class Mundo {
 	}
 
 	public static Cuenta getCompteByPseudo(String p) {
-		for(Cuenta C : Cuentas.values())if(C.get_pseudo().equals(p))return C;
+		for(Cuenta C : Cuentas.values())if(C.getApodo().equals(p))return C;
 		return null;
 	}
 
@@ -1367,9 +1367,9 @@ public class Mundo {
 
 	public static void ReassignAccountToChar(Cuenta C) {
 		C.get_persos().clear();
-		GestorSQL.cargar_personaje_por_cuenta(C.get_GUID());
+		GestorSQL.cargar_personaje_por_cuenta(C.getID());
 		for(Personaje P : Personajes.values()) {
-			if(P.getAccID() == C.get_GUID()) {
+			if(P.getAccID() == C.getID()) {
 				C.addPerso(P);
 				P.setAccount(C);
 			}
@@ -1411,7 +1411,7 @@ public class Mundo {
 		GestorSQL.eliminar_gremio(id);//Supprime la guilde
 	}
 
-	public static boolean ipIsUsed(String ip) {
+	public static boolean IpEstaUsada(String ip) {
 		for(Cuenta c : Cuentas.values())if(c.getActualIP().compareTo(ip) == 0)return true;
 		return false;
 	}

@@ -526,7 +526,7 @@ object MainServidor {
         println("Arret du serveur demande ...")
         if (isRunning) {
             isRunning = false
-            gameServer!!.kickAll()
+            gameServer!!.expulsar_a_todos()
             Mundo.saveAll(null)
             GestorSQL.cerrar_consulta()
         }

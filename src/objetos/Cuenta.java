@@ -139,8 +139,7 @@ public class Cuenta {
 		_gameThread = t;
 	}
 	
-	public void setCurIP(String ip)
-	{
+	public void setActualIP(String ip) {
 		_curIP = ip;
 	}
 	
@@ -156,7 +155,7 @@ public class Cuenta {
 		_lastConnectionDate = connectionDate;
 	}
 
-	public JuegoThread getGameThread()
+	public JuegoThread getJuegoThread()
 	{
 		return _gameThread;
 	}
@@ -166,7 +165,7 @@ public class Cuenta {
 		return _realmThread;
 	}
 	
-	public int get_GUID() {
+	public int getID() {
 		return _GUID;
 	}
 	
@@ -178,7 +177,7 @@ public class Cuenta {
 		return _pass;
 	}
 
-	public String get_pseudo() {
+	public String getApodo() {
 		return _pseudo;
 	}
 
@@ -219,7 +218,7 @@ public class Cuenta {
 		_banned = banned;
 	}
 
-	public boolean isOnline() {
+	public boolean isConectado() {
 		if(_gameThread != null)return true;
 		if(_realmThread != null)return true;
 		return false;
@@ -235,8 +234,7 @@ public class Cuenta {
 		return pass.equals(GestorEncriptador.CryptPassword(hash, _pass));
 	}
 	
-	public int GET_PERSO_NUMBER()
-	{
+	public int getNumeroDePersonajes() {
 		return _persos.size();
 	}
 
@@ -290,7 +288,7 @@ public class Cuenta {
 		_gameThread = null;
 		_realmThread = null;
 		_curIP = "";
-		GestorSQL.salir_del_juego(get_GUID(), 0);
+		GestorSQL.salir_del_juego(getID(), 0);
 		resetAllChars(true);
 		GestorSQL.actualizar_datos_cuenta(this);
 	}
@@ -324,9 +322,9 @@ public class Cuenta {
 		for(int i : _friendGuids) {
 			Cuenta C = Mundo.getCompte(i);
 			if(C == null)continue;
-			str.append("|").append(C.get_pseudo());
+			str.append("|").append(C.getApodo());
 			//on s'arrete la si aucun perso n'est connecté
-			if(!C.isOnline())continue;
+			if(!C.isConectado())continue;
 			Personaje P = C.get_curPerso();
 			if(P == null)continue;
 			str.append(P.parseToFriendList(_GUID));
@@ -351,7 +349,7 @@ public class Cuenta {
 		}
 		if(!_friendGuids.contains(guid)) {
 			_friendGuids.add(guid);
-			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"K"+ Mundo.getCompte(guid).get_pseudo()+ Mundo.getCompte(guid).get_curPerso().parseToFriendList(_GUID));
+			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"K"+ Mundo.getCompte(guid).getApodo()+ Mundo.getCompte(guid).get_curPerso().parseToFriendList(_GUID));
 			GestorSQL.actualizar_datos_cuenta(this);
 		}
 		else GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"Ea");
@@ -415,9 +413,9 @@ public class Cuenta {
 		for(int i : _EnemyGuids) {
 			Cuenta C = Mundo.getCompte(i);
 			if(C == null)continue;
-			str.append("|").append(C.get_pseudo());
+			str.append("|").append(C.getApodo());
 			//on s'arrete la si aucun perso n'est connecté
-			if(!C.isOnline())continue;
+			if(!C.isConectado())continue;
 			Personaje P = C.get_curPerso();
 			if(P == null)continue;
 			str.append(P.parseToEnemyList(_GUID));
@@ -425,12 +423,12 @@ public class Cuenta {
 		return str.toString();
 	}
 	
-	public void setGmLvl(int gmLvl)
+	public void setGMLVL(int gmLvl)
 	{
 		_gmLvl = gmLvl;
 	}
 
-	public int get_vip() {
+	public int getVIP() {
 		return _vip;
 	}
 	
@@ -468,7 +466,7 @@ public class Cuenta {
 		//Hdv curHdv = World.getHdv(hdvID);
 	}
 	
-	public HdvEntry[] getHdvItems(int hdvID) {
+	public HdvEntry[] getMercadilloObjetos(int hdvID) {
 		if(_hdvsItems.get(hdvID) == null)
 			return new HdvEntry[1];
 		

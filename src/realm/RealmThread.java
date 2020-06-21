@@ -16,31 +16,31 @@ import comunes.Mundo;
 
 public class RealmThread implements Runnable{
     private BufferedReader _in;
-    private Thread _t;
-    public PrintWriter _out;
+    private Thread _thread;
+    public PrintWriter _imprimir;
     private Socket _s;
     private String _hashKey;
-    private int _packetNum = 0;
-    private String _accountName;
-    private Cuenta _compte;
+    private int _numerodepaquete = 0;
+    private String _nombredecuenta;
+    private Cuenta _cuenta;
 
     public RealmThread(Socket sock) {
         try {
             _s = sock;
             _in = new BufferedReader(new InputStreamReader(_s.getInputStream()));
-            _out = new PrintWriter(_s.getOutputStream());
-            _t = new Thread(this);
-            _t.setDaemon(true);
-            _t.start();
+            _imprimir = new PrintWriter(_s.getOutputStream());
+            _thread = new Thread(this);
+            _thread.setDaemon(true);
+            _thread.start();
         } catch(IOException e) {
             try {
                 if(!_s.isClosed())_s.close();
             } catch (IOException ignored) {}
         } finally {
-            if(_compte != null) {
-                _compte.setRealmThread(null);
-                _compte.setGameThread(null);
-                _compte.setCurIP("");
+            if(_cuenta != null) {
+                _cuenta.setRealmThread(null);
+                _cuenta.setGameThread(null);
+                _cuenta.setActualIP("");
             }
         }
     }
@@ -50,9 +50,9 @@ public class RealmThread implements Runnable{
             StringBuilder packet = new StringBuilder();
             char[] charCur = new char[1];
             if(MainServidor.ENVIAR_POLITICA_DE_PRIVACIDAD)
-                GestorSalida.REALM_SEND_POLICY_FILE(_out);
+                GestorSalida.REALM_SEND_POLICY_FILE(_imprimir);
 
-            _hashKey = GestorSalida.REALM_SEND_HC_PACKET(_out);
+            _hashKey = GestorSalida.REALM_SEND_HC_PACKET(_imprimir);
 
             while(_in.read(charCur, 0, 1)!=-1 && MainServidor.isRunning) {
                 if (charCur[0] != '\u0000' && charCur[0] != '\n' && charCur[0] != '\r')
@@ -63,7 +63,7 @@ public class RealmThread implements Runnable{
                     if(MainServidor.MOSTRAR_RECIBIDOS){
                         RealmServer.addToSockLog("Realm: Recibido << "+packet);
                     }
-                    _packetNum++;
+                    _numerodepaquete++;
                     parsePacket(packet.toString());
                     packet = new StringBuilder();
                 }
@@ -71,67 +71,67 @@ public class RealmThread implements Runnable{
         }catch(IOException e) {
             try {
                 _in.close();
-                _out.close();
-                if(_compte != null) {
-                    _compte.setCurPerso(null);
-                    _compte.setGameThread(null);
-                    _compte.setRealmThread(null);
-                    _compte.setCurIP("");
+                _imprimir.close();
+                if(_cuenta != null) {
+                    _cuenta.setCurPerso(null);
+                    _cuenta.setGameThread(null);
+                    _cuenta.setRealmThread(null);
+                    _cuenta.setActualIP("");
                 }
                 if(!_s.isClosed())_s.close();
-                _t.interrupt();
+                _thread.interrupt();
             }catch(IOException ignored){}
         } finally {
             try {
                 _in.close();
-                _out.close();
-                if(_compte != null) {
-                    _compte.setCurPerso(null);
-                    _compte.setGameThread(null);
-                    _compte.setRealmThread(null);
-                    _compte.setCurIP("");
+                _imprimir.close();
+                if(_cuenta != null) {
+                    _cuenta.setCurPerso(null);
+                    _cuenta.setGameThread(null);
+                    _cuenta.setRealmThread(null);
+                    _cuenta.setActualIP("");
                 }
                 if(!_s.isClosed())_s.close();
-                _t.interrupt();
+                _thread.interrupt();
             }catch(IOException ignored){}
         }
     }
 
     private void parsePacket(String packet) {
-        switch(_packetNum) {
+        switch(_numerodepaquete) {
             case 1://Version
                 if(!packet.equalsIgnoreCase(MainServidor.VERSION_DEL_CLIENTE) && !MainServidor.IGNORAR_VERSION_DEL_CLIENTE) {
-                    GestorSalida.REALM_SEND_REQUIRED_VERSION(_out);
+                    GestorSalida.REALM_SEND_REQUIRED_VERSION(_imprimir);
                     try {
                         this._s.close();
                     } catch (IOException ignored) {}
                 }
                 break;
-            case 2://Account Name
-                _accountName = packet.toLowerCase();
+            case 2://Nombre de cuenta
+                _nombredecuenta = packet.toLowerCase();
                 break;
-            case 3://HashPass
+            case 3://Contraseña
                 if(!packet.substring(0, 2).equalsIgnoreCase("#1")) {
                     try {
                         this._s.close();
                     } catch (IOException ignored) {}
                 }
 
-                if(Cuenta.COMPTE_LOGIN(_accountName, packet,_hashKey))
+                if(Cuenta.COMPTE_LOGIN(_nombredecuenta, packet,_hashKey))
                 {
-                    _compte = Mundo.getCompteByName(_accountName);
-                    if(_compte.isOnline() && _compte.getGameThread() != null)
+                    _cuenta = Mundo.getCompteByName(_nombredecuenta);
+                    if(_cuenta.isConectado() && _cuenta.getJuegoThread() != null)
                     {
-                        _compte.getGameThread().closeSocket();
-                    }else if(_compte.isOnline() && _compte.getGameThread() == null)
+                        _cuenta.getJuegoThread().closeSocket();
+                    }else if(_cuenta.isConectado() && _cuenta.getJuegoThread() == null)
                     {
-                        GestorSalida.REALM_SEND_ALREADY_CONNECTED(_out);
-                        GestorSalida.REALM_SEND_ALREADY_CONNECTED(_compte.getRealmThread()._out);
+                        GestorSalida.ENVIAR_ESTA_CONECTADO(_imprimir);
+                        GestorSalida.ENVIAR_ESTA_CONECTADO(_cuenta.getRealmThread()._imprimir);
                         return;
                     }
-                    if(_compte.isBanned())
+                    if(_cuenta.isBanned())
                     {
-                        GestorSalida.REALM_SEND_BANNED(_out);
+                        GestorSalida.REALM_SEND_BANNED(_imprimir);
                         try {
                             _s.close();
                         } catch (IOException ignored) {}
@@ -140,57 +140,53 @@ public class RealmThread implements Runnable{
                     if(MainServidor.MAXIMO_DE_CONECTADOS != -1 && MainServidor.MAXIMO_DE_CONECTADOS <= MainServidor.gameServer.getPlayerNumber())
                     {
                         //Seulement si joueur
-                        if(_compte.getGMLVL() == 0  && _compte.get_vip() == 0)
+                        if(_cuenta.getGMLVL() == 0  && _cuenta.getVIP() == 0)
                         {
-                            GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
+                            GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_imprimir);
                             try {
                                 _s.close();
                             } catch (IOException ignored) {}
                             return;
                         }
                     }
-                    if(Mundo.getGmAccess() > _compte.getGMLVL())
-                    {
-                        GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
+                    if(Mundo.getGmAccess() > _cuenta.getGMLVL()) {
+                        GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_imprimir);
                         return;
                     }
                     String ip = _s.getInetAddress().getHostAddress();
-                    if(Constantes.IPcompareToBanIP(ip))
-                    {
-                        GestorSalida.REALM_SEND_BANNED(_out);
+                    if(Constantes.IPcompareToBanIP(ip)) {
+                        GestorSalida.REALM_SEND_BANNED(_imprimir);
                         return;
                     }
                     //Verification Multi compte
-                    if(!MainServidor.HABILITAR_MULTI_CUENTA)
-                    {
-                        if(Mundo.ipIsUsed(ip))
-                        {
-                            GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
+                    if(!MainServidor.HABILITAR_MULTI_CUENTA) {
+                        if(Mundo.IpEstaUsada(ip)) {
+                            GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_imprimir);
                             try {
                                 _s.close();
                             } catch (IOException ignored) {}
                             return;
                         }
                     }
-                    _compte.setRealmThread(this);
-                    _compte.setCurIP(ip);
+                    _cuenta.setRealmThread(this);
+                    _cuenta.setActualIP(ip);
                     RealmServer.totalabonado++;//On incrémente le total
-                    _compte._position = RealmServer.totalabonado;//On lui donne une position
-                    GestorSalida.REALM_SEND_Ad_Ac_AH_AlK_AQ_PACKETS(_out, _compte.get_pseudo(),(_compte.getGMLVL()>0?(1):(0)), _compte.get_question() );
+                    _cuenta._position = RealmServer.totalabonado;//On lui donne une position
+                    GestorSalida.REALM_SEND_Ad_Ac_AH_AlK_AQ_PACKETS(_imprimir, _cuenta.getApodo(),(_cuenta.getGMLVL()>0?(1):(0)), _cuenta.get_question() );
                 }else//Si le compte n'a pas été reconnu
                 {
-                    GestorSQL.Cargar_cuenta_por_usuario(_accountName);
-                    if(Cuenta.COMPTE_LOGIN(_accountName, packet,_hashKey)) {
-                        _compte = Mundo.getCompteByName(_accountName);
-                        if(_compte.isOnline() && _compte.getGameThread() != null) {
-                            _compte.getGameThread().closeSocket();
-                        }else if(_compte.isOnline() && _compte.getGameThread() == null) {
-                            GestorSalida.REALM_SEND_ALREADY_CONNECTED(_out);
-                            GestorSalida.REALM_SEND_ALREADY_CONNECTED(_compte.getRealmThread()._out);
+                    GestorSQL.Cargar_cuenta_por_usuario(_nombredecuenta);
+                    if(Cuenta.COMPTE_LOGIN(_nombredecuenta, packet,_hashKey)) {
+                        _cuenta = Mundo.getCompteByName(_nombredecuenta);
+                        if(_cuenta.isConectado() && _cuenta.getJuegoThread() != null) {
+                            _cuenta.getJuegoThread().closeSocket();
+                        }else if(_cuenta.isConectado() && _cuenta.getJuegoThread() == null) {
+                            GestorSalida.ENVIAR_ESTA_CONECTADO(_imprimir);
+                            GestorSalida.ENVIAR_ESTA_CONECTADO(_cuenta.getRealmThread()._imprimir);
                             return;
                         }
-                        if(_compte.isBanned()) {
-                            GestorSalida.REALM_SEND_BANNED(_out);
+                        if(_cuenta.isBanned()) {
+                            GestorSalida.REALM_SEND_BANNED(_imprimir);
                             try {
                                 this._s.close();
                             } catch (IOException ignored) {}
@@ -198,40 +194,40 @@ public class RealmThread implements Runnable{
                         }
                         if(MainServidor.MAXIMO_DE_CONECTADOS != -1 && MainServidor.MAXIMO_DE_CONECTADOS <= MainServidor.gameServer.getPlayerNumber()) {
                             //Seulement si joueur
-                            if(_compte.getGMLVL() == 0  && _compte.get_vip() == 0) {
-                                GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
+                            if(_cuenta.getGMLVL() == 0  && _cuenta.getVIP() == 0) {
+                                GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_imprimir);
                                 try {
                                     _s.close();
                                 } catch (IOException ignored) {}
                                 return;
                             }
                         }
-                        if(Mundo.getGmAccess() > _compte.getGMLVL()) {
-                            GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
+                        if(Mundo.getGmAccess() > _cuenta.getGMLVL()) {
+                            GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_imprimir);
                             return;
                         }
                         String ip = _s.getInetAddress().getHostAddress();
                         if(Constantes.IPcompareToBanIP(ip)) {
-                            GestorSalida.REALM_SEND_BANNED(_out);
+                            GestorSalida.REALM_SEND_BANNED(_imprimir);
                             return;
                         }
                         //Verification Multi compte
                         if(!MainServidor.HABILITAR_MULTI_CUENTA) {
-                            if(Mundo.ipIsUsed(ip)) {
-                                GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_out);
+                            if(Mundo.IpEstaUsada(ip)) {
+                                GestorSalida.REALM_SEND_TOO_MANY_PLAYER_ERROR(_imprimir);
                                 try {
                                     _s.close();
                                 } catch (IOException ignored) {}
                                 return;
                             }
                         }
-                        _compte.setCurIP(ip);
-                        _compte.setRealmThread(this);
+                        _cuenta.setActualIP(ip);
+                        _cuenta.setRealmThread(this);
                         RealmServer.totalabonado++;//On incrémente le total
-                        _compte._position = RealmServer.totalabonado;//On lui donne une position
-                        GestorSalida.REALM_SEND_Ad_Ac_AH_AlK_AQ_PACKETS(_out, _compte.get_pseudo(),(_compte.getGMLVL()>0?(1):(0)), _compte.get_question() );
+                        _cuenta._position = RealmServer.totalabonado;//On lui donne une position
+                        GestorSalida.REALM_SEND_Ad_Ac_AH_AlK_AQ_PACKETS(_imprimir, _cuenta.getApodo(),(_cuenta.getGMLVL()>0?(1):(0)), _cuenta.get_question() );
                     }else{ //Si le compte n'a pas été reconnu
-                        GestorSalida.REALM_SEND_LOGIN_ERROR(_out);
+                        GestorSalida.REALM_SEND_LOGIN_ERROR(_imprimir);
                         try {
                             this._s.close();
                         } catch (IOException ignored) {}
@@ -240,18 +236,18 @@ public class RealmThread implements Runnable{
                 break;
             default:
                 if(packet.startsWith("Af")) {
-                    _packetNum--;
-                    Pending.PendingSystem(_compte);
+                    _numerodepaquete--;
+                    Pending.PendingSystem(_cuenta);
                 }else
-                if(packet.substring(0,2).equals("Ax")) {
-                    if(_compte == null)return;
-                    GestorSQL.cargar_personaje_por_cuenta(_compte.get_GUID());
-                    GestorSalida.REALM_SEND_PERSO_LIST(_out, _compte.GET_PERSO_NUMBER());
+                if(packet.startsWith("Ax")) {
+                    if(_cuenta == null)return;
+                    GestorSQL.cargar_personaje_por_cuenta(_cuenta.getID());
+                    GestorSalida.REALM_SEND_PERSO_LIST(_imprimir, _cuenta.getNumeroDePersonajes());
                 }else
                 if(packet.equals("AX1")) {
-                    MainServidor.gameServer.addWaitingCompte(_compte);
-                    String ip = _compte.getActualIP();
-                    GestorSalida.REALM_SEND_GAME_SERVER_IP(_out, _compte.get_GUID(),ip.equals("127.0.0.1"));
+                    MainServidor.gameServer.addWaitingCompte(_cuenta);
+                    String ip = _cuenta.getActualIP();
+                    GestorSalida.REALM_SEND_GAME_SERVER_IP(_imprimir, _cuenta.getID(),ip.equals("127.0.0.1"));
                 }
                 break;
         }

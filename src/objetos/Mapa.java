@@ -892,7 +892,7 @@ public class Mapa {
 //Utiliser (zaap)
 				case 114 -> {
 					perso.openZaapMenu();
-					perso.getCuenta().getGameThread().removeAction(GA);
+					perso.getCuenta().getJuegoThread().removeAction(GA);
 				}
 //Zaapis
 				case 157 -> {
@@ -970,13 +970,13 @@ public class Mapa {
 				case 183 -> {
 					if (perso.get_lvl() > 15) {
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1127");
-						perso.getCuenta().getGameThread().removeAction(GA);
+						perso.getCuenta().getJuegoThread().removeAction(GA);
 						return;
 					}
 					short mapID = Constantes.getStartMap(perso.getClase());
 					int cellID = Constantes.getStartCell(perso.getClase());
 					perso.teletransportar(mapID, cellID);
-					perso.getCuenta().getGameThread().removeAction(GA);
+					perso.getCuenta().getJuegoThread().removeAction(GA);
 				}
 //Vérouiller maison
 				case 81 -> {
@@ -1260,7 +1260,7 @@ public class Mapa {
 						return;
 					group.setCellID(nextCell.getID());
 					for (Personaje z : getPersos())
-						GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getGameThread().get_out(), "0", "1", group.getID()
+						GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getJuegoThread().get_out(), "0", "1", group.getID()
 								+ "", pathstr);
 				} else {
 					if (group.isFix())
@@ -1284,7 +1284,7 @@ public class Mapa {
 						return;
 					group.setCellID(cell);
 					for (Personaje z : getPersos())
-						GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getGameThread().get_out(), "0", "1", group.getID() + "", pathstr);
+						GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getJuegoThread().get_out(), "0", "1", group.getID() + "", pathstr);
 				}
 			} else {
 				if (group.isFix())
@@ -1304,7 +1304,7 @@ public class Mapa {
 					return;
 				group.setCellID(cell);
 				for (Personaje z : getPersos())
-					GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getGameThread().get_out(), "0", "1", group.getID()
+					GestorSalida.GAME_SEND_GA_PACKET(z.getCuenta().getJuegoThread().get_out(), "0", "1", group.getID()
 							+ "", pathstr);
 			}
 

@@ -2100,7 +2100,7 @@ public class Pelea
 				{
 					if(!g.getMiembrosGrupo().contains(perso))
 					{
-						GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+						GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 						return;
 					}
 				}
@@ -2109,12 +2109,12 @@ public class Pelea
 			{
 				if(perso.get_align() == Constantes.ALIGNEMENT_NEUTRE)
 				{
-					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 					return;
 				}
 				if(_init0.getPersonnage().get_align() != perso.get_align())
 				{
-					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 					return;
 				}
 			}
@@ -2122,13 +2122,13 @@ public class Pelea
 			{
 				if(get_guildID() == perso.get_guild().get_id()) 
 				{
-					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 					return;
 				}
 			}
 			if(locked0)
 			{
-				GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+				GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 				return;
 			}
 			if(_type == Constantes.FIGHT_TYPE_CHALLENGE)
@@ -2138,7 +2138,7 @@ public class Pelea
 			{
 				GestorSalida.GAME_SEND_GJK_PACKET(perso,2,0,1,0,timeRestant,_type);
 			}
-			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getGameThread().get_out(), _map.getEsquemaPelea(), _st1);
+			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getJuegoThread().get_out(), _map.getEsquemaPelea(), _st1);
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
 			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
@@ -2164,7 +2164,7 @@ public class Pelea
 				{
 					if(!g.getMiembrosGrupo().contains(perso))
 					{
-						GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+						GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 						return;
 					}
 				}
@@ -2173,12 +2173,12 @@ public class Pelea
 			{
 				if(perso.get_align() == Constantes.ALIGNEMENT_NEUTRE)
 				{
-					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 					return;
 				}
 				if(_init1.getPersonnage().get_align() != perso.get_align())
 				{
-					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 					return;
 				}
 			}
@@ -2186,13 +2186,13 @@ public class Pelea
 			{
 				if(get_guildID() == perso.get_guild().get_id()) 
 				{
-					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+					GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 					return;
 				}
 			}
 			if(locked1)
 			{
-				GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getGameThread().get_out(),'f',guid);
+				GestorSalida.GAME_SEND_GA903_ERROR_PACKET(perso.getCuenta().getJuegoThread().get_out(),'f',guid);
 				return;
 			}
 			if(_type == Constantes.FIGHT_TYPE_CHALLENGE)
@@ -2202,7 +2202,7 @@ public class Pelea
 			{
 				GestorSalida.GAME_SEND_GJK_PACKET(perso,2,0,1,0,0,_type);
 			}
-			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getGameThread().get_out(), _map.getEsquemaPelea(), _st2);
+			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getJuegoThread().get_out(), _map.getEsquemaPelea(), _st2);
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
 			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
@@ -2240,7 +2240,7 @@ public class Pelea
 		Case cell = getRandomCell(_start1);
 		if(cell == null)return;
 		GestorSalida.GAME_SEND_GJK_PACKET(perso,2,0,1,0,0,_type);
-		GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getGameThread().get_out(), _map.getEsquemaPelea(), _st2);
+		GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getJuegoThread().get_out(), _map.getEsquemaPelea(), _st2);
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
 		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
@@ -2433,7 +2433,7 @@ public class Pelea
         	if(_ordreJeu.get(_curPlayer).getPersonnage() != null)
         	{
         		//On envoie le path qu'au joueur qui se d�place
-        		PrintWriter out = _ordreJeu.get(_curPlayer).getPersonnage().getCuenta().getGameThread().get_out();
+        		PrintWriter out = _ordreJeu.get(_curPlayer).getPersonnage().getCuenta().getJuegoThread().get_out();
         		GestorSalida.GAME_SEND_GA_PACKET(out,  GA._id+"", "1", _ordreJeu.get(_curPlayer).getGUID()+"", "a"+ GestorEncriptador.cellID_To_Code(f.get_fightCell().getID())+newPath);
         	}
         }
@@ -2506,7 +2506,7 @@ public class Pelea
     		return true;
         }
 
-        f.getPersonnage().getCuenta().getGameThread().addAction(GA);
+        f.getPersonnage().getCuenta().getJuegoThread().addAction(GA);
 		if ((this._type == 4) && (this._challenges.size() > 0) && !this._ordreJeu.get(this._curPlayer).isInvocation() && !this._ordreJeu.get(this._curPlayer).isDouble() && !this._ordreJeu.get(this._curPlayer).isPerco())
         {
         	for (Map.Entry<Integer, Retos> c : this._challenges.entrySet()) {
@@ -3397,7 +3397,7 @@ public class Pelea
 					for(Personaje z : Mundo.getCarte(F._Perco.get_mapID()).getPersos())
 					{
 						if(z == null) continue;
-						GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.getCuenta().getGameThread().get_out(), z.getActualMapa());
+						GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.getCuenta().getJuegoThread().get_out(), z.getActualMapa());
 					}
 				}
 				if(F.hasLeft())continue;
@@ -4090,7 +4090,7 @@ public class Pelea
 									for(Personaje z : Mundo.getCarte(_perco.get_mapID()).getPersos())
 									{
 										if(z == null) continue;
-										GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.getCuenta().getGameThread().get_out(), z.getActualMapa());
+										GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(z.getCuenta().getJuegoThread().get_out(), z.getActualMapa());
 									}
 								}
 								if(_type == Constantes.FIGHT_TYPE_PVM)
@@ -4276,16 +4276,16 @@ public class Pelea
 		{
 			for(Entry<Integer,Fighter> e : _team0.entrySet())
 			{
-				if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().getCuenta().getGameThread() != null)
-					PWs.add(e.getValue().getPersonnage().getCuenta().getGameThread().get_out());
+				if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().getCuenta().getJuegoThread() != null)
+					PWs.add(e.getValue().getPersonnage().getCuenta().getJuegoThread().get_out());
 			}
 		}
 		else if(teams == 1)
 		{
 			for(Entry<Integer,Fighter> e : _team1.entrySet())
 			{
-				if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().getCuenta().getGameThread() != null)
-					PWs.add(e.getValue().getPersonnage().getCuenta().getGameThread().get_out());
+				if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().getCuenta().getJuegoThread() != null)
+					PWs.add(e.getValue().getPersonnage().getCuenta().getJuegoThread().get_out());
 			}
 		}
 		GestorSalida.GAME_SEND_FIGHT_SHOW_CASE(PWs, guid, cellID);
@@ -4296,17 +4296,17 @@ public class Pelea
 		ArrayList<PrintWriter> PWs = new ArrayList<>();
 		for(Entry<Integer,Fighter> e : _team0.entrySet())
 		{
-			if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().getCuenta().getGameThread() != null)
-				PWs.add(e.getValue().getPersonnage().getCuenta().getGameThread().get_out());
+			if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().getCuenta().getJuegoThread() != null)
+				PWs.add(e.getValue().getPersonnage().getCuenta().getJuegoThread().get_out());
 		}
 		for(Entry<Integer,Fighter> e : _team1.entrySet())
 		{
-			if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().getCuenta().getGameThread() != null)
-				PWs.add(e.getValue().getPersonnage().getCuenta().getGameThread().get_out());
+			if(e.getValue().getPersonnage() != null && e.getValue().getPersonnage().getCuenta().getJuegoThread() != null)
+				PWs.add(e.getValue().getPersonnage().getCuenta().getJuegoThread().get_out());
 		}
 		for(Entry<Integer, Personaje> e : _spec.entrySet())
 		{
-			PWs.add(e.getValue().getCuenta().getGameThread().get_out());
+			PWs.add(e.getValue().getCuenta().getJuegoThread().get_out());
 		}
 		GestorSalida.GAME_SEND_FIGHT_SHOW_CASE(PWs, guid, cellID);
 	}

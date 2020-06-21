@@ -151,7 +151,7 @@ public class Casas
 					{
 						packet.append("undefined;");
 					}else {
-						packet.append(Mundo.getCompte(house.getValue().get_owner_id()).get_pseudo()).append(";");
+						packet.append(Mundo.getCompte(house.getValue().get_owner_id()).getApodo()).append(";");
 					}
 				}else {
 					packet.append(";");
@@ -379,7 +379,7 @@ public class Casas
 				if(!isFirst) packet.append("|");
 				
 				packet.append(house.getKey()).append(";");
-				packet.append(Mundo.getPersonnage(house.getValue().get_owner_id()).getCuenta().get_pseudo()).append(";");
+				packet.append(Mundo.getPersonnage(house.getValue().get_owner_id()).getCuenta().getApodo()).append(";");
 				packet.append(Mundo.getCarte((short)house.getValue().get_mapid()).getX()).append(",").append(Mundo.getCarte((short)house.getValue().get_mapid()).getY()).append(";");
 				packet.append("0;");//TODO : Compétences ...
 				packet.append(house.getValue().get_guild_rights());	

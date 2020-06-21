@@ -127,7 +127,7 @@ object GestorSQL {
             p.setInt(4, if (cuenta.isBanned) 1 else 0)
             p.setString(5, cuenta.parseFriendListToDB())
             p.setString(6, cuenta.parseEnemyListToDB())
-            p.setInt(7, cuenta._GUID)
+            p.setInt(7, cuenta.id)
             p.executeUpdate()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
@@ -1312,7 +1312,7 @@ object GestorSQL {
             val p = nueva_consulta(baseQuery, _dinamicos)
             while (RS!!.next()) {
                 //Si le compte est déjà connecté, on zap
-                if (getCompte(RS.getInt("id")) != null) if (getCompte(RS.getInt("id")).isOnline) continue
+                if (getCompte(RS.getInt("id")) != null) if (getCompte(RS.getInt("id")).isConectado) continue
                 val C = Cuenta(
                         RS.getInt("id"),
                         RS.getString("cuenta").toLowerCase(),
@@ -1350,7 +1350,7 @@ object GestorSQL {
             val p = nueva_consulta(baseQuery, _dinamicos)
             while (RS!!.next()) {
                 //Si le compte est déjà connecté, on zap
-                if (getCompte(RS.getInt("id")) != null) if (getCompte(RS.getInt("id")).isOnline) continue
+                if (getCompte(RS.getInt("id")) != null) if (getCompte(RS.getInt("id")).isConectado) continue
                 val C = Cuenta(
                         RS.getInt("id"),
                         RS.getString("cuenta").toLowerCase(),
@@ -1387,7 +1387,7 @@ object GestorSQL {
             val p = nueva_consulta(baseQuery, _dinamicos)
             p.setString(1, compte.actualIP)
             p.setString(2, compte.lastConnectionDate)
-            p.setInt(3, compte._GUID)
+            p.setInt(3, compte.id)
             p.executeUpdate()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
@@ -1905,7 +1905,7 @@ object GestorSQL {
                     addToShopLog("Le Personnage " + RS.getInt("personaje") + " n'est attribue a aucun compte charge")
                     continue
                 }
-                if (perso.cuenta.gameThread == null) {
+                if (perso.cuenta.juegoThread == null) {
                     addToShopLog("Le Personnage " + RS.getInt("personaje") + " n'a pas thread associe, le personnage est il hors ligne ?")
                     continue
                 }

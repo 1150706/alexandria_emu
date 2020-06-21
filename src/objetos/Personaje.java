@@ -218,8 +218,8 @@ public class Personaje {
 			_persos.remove(p);
 			if(_persos.size() == 1) {
 				_persos.get(0).setGroup(null);
-				if(_persos.get(0).getCuenta() == null || _persos.get(0).getCuenta().getGameThread() == null)return;
-				GestorSalida.GAME_SEND_PV_PACKET(_persos.get(0).getCuenta().getGameThread().get_out(),"");
+				if(_persos.get(0).getCuenta() == null || _persos.get(0).getCuenta().getJuegoThread() == null)return;
+				GestorSalida.GAME_SEND_PV_PACKET(_persos.get(0).getCuenta().getJuegoThread().get_out(),"");
 			} else
 				GestorSalida.GAME_SEND_PM_DEL_PACKET_TO_GROUP(this,p.get_GUID());
 		}
@@ -658,7 +658,7 @@ public class Personaje {
 				100,
 				classe * 10 + sexe,
 				(byte)0,
-				compte.get_GUID(),
+				compte.getID(),
 				new TreeMap<>(),
 				(byte)1,
 				(byte)0,
@@ -1060,8 +1060,8 @@ public class Personaje {
 	}
 	
 	public void OnJoinGame() {
-		if(_compte.getGameThread() == null)return;
-		PrintWriter out = _compte.getGameThread().get_out();
+		if(_compte.getJuegoThread() == null)return;
+		PrintWriter out = _compte.getJuegoThread().get_out();
 		_compte.setCurPerso(this);
 		_isOnline = true;
 		
@@ -1089,7 +1089,7 @@ public class Personaje {
 			if(obj != null) {
 				for(StatsMetier sm : list)
 					if(sm.getTemplate().isValidTool(obj.getTemplate().getID()))
-						GestorSalida.GAME_SEND_OT_PACKET(_compte.getGameThread().get_out(),sm.getTemplate().getId());
+						GestorSalida.GAME_SEND_OT_PACKET(_compte.getJuegoThread().get_out(),sm.getTemplate().getId());
 			}
 		}
 		//Fin métier
@@ -1149,8 +1149,8 @@ public class Personaje {
 	}
 	
 	public void sendGameCreate() {
-		if(_compte.getGameThread() == null) return;
-		PrintWriter out = _compte.getGameThread().get_out();
+		if(_compte.getJuegoThread() == null) return;
+		PrintWriter out = _compte.getJuegoThread().get_out();
 		
 		if(is_showSeller() == true && Mundo.getSeller(getActualMapa().getID()) != null && Mundo.getSeller(getActualMapa().getID()).contains(get_GUID())) {
 			Mundo.removeSeller(get_GUID(), getActualMapa().getID());
@@ -1160,7 +1160,7 @@ public class Personaje {
 		
 		GestorSalida.GAME_SEND_GAME_CREATE(out,_name);
 		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
-		GestorSQL.salir_del_juego(_compte.get_GUID(), 1);
+		GestorSQL.salir_del_juego(_compte.getID(), 1);
 		GestorSalida.GAME_SEND_MAPDATA(out,_curCarte.getID(),_curCarte.get_date(),_curCarte.get_key());
 		GestorSalida.GAME_SEND_MAP_FIGHT_COUNT(out,this.getActualMapa());
 		_curCarte.addPlayer(this);
@@ -1511,7 +1511,7 @@ public class Personaje {
 
 	public void refreshMapAfterFight() {
 		_curCarte.addPlayer(this);
-		if(_compte.getGameThread() != null && _compte.getGameThread().get_out() != null) {
+		if(_compte.getJuegoThread() != null && _compte.getJuegoThread().get_out() != null) {
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 			GestorSalida.GAME_SEND_ILS_PACKET(this, 1000);
 		}
@@ -1810,7 +1810,7 @@ public class Personaje {
 			GestorSQL.actualizar_miembro_del_gremio(getMiembroGremio());
 		}
 		if(send && _isOnline) {
-			GestorSalida.GAME_SEND_NEW_LVL_PACKET(_compte.getGameThread().get_out(),_lvl);
+			GestorSalida.GAME_SEND_NEW_LVL_PACKET(_compte.getJuegoThread().get_out(),_lvl);
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 			GestorSalida.GAME_SEND_SPELL_LIST(this);
 		}
@@ -1823,7 +1823,7 @@ public class Personaje {
 		while(_curExp >= Mundo.getPersoXpMax(_lvl) && _lvl< Mundo.getExpLevelSize())
 			levelUp(true,false);
 		if(_isOnline) {
-			if(exLevel < _lvl) GestorSalida.GAME_SEND_NEW_LVL_PACKET(_compte.getGameThread().get_out(),_lvl);
+			if(exLevel < _lvl) GestorSalida.GAME_SEND_NEW_LVL_PACKET(_compte.getJuegoThread().get_out(),_lvl);
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
 		}
 	}
@@ -1893,7 +1893,7 @@ public class Personaje {
 			Objeto obj = getObjetByPos(Constantes.ITEM_POS_ARME);
 			if(obj != null)
 				if(sm.getTemplate().isValidTool(obj.getTemplate().getID()))
-					GestorSalida.GAME_SEND_OT_PACKET(_compte.getGameThread().get_out(),m.getId());
+					GestorSalida.GAME_SEND_OT_PACKET(_compte.getJuegoThread().get_out(),m.getId());
 		}
 		return pos;
 	}
@@ -1971,8 +1971,8 @@ public class Personaje {
 	
 	public void teletransportar(short newMapID, int newCellID) {
 		PrintWriter PW = null;
-		if(_compte.getGameThread() != null) {
-			PW = _compte.getGameThread().get_out();
+		if(_compte.getJuegoThread() != null) {
+			PW = _compte.getJuegoThread().get_out();
 		}
 		if(Mundo.getCarte(newMapID) == null) {
 			JuegoServidor.agregar_a_los_logs("Game: INVALID MAP : "+newMapID);
@@ -2793,7 +2793,7 @@ public class Personaje {
 			return false;
 		
 		if(_isInvisible) {
-			return _compte.isFriendWith(sender.getCuenta().get_GUID());
+			return _compte.isFriendWith(sender.getCuenta().getID());
 		}
 		
 		return true;

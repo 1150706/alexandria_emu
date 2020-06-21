@@ -49,7 +49,7 @@ public class Comandos {
 	        	}
 	        	if(Time <= 0) {
 	        		for(Personaje perso : Mundo.getOnlinePersos()) {
-	        			perso.getCuenta().getGameThread().kick();
+	        			perso.getCuenta().getJuegoThread().kick();
 	        		}
 	    			System.exit(0);
 	        	}
@@ -62,12 +62,12 @@ public class Comandos {
 	public Comandos(Personaje personaje) {
 		this._cuenta = personaje.getCuenta();
 		this._personaje = personaje;
-		this._imprimir = _cuenta.getGameThread().get_out();
+		this._imprimir = _cuenta.getJuegoThread().get_out();
 	}
 	
 	public void consoleCommand(String packet) {
 		if(_cuenta.getGMLVL() < 1) {
-			_cuenta.getGameThread().closeSocket();
+			_cuenta.getJuegoThread().closeSocket();
 			return;
 		}
 		
@@ -93,7 +93,7 @@ public class Comandos {
 	
 	public void ComandosGmNivelUno(String comando, String[] infos, String mensaje) {
 		if(_cuenta.getGMLVL() < 1) {
-			_cuenta.getGameThread().closeSocket();
+			_cuenta.getJuegoThread().closeSocket();
 			return;
 		} if(comando.equalsIgnoreCase("INFORMACION")) {
 			long tiempo = System.currentTimeMillis() - MainServidor.gameServer.getStartTime();
@@ -462,7 +462,7 @@ public class Comandos {
 	
 	public void ComandosGmNivelDos(String comando, String[] infos, String mensaje) {
 		if(_cuenta.getGMLVL() < 2) {
-			_cuenta.getGameThread().closeSocket();
+			_cuenta.getJuegoThread().closeSocket();
 			return;
 		}
 		
@@ -536,7 +536,7 @@ public class Comandos {
 				return;
 			}
 			if(perso.isConectado()) {
-				perso.getCuenta().getGameThread().kick();
+				perso.getCuenta().getJuegoThread().kick();
 				String mess = "Usted ha expulsado a "+perso.getNombre();
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,mess);
 			} else {
@@ -906,7 +906,7 @@ public class Comandos {
 					}
 					if(perso.isConectado()) {
 						GestorSalida.GAME_SEND_SPELL_LIST(perso);
-						GestorSalida.GAME_SEND_NEW_LVL_PACKET(perso.getCuenta().getGameThread().get_out(),perso.get_lvl());
+						GestorSalida.GAME_SEND_NEW_LVL_PACKET(perso.getCuenta().getJuegoThread().get_out(),perso.get_lvl());
 						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					}
 				}
@@ -1047,7 +1047,7 @@ public class Comandos {
 	
 	public void ComandosGmNivelTres(String command, String[] infos, String msg) {
 		if(_cuenta.getGMLVL() < 3) {
-			_cuenta.getGameThread().closeSocket();
+			_cuenta.getJuegoThread().closeSocket();
 			return;
 		}
 		
@@ -1059,7 +1059,7 @@ public class Comandos {
 	        GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "isAlive= " + MainServidor._passerTours.isAlive() + ", SDATA= " + MainServidor._passerTours.toString());
 		} else 
 			if (command.equalsIgnoreCase("EXPULSAR_A_TODOS")) {
-				MainServidor.gameServer.kickAll();
+				MainServidor.gameServer.expulsar_a_todos();
 			}else
 		if (command.equalsIgnoreCase("FINALIZAR_TURNOS")) {
 			MainServidor._passerTours = new Thread(new JuegoServidor.AllFightsTurns());
@@ -1127,7 +1127,7 @@ public class Comandos {
 			}
 			P.getCuenta().setBanned(true);
 			GestorSQL.actualizar_datos_cuenta(P.getCuenta());
-			if(P.getCuenta().getGameThread() != null)P.getCuenta().getGameThread().kick();
+			if(P.getCuenta().getJuegoThread() != null)P.getCuenta().getJuegoThread().kick();
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Usted ha baneado a "+P.getNombre());
 			return;
 		}else
@@ -1471,7 +1471,7 @@ public class Comandos {
 	
 	public void ComandosGmNivelCuatro(String comandos, String[] infos, String mensaje) {
 		if(_cuenta.getGMLVL() < 4) {
-			_cuenta.getGameThread().closeSocket();
+			_cuenta.getJuegoThread().closeSocket();
 			return;
 		}
 		
@@ -1494,7 +1494,7 @@ public class Comandos {
 					return;
 				}
 			}
-			target.getCuenta().setGmLvl(gmLvl);
+			target.getCuenta().setGMLVL(gmLvl);
 			GestorSQL.actualizar_datos_cuenta(target.getCuenta());
 			String str = "El nivel de admin de "+_personaje.getNombre()+" se ha modificado";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
@@ -1540,7 +1540,7 @@ public class Comandos {
 			if(KickPlayer > 0) {
 				for(Personaje z : Mundo.getOnlinePersos()) {
 					if(z.getCuenta().getGMLVL() < GmAccess)
-						z.getCuenta().getGameThread().closeSocket();
+						z.getCuenta().getJuegoThread().closeSocket();
 				}
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Lo jugadores con nivel de admin inferior a "+GmAccess+" seran expulsados.");
 			}
@@ -1562,7 +1562,7 @@ public class Comandos {
 					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "La IP ha sido baneada.");
 				}
 				if(P.isConectado()){
-					P.getCuenta().getGameThread().kick();
+					P.getCuenta().getJuegoThread().kick();
 					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "El jugador ha sido expulsado.");
 				}
 			}else {

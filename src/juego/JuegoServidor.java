@@ -19,12 +19,11 @@ import comunes.*;
 public class JuegoServidor implements Runnable{
 
 	private ServerSocket _SS;
-	private Thread _t;
-	private final ArrayList<JuegoThread> _clients = new ArrayList<>();
-	private final ArrayList<Cuenta> _waitings = new ArrayList<>();
-	private Timer _reloadPubTimer;
-	private long _startTime;
-	private int _maxPlayer = 0;
+	private Thread _thread;
+	private final ArrayList<JuegoThread> _clientes = new ArrayList<>();
+	private final ArrayList<Cuenta> _esperando = new ArrayList<>();
+	private long _tiempoinicio;
+	private int _jugadoresmaximos = 0;
 	private String _publicidad;
 	private static int _nropublicidad = 0;
 	
@@ -32,8 +31,8 @@ public class JuegoServidor implements Runnable{
 		try {
 
 			//Timer de guardado automatico
-			Timer _saveTimer = new Timer();
-			_saveTimer.schedule(new TimerTask() {
+			Timer _tiempoguardado = new Timer();
+			_tiempoguardado.schedule(new TimerTask() {
 				public void run() {
 					if(!MainServidor.isSaving) {
 						Thread t = new Thread(new SaveThread());
@@ -111,10 +110,10 @@ public class JuegoServidor implements Runnable{
 					for(Personaje perso : Mundo.getOnlinePersos()) {
 						if (perso.getLastPacketTime() + MainServidor.TIEMPO_DESCONECTAR_POR_AFK < System.currentTimeMillis()) {
 							
-							if(perso.getCuenta().getGameThread() != null && perso.isConectado()) {
+							if(perso.getCuenta().getJuegoThread() != null && perso.isConectado()) {
 								JuegoServidor.agregar_a_los_logs("Se ha desconectado a "+perso.getNombre()+" por inactividad");
-								GestorSalida.REALM_SEND_MESSAGE(perso.getCuenta().getGameThread().get_out(),"01|");
-								perso.getCuenta().getGameThread().closeSocket();
+								GestorSalida.REALM_SEND_MESSAGE(perso.getCuenta().getJuegoThread().get_out(),"01|");
+								perso.getCuenta().getJuegoThread().closeSocket();
 							}
 						}
 					}
@@ -124,9 +123,9 @@ public class JuegoServidor implements Runnable{
 			_SS = new ServerSocket(MainServidor.PUERTO_DE_JUEGO);
 			if(MainServidor.USAR_IP)
 				MainServidor.GAMESERVER_IP = GestorEncriptador.CryptIP(Ip)+ GestorEncriptador.CryptPort(MainServidor.PUERTO_DE_JUEGO);
-			_startTime = System.currentTimeMillis();
-			_t = new Thread(this);
-			_t.start();
+			_tiempoinicio = System.currentTimeMillis();
+			_thread = new Thread(this);
+			_thread.start();
 		} catch (IOException e) {
 			agregar_a_los_logs("IOException: "+e.getMessage());
 			MainServidor.closeServers();
@@ -144,29 +143,30 @@ public class JuegoServidor implements Runnable{
 	}
 	
 	public ArrayList<JuegoThread> getClients() {
-		return _clients;
+		return _clientes;
 	}
 
 	public long getStartTime()
 	{
-		return _startTime;
+		return _tiempoinicio;
 	}
 	
 	public int getMaxPlayer()
 	{
-		return _maxPlayer;
+		return _jugadoresmaximos;
 	}
 	
 	public int getPlayerNumber()
 	{
-		return _clients.size();
+		return _clientes.size();
 	}
+
 	public void run() {
 		while(MainServidor.isRunning)//bloque sur _SS.accept()
 		{
 			try {
-				_clients.add(new JuegoThread(_SS.accept()));
-				if(_clients.size() > _maxPlayer)_maxPlayer = _clients.size();
+				_clientes.add(new JuegoThread(_SS.accept()));
+				if(_clientes.size() > _jugadoresmaximos) _jugadoresmaximos = _clientes.size();
 			}catch(IOException e) {
 				agregar_a_los_logs("IOException: "+e.getMessage());
 				try {
@@ -177,12 +177,12 @@ public class JuegoServidor implements Runnable{
 		}
 	}
 	
-	public void kickAll() {
+	public void expulsar_a_todos() {
 		try {
 			_SS.close();
 		} catch (IOException ignored) {}
 		//Copie
-		ArrayList<JuegoThread> c = new ArrayList<>(_clients);
+		ArrayList<JuegoThread> c = new ArrayList<>(_clientes);
 		for(JuegoThread GT : c) {
 			try {
 				GT.closeSocket();
@@ -215,13 +215,13 @@ public class JuegoServidor implements Runnable{
 	}
 	
 	public void delClient(JuegoThread gameThread) {
-		_clients.remove(gameThread);
-		if(_clients.size() > _maxPlayer)_maxPlayer = _clients.size();
+		_clientes.remove(gameThread);
+		if(_clientes.size() > _jugadoresmaximos) _jugadoresmaximos = _clientes.size();
 	}
 
 	public synchronized Cuenta getWaitingCompte(int guid) {
-		for (Cuenta waiting : _waitings) {
-			if (waiting.get_GUID() == guid)
+		for (Cuenta waiting : _esperando) {
+			if (waiting.getID() == guid)
 				return waiting;
 		}
 		return null;
@@ -229,12 +229,12 @@ public class JuegoServidor implements Runnable{
 	
 	public synchronized void delWaitingCompte(Cuenta _compte)
 	{
-		_waitings.remove(_compte);
+		_esperando.remove(_compte);
 	}
 	
 	public synchronized void addWaitingCompte(Cuenta _compte)
 	{
-		_waitings.add(_compte);
+		_esperando.add(_compte);
 	}
 	
 	public static String getServerTime() {
@@ -261,7 +261,7 @@ public class JuegoServidor implements Runnable{
 
 	public Thread getThread()
 	{
-		return _t;
+		return _thread;
 	}
 	public static class AllFightsTurns
     implements Runnable {

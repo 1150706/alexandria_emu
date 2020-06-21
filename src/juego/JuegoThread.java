@@ -291,7 +291,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
-				guid = C.get_GUID();
+				guid = C.getID();
 			}
 			default -> {
 				packet = packet.substring(2);
@@ -300,7 +300,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
-				guid = Pr.getCuenta().get_GUID();
+				guid = Pr.getCuenta().getID();
 			}
 		}
 		if(guid == -1)
@@ -334,7 +334,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
-				guid = C.get_GUID();
+				guid = C.getID();
 			}
 			default -> {
 				packet = packet.substring(2);
@@ -343,7 +343,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
-				guid = Pr.getCuenta().get_GUID();
+				guid = Pr.getCuenta().getID();
 			}
 		}
 		if(guid == -1 || !_compte.isEnemyWith(guid))
@@ -1253,7 +1253,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
-				guid = C.get_GUID();
+				guid = C.getID();
 			}
 			default -> {
 				packet = packet.substring(2);
@@ -1263,7 +1263,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_FD_PACKET(_perso, "Ef");
 					return;
 				}
-				guid = Pr.getCuenta().get_GUID();
+				guid = Pr.getCuenta().getID();
 			}
 		}
 		if(guid == -1 || !_compte.isFriendWith(guid))
@@ -1294,11 +1294,11 @@ public class JuegoThread implements Runnable {
 			case '*' -> {
 				packet = packet.substring(3);
 				Cuenta C = Mundo.getCompteByPseudo(packet);
-				if (C == null ? true : !C.isOnline()) {
+				if (C == null ? true : !C.isConectado()) {
 					GestorSalida.GAME_SEND_FA_PACKET(_perso, "Ef");
 					return;
 				}
-				guid = C.get_GUID();
+				guid = C.getID();
 			}
 			default -> {
 				packet = packet.substring(2);
@@ -1308,7 +1308,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_FA_PACKET(_perso, "Ef");
 					return;
 				}
-				guid = Pr.getCuenta().get_GUID();
+				guid = Pr.getCuenta().getID();
 			}
 		}
 		if(guid == -1)
@@ -1437,7 +1437,7 @@ public class JuegoThread implements Runnable {
 			if(guid == -1)return;
 			Personaje t = Mundo.getPersonnage(guid);
 			g.leave(t);
-			GestorSalida.GAME_SEND_PV_PACKET(t.getCuenta().getGameThread().get_out(),""+_perso.get_GUID());
+			GestorSalida.GAME_SEND_PV_PACKET(t.getCuenta().getJuegoThread().get_out(),""+_perso.get_GUID());
 			GestorSalida.GAME_SEND_IH_PACKET(t, "");
 		}
 	}
@@ -1466,7 +1466,7 @@ public class JuegoThread implements Runnable {
 		target.setInvitation(_perso.get_GUID());	
 		_perso.setInvitation(target.get_GUID());
 		GestorSalida.GAME_SEND_GROUP_INVITATION(_out,_perso.getNombre(),name);
-		GestorSalida.GAME_SEND_GROUP_INVITATION(target.getCuenta().getGameThread().get_out(),_perso.getNombre(),name);
+		GestorSalida.GAME_SEND_GROUP_INVITATION(target.getCuenta().getJuegoThread().get_out(),_perso.getNombre(),name);
 	}
 
 	private void group_refuse()
@@ -1493,10 +1493,10 @@ public class JuegoThread implements Runnable {
 			g = new Grupo(t,_perso);
 			GestorSalida.GAME_SEND_GROUP_CREATE(_out,g);
 			GestorSalida.GAME_SEND_PL_PACKET(_out,g);
-			GestorSalida.GAME_SEND_GROUP_CREATE(t.getCuenta().getGameThread().get_out(),g);
-			GestorSalida.GAME_SEND_PL_PACKET(t.getCuenta().getGameThread().get_out(),g);
+			GestorSalida.GAME_SEND_GROUP_CREATE(t.getCuenta().getJuegoThread().get_out(),g);
+			GestorSalida.GAME_SEND_PL_PACKET(t.getCuenta().getJuegoThread().get_out(),g);
 			t.setGroup(g);
-			GestorSalida.GAME_SEND_ALL_PM_ADD_PACKET(t.getCuenta().getGameThread().get_out(),g);
+			GestorSalida.GAME_SEND_ALL_PM_ADD_PACKET(t.getCuenta().getJuegoThread().get_out(),g);
 		}
 		else
 		{
@@ -2314,7 +2314,7 @@ public class JuegoThread implements Runnable {
 						Mundo.addObjet(newObj, true);
 						obj = newObj;
 					}
-					HdvEntry toAdd = new HdvEntry(price, amount, _perso.getCuenta().get_GUID(), obj);
+					HdvEntry toAdd = new HdvEntry(price, amount, _perso.getCuenta().getID(), obj);
 					curHdv.addEntry(toAdd);    //Ajoute l'entry dans l'HDV
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(_out, '+', "", toAdd.parseToEmK());    //Envoie un packet pour ajouter l'item dans la fenetre de l'HDV du client
 				}
@@ -2537,7 +2537,7 @@ public class JuegoThread implements Runnable {
 		Personaje target = Mundo.getPersonnage(_perso.get_isTradingWith());
 		if(target == null)return;
 		GestorSalida.GAME_SEND_EXCHANGE_CONFIRM_OK(_out,1);
-		GestorSalida.GAME_SEND_EXCHANGE_CONFIRM_OK(target.getCuenta().getGameThread().get_out(),1);
+		GestorSalida.GAME_SEND_EXCHANGE_CONFIRM_OK(target.getCuenta().getJuegoThread().get_out(),1);
 		Mundo.Exchange echg = new Mundo.Exchange(target,_perso);
 		_perso.setCurExchange(echg);
 		_perso.set_isTradingWith(target.get_GUID());
@@ -2707,7 +2707,7 @@ public class JuegoThread implements Runnable {
 			{
 				if(p.isConectado())
 				{
-					PrintWriter out = p.getCuenta().getGameThread().get_out();
+					PrintWriter out = p.getCuenta().getJuegoThread().get_out();
 					GestorSalida.GAME_SEND_EV_PACKET(out);
 					p.set_isTradingWith(0);
 				}
@@ -2837,7 +2837,7 @@ public class JuegoThread implements Runnable {
 					return;
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_REQUEST_OK(_out, _perso.get_GUID(), guidTarget,1);
-				GestorSalida.GAME_SEND_EXCHANGE_REQUEST_OK(target.getCuenta().getGameThread().get_out(),_perso.get_GUID(), guidTarget,1);
+				GestorSalida.GAME_SEND_EXCHANGE_REQUEST_OK(target.getCuenta().getJuegoThread().get_out(),_perso.get_GUID(), guidTarget,1);
 				_perso.set_isTradingWith(guidTarget);
 				target.set_isTradingWith(_perso.get_GUID());
 			}catch(NumberFormatException ignored){}
@@ -3556,12 +3556,12 @@ public class JuegoThread implements Runnable {
 						GestorSalida.GAME_SEND_CHAT_ERROR_PACKET(_out, nom);
 						return;
 					}
-					if(target.getCuenta().getGameThread() == null)//si le perso n'est pas co
+					if(target.getCuenta().getJuegoThread() == null)//si le perso n'est pas co
 					{
 						GestorSalida.GAME_SEND_CHAT_ERROR_PACKET(_out, nom);
 						return;
 					}
-					if(target.getCuenta().isEnemyWith(_perso.getCuenta().get_GUID()) == true || !target.isDispo(_perso))
+					if(target.getCuenta().isEnemyWith(_perso.getCuenta().getID()) == true || !target.isDispo(_perso))
 					{
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "114;"+target.getNombre());
 						return;
@@ -3584,7 +3584,7 @@ public class JuegoThread implements Runnable {
 			packet = packet.substring(2);
 			Personaje T = Mundo.getPersonajePorNombre(packet);
 			if(T == null) return;
-			GestorSalida.GAME_SEND_BWK(_perso, T.getCuenta().get_pseudo()+"|1|"+T.getNombre()+"|-1");
+			GestorSalida.GAME_SEND_BWK(_perso, T.getCuenta().getApodo()+"|1|"+T.getNombre()+"|-1");
 	}
 
 	private void parseGamePacket(String packet)
@@ -3798,7 +3798,7 @@ public class JuegoThread implements Runnable {
 		Casas.LoadHouse(_perso, _perso.getActualMapa().getID());
 		//Objets sur la carte
 		GestorSalida.GAME_SEND_MAP_GMS_PACKETS(_perso.getActualMapa(), _perso);
-		GestorSalida.GAME_SEND_MAP_MOBS_GMS_PACKETS(_perso.getCuenta().getGameThread().get_out(), _perso.getActualMapa());
+		GestorSalida.GAME_SEND_MAP_MOBS_GMS_PACKETS(_perso.getCuenta().getJuegoThread().get_out(), _perso.getActualMapa());
 		GestorSalida.GAME_SEND_MAP_NPCS_GMS_PACKETS(_perso,_perso.getActualMapa());
 		GestorSalida.GAME_SEND_MAP_PERCO_GMS_PACKETS(_out,_perso.getActualMapa());
 		GestorSalida.GAME_SEND_MAP_OBJECTS_GDS_PACKETS(_out,_perso.getActualMapa());
@@ -3957,7 +3957,7 @@ public class JuegoThread implements Runnable {
 				_perso.getActualMapa().getMapa(cellID) == null)
 			return;
 		GA._args = cellID+";"+actionID;
-		_perso.getCuenta().getGameThread().addAction(GA);
+		_perso.getCuenta().getJuegoThread().addAction(GA);
 		_perso.startActionOnCell(GA);
 	}
 
@@ -4189,7 +4189,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_NAME_ALREADY_EXIST(_out);
 					return;
 				}
-				if (_compte.GET_PERSO_NUMBER() >= MainServidor.MAXIMO_PERSONAJES_POR_CUENTA) {
+				if (_compte.getNumeroDePersonajes() >= MainServidor.MAXIMO_PERSONAJES_POR_CUENTA) {
 					GestorSalida.GAME_SEND_CREATE_PERSO_FULL(_out);
 					return;
 				}
@@ -4261,7 +4261,7 @@ public class JuegoThread implements Runnable {
 					String ip = _s.getInetAddress().getHostAddress();
 
 					_compte.setGameThread(this);
-					_compte.setCurIP(ip);
+					_compte.setActualIP(ip);
 					MainServidor.gameServer.delWaitingCompte(_compte);
 					GestorSalida.GAME_SEND_ATTRIBUTE_SUCCESS(_out);
 				} else {

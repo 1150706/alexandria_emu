@@ -187,7 +187,7 @@ public class Cofres {
 		
 		if(packet.compareTo(t.get_key()) == 0 || isTrunk)//Si c'est chez lui ou que le mot de passe est bon
 		{
-			GestorSalida.GAME_SEND_ECK_PACKET(P.getCuenta().getGameThread().get_out(), 5, "");
+			GestorSalida.GAME_SEND_ECK_PACKET(P.getCuenta().getJuegoThread().get_out(), 5, "");
 			GestorSalida.GAME_SEND_EL_TRUNK_PACKET(P, t);
 			closeCode(P);
 		}

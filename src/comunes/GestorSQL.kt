@@ -780,7 +780,7 @@ object GestorSQL {
 	fun cargar_mapas() {
         try {
             var RS: ResultSet?
-            RS = ejecutar_consulta("SELECT * FROM datos_mapas LIMIT " + Constantes.LIMITE_MAPAS + ";", MainServidor.DB_ESTATICOS)
+            RS = ejecutar_consulta("SELECT * FROM datos_mapas LIMIT " + MainServidor.LIMITE_DE_MAPAS + ";", MainServidor.DB_ESTATICOS)
             while (RS!!.next()) {
                 addCarte(Mapa(
                         RS.getShort("id"),

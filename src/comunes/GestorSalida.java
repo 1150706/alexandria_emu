@@ -80,7 +80,7 @@ public class GestorSalida {
 	}
 	
 	public static void REALM_SEND_REQUIRED_VERSION(PrintWriter out) {
-		String packet = "AlEv" + Constantes.CLIENT_VERSION;
+		String packet = "AlEv" + MainServidor.VERSION_DEL_CLIENTE;
 		send(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet);

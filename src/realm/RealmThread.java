@@ -100,7 +100,7 @@ public class RealmThread implements Runnable{
     private void parsePacket(String packet) {
         switch(_packetNum) {
             case 1://Version
-                if(!packet.equalsIgnoreCase(Constantes.CLIENT_VERSION) && !Constantes.IGNORE_VERSION) {
+                if(!packet.equalsIgnoreCase(MainServidor.VERSION_DEL_CLIENTE) && !MainServidor.IGNORAR_VERSION_DEL_CLIENTE) {
                     GestorSalida.REALM_SEND_REQUIRED_VERSION(_out);
                     try {
                         this._s.close();

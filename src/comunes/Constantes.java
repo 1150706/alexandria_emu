@@ -15,13 +15,6 @@ import objetos.hechizos.Hechizos.SortStats;
 
 public class Constantes {
 
-	public static final int LIMITE_MAPAS = 20000;
-	//Server
-	public static final String SERVER_VERSION	=	"3.0";
-	public static final String SERVER_MAKER		=	"Skillet";
-	//Versions
-	public static final	String CLIENT_VERSION	=	"1.29.1";
-	public static final boolean IGNORE_VERSION 		= false;
 	//ZAAPI <alignID,{mapID,mapID,...,mapID}>
 	public static final Map<Integer, String> ZAAPI = new TreeMap<>();
 	//ZAAP <mapID,cellID>

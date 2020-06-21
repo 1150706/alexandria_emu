@@ -39,6 +39,10 @@ object MainServidor {
     @JvmField
     var CONFIG_PUB_COLOR: String? = ""
     @JvmField
+    var VERSION_DEL_CLIENTE: String? = ""
+    @JvmField
+    var IGNORAR_VERSION_DEL_CLIENTE = false
+    @JvmField
     var MOSTRAR_ENVIADOS = false
     @JvmField
     var MOSTRAR_RECIBIDOS = false
@@ -79,6 +83,8 @@ object MainServidor {
     var NIVEL_DE_INICIO = 1
     @JvmField
     var DAR_KAMAS_AL_INICIO = 0
+    @JvmField
+    var LIMITE_DE_MAPAS = 20000
     @JvmField
     var CONFIG_KAMASMIN = 101
     @JvmField
@@ -316,10 +322,16 @@ object MainServidor {
                     if (value.equals("true", ignoreCase = true)) {
                         CONFIG_CUSTOM_STARTMAP = true
                     }
+                } else if (param.equals("IGNORAR_VERSION_DEL_CLIENTE", ignoreCase = true)) {
+                    if (value.equals("true", ignoreCase = true)) {
+                        IGNORAR_VERSION_DEL_CLIENTE = true
+                    }
                 } else if (param.equals("DAR_KAMAS_AL_INICIO", ignoreCase = true)) {
                     DAR_KAMAS_AL_INICIO = value.toInt()
                     if (DAR_KAMAS_AL_INICIO < 0) DAR_KAMAS_AL_INICIO = 0
                     if (DAR_KAMAS_AL_INICIO > 1000000000) DAR_KAMAS_AL_INICIO = 1000000000
+                } else if (param.equals("LIMITE_DE_MAPAS", ignoreCase = true)) {
+                    LIMITE_DE_MAPAS = value.toInt()
                 } else if (param.equals("KAMASMAX", ignoreCase = true)) {
                     CONFIG_KAMASMAX = value.toInt()
                     if (CONFIG_KAMASMAX < 0) CONFIG_KAMASMAX = 0
@@ -388,6 +400,8 @@ object MainServidor {
                     CONFIG_URLVOTE = line.split("=".toRegex(), 2).toTypedArray()[1]
                 } else if (param.equals("MOTD_COLOR", ignoreCase = true)) {
                     CONFIG_MOTD_COLOR = value
+                } else if (param.equals("VERSION_DEL_CLIENTE", ignoreCase = true)) {
+                    VERSION_DEL_CLIENTE = value
                 } else if (param.equals("PUB_COLOR", ignoreCase = true)) {
                     CONFIG_PUB_COLOR = value
                 } else if (param.equals("XP_OFICIOS", ignoreCase = true)) {

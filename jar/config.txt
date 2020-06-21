@@ -12,6 +12,8 @@ MOSTRAR_RECIBIDOS = true
 NOMBRE_DEL_SERVIDOR = Alexandria EMU
 WEB_DEL_SERVIDOR = http://privatedofus.net
 MOTD_COLOR = FF0000
+VERSION_DEL_CLIENTE = 1.29.1
+IGNORAR_VERSION_DEL_CLIENTE = true
 ENVIAR_POLITICA_DE_PRIVACIDAD = true
 #Tiempo de guardado en minutos (defecto 30min)
 TIEMPO_DE_GUARDADO = 30
@@ -39,6 +41,7 @@ DB_ESTATICOS = alexandria_estaticos
 DB_DINAMICOS = alexandria_dinamicos
 
 #Configuracion del juego
+LIMITE_DE_MAPAS = 13000
 MAXIMO_PERSONAJES_POR_CUENTA = 5
 USAR_MOOBS = true
 USAR_MAPA_INICIO_PERSONALIZADO = false

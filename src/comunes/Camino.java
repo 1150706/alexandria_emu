@@ -449,7 +449,7 @@ public class Camino {
 			break;
 			
 			default:
-				JuegoServidor.addToLog("[FIXME]Type de portée non reconnue: "+zoneStr);//.charAt(0));
+				JuegoServidor.agregar_a_los_logs("[FIXME]Type de portée non reconnue: "+zoneStr);//.charAt(0));
 			break;
 		}
 		return cases;

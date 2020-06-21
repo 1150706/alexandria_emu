@@ -78,7 +78,7 @@ public class Objeto {
 					}
 				}
 			} catch (Exception e) {
-				JuegoServidor.addToLog(e.getMessage());
+				JuegoServidor.agregar_a_los_logs(e.getMessage());
 				return Constantes.ITEM_TYPE_OBJET_VIVANT;
 			}
 			return Constantes.ITEM_TYPE_OBJET_VIVANT; //Si erreur on retourne le type de base

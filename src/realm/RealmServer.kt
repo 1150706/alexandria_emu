@@ -16,9 +16,9 @@ class RealmServer : Runnable {
             try {
                 RealmThread(serversocket!!.accept())
             } catch (e: IOException) {
-                addToLog("IOException: " + e.message)
+                agregar_a_los_logs("IOException: " + e.message)
                 try {
-                    addToLog("Fermeture du serveur de connexion")
+                    agregar_a_los_logs("Fermeture du serveur de connexion")
                     if (!serversocket!!.isClosed) serversocket!!.close()
                 } catch (e1: IOException) {
                 }
@@ -42,7 +42,7 @@ class RealmServer : Runnable {
 
         @JvmStatic
 		@Synchronized
-        fun addToLog(str: String) {
+        fun agregar_a_los_logs(str: String) {
             println(str)
             if (MainServidor.canLog) {
                 try {
@@ -78,7 +78,7 @@ class RealmServer : Runnable {
             thread!!.isDaemon = true
             thread!!.start()
         } catch (e: IOException) {
-            addToLog("IOException: " + e.message)
+            agregar_a_los_logs("IOException: " + e.message)
             closeServers()
         }
     }

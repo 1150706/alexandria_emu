@@ -57,7 +57,7 @@ public class JuegoServidor implements Runnable{
 					//Imprimimos la publicidad desde el lang
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_A_TODOS("1241;" + _publicidad);
 					if (MainServidor.MOSTRAR_ENVIADOS){
-					JuegoServidor.addToLog("Enviando publicidad automatica");
+					JuegoServidor.agregar_a_los_logs("Enviando publicidad automatica");
 					}
 					//En caso de que la lista ya termine la retomamos
 					if (_nropublicidad >= Mundo.Publicidad.size()) {
@@ -79,7 +79,7 @@ public class JuegoServidor implements Runnable{
 						if(!mapas.contains(map.getID())){
 							map.MovimientoDeMonstruosEnMapas();
 							mapas.add(map.getID());
-							JuegoServidor.addToLog("Moviendo los monstruos en mapas donde se encuentran personajes");
+							JuegoServidor.agregar_a_los_logs("Moviendo los monstruos en mapas donde se encuentran personajes");
 						}
 					}
 				}
@@ -90,7 +90,7 @@ public class JuegoServidor implements Runnable{
 			_loadActionTimer.schedule(new TimerTask() {
 				public void run() {
 					GestorSQL.cargar_acciones();
-					JuegoServidor.addToLog("Las acciones en tiempo real se han realizado!");
+					JuegoServidor.agregar_a_los_logs("Las acciones en tiempo real se han realizado!");
 				}
 			}, MainServidor.ACTIVAR_ACCIONES_TIEMPO_REAL, MainServidor.ACTIVAR_ACCIONES_TIEMPO_REAL);
 
@@ -112,7 +112,7 @@ public class JuegoServidor implements Runnable{
 						if (perso.getLastPacketTime() + MainServidor.TIEMPO_DESCONECTAR_POR_AFK < System.currentTimeMillis()) {
 							
 							if(perso.getCuenta().getGameThread() != null && perso.isConectado()) {
-								JuegoServidor.addToLog("Se ha desconectado a "+perso.getNombre()+" por inactividad");
+								JuegoServidor.agregar_a_los_logs("Se ha desconectado a "+perso.getNombre()+" por inactividad");
 								GestorSalida.REALM_SEND_MESSAGE(perso.getCuenta().getGameThread().get_out(),"01|");
 								perso.getCuenta().getGameThread().closeSocket();
 							}
@@ -128,7 +128,7 @@ public class JuegoServidor implements Runnable{
 			_t = new Thread(this);
 			_t.start();
 		} catch (IOException e) {
-			addToLog("IOException: "+e.getMessage());
+			agregar_a_los_logs("IOException: "+e.getMessage());
 			MainServidor.closeServers();
 		}
 	}
@@ -168,7 +168,7 @@ public class JuegoServidor implements Runnable{
 				_clients.add(new JuegoThread(_SS.accept()));
 				if(_clients.size() > _maxPlayer)_maxPlayer = _clients.size();
 			}catch(IOException e) {
-				addToLog("IOException: "+e.getMessage());
+				agregar_a_los_logs("IOException: "+e.getMessage());
 				try {
 					if(!_SS.isClosed())_SS.close();
 					MainServidor.closeServers();
@@ -190,7 +190,7 @@ public class JuegoServidor implements Runnable{
 		}
 	}
 	
-	public synchronized static void addToLog(String str) {
+	public synchronized static void agregar_a_los_logs(String str) {
 		System.out.println(str);
 		if(MainServidor.canLog) {
 			try {

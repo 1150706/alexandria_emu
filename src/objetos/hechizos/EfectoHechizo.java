@@ -285,7 +285,7 @@ public class EfectoHechizo
 						break;
 						
 						default:
-							JuegoServidor.addToLog("Effect id "+id+" definie comme ON_HIT_BUFF mais n'a pas d'effet definie dans ce gestionnaire.");
+							JuegoServidor.agregar_a_los_logs("Effect id "+id+" definie comme ON_HIT_BUFF mais n'a pas d'effet definie dans ce gestionnaire.");
 						break;
 					}
 				}
@@ -304,7 +304,7 @@ public class EfectoHechizo
 		
 		public void applyToFight(Pelea fight, Fighter acaster, ArrayList<Fighter> cibles, boolean isCaC)
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Effet id: "+effectID+" Args: "+args+" turns: "+turns+" cibles: "+cibles.size()+" chance: "+chance);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Effet id: "+effectID+" Args: "+args+" turns: "+turns+" cibles: "+cibles.size()+" chance: "+chance);
 			try
 			{
 				if(turns != -1)//Si ce n'est pas un buff qu'on applique en début de tour
@@ -723,7 +723,7 @@ public class EfectoHechizo
 				break;
 				
 				default:
-					JuegoServidor.addToLog("effet non implante : "+effectID+" args: "+args);
+					JuegoServidor.agregar_a_los_logs("effet non implante : "+effectID+" args: "+args);
 				break;
 			}
 		}
@@ -937,7 +937,7 @@ public class EfectoHechizo
 				
 				MG = Mundo.getMonstre(mobID).getGradeByLevel(level).getCopy();
 			}catch(Exception e1){
-				JuegoServidor.addToLog("Erreur sur le monstre id:"+mobID);
+				JuegoServidor.agregar_a_los_logs("Erreur sur le monstre id:"+mobID);
 				return;
 			}
 			if(mobID == -1 || level == -1 || MG == null)return;
@@ -1259,7 +1259,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1272,7 +1272,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1285,7 +1285,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1298,7 +1298,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1311,7 +1311,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1324,7 +1324,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1337,7 +1337,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1350,7 +1350,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1363,7 +1363,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1376,7 +1376,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1390,7 +1390,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1418,7 +1418,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1432,7 +1432,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1447,7 +1447,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1462,7 +1462,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1477,7 +1477,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1492,7 +1492,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1507,7 +1507,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1521,7 +1521,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1535,7 +1535,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1549,7 +1549,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1580,7 +1580,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1595,7 +1595,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1610,7 +1610,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1625,7 +1625,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1640,7 +1640,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1655,7 +1655,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1670,7 +1670,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1684,7 +1684,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1698,7 +1698,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1828,7 +1828,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1843,7 +1843,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1860,7 +1860,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1875,7 +1875,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1890,7 +1890,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 				caster.addBuff(effectID, val, turns, 1, false, spell, args, caster);
@@ -1902,7 +1902,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -1954,7 +1954,7 @@ public class EfectoHechizo
 				
 				MG = Mundo.getMonstre(mobID).getGradeByLevel(level).getCopy();
 			}catch(Exception e1){
-				JuegoServidor.addToLog("Erreur sur le monstre id:"+mobID);
+				JuegoServidor.agregar_a_los_logs("Erreur sur le monstre id:"+mobID);
 				return;
 			}
 
@@ -1989,7 +1989,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2004,7 +2004,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2025,7 +2025,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2040,7 +2040,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2055,7 +2055,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2070,7 +2070,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2085,7 +2085,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2100,7 +2100,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2115,7 +2115,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2130,7 +2130,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2147,7 +2147,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2162,7 +2162,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2177,7 +2177,7 @@ public class EfectoHechizo
 			int val = Formulas.getRandomJet(jet);
 			if(val == -1)
 			{
-				JuegoServidor.addToLog("Erreur de valeur pour getRandomJet (applyEffect_115)");
+				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_115)");
 				return;
 			}
 			for(Fighter target : cibles)
@@ -2461,9 +2461,9 @@ public class EfectoHechizo
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 4, caster.getGUID()+"", caster.getGUID()+","+cell.getID());
 			}else
 			{
-				JuegoServidor.addToLog("Tentative de teleportation echouee : case non libre:");
-				JuegoServidor.addToLog("IsOccuped: "+fight.isOccuped(cell.getID()));
-				JuegoServidor.addToLog("Walkable: "+cell.isWalkable(true));
+				JuegoServidor.agregar_a_los_logs("Tentative de teleportation echouee : case non libre:");
+				JuegoServidor.agregar_a_los_logs("IsOccuped: "+fight.isOccuped(cell.getID()));
+				JuegoServidor.agregar_a_los_logs("Walkable: "+cell.isWalkable(true));
 			}
 		}
 		

@@ -48,10 +48,7 @@ public class Casas
 		_caseid = caseid;
 	}
 	
-	public int get_id()
-	{
-		return _id;
-	}
+	public int get_id() { return _id; }
 	
 	public short get_map_id()
 	{
@@ -133,12 +130,9 @@ public class Casas
 		return _caseid;
 	}
 	
-	public static Casas get_house_id_by_coord(int map_id, int cell_id)
-	{
-		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
-		{
-			if(house.getValue().get_map_id() == map_id && house.getValue().get_cell_id() == cell_id)
-			{
+	public static Casas get_house_id_by_coord(int map_id, int cell_id) {
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet()) {
+			if(house.getValue().get_map_id() == map_id && house.getValue().get_cell_id() == cell_id) {
 				return house.getValue();
 			}
 		}
@@ -147,46 +141,37 @@ public class Casas
 	
 	public static void LoadHouse(Personaje P, int newMapID)//Affichage des maison + Blason
 	{
-		
-		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
-		{
-			if(house.getValue().get_map_id() == newMapID)
-			{
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet()) {
+			if(house.getValue().get_map_id() == newMapID) {
 				StringBuilder packet = new StringBuilder();
 				packet.append("P").append(house.getValue().get_id()).append("|");
-				if(house.getValue().get_owner_id() > 0)
-				{
+				if(house.getValue().get_owner_id() > 0) {
 					Cuenta C = Mundo.getCompte(house.getValue().get_owner_id());
 					if(C == null)//Ne devrait pas arriver
 					{
 						packet.append("undefined;");
-					}else
-					{
+					}else {
 						packet.append(Mundo.getCompte(house.getValue().get_owner_id()).get_pseudo()).append(";");
 					}
-				}else
-				{
+				}else {
 					packet.append(";");
 				}
 				if(house.getValue().get_sale() > 0)//Si prix > 0
 				{
 					packet.append("1");//Achetable
-				}else
-				{
+				}else {
 					packet.append("0");//Non achetable
 				}
 				if(house.getValue().get_guild_id() > 0) //Maison de guilde
 				{
 					Gremio G = Mundo.getGuild(house.getValue().get_guild_id());
-					if(G != null)
-					{
+					if(G != null) {
 						String Gname = G.get_name();
 						String Gemblem = G.get_emblem();
 						if(G.getMembers().size() < MainServidor.MEMBRE_MINI_GUILDE_VALIDE)//Ce n'est plus une maison de guilde
 						{
 							GestorSQL.casa_gremio(house.getValue(), 0, 0) ;
-						}else
-						{
+						}else {
 							//Affiche le blason pour les membre de guilde OU Affiche le blason pour les non membre de guilde
 							if(P.get_guild() != null && P.get_guild().get_id() == house.getValue().get_guild_id() && house.getValue().canDo(Constantes.H_GBLASON))//meme guilde
 							{
@@ -201,17 +186,14 @@ public class Casas
 				}
 				GestorSalida.GAME_SEND_hOUSE(P, packet.toString());
 
-				if(house.getValue().get_owner_id() == P.getAccID())
-				{
+				if(house.getValue().get_owner_id() == P.getAccID()) {
 					StringBuilder packet1 = new StringBuilder();
 					packet1.append("L+|").append(house.getValue().get_id()).append(";").append(house.getValue().get_access()).append(";");
 					
-					if(house.getValue().get_sale() <= 0)
-					{
+					if(house.getValue().get_sale() <= 0) {
 						packet1.append("0;").append(house.getValue().get_sale());
 					}
-					else if(house.getValue().get_sale() > 0)
-					{
+					else if(house.getValue().get_sale() > 0) {
 						packet1.append("1;").append(house.getValue().get_sale());
 					}
 					GestorSalida.GAME_SEND_hOUSE(P, packet1.toString());
@@ -238,27 +220,20 @@ public class Casas
             return;
     }
 
-    public static void OpenHouse(Personaje P, String packet, boolean isHome)
-    {
-        if(P.get_savestat() == 0)
-        {
+    public static void OpenHouse(Personaje P, String packet, boolean isHome) {
+        if(P.get_savestat() == 0) {
             Casas h = P.getInHouse();
             GestorSQL.guardar_personaje(P, true);
-            if(!h.canDo(Constantes.H_OCANTOPEN) && packet.compareTo(h.get_key()) == 0 || isHome)
-            {
+            if(!h.canDo(Constantes.H_OCANTOPEN) && packet.compareTo(h.get_key()) == 0 || isHome) {
                 P.teletransportar((short)h.get_mapid(), h.get_caseid());
                 closeCode(P);
-            } else
-            if(packet.compareTo(h.get_key()) != 0 || h.canDo(Constantes.H_OCANTOPEN))
-            {
+            } else if(packet.compareTo(h.get_key()) != 0 || h.canDo(Constantes.H_OCANTOPEN)) {
                 GestorSalida.GAME_SEND_KODE(P, "KE");
                 GestorSalida.GAME_SEND_KODE(P, "V");
             }
-        } else
-        {
+        } else {
             int code = Integer.parseInt(packet);
-            if(P.get_capital() >= code)
-            {
+            if(P.get_capital() >= code) {
                 for(int i = 0; i < code; i++)
                     P.boostStat(P.get_savestat());
 
@@ -278,9 +253,7 @@ public class Casas
 	public static void HouseAchat(Personaje P)//Acheter une maison
 	{
 		Casas h = P.getInHouse();
-
-		if(AlreadyHaveHouse(P))
-		{
+		if(AlreadyHaveHouse(P)) {
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "132;1");
 			return;
 		}
@@ -290,10 +263,8 @@ public class Casas
 		P.setKamas(newkamas);
 		
 		int tKamas = 0;
-		for(Cofres t : Cofres.getTrunksByHouse(h))
-		{
-			if(h.get_owner_id() > 0)
-			{
+		for(Cofres t : Cofres.getTrunksByHouse(h)) {
+			if(h.get_owner_id() > 0) {
 				t.moveTrunktoBank(Mundo.getCompte(h.get_owner_id()));//Déplacement des items vers la banque
 			}
 			tKamas += t.get_kamas();
@@ -325,8 +296,7 @@ public class Casas
 		GestorSQL.comprar_casa(P, h);
 
 		//Rafraichir la map après l'achat
-		for(Personaje z:P.getActualMapa().getPersos())
-		{
+		for(Personaje z:P.getActualMapa().getPersos()) {
 			LoadHouse(z, z.getActualMapa().getID());
 		}
 	}
@@ -334,13 +304,11 @@ public class Casas
 	public void SellIt(Personaje P)//Vendre une maison
 	{
 		Casas h = P.getInHouse();
-		if(isHouse(P, h))
-		{
+		if(isHouse(P, h)) {
 			String str = "CK"+h.get_id()+"|"+h.get_sale();//ID + Prix
 			GestorSalida.GAME_SEND_hOUSE(P, str);
 				return;
-		}else
-		{
+		}else {
 			return;
 		}
 	}
@@ -349,8 +317,7 @@ public class Casas
 	{
 		Casas h = P.getInHouse();
 		int price = Integer.parseInt(packet);	
-		if(h.isHouse(P, h))
-		{
+		if(h.isHouse(P, h)) {
 			GestorSalida.GAME_SEND_hOUSE(P, "V");
 			GestorSalida.GAME_SEND_hOUSE(P, "SK"+h.get_id()+"|"+price);
 				
@@ -364,8 +331,7 @@ public class Casas
 			}
 				
 			return;
-		}else
-		{
+		}else {
 			return;
 		}
 	}
@@ -394,26 +360,21 @@ public class Casas
 	public static void LockHouse(Personaje P, String packet)
 	{
 		Casas h = P.getInHouse();
-		if(h.isHouse(P, h))
-		{
+		if(h.isHouse(P, h)) {
 			GestorSQL.codigo_casa(P, h, packet);//Change le code
 			closeCode(P);
 			return;
-		}else
-		{
+		}else {
 			closeCode(P);
 			return;
 		}
 	}
 	
-	public static String parseHouseToGuild(Personaje P)
-	{
+	public static String parseHouseToGuild(Personaje P) {
 		boolean isFirst = true;
 		StringBuilder packet = new StringBuilder();
-		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
-		{
-			if(house.getValue().get_guild_id() == P.get_guild().get_id() && house.getValue().get_guild_rights() > 0)
-			{
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet()) {
+			if(house.getValue().get_guild_id() == P.get_guild().get_id() && house.getValue().get_guild_rights() > 0) {
 				if(isFirst) packet.append("+");
 				if(!isFirst) packet.append("|");
 				
@@ -428,66 +389,49 @@ public class Casas
 			return packet.toString();
 	}
 	
-	public static boolean AlreadyHaveHouse(Personaje P)
-	{
-		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
-		{
-			if(house.getValue().get_owner_id() == P.getAccID())
-			{
+	public static boolean AlreadyHaveHouse(Personaje P) {
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet()) {
+			if(house.getValue().get_owner_id() == P.getAccID()) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static void parseHG(Personaje P, String packet)
-	{
+	public static void parseHG(Personaje P, String packet) {
 		Casas h = P.getInHouse();
 		
 		if(P.get_guild() == null) return;
 		
-		if(packet != null)
-		{
-			if(packet.charAt(0) == '+')
-			{
+		if(packet != null) {
+			if(packet.charAt(0) == '+') {
 				//Ajoute en guilde
 				byte HouseMaxOnGuild = (byte) Math.floor(P.get_guild().get_lvl()/10);
 				if(HouseOnGuild(P.get_guild().get_id()) >= HouseMaxOnGuild) return;
 				if(P.get_guild().getMembers().size() < 10) return;
 				GestorSQL.casa_gremio(h, P.get_guild().get_id(), 0);
 				parseHG(P, null);
-			}
-			else if(packet.charAt(0) == '-')
-			{
+			} else if(packet.charAt(0) == '-') {
 				//Retire de la guilde
 				GestorSQL.casa_gremio(h, 0, 0);
 				parseHG(P, null);
-			}
-			else
-			{
+			} else {
 				GestorSQL.casa_gremio(h, h.get_guild_id(), Integer.parseInt(packet));
 				h.parseIntToRight(Integer.parseInt(packet));
 			}
-		}
-		else if(packet == null)
-		{
-		if(h.get_guild_id() <= 0)
-		{
+		} else if(packet == null) {
+		if(h.get_guild_id() <= 0) {
 			GestorSalida.GAME_SEND_hOUSE(P, "G"+h.get_id());
-		}else if(h.get_guild_id() > 0)
-		{
+		}else if(h.get_guild_id() > 0) {
 			GestorSalida.GAME_SEND_hOUSE(P, "G"+h.get_id()+";"+P.get_guild().get_name()+";"+P.get_guild().get_emblem()+";"+h.get_guild_rights());
 		}
 		}
 	}
 	
-	public static byte HouseOnGuild(int GuildID) 
-	{
+	public static byte HouseOnGuild(int GuildID) {
 		byte i = 0;
-		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
-		{
-			if(house.getValue().get_guild_id() == GuildID)
-			{
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet()) {
+			if(house.getValue().get_guild_id() == GuildID) {
 				i++;
 			}
 		}
@@ -499,8 +443,7 @@ public class Casas
 		return haveRight.get(rightValue);
 	}
 	
-	public void initRight()
-	{
+	public void initRight() {
 		haveRight.put(Constantes.H_GBLASON, false);
 		haveRight.put(Constantes.H_OBLASON,false);
 		haveRight.put(Constantes.H_GNOCODE,false);
@@ -511,10 +454,8 @@ public class Casas
 		haveRight.put(Constantes.H_GTELE,false);
 	}
 	
-	public void parseIntToRight(int total)
-	{
-		if(haveRight.isEmpty())
-		{
+	public void parseIntToRight(int total) {
+		if(haveRight.isEmpty()) {
 			initRight();
 		}
 		if(total == 1)
@@ -527,12 +468,9 @@ public class Casas
 
 		Integer[] mapKey = haveRight.keySet().toArray(new Integer[haveRight.size()]);	//Récupère les clef de map dans un tableau d'Integer
 
-		while(total > 0)
-		{
-			for (int i = haveRight.size()-1; i < haveRight.size(); i--)
-			{
-				if(mapKey[i] <= total)
-				{
+		while(total > 0) {
+			for (int i = haveRight.size()-1; i < haveRight.size(); i--) {
+				if(mapKey[i] <= total) {
 					total ^= mapKey[i];
 					haveRight.put(mapKey[i],true);
 					break;
@@ -541,8 +479,7 @@ public class Casas
 		}
 	}
 	
-	public static void Leave(Personaje P, String packet)
-	{
+	public static void Leave(Personaje P, String packet) {
 		Casas h = P.getInHouse();
 		if(!h.isHouse(P, h)) return;
 		int Pguid = Integer.parseInt(packet);
@@ -555,26 +492,20 @@ public class Casas
 	
 	public static Casas get_HouseByPerso(Personaje P)//Connaitre la MAPID + CELLID de sa maison
 	{
-		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet())
-		{
-			if(house.getValue().get_owner_id() == P.getAccID())
-			{
+		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet()) {
+			if(house.getValue().get_owner_id() == P.getAccID()) {
 				return house.getValue();
 			}
 		}
 		return null;
 	}
 	
-	public static void removeHouseGuild(int GuildID)
-	{
-		for(Entry<Integer, Casas> h : Mundo.getHouses().entrySet())
-		{
-			if(h.getValue().get_guild_id() == GuildID)
-			{
+	public static void removeHouseGuild(int GuildID) {
+		for(Entry<Integer, Casas> h : Mundo.getHouses().entrySet()) {
+			if(h.getValue().get_guild_id() == GuildID) {
 				h.getValue().set_guild_rights(0);
 				h.getValue().set_guild_id(0);
-			}else
-			{
+			}else {
 				continue;
 			}
 		}

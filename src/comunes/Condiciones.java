@@ -72,7 +72,7 @@ public class Condiciones {
 		StringBuilder copyCond = new StringBuilder();
 		int finalLength = 0;
 		
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Entered Cond : "+cond);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Entered Cond : "+cond);
 		
 		if(cond.contains("&&")) {
 			for(String cur : cond.split("&&")) {
@@ -215,7 +215,7 @@ public class Condiciones {
 			finalLength = (copyCond.length()-2);//On retire les deux derniers carractères (|| ou &&)
 			copyCond = new StringBuilder(copyCond.substring(0, finalLength));
 		}
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Returned Cond : "+copyCond);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Returned Cond : "+copyCond);
 		return copyCond.toString();
 	}
 	

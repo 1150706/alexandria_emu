@@ -250,7 +250,7 @@ public class Cofres {
 		//Si le joueur n'a pas l'item dans son sac ...
 		if(P.getItems().get(guid) == null)
 		{
-			JuegoServidor.addToLog("Le joueur "+P.getNombre()+" a tenter d'ajouter un objet dans un coffre qu'il n'avait pas.");
+			JuegoServidor.agregar_a_los_logs("Le joueur "+P.getNombre()+" a tenter d'ajouter un objet dans un coffre qu'il n'avait pas.");
 			return;
 		}
 		
@@ -336,7 +336,7 @@ public class Cofres {
 		//Si le joueur n'a pas l'item dans son coffre
 		if(_object.get(guid) == null)
 		{
-			JuegoServidor.addToLog("Le joueur "+P.getNombre()+" a tenter de retirer un objet dans un coffre qu'il n'avait pas.");
+			JuegoServidor.agregar_a_los_logs("Le joueur "+P.getNombre()+" a tenter de retirer un objet dans un coffre qu'il n'avait pas.");
 			return;
 		}
 		

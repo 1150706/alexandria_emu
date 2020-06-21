@@ -2566,7 +2566,7 @@ public class Constantes {
 			}
 			GestorSalida.GAME_SEND_gn_PACKET(perso);
 		} else {
-			JuegoServidor.addToLog("PlotIOAction non gere pour la map " + mID + " cell=" + cID);
+			JuegoServidor.agregar_a_los_logs("PlotIOAction non gere pour la map " + mID + " cell=" + cID);
 		}
 	}
 	

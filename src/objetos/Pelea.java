@@ -550,7 +550,7 @@ public class Pelea
 					{
 						if(entry.getEffectID() == effectID)
 						{
-							if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Effet de debut de tour : "+ effectID);
+							if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Effet de debut de tour : "+ effectID);
 							entry.applyBeginingBuff(fight, this);
 						}
 					}
@@ -626,7 +626,7 @@ public class Pelea
 					b.add(entry);
 				}else
 				{
-					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Suppression du buff "+entry.getEffectID()+" sur le joueur Fighter ID= "+getGUID());
+					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Suppression du buff "+entry.getEffectID()+" sur le joueur Fighter ID= "+getGUID());
 					switch(entry.getEffectID())
 					{
 						case 108:
@@ -711,7 +711,7 @@ public class Pelea
 			}
 			//Si c'est le jouer actif qui s'autoBuff, on ajoute 1 a la dur�e
 			_fightBuffs.add(new EfectoHechizo(id,val,(_canPlay?duration+1:duration),turns,debuff,caster,args,spellID));
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Ajout du Buff "+id+" sur le personnage Fighter ID = "+this.getGUID()+" val : "+val+" duration : "+duration+" turns : "+turns+" debuff : "+debuff+" spellid : "+spellID+" args : "+args);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Ajout du Buff "+id+" sur le personnage Fighter ID = "+this.getGUID()+" val : "+val+" duration : "+duration+" turns : "+turns+" debuff : "+debuff+" spellid : "+spellID+" args : "+args);
 
 
 			switch (id) {
@@ -1557,7 +1557,7 @@ public class Pelea
 		}while((cell == null || !cell.getFighters().isEmpty()) && limit < 80);
 		if(limit == 80)
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Case non trouve dans la liste");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Case non trouve dans la liste");
 			return null;
 		}
 		return cell;		
@@ -1711,7 +1711,7 @@ public class Pelea
 		if(_turnTimer  != null)_turnTimer.stop();
 		_turnTimer = null;
 		_turnTimer = new Timer(Constantes.TIME_BY_TURN, e -> endTurn());
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Debut du combat");
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Debut du combat");
 		for(Fighter F : getFighters(3))
 		{
 			Personaje perso = F.getPersonnage();
@@ -1830,7 +1830,7 @@ public class Pelea
 		
 		if(_ordreJeu.get(_curPlayer).hasLeft() || _ordreJeu.get(_curPlayer).isDead())//Si joueur mort
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID=  "+_ordreJeu.get(_curPlayer).getGUID()+" est mort");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Fighter ID=  "+_ordreJeu.get(_curPlayer).getGUID()+" est mort");
 			endTurn();
 			return;
 		}
@@ -1874,7 +1874,7 @@ public class Pelea
 		if(_ordreJeu.get(_curPlayer) == null)return;
 		if(_ordreJeu.get(_curPlayer).isDead())//Si joueur mort
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID=  "+_ordreJeu.get(_curPlayer).getGUID()+" est mort");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Fighter ID=  "+_ordreJeu.get(_curPlayer).getGUID()+" est mort");
 			endTurn();
 			return;
 		}
@@ -1884,11 +1884,11 @@ public class Pelea
 		}
 		if(_ordreJeu.get(_curPlayer).hasBuff(Constantes.EFFECT_PASS_TURN))//Si il doit passer son tour
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID= "+_ordreJeu.get(_curPlayer).getGUID()+" passe son tour");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Fighter ID= "+_ordreJeu.get(_curPlayer).getGUID()+" passe son tour");
 			endTurn();
 			return;
 		}
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+")Debut du tour de Fighter ID= "+_ordreJeu.get(_curPlayer).getGUID());
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+")Debut du tour de Fighter ID= "+_ordreJeu.get(_curPlayer).getGUID());
 		GestorSalida.GAME_SEND_GAMETURNSTART_PACKET_TO_FIGHT(this,7,_ordreJeu.get(_curPlayer).getGUID(), Constantes.TIME_BY_TURN);
 		_turnTimer.restart();
 		try {
@@ -2025,7 +2025,7 @@ public class Pelea
 			
 			GestorSalida.GAME_SEND_GTM_PACKET_TO_FIGHT(this, 7);
 			GestorSalida.GAME_SEND_GTR_PACKET_TO_FIGHT(this, 7, _ordreJeu.get(_curPlayer==_ordreJeu.size()?0:_curPlayer).getGUID());
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+")Fin du tour de Fighter ID= "+_ordreJeu.get(_curPlayer).getGUID());
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+")Fin du tour de Fighter ID= "+_ordreJeu.get(_curPlayer).getGUID());
 			startTurn();
 		}catch(NullPointerException e)
 		{
@@ -2264,13 +2264,13 @@ public class Pelea
 		if(_init0 != null && _init0.getGUID() == guid)
 		{
 			locked0 = !locked0;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(locked0?"L'equipe 1 devient bloquee":"L'equipe 1 n'est plus bloquee");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(locked0?"L'equipe 1 devient bloquee":"L'equipe 1 n'est plus bloquee");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), locked0?'+':'-', 'A', guid);
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,1,locked0?"095":"096");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			locked1 = !locked1;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(locked1?"L'equipe 2 devient bloquee":"L'equipe 2 n'est plus bloquee");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(locked1?"L'equipe 2 devient bloquee":"L'equipe 2 n'est plus bloquee");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), locked1?'+':'-', 'A', guid);
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,2,locked1?"095":"096");
 		}
@@ -2281,13 +2281,13 @@ public class Pelea
 		if(_init0 != null && _init0.getGUID() == guid)
 		{
 			onlyGroup0 = !onlyGroup0;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(locked0?"L'equipe 1 n'accepte que les membres du groupe":"L'equipe 1 n'est plus bloquee");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(locked0?"L'equipe 1 n'accepte que les membres du groupe":"L'equipe 1 n'est plus bloquee");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), onlyGroup0?'+':'-', 'P', guid);
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,1,onlyGroup0?"093":"094");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			onlyGroup1 = !onlyGroup1;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(locked1?"L'equipe 2 n'accepte que les membres du groupe":"L'equipe 2 n'est plus bloquee");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(locked1?"L'equipe 2 n'accepte que les membres du groupe":"L'equipe 2 n'est plus bloquee");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), onlyGroup1?'+':'-', 'P', guid);
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,2,onlyGroup1?"095":"096");
 		}
@@ -2298,7 +2298,7 @@ public class Pelea
 		if((_init0 != null && _init0.getGUID() == guid) || (_init1 != null &&  _init1.getGUID() == guid))
 		{
 			specOk = !specOk;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(specOk?"Le combat accepte les spectateurs":"Le combat n'accepte plus les spectateurs");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(specOk?"Le combat accepte les spectateurs":"Le combat n'accepte plus les spectateurs");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), specOk?'+':'-', 'S', _init0.getGUID());
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), specOk?'+':'-', 'S', _init1.getGUID());
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_AL_MAPA(_map,specOk?"039":"040");
@@ -2310,13 +2310,13 @@ public class Pelea
 		if(_init0 != null && _init0.getGUID() == guid)
 		{
 			help1 = !help1;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(help2?"L'equipe 1 demande de l'aide":"L'equipe 1s ne demande plus d'aide");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(help2?"L'equipe 1 demande de l'aide":"L'equipe 1s ne demande plus d'aide");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init0.getPersonnage().getActualMapa(), locked0?'+':'-', 'H', guid);
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,1,help1?"0103":"0104");
 		}else if(_init1 != null && _init1.getGUID() == guid)
 		{
 			help2 = !help2;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(help2?"L'equipe 2 demande de l'aide":"L'equipe 2 ne demande plus d'aide");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(help2?"L'equipe 2 demande de l'aide":"L'equipe 2 ne demande plus d'aide");
 			GestorSalida.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(_init1.getPersonnage().getActualMapa(), locked1?'+':'-', 'H', guid);
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this,2,help2?"0103":"0104");
 		}
@@ -2360,21 +2360,21 @@ public class Pelea
 		String path = GA._args;
 		if(path.equals(""))
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Echec du deplacement: chemin vide");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Echec du deplacement: chemin vide");
 			return false;
 		}
 		if(_ordreJeu.size() <= _curPlayer)return false;
 		if(_ordreJeu.get(_curPlayer) == null)return false;
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+")Tentative de deplacement de Fighter ID= "+f.getGUID()+" a partir de la case "+f.get_fightCell().getID());
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Path: "+path);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+")Tentative de deplacement de Fighter ID= "+f.getGUID()+" a partir de la case "+f.get_fightCell().getID());
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Path: "+path);
 		if(!_curAction.equals("")|| _ordreJeu.get(_curPlayer).getGUID() != f.getGUID() || _state != Constantes.FIGHT_STATE_ACTIVE)
 		{
 			if(!_curAction.equals(""))
-				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Echec du deplacement: il y deja une action en cours");
+				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Echec du deplacement: il y deja une action en cours");
 			if(_ordreJeu.get(_curPlayer).getGUID() != f.getGUID())
-				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Echec du deplacement: ce n'est pas a ce joueur de jouer");
+				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Echec du deplacement: ce n'est pas a ce joueur de jouer");
 			if(_state != Constantes.FIGHT_STATE_ACTIVE)
-				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Echec du deplacement: le combat n'est pas en cours");
+				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Echec du deplacement: le combat n'est pas en cours");
 			return false;
 		}
 		
@@ -2385,7 +2385,7 @@ public class Pelea
 			tacle.removeIf(T -> T.isState(6));
 			if(!tacle.isEmpty())//Si tous les tacleur ne sont pas stabilis�s
 			{
-				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Le personnage est a cote de ("+tacle.size()+") ennemi(s)");// ("+tacle.getPacketsName()+","+tacle.get_fightCell().getID()+") => Tentative de tacle:");
+				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Le personnage est a cote de ("+tacle.size()+") ennemi(s)");// ("+tacle.getPacketsName()+","+tacle.get_fightCell().getID()+") => Tentative de tacle:");
 				int chance = Formulas.getTacleChance(f, tacle);
 				int rand = Formulas.getRandomValue(0, 99);
 				if(rand > chance)
@@ -2400,7 +2400,7 @@ public class Pelea
 					
 					_curFighterPM = 0;
 					_curFighterPA -= pertePA;
-					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Echec du deplacement: fighter tacle");
+					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Echec du deplacement: fighter tacle");
 					return false;
 				}
 			}
@@ -2412,7 +2412,7 @@ public class Pelea
 		String newPath = pathRef.get();
 		if( nStep > _curFighterPM || nStep == -1000)
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID= "+_ordreJeu.get(_curPlayer).getGUID()+" a demander un chemin inaccessible ou trop loin");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Fighter ID= "+_ordreJeu.get(_curPlayer).getGUID()+" a demander un chemin inaccessible ou trop loin");
 			return false;
 		}
 		
@@ -2465,13 +2465,13 @@ public class Pelea
       	}
         
 		_ordreJeu.get(_curPlayer).get_fightCell().getFighters().clear();
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID= "+f.getGUID()+" se deplace de la case "+_ordreJeu.get(_curPlayer).get_fightCell().getID()+" vers "+ GestorEncriptador.cellCode_To_ID(encriptarcelda));
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Fighter ID= "+f.getGUID()+" se deplace de la case "+_ordreJeu.get(_curPlayer).get_fightCell().getID()+" vers "+ GestorEncriptador.cellCode_To_ID(encriptarcelda));
         _ordreJeu.get(_curPlayer).set_fightCell(_map.getMapa(nextCellID));
         _ordreJeu.get(_curPlayer).get_fightCell().addFighter(_ordreJeu.get(_curPlayer));
         if(po != null) po.get_fightCell().addFighter(po);// m�me erreur que tant�t, bug ou plus de fighter sur la case
        if(nStep < 0) 
        {
-    	   if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Fighter ID= "+f.getGUID()+" nStep negatives, reconversion");
+    	   if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Fighter ID= "+f.getGUID()+" nStep negatives, reconversion");
     	   nStep = nStep*(-1);
        }
         _curAction = "GA;129;"+_ordreJeu.get(_curPlayer).getGUID()+";"+_ordreJeu.get(_curPlayer).getGUID()+",-"+nStep;
@@ -2484,7 +2484,7 @@ public class Pelea
         {
        		//on d�place le port� sur la case
         	po.set_fightCell(_ordreJeu.get(_curPlayer).get_fightCell());
-        	if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(po.getPacketsName()+" se deplace vers la case "+nextCellID);
+        	if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(po.getPacketsName()+" se deplace vers la case "+nextCellID);
       	}
         
         if(f.getPersonnage() == null)
@@ -2522,7 +2522,7 @@ public class Pelea
 	public void onGK(Personaje perso)
 	{
 		if(_curAction.equals("")|| _ordreJeu.get(_curPlayer).getGUID() != perso.get_GUID() || _state!= Constantes.FIGHT_STATE_ACTIVE)return;
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+")Fin du deplacement de Fighter ID= "+perso.get_GUID());
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+")Fin du deplacement de Fighter ID= "+perso.get_GUID());
 		GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
 		GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this,7,2,_ordreJeu.get(_curPlayer).getGUID());
 		//copie
@@ -2567,7 +2567,7 @@ public class Pelea
 				GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(fighter.getPersonnage()); // envoi des stats du lanceur
 			
 			if(MainServidor.MOSTRAR_ENVIADOS)
-				JuegoServidor.addToLog(fighter.getPacketsName()+" tentative de lancer le sort "+Spell.getSpellID()+" sur la case "+caseID);
+				JuegoServidor.agregar_a_los_logs(fighter.getPacketsName()+" tentative de lancer le sort "+Spell.getSpellID()+" sur la case "+caseID);
 			_curFighterPA -= Spell.getPACost();
 			_curFighterUsedPA += Spell.getPACost();
 			GestorSalida.GAME_SEND_GAS_PACKET_TO_FIGHT(this, 7, fighter.getGUID()); // infos concernant la d�pense de PA ?
@@ -2575,7 +2575,7 @@ public class Pelea
 			if(isEc)
 			{
 				if(MainServidor.MOSTRAR_ENVIADOS)
-					JuegoServidor.addToLog(fighter.getPacketsName()+" Echec critique sur le sort "+Spell.getSpellID());
+					JuegoServidor.agregar_a_los_logs(fighter.getPacketsName()+" Echec critique sur le sort "+Spell.getSpellID());
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 302, fighter.getGUID()+"", Spell.getSpellID()+""); // envoi de l'EC
 			}else
 			{
@@ -2604,7 +2604,7 @@ public class Pelea
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 300, fighter.getGUID()+"", sort); // xx lance le sort
 				if(isCC)
 				{
-					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(fighter.getPacketsName()+" Coup critique sur le sort "+Spell.getSpellID());
+					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(fighter.getPacketsName()+" Coup critique sur le sort "+Spell.getSpellID());
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 301, fighter.getGUID()+"", sort); // CC !
 				}
 				//Si le joueur est invi, on montre la case
@@ -2668,7 +2668,7 @@ public class Pelea
 		//Si le sort n'est pas existant
 		if(spell == null)
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Sort non existant");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Sort non existant");
 			if(perso != null)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1169");
@@ -2678,7 +2678,7 @@ public class Pelea
 		//Si ce n'est pas au joueur de jouer
 		if (f == null || f.getGUID() != fighter.getGUID()) 
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Ce n'est pas au joueur. Doit jouer :("+f.getGUID()+"). Fautif :("+fighter.getGUID()+")");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Ce n'est pas au joueur. Doit jouer :("+f.getGUID()+"). Fautif :("+fighter.getGUID()+")");
 			if(perso != null)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1175");
@@ -2688,7 +2688,7 @@ public class Pelea
 		//Si le joueur n'a pas assez de PA
 		if(_curFighterPA < spell.getPACost())
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Le joueur n'a pas assez de PA ("+_curFighterPA+"/"+spell.getPACost()+")");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Le joueur n'a pas assez de PA ("+_curFighterPA+"/"+spell.getPACost()+")");
 			if(perso != null)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1170;" + _curFighterPA + "~" + spell.getPACost());
@@ -2698,7 +2698,7 @@ public class Pelea
 		//Si la cellule vis�e n'existe pas
 		if(cell == null)
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") La cellule visee n'existe pas");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") La cellule visee n'existe pas");
 			if(perso != null)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1172");
@@ -2708,7 +2708,7 @@ public class Pelea
 		//Si la cellule vis�e n'est pas align�e avec le joueur alors que le sort le demande
 		if(spell.isLineLaunch() && !Camino.casesAreInSameLine(_map, ValidlaunchCase, cell.getID(), 'z'))
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Le sort demande un lancer en ligne, or la case n'est pas alignee avec le joueur");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Le sort demande un lancer en ligne, or la case n'est pas alignee avec le joueur");
 			if(perso != null)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1173");
@@ -2718,7 +2718,7 @@ public class Pelea
 		//Si le sort demande une ligne de vue et que la case demand�e n'en fait pas partie
 		if(spell.hasLDV() && !Camino.checkLoS(_map, ValidlaunchCase, cell.getID(), fighter, false))
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Le sort demande une ligne de vue, mais la case visee n'est pas visible pour le joueur");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Le sort demande une ligne de vue, mais la case visee n'est pas visible pour le joueur");
 			if(perso != null)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1174");
@@ -2729,7 +2729,7 @@ public class Pelea
 		char dir = Camino.getDirBetweenTwoCase(ValidlaunchCase, cell.getID(), _map, true);
 		if(spell.getSpellID() == 67)
 			if(!Camino.checkLoS(_map, Camino.GetCaseIDFromDirrection(ValidlaunchCase, dir, _map, true), cell.getID(), null, true)) {
-				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") Le sort demande une ligne de vue, mais la case visee n'est pas visible pour le joueur");
+				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Le sort demande une ligne de vue, mais la case visee n'est pas visible pour le joueur");
 				if(perso != null)
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1174");
 				return false;
@@ -2744,7 +2744,7 @@ public class Pelea
 		//V�rification Port�e mini / maxi
 		if(dist < spell.getMinPO() || dist > MaxPO)
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("("+_curPlayer+") La case est trop proche ou trop eloignee Min: "+spell.getMinPO()+" Max: "+spell.getMaxPO()+" Dist: "+dist);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") La case est trop proche ou trop eloignee Min: "+spell.getMinPO()+" Max: "+spell.getMaxPO()+" Dist: "+dist);
 			if(perso != null)
 			{
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1171;" + spell.getMinPO() + "~" + spell.getMaxPO() + "~" + dist);
@@ -3306,7 +3306,7 @@ public class Pelea
 	        _ticMyTimer_endTurn = false;
 	        _state = Constantes.FIGHT_STATE_FINISHED;
 			int winner = team0?2:1;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("L'equipe "+winner+" gagne !");
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("L'equipe "+winner+" gagne !");
 
 			_turnTimer.stop();
 			//On despawn tous le monde
@@ -3732,7 +3732,7 @@ public class Pelea
 			boolean isEc = arme.getTemplate().getTauxEC() != 0 && Formulas.getRandomValue(1, arme.getTemplate().getTauxEC()) == arme.getTemplate().getTauxEC();
 			if(isEc)
 			{
-				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(perso.getNombre()+" Echec critique sur le CaC ");
+				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(perso.getNombre()+" Echec critique sur le CaC ");
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 305, perso.get_GUID()+"", "");//Echec Critique Cac
 				GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.get_GUID());//Fin de l'action
 				endTurn();
@@ -3742,7 +3742,7 @@ public class Pelea
 				boolean isCC = caster.testIfCC(arme.getTemplate().getTauxCC());
 				if(isCC)
 				{
-					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(perso.getNombre()+" Coup critique sur le CaC");
+					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(perso.getNombre()+" Coup critique sur le CaC");
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 301, perso.get_GUID()+"", "0");
 				}
 				
@@ -3801,10 +3801,10 @@ public class Pelea
 		{
 			if(target != null && T != null) 
 			{
-				JuegoServidor.addToLog(perso.getNombre()+" expulse "+T.getPersonnage().getNombre());
+				JuegoServidor.agregar_a_los_logs(perso.getNombre()+" expulse "+T.getPersonnage().getNombre());
 			}else
 			{
-				JuegoServidor.addToLog(perso.getNombre()+" a quitter le combat");
+				JuegoServidor.agregar_a_los_logs(perso.getNombre()+" a quitter le combat");
 			}
 		}
 		
@@ -4175,11 +4175,11 @@ public class Pelea
 						}
 					}else
 					{
-						if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Phase de combat non geree, type de combat:"+_type+" T:"+T+" F:"+F);
+						if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Phase de combat non geree, type de combat:"+_type+" T:"+T+" F:"+F);
 					}
 				break;
 				default:
-					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Type de combat non geree, type de combat:"+_type+" T:"+T+" F:"+F);
+					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Type de combat non geree, type de combat:"+_type+" T:"+T+" F:"+F);
 				break;
 			}
 		}else//Si perso en spec

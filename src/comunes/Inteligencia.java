@@ -710,7 +710,7 @@ public class Inteligencia {
 			if(Camino.isNextTo(F.get_fightCell().getID(), T.get_fightCell().getID()))
 				return false;
 			
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Tentative d'approche par "+F.getPacketsName()+" de "+T.getPacketsName());
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Tentative d'approche par "+F.getPacketsName()+" de "+T.getPacketsName());
 			
 			int cellID = Camino.getNearestCellAround(fight.get_map(),T.get_fightCell().getID(),F.get_fightCell().getID(),null);
 			//On demande le chemin plus court

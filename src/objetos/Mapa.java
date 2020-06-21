@@ -771,7 +771,7 @@ public class Mapa {
 					return (_object.getID() == 7350 || _object.getID() == 7351 || _object.getID() == 7353);
 				//Action ID non trouvé
 				default:
-					JuegoServidor.addToLog("MapActionID non existant dans Case.canDoAction: "+id);
+					JuegoServidor.agregar_a_los_logs("MapActionID non existant dans Case.canDoAction: "+id);
 					return false;
 			}
 		}
@@ -1003,7 +1003,7 @@ public class Mapa {
 				case 104 -> {
 					Cofres trunk = Cofres.get_trunk_id_by_coord(perso.getActualMapa().getID(), CcellID);
 					if (trunk == null) {
-						JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().getID() + " CELLID : " + CcellID);
+						JuegoServidor.agregar_a_los_logs("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().getID() + " CELLID : " + CcellID);
 						return;
 					}
 					perso.setInTrunk(trunk);
@@ -1013,7 +1013,7 @@ public class Mapa {
 				case 105 -> {
 					Cofres t = Cofres.get_trunk_id_by_coord(perso.getActualMapa().getID(), CcellID);
 					if (t == null) {
-						JuegoServidor.addToLog("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().getID() + " CELLID : " + CcellID);
+						JuegoServidor.agregar_a_los_logs("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().getID() + " CELLID : " + CcellID);
 						return;
 					}
 					perso.setInTrunk(t);
@@ -1026,7 +1026,7 @@ public class Mapa {
 					perso.setInHouse(h4);
 					h4.SellIt(perso);
 				}
-				default -> JuegoServidor.addToLog("Case.startAction non definie pour l'actionID = " + actionID);
+				default -> JuegoServidor.agregar_a_los_logs("Case.startAction non definie pour l'actionID = " + actionID);
 			}
 		}
 
@@ -1068,7 +1068,7 @@ public class Mapa {
 				break;
 				
 				default:
-					JuegoServidor.addToLog("[FIXME]Case.finishAction non definie pour l'actionID = "+actionID);
+					JuegoServidor.agregar_a_los_logs("[FIXME]Case.finishAction non definie pour l'actionID = "+actionID);
 				break;
 			}
 		}
@@ -1106,7 +1106,7 @@ public class Mapa {
 			_subArea = Mundo.getSubArea(subArea);
 			if(_subArea != null)_subArea.addMap(this);
 		}catch(Exception e) {
-			JuegoServidor.addToLog("Erreur de chargement de la map "+_id+": Le champ MapPos est invalide");
+			JuegoServidor.agregar_a_los_logs("Erreur de chargement de la map "+_id+": Le champ MapPos est invalide");
 			System.exit(0);
 		}
 		
@@ -1368,7 +1368,7 @@ public class Mapa {
 			if(group.getMobs().isEmpty())continue;
 			_mobGroups.put(_nextObjectID, group);
 			if(log) {
-				JuegoServidor.addToLog("Groupe de monstres ajoutes sur la map: "+_id+" alignement: "+align+" ID: "+_nextObjectID);
+				JuegoServidor.agregar_a_los_logs("Groupe de monstres ajoutes sur la map: "+_id+" alignement: "+align+" ID: "+_nextObjectID);
 				GestorSalida.GAME_SEND_MAP_MOBS_GM_PACKET(this, group);
 			}
 			_nextObjectID--;
@@ -1382,7 +1382,7 @@ public class Mapa {
 		group.setCondition(condition);
 		group.setIsFix(false);
 		
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Groupe de monstres ajoutes sur la map: "+_id+" ID: "+_nextObjectID);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Groupe de monstres ajoutes sur la map: "+_id+" ID: "+_nextObjectID);
 		
 		GestorSalida.GAME_SEND_MAP_MOBS_GM_PACKET(this, group);
 		_nextObjectID--;
@@ -1397,7 +1397,7 @@ public class Mapa {
 		_mobGroups.put(_nextObjectID, group);
 		group.setIsFix(false);
 
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Groupe de monstres ajoutes sur la map: "+_id+" ID: "+_nextObjectID);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Groupe de monstres ajoutes sur la map: "+_id+" ID: "+_nextObjectID);
 
 		GestorSalida.GAME_SEND_MAP_MOBS_GM_PACKET(this, group);
 		_nextObjectID--;
@@ -1591,7 +1591,7 @@ public class Mapa {
 			freecell.add(entry.getValue().getID());
 		}
 		if(freecell.isEmpty()) {
-			JuegoServidor.addToLog("Aucune cellulle libre n'a ete trouve sur la map "+_id+" : groupe non spawn");
+			JuegoServidor.agregar_a_los_logs("Aucune cellulle libre n'a ete trouve sur la map "+_id+" : groupe non spawn");
 			return -1;
 		}
 		int rand = Formulas.getRandomValue(0, freecell.size()-1);
@@ -1747,7 +1747,7 @@ public class Mapa {
 			{
 				if((group.getAlineacion() == -1 || ((perso.get_align() == 1 || perso.get_align() == 2) && (perso.get_align() != group.getAlineacion()))) && Condiciones.ValidarCondicion(perso, group.getCondition()))
 				{
-					JuegoServidor.addToLog(perso.getNombre()+" lance un combat contre le groupe "+group.getID()+" sur la map "+_id);
+					JuegoServidor.agregar_a_los_logs(perso.getNombre()+" lance un combat contre le groupe "+group.getID()+" sur la map "+_id);
 					startFigthVersusMonstres(perso,group);
 					return;
 				}

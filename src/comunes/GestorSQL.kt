@@ -17,12 +17,13 @@ import objetos.casas.Casas
 import objetos.casas.Cofres
 import objetos.hechizos.Hechizos
 import objetos.hechizos.Hechizos.SortStats
-import realm.RealmServer.Companion.addToLog
+import realm.RealmServer.Companion.agregar_a_los_logs
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
+import kotlin.system.exitProcess
 
 object GestorSQL {
     private var _dinamicos: Connection? = null
@@ -86,7 +87,7 @@ object GestorSQL {
             _dinamicos = dinamicos.connection
             _estaticos = estaticos.connection
             if (!_estaticos!!.isValid(1000) || !_dinamicos!!.isValid(1000)) {
-                JuegoServidor.addToLog("SQLError : Connexion a la BD invalide!")
+                JuegoServidor.agregar_a_los_logs("SQLError : Connexion a la BD invalide!")
                 return false
             }
             true
@@ -130,7 +131,7 @@ object GestorSQL {
             p.executeUpdate()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -154,11 +155,11 @@ object GestorSQL {
                 }
                 //s'il y a eu une erreur de parsing, on ignore cette recette
                 if (!cont) continue
-                addCraft(RS.getInt("id"), m)
+                addRecetas(RS.getInt("id"), m)
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -170,7 +171,7 @@ object GestorSQL {
             while (RS!!.next()) Publicidad.add(RS.getString("texto"))
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -189,7 +190,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -212,7 +213,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -227,7 +228,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -257,7 +258,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -276,7 +277,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -294,7 +295,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -313,7 +314,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -336,7 +337,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
             nbr = 0
         }
@@ -356,7 +357,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -376,7 +377,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -397,7 +398,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -414,7 +415,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
             nbr = 0
         }
@@ -444,7 +445,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
             nbr = 0
         }
@@ -475,7 +476,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
             nbr = 0
         }
@@ -513,7 +514,7 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -529,7 +530,7 @@ object GestorSQL {
                 cerrar_resultado(RS)
                 return guid
             } catch (e: SQLException) {
-                addToLog("SQL ERROR: " + e.message)
+                agregar_a_los_logs("SQL ERROR: " + e.message)
                 e.printStackTrace()
                 closeServers()
             }
@@ -588,8 +589,8 @@ object GestorSQL {
                         RS.getInt("esposo"))
                 //Vérifications pré-connexion
                 perso.VerifAndChangeItemPlace()
-                addPersonnage(perso)
-                val guildId = isPersoInGuild(RS.getInt("id"))
+                agregar_personaje(perso)
+                val guildId = personaje_esta_en_gremio(RS.getInt("id"))
                 if (guildId >= 0) {
                     perso.setGuildMember(getGuild(guildId).getMember(RS.getInt("id")))
                 }
@@ -597,7 +598,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
             closeServers()
         }
@@ -655,12 +656,12 @@ object GestorSQL {
                         RS.getInt("esposo"))
                 //Vérifications pré-connexion
                 perso.VerifAndChangeItemPlace()
-                addPersonnage(perso)
+                agregar_personaje(perso)
                 if (getCompte(RS.getInt("cuenta")) != null) getCompte(RS.getInt("cuenta")).addPerso(perso)
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
             closeServers()
         }
@@ -696,9 +697,9 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
-            JuegoServidor.addToLog("Game: Supression du personnage echouee")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: Supression du personnage echouee")
             false
         }
     }
@@ -732,9 +733,9 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
-            JuegoServidor.addToLog("Game: Creation du personnage echouee")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: Creation du personnage echouee")
             false
         }
     }
@@ -762,7 +763,7 @@ object GestorSQL {
                 if (RS.getInt("tipo") == 1) { //Stop sur la case(triggers)
                     getCarte(RS.getShort("mapa")).getMapa(RS.getInt("celda")).addOnCellStopAction(RS.getInt("accion"), RS.getString("argumento"), RS.getString("condicion"))
                 } else {
-                    JuegoServidor.addToLog("Action Event " + RS.getInt("tipo") + " non implante")
+                    JuegoServidor.agregar_a_los_logs("Action Event " + RS.getInt("tipo") + " non implante")
                 }
                 nbr++
             }
@@ -770,7 +771,7 @@ object GestorSQL {
             return nbr
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
         return 0
     }
@@ -805,7 +806,7 @@ object GestorSQL {
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -892,12 +893,12 @@ object GestorSQL {
             p.executeUpdate()
             if (_perso.miembroGremio != null) actualizar_miembro_del_gremio(_perso.miembroGremio)
             if (_perso.mount != null) actualizar_informacion_monturas(_perso.mount)
-            JuegoServidor.addToLog("Personaje " + _perso.nombre + " guardado")
+            JuegoServidor.agregar_a_los_logs("Personaje " + _perso.nombre + " guardado")
         } catch (e: Exception) {
             println("Game: SQL ERROR: " + e.message)
             println("Requete: $baseQuery")
             println("Le personnage n'a pas ete sauvegarde")
-            System.exit(1)
+            exitProcess(1)
         }
         if (saveItem) {
             baseQuery = "UPDATE `datos_objetos` SET cantidad = ?, ubicacion = ?, caracteristicas = ? WHERE id = ?;"
@@ -963,7 +964,7 @@ object GestorSQL {
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -1235,8 +1236,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1253,8 +1254,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1284,8 +1285,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1298,8 +1299,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1336,7 +1337,7 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -1374,7 +1375,7 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -1390,8 +1391,8 @@ object GestorSQL {
             p.executeUpdate()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
-            addToLog("Query: $baseQuery")
+            agregar_a_los_logs("SQL ERROR: " + e.message)
+            agregar_a_los_logs("Query: $baseQuery")
             e.printStackTrace()
         }
     }
@@ -1432,8 +1433,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Query: $baseQuery")
             e.printStackTrace()
         }
     }
@@ -1453,8 +1454,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1468,8 +1469,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1488,8 +1489,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1505,8 +1506,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1523,8 +1524,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1540,8 +1541,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1556,8 +1557,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1573,8 +1574,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1592,8 +1593,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1617,8 +1618,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1635,8 +1636,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1655,8 +1656,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1672,8 +1673,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
             false
         }
     }
@@ -1691,8 +1692,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1705,8 +1706,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1719,8 +1720,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1733,8 +1734,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1753,8 +1754,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -1772,13 +1773,13 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
     @JvmStatic
-    fun isPersoInGuild(guid: Int): Int {
+    fun personaje_esta_en_gremio(guid: Int): Int {
         var guildId = -1
         try {
             val GuildQuery = ejecutar_consulta("SELECT gremio FROM `datos_miembros_gremio` WHERE id =$guid;", MainServidor.DB_DINAMICOS)
@@ -1786,14 +1787,14 @@ object GestorSQL {
             if (found) guildId = GuildQuery.getInt("gremio")
             cerrar_resultado(GuildQuery)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
         return guildId
     }
 
     @JvmStatic
-	fun isPersoInGuild(name: String): IntArray {
+	fun personaje_esta_en_gremio(name: String): IntArray {
         var guildId = -1
         var guid = -1
         try {
@@ -1805,7 +1806,7 @@ object GestorSQL {
             }
             cerrar_resultado(GuildQuery)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
         return intArrayOf(guid, guildId)
@@ -1822,8 +1823,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         baseQuery = "INSERT INTO `datos_npc_respuesta` VALUES (?,?,?);"
         try {
@@ -1835,8 +1836,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1852,8 +1853,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -1869,8 +1870,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -2003,7 +2004,7 @@ object GestorSQL {
                     cerrar_nueva_consulta(p)
                     addToShopLog("Commande $id supprimee.")
                 } catch (e: SQLException) {
-                    JuegoServidor.addToLog("SQL ERROR: " + e.message)
+                    JuegoServidor.agregar_a_los_logs("SQL ERROR: " + e.message)
                     addToShopLog("Error Delete From: " + e.message)
                     e.printStackTrace()
                 }
@@ -2011,7 +2012,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: Exception) {
-            JuegoServidor.addToLog("ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("ERROR: " + e.message)
             addToShopLog("Error: " + e.message)
             e.printStackTrace()
         }
@@ -2028,8 +2029,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 
@@ -2042,8 +2043,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 
@@ -2061,8 +2062,8 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            exitProcess(1)
         }
     }
 
@@ -2082,7 +2083,7 @@ object GestorSQL {
             cerrar_resultado(RS)
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
         return exist
@@ -2105,8 +2106,8 @@ object GestorSQL {
             h._key = "-"
             h._guild_rights = 0
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
         val trunks = Cofres.getTrunksByHouse(h)
         for (trunk in trunks) {
@@ -2121,8 +2122,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 
@@ -2138,8 +2139,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 
@@ -2156,8 +2157,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             h._key = packet
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 
@@ -2175,8 +2176,8 @@ object GestorSQL {
             h._guild_id = GuildID
             h._guild_rights = GuildRights
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 
@@ -2190,8 +2191,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 
@@ -2210,8 +2211,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
     }
 
@@ -2226,7 +2227,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
         return i
@@ -2258,7 +2259,7 @@ object GestorSQL {
             Constantes.ZAAPI[Constantes.ALIGNEMENT_NEUTRE] = neutral.toString()
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
         return i
@@ -2275,7 +2276,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
         return i
@@ -2291,7 +2292,7 @@ object GestorSQL {
             cerrar_resultado(RS)
             return guid
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
             closeServers()
         }
@@ -2310,7 +2311,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
         }
         return i
@@ -2326,8 +2327,8 @@ object GestorSQL {
             cerrar_nueva_consulta(p)
             return true
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $baseQuery")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $baseQuery")
         }
         return false
     }
@@ -2350,7 +2351,7 @@ object GestorSQL {
             setNextHdvID(RS.getInt("MAX"))
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -2383,7 +2384,7 @@ object GestorSQL {
             println((System.currentTimeMillis() - (time1)).toString() + "ms pour loader les HDVS items") //TIME
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -2410,7 +2411,7 @@ object GestorSQL {
             cerrar_nueva_consulta(queries)
             guardar_mercadillo_precio_medio()
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -2429,7 +2430,7 @@ object GestorSQL {
             }
             cerrar_nueva_consulta(queries)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -2449,7 +2450,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
             e.printStackTrace()
         }
     }
@@ -2473,7 +2474,7 @@ object GestorSQL {
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
-            addToLog("SQL ERROR: " + e.message)
+            agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
             nbr = 0
         }
@@ -2492,8 +2493,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 
@@ -2509,8 +2510,8 @@ object GestorSQL {
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
-            JuegoServidor.addToLog("Game: SQL ERROR: " + e.message)
-            JuegoServidor.addToLog("Game: Query: $query")
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
         }
     }
 }

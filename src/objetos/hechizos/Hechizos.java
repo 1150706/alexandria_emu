@@ -187,7 +187,7 @@ public class Hechizos {
 				effets = CCeffects;
 			else
 				effets = effects;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Nombre d'effets: "+effets.size());
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Nombre d'effets: "+effets.size());
 			int jetChance = Formulas.getRandomValue(0, 99);
 			int curMin = 0;
 			//int num = 0;
@@ -218,7 +218,7 @@ public class Hechizos {
 				effets = CCeffects;
 			else
 				effets = effects;
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Nombre d'effets: "+effets.size());
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Nombre d'effets: "+effets.size());
 			int jetChance = Formulas.getRandomValue(0, 99);
 			int curMin = 0;
 			int num = 0;

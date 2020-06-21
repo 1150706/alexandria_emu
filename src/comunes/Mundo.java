@@ -1018,7 +1018,7 @@ public class Mundo {
 		CuentaPorNombre.put(compte.getNombre(), compte.get_GUID());
 	}
 
-	public static void addPersonnage(Personaje perso)
+	public static void agregar_personaje(Personaje perso)
 	{
 		Personajes.put(perso.get_GUID(), perso);
 	}
@@ -1165,59 +1165,59 @@ public class Mundo {
 		set_state((short)2);
 
 		try {
-			JuegoServidor.addToLog("Lanzando el guardado general del mundo");
+			JuegoServidor.agregar_a_los_logs("Lanzando el guardado general del mundo");
 			MainServidor.isSaving = true;
-			JuegoServidor.addToLog("Guardando personajes");
+			JuegoServidor.agregar_a_los_logs("Guardando personajes");
 			for(Personaje perso : Personajes.values()) {
 				if(!perso.isConectado())continue;
 				Thread.sleep(100);//0.1 sec. pour 1 objets
 				GestorSQL.guardar_personaje(perso,true);//sauvegarde des persos et de leurs items
 			}
-			JuegoServidor.addToLog("Guardando los gremios");
+			JuegoServidor.agregar_a_los_logs("Guardando los gremios");
 			for(Gremio guilde : Guildes.values()) {
 				Thread.sleep(100);//0.1 sec. pour 1 guilde
 				GestorSQL.actualizar_gremio(guilde);
 			}
-			JuegoServidor.addToLog("Guardando los recaudadores");
+			JuegoServidor.agregar_a_los_logs("Guardando los recaudadores");
 			for(Recaudador perco : Percepteurs.values()) {
 				if(perco.get_inFight()>0)continue;
 				Thread.sleep(100);//0.1 sec. pour 1 percepteur
 				GestorSQL.actualizar_recaudador(perco);
 			}
-			JuegoServidor.addToLog("Guardando las casas");
+			JuegoServidor.agregar_a_los_logs("Guardando las casas");
 			for(Casas house : Houses.values()) {
 				if(house.get_owner_id() > 0) {
 					Thread.sleep(100);//0.1 sec. pour 1 maison
 					GestorSQL.actualizar_casa(house);
 				}
 			}
-			JuegoServidor.addToLog("Guardando los cofres");
+			JuegoServidor.agregar_a_los_logs("Guardando los cofres");
 			for(Cofres t : Trunks.values()) {
 				if(t.get_owner_id() > 0) {
 					Thread.sleep(100);//0.1 sec. pour 1 coffre
 					GestorSQL.actualizar_cofre(t);
 				}
 			}
-			JuegoServidor.addToLog("Guardando los cercados");
+			JuegoServidor.agregar_a_los_logs("Guardando los cercados");
 			for(Mapa.MountPark mp : MountPark.values()) {
 				if(mp.get_owner() > 0 || mp.get_owner() == -1) {
 					Thread.sleep(100);//0.1 sec. pour 1 enclo
 					GestorSQL.actualizar_cercado(mp);
 				}
 			}
-			JuegoServidor.addToLog("Guardando los mercadillos");
+			JuegoServidor.agregar_a_los_logs("Guardando los mercadillos");
 			ArrayList<HdvEntry> toSave = new ArrayList<>();
 			for(Mercadillo curHdv : Hdvs.values()) {
 				toSave.addAll(curHdv.getAllEntry());
 			}
 			GestorSQL.guardar_objetos_mercadillo(toSave);
-			JuegoServidor.addToLog("Guardado completado con exito");
+			JuegoServidor.agregar_a_los_logs("Guardado completado con exito");
 			set_state((short)1);
 			//TODO : Rafraichir
 			
 		}catch(ConcurrentModificationException e) {
 			if(saveTry < 10) {
-				JuegoServidor.addToLog("Nouvelle tentative de sauvegarde");
+				JuegoServidor.agregar_a_los_logs("Nouvelle tentative de sauvegarde");
 				if(saver != null && _out != null)
 					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_out, "Erreur. Nouvelle tentative de sauvegarde");
 				saveTry++;
@@ -1228,11 +1228,11 @@ public class Mundo {
 				String mess = "Echec de la sauvegarde apres " + saveTry + " tentatives";
 				if(saver != null && _out != null)
 					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_out, mess);
-				JuegoServidor.addToLog(mess);
+				JuegoServidor.agregar_a_los_logs(mess);
 			}
 				
 		}catch(Exception e) {
-			JuegoServidor.addToLog("Erreur lors de la sauvegarde : " + e.getMessage());
+			JuegoServidor.agregar_a_los_logs("Erreur lors de la sauvegarde : " + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			MainServidor.isSaving = false;
@@ -1268,7 +1268,7 @@ public class Mundo {
 		Jobs.put(metier.getId(), metier);
 	}
 
-	public static void addCraft(int id, ArrayList<Couple<Integer, Integer>> m) { Crafts.put(id,m); }
+	public static void addRecetas(int id, ArrayList<Couple<Integer, Integer>> m) { Crafts.put(id,m); }
 	
 	public static ArrayList<Couple<Integer,Integer>> getCraft(int i)
 	{
@@ -1280,7 +1280,7 @@ public class Mundo {
 		for(int tID : list) {
 			ArrayList<Couple<Integer,Integer>> craft = Mundo.getCraft(tID);
 			if(craft == null) {
-				JuegoServidor.addToLog("/!\\Recette pour l'objet "+tID+" non existante !");
+				JuegoServidor.agregar_a_los_logs("/!\\Recette pour l'objet "+tID+" non existante !");
 				continue;
 			}
 			if(craft.size() != ingredients.size())continue;

@@ -495,7 +495,7 @@ public class Personaje {
 			this._curCarte = Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO);
 			this._curCell = _curCarte.getMapa(MainServidor.CALDA_INICIO_PERSONALIZADA);
 		}else if (_curCarte == null && Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO) == null) {
-			JuegoServidor.addToLog("Personnage mal positione, et position de départ non valide. Fermeture du serveur.");
+			JuegoServidor.agregar_a_los_logs("Personnage mal positione, et position de départ non valide. Fermeture du serveur.");
 			MainServidor.closeServers();
 		} else if(_curCarte != null) {
 			this._curCell = _curCarte.getMapa(cell);
@@ -510,9 +510,9 @@ public class Personaje {
 			}catch(Exception ignored){}
 		}
 		if(_curCarte == null || _curCell == null) {
-			JuegoServidor.addToLog("Map ou case de départ du personnage "+_name+" invalide");
-			JuegoServidor.addToLog("Map ou case par défaut invalide");
-			JuegoServidor.addToLog("Le serveur ne peut se lancer");
+			JuegoServidor.agregar_a_los_logs("Map ou case de départ du personnage "+_name+" invalide");
+			JuegoServidor.agregar_a_los_logs("Map ou case par défaut invalide");
+			JuegoServidor.agregar_a_los_logs("Le serveur ne peut se lancer");
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException ignored) {}
@@ -688,7 +688,7 @@ public class Personaje {
 		if(!GestorSQL.agregar_personaje_db(perso))
 			return null;
 		
-		Mundo.addPersonnage(perso);
+		Mundo.agregar_personaje(perso);
 	
 		return perso;
 	}
@@ -940,7 +940,7 @@ public class Personaje {
 	
 	public boolean AprenderHechizo(int spellID, int level, boolean save, boolean send) {
 		if(Mundo.getSort(spellID).getStatsByLevel(level)==null) {
-			JuegoServidor.addToLog("[ERROR]Sort "+spellID+" lvl "+level+" non trouve.");
+			JuegoServidor.agregar_a_los_logs("[ERROR]Sort "+spellID+" lvl "+level+" non trouve.");
 			return false;
 		}
 		_sorts.put(spellID, Mundo.getSort(spellID).getStatsByLevel(level));
@@ -955,7 +955,7 @@ public class Personaje {
 	
 	public boolean boostSpell(int spellID) {
 		if(getSortStatBySortIfHas(spellID)== null) {
-			JuegoServidor.addToLog(_name+" n'a pas le sort "+spellID);
+			JuegoServidor.agregar_a_los_logs(_name+" n'a pas le sort "+spellID);
 			return false;
 		}
 		int AncLevel = getSortStatBySortIfHas(spellID).getLevel();
@@ -966,23 +966,23 @@ public class Personaje {
 				GestorSQL.guardar_personaje(this,false);
 				return true;
 			}else {
-				JuegoServidor.addToLog(_name+" : Echec LearnSpell "+spellID);
+				JuegoServidor.agregar_a_los_logs(_name+" : Echec LearnSpell "+spellID);
 				return false;
 			}
 		}
 		else//Pas le niveau ou pas les Points
 		{
 			if(_spellPts<AncLevel)
-				JuegoServidor.addToLog(_name+" n'a pas les points requis pour booster le sort "+spellID+" "+_spellPts+"/"+AncLevel);
+				JuegoServidor.agregar_a_los_logs(_name+" n'a pas les points requis pour booster le sort "+spellID+" "+_spellPts+"/"+AncLevel);
 			if(Mundo.getSort(spellID).getStatsByLevel(AncLevel+1).getReqLevel() > _lvl)
-				JuegoServidor.addToLog(_name+" n'a pas le niveau pour booster le sort "+spellID+" "+_lvl+"/"+ Mundo.getSort(spellID).getStatsByLevel(AncLevel+1).getReqLevel());
+				JuegoServidor.agregar_a_los_logs(_name+" n'a pas le niveau pour booster le sort "+spellID+" "+_lvl+"/"+ Mundo.getSort(spellID).getStatsByLevel(AncLevel+1).getReqLevel());
 			return false;
 		}
 	}
 	
 	public boolean forgetSpell(int spellID) {
 		if(getSortStatBySortIfHas(spellID)== null) {
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(_name+" n'a pas le sort "+spellID);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(_name+" n'a pas le sort "+spellID);
 			return false;
 		}
 		int AncLevel = getSortStatBySortIfHas(spellID).getLevel();
@@ -994,7 +994,7 @@ public class Personaje {
 			GestorSQL.guardar_personaje(this,false);
 			return true;
 		}else {
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog(_name+" : Echec LearnSpell "+spellID);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(_name+" : Echec LearnSpell "+spellID);
 			return false;
 		}
 		
@@ -1975,11 +1975,11 @@ public class Personaje {
 			PW = _compte.getGameThread().get_out();
 		}
 		if(Mundo.getCarte(newMapID) == null) {
-			JuegoServidor.addToLog("Game: INVALID MAP : "+newMapID);
+			JuegoServidor.agregar_a_los_logs("Game: INVALID MAP : "+newMapID);
 			return;
 		}
 		if(Mundo.getCarte(newMapID).getMapa(newCellID) == null) {
-			JuegoServidor.addToLog("Game: INVALID CELL : "+newCellID+" ON MAP : "+newMapID);
+			JuegoServidor.agregar_a_los_logs("Game: INVALID CELL : "+newCellID+" ON MAP : "+newMapID);
 			return;
 		}
 		if(PW != null) {
@@ -1994,7 +1994,7 @@ public class Personaje {
 		//Verifier la validité du mountpark
 		if(_curCarte.getMountPark() != null && _curCarte.getMountPark().get_owner() > 0 && _curCarte.getMountPark().get_guild().get_id() != -1) {
 			if(Mundo.getGuild(_curCarte.getMountPark().get_guild().get_id()) == null){ //Ne devrait pas arriver
-				JuegoServidor.addToLog("[MountPark] Suppression d'un MountPark a Guild invalide. GuildID : "+_curCarte.getMountPark().get_guild().get_id());
+				JuegoServidor.agregar_a_los_logs("[MountPark] Suppression d'un MountPark a Guild invalide. GuildID : "+_curCarte.getMountPark().get_guild().get_id());
 				Mapa.MountPark.removeMountPark(_curCarte.getMountPark().get_guild().get_id());
 			}
 		}
@@ -2002,7 +2002,7 @@ public class Personaje {
 		if(Recaudador.GetPercoByMapID(_curCarte.getID()) != null) {
 			if(Mundo.getGuild(Recaudador.GetPercoByMapID(_curCarte.getID()).get_guildID()) == null)//Ne devrait pas arriver
 			{
-				JuegoServidor.addToLog("[Percepteur] Suppression d'un Percepteur a Guild invalide. GuildID : "+ Recaudador.GetPercoByMapID(_curCarte.getID()).get_guildID());
+				JuegoServidor.agregar_a_los_logs("[Percepteur] Suppression d'un Percepteur a Guild invalide. GuildID : "+ Recaudador.GetPercoByMapID(_curCarte.getID()).get_guildID());
 				Recaudador.removePercepteur(Recaudador.GetPercoByMapID(_curCarte.getID()).get_guildID());
 			}
 		}
@@ -2079,7 +2079,7 @@ public class Personaje {
 		Objeto PersoObj = Mundo.getObjet(guid);
 		//Si le joueur n'a pas l'item dans son sac ...
 		if(_items.get(guid) == null) {
-			JuegoServidor.addToLog("Le joueur "+_name+" a tenter d'ajouter un objet en banque qu'il n'avait pas.");
+			JuegoServidor.agregar_a_los_logs("Le joueur "+_name+" a tenter d'ajouter un objet en banque qu'il n'avait pas.");
 			return;
 		}
 		//Si c'est un item équipé ...
@@ -2159,7 +2159,7 @@ public class Personaje {
 		Objeto BankObj = Mundo.getObjet(guid);
 		//Si le joueur n'a pas l'item dans sa banque ...
 		if(_compte.getBank().get(guid) == null) {
-			JuegoServidor.addToLog("Le joueur "+_name+" a tenter de retirer un objet en banque qu'il n'avait pas.");
+			JuegoServidor.agregar_a_los_logs("Le joueur "+_name+" a tenter de retirer un objet en banque qu'il n'avait pas.");
 			return;
 		}
 		
@@ -2689,17 +2689,17 @@ public class Personaje {
 		int SubAreaID = _curCarte.getSubArea().get_area().get_superArea().get_id();
 		int cellID = Mundo.getZaapCellIdByMapId(id);
 		if(Mundo.getCarte(mapID) == null) {
-			JuegoServidor.addToLog("La map "+id+" n'est pas implantee, Zaap refuse");
+			JuegoServidor.agregar_a_los_logs("La map "+id+" n'est pas implantee, Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
 		if(Mundo.getCarte(mapID).getMapa(cellID) == null) {
-			JuegoServidor.addToLog("La cellule associee au zaap "+id+" n'est pas implantee, Zaap refuse");
+			JuegoServidor.agregar_a_los_logs("La cellule associee au zaap "+id+" n'est pas implantee, Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
 		if(!Mundo.getCarte(mapID).getMapa(cellID).isWalkable(true)) {
-			JuegoServidor.addToLog("La cellule associee au zaap "+id+" n'est pas 'walkable', Zaap refuse");
+			JuegoServidor.agregar_a_los_logs("La cellule associee au zaap "+id+" n'est pas 'walkable', Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
@@ -3255,7 +3255,7 @@ public class Personaje {
 		}
 		if(_items.get(ObjID) == null)
 		{
-			JuegoServidor.addToLog("Le joueur "+_name+" a tenter d'ajouter un objet au store qu'il n'avait pas.");
+			JuegoServidor.agregar_a_los_logs("Le joueur "+_name+" a tenter d'ajouter un objet au store qu'il n'avait pas.");
 			return;
 		}
 		//Si c'est un item équipé ...
@@ -3341,7 +3341,7 @@ public class Personaje {
 		//Si le joueur n'a pas l'item dans son store ...
 		if(_storeItems.get(guid) == null)
 		{
-			JuegoServidor.addToLog("Le joueur "+_name+" a tenter de retirer un objet du store qu'il n'avait pas.");
+			JuegoServidor.agregar_a_los_logs("Le joueur "+_name+" a tenter de retirer un objet du store qu'il n'avait pas.");
 			return;
 		}
 		

@@ -19,7 +19,7 @@ object Pending {
                 RealmServer.totalabonado--
             } catch (e: InterruptedException) {
                 GestorSalida.REALM_SEND_ALREADY_CONNECTED(C.realmThread._out)
-                RealmServer.addToLog("Erreur : " + e.message)
+                RealmServer.agregar_a_los_logs("Erreur : " + e.message)
             }
         } else {
             try {
@@ -30,7 +30,7 @@ object Pending {
                 RealmServer.totalabonado--
             } catch (e: InterruptedException) {
                 GestorSalida.REALM_SEND_ALREADY_CONNECTED(C.realmThread._out)
-                RealmServer.addToLog("Erreur : " + e.message)
+                RealmServer.agregar_a_los_logs("Erreur : " + e.message)
             }
         }
     }

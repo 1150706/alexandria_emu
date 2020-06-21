@@ -119,7 +119,7 @@ public class Accion {
 					if(perso.isConectado())
 						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 			case 5://Objeto
@@ -154,7 +154,7 @@ public class Accion {
 						}
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 			case 6://Aprender un oficio
@@ -225,7 +225,7 @@ public class Accion {
 						}
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 			case 7://Devolver al punto de guardado
@@ -251,7 +251,7 @@ public class Accion {
 					if(Mundo.getSort(sID) == null)return;
 					perso.AprenderHechizo(sID,1, true,true);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 			case 10://Pain/potion/viande/poisson
@@ -270,7 +270,7 @@ public class Accion {
 						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 			case 11://Definir la alineacion
@@ -281,7 +281,7 @@ public class Accion {
 					if(perso.get_align() != Constantes.ALIGNEMENT_NEUTRE && !replace)return;
 					perso.modifAlignement(newAlign);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 			case 12://Refrescar un grupo de monstruos
@@ -297,7 +297,7 @@ public class Accion {
 						perso.removeItem(itemID, 1, true, true);
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 		    case 13://Reiniciar caracteristicas
@@ -311,7 +311,7 @@ public class Accion {
 		          perso.addPuntosDeCapital((perso.get_lvl() - 1) * 5 - perso.get_capital());
 		          GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 		        }catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 		    case 14://Ouvrir l'interface d'oublie de sort
@@ -359,7 +359,7 @@ public class Accion {
 					}
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 16://Ajout d'honneur HonorValue
 				try
@@ -371,7 +371,7 @@ public class Accion {
 						perso.set_honor(ActualHonor+AddHonor);
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 17://Xp métier JobID,XpValue
 				try
@@ -383,7 +383,7 @@ public class Accion {
 						perso.getOficioPorID(JobID).AgregarExperiencia(perso, XpValue);
 					}
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 18://Téléportation chez sois
 				if(Casas.AlreadyHaveHouse(perso))//Si il a une maison
@@ -409,7 +409,7 @@ public class Accion {
 					perso.addAgregarPuntosDeHechizo(pts);
 					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 21://+Energie
 				try
@@ -423,7 +423,7 @@ public class Accion {
 					perso.set_energy(EnergyTotal);
 					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 22://+Xp
 				try
@@ -435,7 +435,7 @@ public class Accion {
 					perso.set_curExp(TotalXp);
 					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 23://UnlearnJob
 				try
@@ -448,7 +448,7 @@ public class Accion {
 					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					GestorSQL.guardar_personaje(perso, false);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 24://SimpleMorph
 				try
@@ -459,7 +459,7 @@ public class Accion {
 					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
 					GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(perso.getActualMapa(), perso);
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 25://SimpleUnMorph
 				int UnMorphID = perso.getClase()*10 + perso.getSexo();
@@ -484,7 +484,7 @@ public class Accion {
 						
 						if(Mundo.getMonstre(monsterID) == null || Mundo.getMonstre(monsterID).getGradeByLevel(monsterLevel) == null)
 						{
-							if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Monstre invalide : monsterID:"+monsterID+" monsterLevel:"+monsterLevel);
+							if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Monstre invalide : monsterID:"+monsterID+" monsterLevel:"+monsterLevel);
 							continue;
 						}
 						ValidMobGroup += monsterID+","+monsterLevel+","+monsterLevel+";";
@@ -493,7 +493,7 @@ public class Accion {
 					MobGroup group  = new MobGroup(perso.getActualMapa()._nextObjectID,perso.getActualCelda().getID(),ValidMobGroup);
 					perso.getActualMapa().startFigthVersusMonstres(perso, group);
 		        }catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			case 50://Traque
 				if(perso.get_traque() == null)
@@ -700,7 +700,7 @@ public class Accion {
 					}
 					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
 					GestorSQL.guardar_personaje(perso, false);
-				}catch(Exception e){JuegoServidor.addToLog(e.getMessage());}
+				}catch(Exception e){JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 
 			case 105://Teletransportar a todos los miembros del grupo
@@ -729,10 +729,10 @@ public class Accion {
 					perso.changeOrientation(1);
 					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "0", 228, perso.get_GUID()+";"+cellid+","+ Animaciones.PrepareToGA(animation), "");
 				}catch(Exception e){
-					JuegoServidor.addToLog(e.getMessage());}
+					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			default:
-				JuegoServidor.addToLog("Action ID="+ _id +" non implantee");
+				JuegoServidor.agregar_a_los_logs("Action ID="+ _id +" non implantee");
 			break;
 		}
 	}

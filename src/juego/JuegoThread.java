@@ -61,7 +61,7 @@ public class JuegoThread implements Runnable {
 			_t.start();
 		} catch(IOException e) {
 			try {
-				JuegoServidor.addToLog(e.getMessage());
+				JuegoServidor.agregar_a_los_logs(e.getMessage());
 				if(!_s.isClosed())_s.close();
 			} catch (IOException e1) {e1.printStackTrace();}
 		}
@@ -87,7 +87,7 @@ public class JuegoThread implements Runnable {
 	    	}
     	}catch(IOException e) {
     		try {
-    			JuegoServidor.addToLog(e.getMessage());
+    			JuegoServidor.agregar_a_los_logs(e.getMessage());
 	    		_in.close();
 	    		_out.close();
 	    		if(_compte != null) {
@@ -99,7 +99,7 @@ public class JuegoThread implements Runnable {
 	    	}catch(IOException e1){e1.printStackTrace();}
 		}catch(Exception e) {
     		e.printStackTrace();
-    		JuegoServidor.addToLog(e.getMessage());
+    		JuegoServidor.agregar_a_los_logs(e.getMessage());
     	} finally {
     		kick();
     	}
@@ -452,7 +452,7 @@ public class JuegoThread implements Runnable {
 					GestorSQL.actualizar_gremio(G2);
 					GestorSalida.GAME_SEND_gIB_PACKET(_perso, _perso.get_guild().parsePercotoGuild());
 				} else {
-					JuegoServidor.addToLog("[ERROR]Sort " + spellID + " non trouve.");
+					JuegoServidor.agregar_a_los_logs("[ERROR]Sort " + spellID + " non trouve.");
 				}
 			}
 //Creation
@@ -513,7 +513,7 @@ public class JuegoThread implements Runnable {
 			}
 
 			if (MainServidor.MOSTRAR_ENVIADOS)
-				JuegoServidor.addToLog("[DEBUG] Percepteur INFORMATIONS : TiD:" + TiD + ", FightID:" + FightID + ", MapID:" + MapID + ", CellID" + CellID);
+				JuegoServidor.agregar_a_los_logs("[DEBUG] Percepteur INFORMATIONS : TiD:" + TiD + ", FightID:" + FightID + ", MapID:" + MapID + ", CellID" + CellID);
 			if (TiD == -1 || FightID == -1 || MapID == -1 || CellID == -1) return;
 			if (_perso.getPelea() == null && !_perso.is_away()) {
 				if (_perso.getActualMapa().getID() != MapID) {
@@ -671,7 +671,7 @@ public class JuegoThread implements Runnable {
 		//R�cup�ration du personnage � changer, et verification de quelques conditions de base
 		if(p == null)	//Arrive lorsque le personnage n'est pas charg� dans la m�moire
 		{
-			int guildId = GestorSQL.isPersoInGuild(guid);	//R�cup�re l'id de la guilde du personnage qui n'est pas dans la m�moire
+			int guildId = GestorSQL.personaje_esta_en_gremio(guid);	//R�cup�re l'id de la guilde du personnage qui n'est pas dans la m�moire
 			
 			if(guildId < 0)return;	//Si le personnage � qui les droits doivent �tre modifi� n'existe pas ou n'a pas de guilde
 			
@@ -762,7 +762,7 @@ public class JuegoThread implements Runnable {
 		GuildMember toRemMember;
 		if(P == null)
 		{
-			int[] infos = GestorSQL.isPersoInGuild(name);
+			int[] infos = GestorSQL.personaje_esta_en_gremio(name);
 			guid = infos[0];
 			guildId = infos[1];
 			if(guildId < 0 || guid < 0)return;
@@ -2640,20 +2640,20 @@ public class JuegoThread implements Runnable {
 			ObjTemplate template = Mundo.getObjTemplate(tempID);
 			if(template == null)//Si l'objet demand� n'existe pas(ne devrait pas arriv�)
 			{
-				JuegoServidor.addToLog(_perso.getNombre()+" tente d'acheter l'itemTemplate "+tempID+" qui est inexistant");
+				JuegoServidor.agregar_a_los_logs(_perso.getNombre()+" tente d'acheter l'itemTemplate "+tempID+" qui est inexistant");
 				GestorSalida.GAME_SEND_BUY_ERROR_PACKET(_out);
 				return;
 			}
 			if(!_perso.getActualMapa().getNPC(_perso.get_isTradingWith()).getModelo().haveItem(tempID))//Si le PNJ ne vend pas l'objet voulue
 			{
-				JuegoServidor.addToLog(_perso.getNombre()+" tente d'acheter l'itemTemplate "+tempID+" que le present PNJ ne vend pas");
+				JuegoServidor.agregar_a_los_logs(_perso.getNombre()+" tente d'acheter l'itemTemplate "+tempID+" que le present PNJ ne vend pas");
 				GestorSalida.GAME_SEND_BUY_ERROR_PACKET(_out);
 				return;
 			}
 			int prix = template.getPrix() * qua;
 			if(_perso.getKamas()<prix)//Si le joueur n'a pas assez de kamas
 			{
-				JuegoServidor.addToLog(_perso.getNombre()+" tente d'acheter l'itemTemplate "+tempID+" mais n'a pas l'argent necessaire");
+				JuegoServidor.agregar_a_los_logs(_perso.getNombre()+" tente d'acheter l'itemTemplate "+tempID+" mais n'a pas l'argent necessaire");
 				GestorSalida.GAME_SEND_BUY_ERROR_PACKET(_out);
 				return;
 			}
@@ -2957,15 +2957,15 @@ public class JuegoThread implements Runnable {
 		try
 		{
 			int id = Integer.parseInt(packet.substring(2));
-			JuegoServidor.addToLog("Info: "+_perso.getNombre()+": Tente BOOST sort id="+id);
+			JuegoServidor.agregar_a_los_logs("Info: "+_perso.getNombre()+": Tente BOOST sort id="+id);
 			if(_perso.boostSpell(id))
 			{
-				JuegoServidor.addToLog("Info: "+_perso.getNombre()+": OK pour BOOST sort id="+id);
+				JuegoServidor.agregar_a_los_logs("Info: "+_perso.getNombre()+": OK pour BOOST sort id="+id);
 				GestorSalida.GAME_SEND_SPELL_UPGRADE_SUCCED(_out, id, _perso.getSortStatBySortIfHas(id).getLevel());
 				GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_perso);
 			}else
 			{
-				JuegoServidor.addToLog("Info: "+_perso.getNombre()+": Echec BOOST sort id="+id);
+				JuegoServidor.agregar_a_los_logs("Info: "+_perso.getNombre()+": Echec BOOST sort id="+id);
 				GestorSalida.GAME_SEND_SPELL_UPGRADE_FAILED(_out);
 				return;
 			}
@@ -2979,11 +2979,11 @@ public class JuegoThread implements Runnable {
 		
 		int id = Integer.parseInt(packet.substring(2));
 		
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Info: "+_perso.getNombre()+": Tente Oublie sort id="+id);
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Info: "+_perso.getNombre()+": Tente Oublie sort id="+id);
 		
 		if(_perso.forgetSpell(id))
 		{
-			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.addToLog("Info: "+_perso.getNombre()+": OK pour Oublie sort id="+id);
+			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Info: "+_perso.getNombre()+": OK pour Oublie sort id="+id);
 			GestorSalida.GAME_SEND_SPELL_UPGRADE_SUCCED(_out, id, _perso.getSortStatBySortIfHas(id).getLevel());
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_perso);
 			_perso.setisForgetingSpell(false);
@@ -3542,7 +3542,7 @@ public class JuegoThread implements Runnable {
 				String nom = packet.substring(2).split("\\|")[0];
 				msg = packet.split("\\|",2)[1];
 				if(nom.length() <= 1)
-					JuegoServidor.addToLog("ChatHandler: Chanel non gere : "+nom);
+					JuegoServidor.agregar_a_los_logs("ChatHandler: Chanel non gere : "+nom);
 				else
 				{
 					Personaje target = Mundo.getPersonajePorNombre(nom);
@@ -4096,7 +4096,7 @@ public class JuegoThread implements Runnable {
 			//Si le path est invalide
 			if(result == -1000)
 			{
-				JuegoServidor.addToLog(_perso.getNombre()+"("+_perso.get_GUID()+") Tentative de  deplacement avec un path invalide");
+				JuegoServidor.agregar_a_los_logs(_perso.getNombre()+"("+_perso.get_GUID()+") Tentative de  deplacement avec un path invalide");
 				path = GestorEncriptador.getHashedValueByInt(_perso.getOrientacion())+ GestorEncriptador.cellID_To_Code(_perso.getActualCelda().getID());
 			}
 			//On sauvegarde le path dans la variable

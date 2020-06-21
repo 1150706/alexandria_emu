@@ -359,7 +359,7 @@ public class Oficio {
 				if(!_P.hasItemGuid(e.getKey()))
 				{
 					GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-					JuegoServidor.addToLog("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet qu'il n'a pas");
+					JuegoServidor.agregar_a_los_logs("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet qu'il n'a pas");
 					return;
 				}
 				//Si l'objet n'existe pas
@@ -367,14 +367,14 @@ public class Oficio {
 				if(obj == null)
 				{
 					GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-					JuegoServidor.addToLog("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet qui n'existe pas");
+					JuegoServidor.agregar_a_los_logs("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet qui n'existe pas");
 					return;
 				}
 				//Si la quantité est trop faible
 				if(obj.getQuantity() < e.getValue())
 				{
 					GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-					JuegoServidor.addToLog("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet dont la quantite est trop faible");
+					JuegoServidor.agregar_a_los_logs("/!\\ "+_P.getNombre()+" essaye de crafter avec un objet dont la quantite est trop faible");
 					return;
 				}
 				//On calcule la nouvelle quantité

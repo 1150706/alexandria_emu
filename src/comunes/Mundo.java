@@ -707,7 +707,7 @@ public class Mundo {
 		GestorSQL.cargar_subareas();
 		System.out.println(SubAreas.size()+" subzonas cargadas");
 		System.out.println("Cargando los objetos interactivos:");
-		GestorSQL.LOAD_IOTEMPLATE();
+		GestorSQL.cargar_objetos_interactivos();
 		System.out.println(IOTemplate.size()+" objetos interactivos cargados");
 		System.out.println("Cargando las recetas:");
 		GestorSQL.cargar_recetas();

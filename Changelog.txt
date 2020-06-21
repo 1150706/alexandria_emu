@@ -32,3 +32,5 @@ v0.00.3
 
 v0.00.4
 - Timmer de commit para SQL anulado ya que Hikari lo hace automaticamente
+- Gestor de SQL en kotlin
+- Comandos admin.txt agregado  la carpeta recursos

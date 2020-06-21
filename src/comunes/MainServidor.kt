@@ -215,7 +215,7 @@ object MainServidor {
         isInit = true
         println("Cargado!")
         println("Conectando a la base de datos:")
-        if (GestorSQL.InicarConexion()) println("Conectado!") else {
+        if (GestorSQL.iniciar_conexion()) println("Conectado!") else {
             println("Conexion invalida")
             closeServers()
             exitProcess(0)
@@ -514,7 +514,7 @@ object MainServidor {
             isRunning = false
             gameServer!!.kickAll()
             Mundo.saveAll(null)
-            GestorSQL.CerrarConsulta()
+            GestorSQL.cerrar_consulta()
         }
         println("Arret du serveur: OK")
         isRunning = false

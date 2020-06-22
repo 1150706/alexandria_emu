@@ -362,9 +362,9 @@ public class Mundo {
 		
 		synchronized public long getKamas(int guid) {
 			int i = 0;
-			if(perso1.get_GUID() == guid)
+			if(perso1.getID() == guid)
 				i = 1;
-			else if(perso2.get_GUID() == guid)
+			else if(perso2.getID() == guid)
 				i = 2;
 			
 			if(i == 1)
@@ -376,9 +376,9 @@ public class Mundo {
 		
 		synchronized public void toogleOK(int guid) {
 			int i = 0;
-			if(perso1.get_GUID() == guid)
+			if(perso1.getID() == guid)
 				i = 1;
-			else if(perso2.get_GUID() == guid)
+			else if(perso2.getID() == guid)
 				i = 2;
 			
 			if(i == 1) {
@@ -401,14 +401,14 @@ public class Mundo {
 			ok2 = false;
 			
 			int i = 0;
-			if(perso1.get_GUID() == guid)
+			if(perso1.getID() == guid)
 				i = 1;
-			else if(perso2.get_GUID() == guid)
+			else if(perso2.getID() == guid)
 				i = 2;
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
 			
 			if(i == 1)
 			{
@@ -455,7 +455,7 @@ public class Mundo {
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(perso1, obj);
 					Objeto newObj = Objeto.getCloneObjet(obj, couple.second);
 					if(perso2.addObjet(newObj, true))//Si le joueur n'avait pas d'item similaire
-						Mundo.addObjet(newObj,true);//On ajoute l'item au World
+						Mundo.addObjet(newObj,perso2.getID(), true);//On ajoute l'item au World
 				}
 			}
 			for(Couple<Integer, Integer> couple : items2) {
@@ -478,7 +478,7 @@ public class Mundo {
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(perso2, obj);
 					Objeto newObj = Objeto.getCloneObjet(obj, couple.second);
 					if(perso1.addObjet(newObj, true))//Si le joueur n'avait pas d'item similaire
-						Mundo.addObjet(newObj,true);//On ajoute l'item au World
+						Mundo.addObjet(newObj, perso1.getID(),true);//On ajoute l'item au World
 				}
 			}
 			//Fin
@@ -503,17 +503,17 @@ public class Mundo {
 			Objeto obj = Mundo.getObjet(guid);
 			int i = 0;
 			
-			if(perso1.get_GUID() == pguid) i = 1;
-			if(perso2.get_GUID() == pguid) i = 2;
+			if(perso1.getID() == pguid) i = 1;
+			if(perso2.getID() == pguid) i = 2;
 			
 			if(qua == 1) qua = 1;
 			String str = guid+"|"+qua;
 			if(obj == null)return;
 			String add = "|"+obj.getTemplate().getID()+"|"+obj.parseStatsString();
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
 			if(i == 1) {
 				Couple<Integer,Integer> couple = getCoupleInList(items1,guid);
 				if(couple != null) {
@@ -542,17 +542,17 @@ public class Mundo {
 		
 		synchronized public void removeItem(int guid, int qua, int pguid) {
 			int i = 0;
-			if(perso1.get_GUID() == pguid)
+			if(perso1.getID() == pguid)
 				i = 1;
-			else if(perso2.get_GUID() == pguid)
+			else if(perso2.getID() == pguid)
 				i = 2;
 			ok1 = false;
 			ok2 = false;
 			
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
-			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.get_GUID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
+			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
 			
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null)return;
@@ -597,7 +597,7 @@ public class Mundo {
 		
 		public synchronized int getQuaItem(int itemID, int playerGuid) {
 			ArrayList<Couple<Integer, Integer>> items;
-			if(perso1.get_GUID() == playerGuid)
+			if(perso1.getID() == playerGuid)
 				items = items1;
 			else
 				items = items2;
@@ -970,7 +970,7 @@ public class Mundo {
 
 	public static void agregar_personaje(Personaje perso)
 	{
-		Personajes.put(perso.get_GUID(), perso);
+		Personajes.put(perso.getID(), perso);
 	}
 
 	public static Personaje getPersonajePorNombre(String nombre) {
@@ -1004,7 +1004,7 @@ public class Mundo {
 			}
 		}
 		perso.remove();//Supression BDD Perso, items, monture.
-		Mundo.unloadPerso(perso.get_GUID());//UnLoad du perso+item
+		Mundo.unloadPerso(perso.getID());//UnLoad du perso+item
 	}
 
 	public static String getSousZoneStateString() {
@@ -1071,10 +1071,10 @@ public class Mundo {
 		return online;
 	}
 
-	public static void addObjet(Objeto item, boolean saveSQL) {
-		Objetos.put(item.getGuid(), item);
+	public static void addObjet(Objeto item, int idpersonaje, boolean saveSQL) {
+		Objetos.put(item.getID(), item);
 		if(saveSQL)
-			GestorSQL.guardar_nuevo_objeto(item);
+			GestorSQL.guardar_nuevo_objeto(item, idpersonaje);
 	}
 
 	public static Objeto getObjet(int guid)
@@ -1510,7 +1510,7 @@ public class Mundo {
 	public static void AddMarried(int ordre, Personaje perso) {
 		Personaje Perso = Married.get(ordre);
 		if(Perso != null) {
-			if(perso.get_GUID() == Perso.get_GUID()) // Si c'est le meme joueur...
+			if(perso.getID() == Perso.getID()) // Si c'est le meme joueur...
 				return;
 			if(Perso.isConectado())// Si perso en ligne...
 			{
@@ -1538,7 +1538,7 @@ public class Mundo {
 			return;
 		}
 		GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(perso.getActualMapa(), "", -1, "Pr?tre", perso.getNombre()+" acceptez-vous d'?pouser "+getMarried((perso.getSexo()==1?0:1)).getNombre()+" ?");
-		GestorSalida.GAME_SEND_WEDDING(carte, 617, (Homme==perso?Homme.get_GUID():Femme.get_GUID()), (Homme==perso?Femme.get_GUID():Homme.get_GUID()), IdPretre);
+		GestorSalida.GAME_SEND_WEDDING(carte, 617, (Homme==perso?Homme.getID():Femme.getID()), (Homme==perso?Femme.getID():Homme.getID()), IdPretre);
 	}
 	
 	public static void Wedding(Personaje Homme, Personaje Femme, int isOK) {
@@ -1594,10 +1594,7 @@ public class Mundo {
 		return Percepteurs;
 	}
 	
-	public static void addTrunk(Cofres trunk)
-	{
-		Trunks.put(trunk.get_id(), trunk);
-	}
+	public static void addTrunk(Cofres trunk) { Trunks.put(trunk.get_id(), trunk); }
 	
 	public static Cofres getTrunk(int id)
 	{
@@ -1650,11 +1647,11 @@ public class Mundo {
 	public static void addSeller(Personaje p) {
 		if(Seller.get(p.getActualMapa().getID()) == null) {
 			ArrayList<Integer> PersoID = new ArrayList<>();
-			PersoID.add(p.get_GUID());
+			PersoID.add(p.getID());
 			Seller.put(p.getActualMapa().getID(), PersoID);
 		}else {
 			ArrayList<Integer> PersoID = new ArrayList<>(Seller.get(p.getActualMapa().getID()));
-			PersoID.add(p.get_GUID());
+			PersoID.add(p.getID());
 			Seller.remove(p.getActualMapa().getID());
 			Seller.put(p.getActualMapa().getID(), PersoID);
 		}

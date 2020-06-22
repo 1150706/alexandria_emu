@@ -136,7 +136,7 @@ public class Accion {
 						Objeto O = T.createNewItem(count, false);
 						//Si retourne true, on l'ajoute au monde
 						if(perso.addObjet(O, true))
-							Mundo.addObjet(O, true);
+							Mundo.addObjet(O, perso.getID(), true);
 					}else {
 						perso.removeByTemplateID(tID,-count);
 					}
@@ -291,7 +291,7 @@ public class Accion {
 					if(inArena && !Mundo.isArenaMap(perso.getActualMapa().getID()))return;	//Si la map du personnage n'est pas classé comme étant dans l'arène
 					PiedraAlma pierrePleine = (PiedraAlma) Mundo.getObjet(itemID);
 					String groupData = pierrePleine.parseGroupData();
-					String condition = "MiS = "+perso.get_GUID();	//Condition pour que le groupe ne soit lançable que par le personnage qui à utiliser l'objet
+					String condition = "MiS = "+perso.getID();	//Condition pour que le groupe ne soit lançable que par le personnage qui à utiliser l'objet
 					perso.getActualMapa().spawnNewGroup(true, perso.getActualCelda().getID(), groupData,condition);
 					if(delObj) {
 						perso.removeItem(itemID, 1, true, true);
@@ -456,7 +456,7 @@ public class Accion {
 					int morphID = Integer.parseInt(_argumento);
 					if(morphID < 0)return;
 					perso.setGFX(morphID);
-					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
+					GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.getID());
 					GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(perso.getActualMapa(), perso);
 				}catch(Exception e){
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}
@@ -464,7 +464,7 @@ public class Accion {
 			case 25://SimpleUnMorph
 				int UnMorphID = perso.getClase()*10 + perso.getSexo();
 				perso.setGFX(UnMorphID);
-				GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
+				GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.getID());
 				GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(perso.getActualMapa(), perso);
 			break;
 			case 26://Téléportation enclo de guilde (ouverture du panneau de guilde)
@@ -545,8 +545,7 @@ public class Accion {
 					
 					int alignid = tempP.get_align();
 					String align = "";
-					switch(alignid)
-					{
+					switch(alignid) {
 					case 0:
 					align = "Neutre";
 					case 1:
@@ -565,13 +564,11 @@ public class Accion {
 					
 					//Si retourne true, on l'ajoute au monde
 					if(perso.addObjet(newObj, true)){
-						Mundo.addObjet(newObj, true);
-			}else
-			{
+						Mundo.addObjet(newObj, perso.getID(), true);
+			} else {
 				perso.removeByTemplateID(T.getID(),20);
 			}
-			}
-			else{
+			} else{
 			GestorSalida.GAME_SEND_MESSAGE(perso, "Thomas Sacre : Vous venez juste de signer un contrat, vous devez vous reposer." , "000000");
 				}
 
@@ -727,7 +724,7 @@ public class Accion {
 					Animaciones animation = Mundo.getAnimation(AnimationId);
 					if(perso.getPelea() != null) return;
 					perso.changeOrientation(1);
-					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "0", 228, perso.get_GUID()+";"+cellid+","+ Animaciones.PrepareToGA(animation), "");
+					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "0", 228, perso.getID()+";"+cellid+","+ Animaciones.PrepareToGA(animation), "");
 				}catch(Exception e){
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;

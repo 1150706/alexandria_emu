@@ -218,7 +218,7 @@ public class Pelea
 				_type = 1;
 				_perso = perso;
 			}
-			_id = perso.get_GUID();
+			_id = perso.getID();
 			_PDVMAX = perso.get_PDVMAX();
 			_PDV = perso.get_PDV();
 			_gfxID = getDefaultGfx();
@@ -411,7 +411,7 @@ public class Pelea
 					str.append(_perso.get_align()).append(",");
 					str.append("0,");//TODO
 					str.append((_perso.is_showWings() ? _perso.getGrade() : "0")).append(",");
-					str.append(_perso.get_GUID()).append(";");
+					str.append(_perso.getID()).append(";");
 					str.append((_perso.get_color1() == -1 ? "-1" : Integer.toHexString(_perso.get_color1()))).append(";");
 					str.append((_perso.get_color2() == -1 ? "-1" : Integer.toHexString(_perso.get_color2()))).append(";");
 					str.append((_perso.get_color3() == -1 ? "-1" : Integer.toHexString(_perso.get_color3()))).append(";");
@@ -464,7 +464,7 @@ public class Pelea
 					str.append(_double.get_align()).append(",");
 					str.append("0,");//TODO
 					str.append((_double.is_showWings() ? _double.getGrade() : "0")).append(",");
-					str.append(_double.get_GUID()).append(";");
+					str.append(_double.getID()).append(";");
 					str.append((_double.get_color1() == -1 ? "-1" : Integer.toHexString(_double.get_color1()))).append(";");
 					str.append((_double.get_color2() == -1 ? "-1" : Integer.toHexString(_double.get_color2()))).append(";");
 					str.append((_double.get_color3() == -1 ? "-1" : Integer.toHexString(_double.get_color3()))).append(";");
@@ -1270,8 +1270,8 @@ public class Pelea
 		_mapOld = map;
 		_init0 = new Fighter(this,init1);
 		_init1 = new Fighter(this,init2);
-		_team0.put(init1.get_GUID(), _init0);
-		_team1.put(init2.get_GUID(), _init1);
+		_team0.put(init1.getID(), _init0);
+		_team1.put(init2.getID(), _init1);
 		//on desactive le timer de regen cot� client
 		GestorSalida.GAME_SEND_ILF_PACKET(init1, 0);
 		GestorSalida.GAME_SEND_ILF_PACKET(init2, 0);
@@ -1303,10 +1303,10 @@ public class Pelea
 			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET_TO_FIGHT(this,1,_map.getEsquemaPelea(),1);
 			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET_TO_FIGHT(this,2,_map.getEsquemaPelea(),0);
 		}
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.get_GUID()+"", init1.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.get_GUID()+"", init1.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init2.get_GUID()+"", init2.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init2.get_GUID()+"", init2.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.getID()+"", init1.getID()+","+ Constantes.ETAT_PORTE+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.getID()+"", init1.getID()+","+ Constantes.ETAT_PORTEUR+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init2.getID()+"", init2.getID()+","+ Constantes.ETAT_PORTE+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init2.getID()+"", init2.getID()+","+ Constantes.ETAT_PORTEUR+",0");
 		
 		_init0.set_fightCell(getRandomCell(_start0));
 		_init1.set_fightCell(getRandomCell(_start1));
@@ -1346,7 +1346,7 @@ public class Pelea
 		_mapOld = map;
 		_init0 = new Fighter(this,init1);
 		
-		_team0.put(init1.get_GUID(), _init0);
+		_team0.put(init1.getID(), _init0);
 		for(Entry<Integer, MobGrade> entry : group.getMobs().entrySet())
 		{
 			entry.getValue().setInFightID(entry.getKey());
@@ -1381,8 +1381,8 @@ public class Pelea
 			_st2 = 0;
 			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET_TO_FIGHT(this,1,_map.getEsquemaPelea(),1);
 		}
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.get_GUID()+"", init1.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.get_GUID()+"", init1.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.getID()+"", init1.getID()+","+ Constantes.ETAT_PORTE+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.getID()+"", init1.getID()+","+ Constantes.ETAT_PORTEUR+",0");
 		
 		List<Entry<Integer, Fighter>> e = new ArrayList<>();
 		e.addAll(_team1.entrySet());
@@ -1405,7 +1405,7 @@ public class Pelea
 		}
 		_init0.set_fightCell(getRandomCell(_start0));
 		
-		_init0.getPersonnage().getActualCelda().removePlayer(_init0.getPersonnage().get_GUID());
+		_init0.getPersonnage().getActualCelda().removePlayer(_init0.getPersonnage().getID());
 		
 		_init0.get_fightCell().addFighter(_init0);
 		
@@ -1445,7 +1445,7 @@ public class Pelea
 	    //on desactive le timer de regen cot� client
 	  	GestorSalida.GAME_SEND_ILF_PACKET(perso, 0);
 	  		
-		_team0.put(perso.get_GUID(), _init0);
+		_team0.put(perso.getID(), _init0);
 
 		Fighter percoF = new Fighter(this,perco);
 		_team1.put(-1, percoF);
@@ -1472,8 +1472,8 @@ public class Pelea
 			_st2 = 0;
 			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET_TO_FIGHT(this,1,_map.getEsquemaPelea(),1);
 		}
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTE+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTEUR+",0");
 		
 		List<Entry<Integer, Fighter>> e = new ArrayList<>();
 		e.addAll(_team1.entrySet());
@@ -1496,7 +1496,7 @@ public class Pelea
 		}
 		_init0.set_fightCell(getRandomCell(_start0));
 		
-		_init0.getPersonnage().getActualCelda().removePlayer(_init0.getPersonnage().get_GUID());
+		_init0.getPersonnage().getActualCelda().removePlayer(_init0.getPersonnage().getID());
 		
 		_init0.get_fightCell().addFighter(_init0);
 		
@@ -1605,7 +1605,7 @@ public class Pelea
 	public synchronized void changePlace(Personaje perso, int cell)
 	{
 		Fighter fighter = getFighterByPerso(perso);
-		int team = getTeamID(perso.get_GUID()) -1;
+		int team = getTeamID(perso.getID()) -1;
 		if(fighter == null)return;
 		if(get_state() != 2 || isOccuped(cell) || perso.is_ready() || (team == 0 && !groupCellContains(_start0,cell)) || (team == 1 && !groupCellContains(_start1,cell)))return;
 
@@ -1613,7 +1613,7 @@ public class Pelea
 		fighter.set_fightCell(_map.getMapa(cell));
 		
 		_map.getMapa(cell).addFighter(fighter);
-		GestorSalida.GAME_SEND_FIGHT_CHANGE_PLACE_PACKET_TO_FIGHT(this,3,_map,perso.get_GUID(),cell);
+		GestorSalida.GAME_SEND_FIGHT_CHANGE_PLACE_PACKET_TO_FIGHT(this,3,_map,perso.getID(),cell);
 	}
 
 	public boolean isOccuped(int cell)
@@ -1717,7 +1717,7 @@ public class Pelea
 			Personaje perso = F.getPersonnage();
 			if(perso == null)continue;
 			if(perso.isOnMount())
-				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_CHEVAUCHANT+",1");
+				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_CHEVAUCHANT+",1");
 			
 		}
 		
@@ -2139,14 +2139,14 @@ public class Pelea
 				GestorSalida.GAME_SEND_GJK_PACKET(perso,2,0,1,0,timeRestant,_type);
 			}
 			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getJuegoThread().get_out(), _map.getEsquemaPelea(), _st1);
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTE+",0");
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTEUR+",0");
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.getID());
 			
 			Fighter f = new Fighter(this, perso);
 			current_Join = f;
 			f.setTeam(0);
-			_team0.put(perso.get_GUID(), f);
+			_team0.put(perso.getID(), f);
 			perso.set_fight(this);
 			f.set_fightCell(cell);
 			f.get_fightCell().addFighter(f);
@@ -2203,18 +2203,18 @@ public class Pelea
 				GestorSalida.GAME_SEND_GJK_PACKET(perso,2,0,1,0,0,_type);
 			}
 			GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getJuegoThread().get_out(), _map.getEsquemaPelea(), _st2);
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTE+",0");
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTEUR+",0");
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.getID());
 			Fighter f = new Fighter(this, perso);
 			current_Join = f;
 			f.setTeam(1);
-			_team1.put(perso.get_GUID(), f);
+			_team1.put(perso.getID(), f);
 			perso.set_fight(this);
 			f.set_fightCell(cell);
 			f.get_fightCell().addFighter(f);
 		}
-		perso.getActualCelda().removePlayer(perso.get_GUID());
+		perso.getActualCelda().removePlayer(perso.getID());
 		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(perso.getActualMapa(),(current_Join.getTeam()==0?_init0:_init1).getGUID(), current_Join);
 		GestorSalida.GAME_SEND_FIGHT_PLAYER_JOIN(this,7,current_Join);
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS(this,_map,perso);
@@ -2241,19 +2241,19 @@ public class Pelea
 		if(cell == null)return;
 		GestorSalida.GAME_SEND_GJK_PACKET(perso,2,0,1,0,0,_type);
 		GestorSalida.GAME_SEND_FIGHT_PLACES_PACKET(perso.getCuenta().getJuegoThread().get_out(), _map.getEsquemaPelea(), _st2);
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTE+",0");
-		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.get_GUID()+"", perso.get_GUID()+","+ Constantes.ETAT_PORTEUR+",0");
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.get_GUID());
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTE+",0");
+		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTEUR+",0");
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(perso.getActualMapa(), perso.getID());
 		Fighter f = new Fighter(this, perso);
 		current_Join = f;
 		f.setTeam(1);
-		_team1.put(perso.get_GUID(), f);
+		_team1.put(perso.getID(), f);
 		perso.set_fight(this);
 		f.set_fightCell(cell);
 		f.get_fightCell().addFighter(f);
 		GestorSalida.GAME_SEND_ILF_PACKET(perso, 0);
 		
-		perso.getActualCelda().removePlayer(perso.get_GUID());
+		perso.getActualCelda().removePlayer(perso.getID());
 		GestorSalida.GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(perso.getActualMapa(), percoID, current_Join);
 		GestorSalida.GAME_SEND_FIGHT_PLAYER_JOIN(this,7,current_Join);
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS(this,_map,perso);
@@ -2521,8 +2521,8 @@ public class Pelea
 
 	public void onGK(Personaje perso)
 	{
-		if(_curAction.equals("")|| _ordreJeu.get(_curPlayer).getGUID() != perso.get_GUID() || _state!= Constantes.FIGHT_STATE_ACTIVE)return;
-		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+")Fin du deplacement de Fighter ID= "+perso.get_GUID());
+		if(_curAction.equals("")|| _ordreJeu.get(_curPlayer).getGUID() != perso.getID() || _state!= Constantes.FIGHT_STATE_ACTIVE)return;
+		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+")Fin du deplacement de Fighter ID= "+perso.getID());
 		GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
 		GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this,7,2,_ordreJeu.get(_curPlayer).getGUID());
 		//copie
@@ -3000,7 +3000,7 @@ public class Pelea
 			    			if(Formulas.getRandomValue(1, 100) <= captChance)	//Si le joueur obtiens la capture
 			    			{
 			    				//Retire la pierre vide au personnage et lui envoie ce changement
-			    				int pierreVide = f.getPersonnage().getObjetByPos(Constantes.ITEM_POS_ARME).getGuid();
+			    				int pierreVide = f.getPersonnage().getObjetByPos(Constantes.ITEM_POS_ARME).getID();
 			    				f.getPersonnage().deleteItem(pierreVide);
 			    				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(f.getPersonnage(), pierreVide);
 			    				
@@ -3051,7 +3051,7 @@ public class Pelea
                 }
                 
         		int winKamas	= Formulas.getKamasWin(i,TEAM1,minkamas,maxkamas);
-        		String drops = "";
+        		StringBuilder drops = new StringBuilder();
         		//Drop system
         		
         		ArrayList<Drop> temp = new ArrayList<>();
@@ -3085,22 +3085,22 @@ public class Pelea
     			}
     	        if(i._id == captWinner && pierrePleine != null)	//S'il � captur� le groupe
         		{
-        			if(drops.length() >0)drops += ",";
-        			drops += pierrePleine.getTemplate().getID()+"~"+1;
+        			if(drops.length() >0) drops.append(",");
+        			drops.append(pierrePleine.getTemplate().getID()).append("~").append(1);
         			if(i.getPersonnage().addObjet(pierrePleine, false))
-        				Mundo.addObjet(pierrePleine, true);
+        				Mundo.addObjet(pierrePleine, i.getGUID(), true);
         		}
         		for(Entry<Integer,Integer> entry : itemWon.entrySet())
         		{
         			ObjTemplate OT = Mundo.getObjTemplate(entry.getKey());
         			if(OT == null)continue;
-        			if(drops.length() >0)drops += ",";
-        			drops += entry.getKey()+"~"+entry.getValue();
+        			if(drops.length() >0) drops.append(",");
+        			drops.append(entry.getKey()).append("~").append(entry.getValue());
         			Objeto obj = OT.createNewItem(entry.getValue(), false);
         			if(i.getPersonnage() != null && i.getPersonnage().addObjet(obj, true))
-        				Mundo.addObjet(obj, true);
+        				Mundo.addObjet(obj, i.getGUID(), true);
         			else if (i.isInvocation() && i.getMob().getTemplate().getID() == 285 && i.getInvocator().getPersonnage().addObjet(obj, true))
-        				Mundo.addObjet(obj, true);
+        				Mundo.addObjet(obj, i.getGUID(), true);
         		}
         		//fin drop system
         		winxp = XP.get();
@@ -3125,12 +3125,9 @@ public class Pelea
         		// Si c'est un neutre, on ne gagne pas de points
         		int winH = 0;
         		int winD = 0;
-        		if(type == Constantes.FIGHT_TYPE_AGRESSION)
-        		{
-	        		if(_init1.getPersonnage().get_align() != 0 && _init0.getPersonnage().get_align() != 0)
-	    			{
-	        			if(_init1.getPersonnage().getCuenta().getActualIP().compareTo(_init0.getPersonnage().getCuenta().getActualIP()) != 0 || MainServidor.ALLOW_MULE_PVP)
-	        			{
+        		if(type == Constantes.FIGHT_TYPE_AGRESSION) {
+	        		if(_init1.getPersonnage().get_align() != 0 && _init0.getPersonnage().get_align() != 0) {
+	        			if(_init1.getPersonnage().getCuenta().getActualIP().compareTo(_init0.getPersonnage().getCuenta().getActualIP()) != 0 || MainServidor.ALLOW_MULE_PVP) {
 	            			winH = Formulas.calculHonorWin(TEAM1,TEAM2,i);
 	        			}
 	        			if(i.getPersonnage().getDeshonor() > 0) winD = -1;
@@ -3213,17 +3210,14 @@ public class Pelea
 			Packet.append(winxp).append(";");//XpGuilde
 			Packet.append(";");//Monture
 			
-			String drops = "";
-    		ArrayList<Drop> temp = new ArrayList<>();
-    		temp.addAll(possibleDrops);
+			StringBuilder drops = new StringBuilder();
+			ArrayList<Drop> temp = new ArrayList<>(possibleDrops);
     		Map<Integer,Integer> itemWon = new TreeMap<>();
     		
-    		for(Drop D : temp)
-    		{
+    		for(Drop D : temp) {
     			int t = (int)(D.get_taux()*100);//Permet de gerer des taux>0.01
     			int jet = Formulas.getRandomValue(0, 100*100);
-    			if(jet < t)
-    			{
+    			if(jet < t) {
     				ObjTemplate OT = Mundo.getObjTemplate(D.get_itemID());
     				if(OT == null)continue;
     				//on ajoute a la liste
@@ -3233,15 +3227,14 @@ public class Pelea
     				if(D.get_max() == 0)possibleDrops.remove(D);
     			}
     		}
-    		for(Entry<Integer,Integer> entry : itemWon.entrySet())
-    		{
+    		for(Entry<Integer,Integer> entry : itemWon.entrySet()) {
     			ObjTemplate OT = Mundo.getObjTemplate(entry.getKey());
     			if(OT == null)continue;
-    			if(drops.length() >0)drops += ",";
-    			drops += entry.getKey()+"~"+entry.getValue();
+    			if(drops.length() >0) drops.append(",");
+    			drops.append(entry.getKey()).append("~").append(entry.getValue());
     			Objeto obj = OT.createNewItem(entry.getValue(), false);
     			p.addObjet(obj);
-    			Mundo.addObjet(obj, true);
+    			Mundo.addObjet(obj, _init1.getGUID(), true);
     		}
     		Packet.append(drops).append(";");//Drop
     		Packet.append(winkamas).append("|");
@@ -3678,7 +3671,7 @@ public class Pelea
 			if(_curFighterPA < 4)//S'il n'a pas assez de PA
 				return;
 			
-			GestorSalida.GAME_SEND_GAS_PACKET_TO_FIGHT(this, 7, perso.get_GUID());
+			GestorSalida.GAME_SEND_GAS_PACKET_TO_FIGHT(this, 7, perso.getID());
 			
 			//Si le joueur est invisible
 			if(caster.isHide())
@@ -3686,7 +3679,7 @@ public class Pelea
 			
 			Fighter target = _map.getMapa(cellID).getFirstFighter();
 			
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 303, perso.get_GUID()+"", cellID+"");
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 303, perso.getID()+"", cellID+"");
 			
 			if(target != null)
 			{
@@ -3701,8 +3694,8 @@ public class Pelea
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 100, caster.getGUID()+"", target.getGUID()+","+finalDommage);
 			}
 			_curFighterPA-= 4;
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 102,perso.get_GUID()+"",perso.get_GUID()+",-4");
-			GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.get_GUID());
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 102,perso.getID()+"",perso.getID()+",-4");
+			GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.getID());
 			
 			if(target.getPDV() <=0)
 				onFighterDie(target, caster);
@@ -3714,8 +3707,8 @@ public class Pelea
 			//Pierre d'�mes = EC
 			if(arme.getTemplate().getType() == 83)
 			{
-				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 305, perso.get_GUID()+"", "");//Echec Critique Cac
-				GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.get_GUID());//Fin de l'action
+				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 305, perso.getID()+"", "");//Echec Critique Cac
+				GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.getID());//Fin de l'action
 				try{
 					Thread.sleep(500);
 				}catch(Exception ignored){}
@@ -3727,23 +3720,23 @@ public class Pelea
 			if(_curFighterPA < PACost)//S'il n'a pas assez de PA			
 				return;
 			
-			GestorSalida.GAME_SEND_GAS_PACKET_TO_FIGHT(this, 7, perso.get_GUID());
+			GestorSalida.GAME_SEND_GAS_PACKET_TO_FIGHT(this, 7, perso.getID());
 			
 			boolean isEc = arme.getTemplate().getTauxEC() != 0 && Formulas.getRandomValue(1, arme.getTemplate().getTauxEC()) == arme.getTemplate().getTauxEC();
 			if(isEc)
 			{
 				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(perso.getNombre()+" Echec critique sur le CaC ");
-				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 305, perso.get_GUID()+"", "");//Echec Critique Cac
-				GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.get_GUID());//Fin de l'action
+				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 305, perso.getID()+"", "");//Echec Critique Cac
+				GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.getID());//Fin de l'action
 				endTurn();
 			}else
 			{
-				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 303, perso.get_GUID()+"", cellID+"");
+				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 303, perso.getID()+"", cellID+"");
 				boolean isCC = caster.testIfCC(arme.getTemplate().getTauxCC());
 				if(isCC)
 				{
 					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(perso.getNombre()+" Coup critique sur le CaC");
-					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 301, perso.get_GUID()+"", "0");
+					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 301, perso.getID()+"", "0");
 				}
 				
 				//Si le joueur est invisible
@@ -3762,8 +3755,8 @@ public class Pelea
 					SE.applyToFight(this, caster, cibles, true);
 				}
 				_curFighterPA-= PACost;
-				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 102,perso.get_GUID()+"",perso.get_GUID()+",-"+PACost);
-				GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.get_GUID());
+				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 102,perso.getID()+"",perso.getID()+",-"+PACost);
+				GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, perso.getID());
 				verifIfTeamAllDead();
 			}
 		}
@@ -3772,10 +3765,10 @@ public class Pelea
 	public Fighter getFighterByPerso(Personaje perso)
 	{
 		Fighter fighter = null;
-		if(_team0.get(perso.get_GUID()) != null)
-			fighter = _team0.get(perso.get_GUID());
-		if(_team1.get(perso.get_GUID()) != null)
-			fighter = _team1.get(perso.get_GUID());
+		if(_team0.get(perso.getID()) != null)
+			fighter = _team0.get(perso.getID());
+		if(_team1.get(perso.getID()) != null)
+			fighter = _team1.get(perso.getID());
 		return fighter;
 	}
 
@@ -3904,14 +3897,14 @@ public class Pelea
 						{
 							if(_init0 != null &&_init0.getPersonnage() != null)
 							{
-								if(F.getPersonnage().get_GUID() == _init0.getPersonnage().get_GUID())
+								if(F.getPersonnage().getID() == _init0.getPersonnage().getID())
 								{
 									isValid1 = true;
 								}
 							}
 							if(_init1 != null &&_init1.getPersonnage() != null)
 							{
-								if(F.getPersonnage().get_GUID() == _init1.getPersonnage().get_GUID())
+								if(F.getPersonnage().getID() == _init1.getPersonnage().getID())
 								{
 									isValid1 = true;
 								}
@@ -3923,8 +3916,8 @@ public class Pelea
 							if((T.getTeam() == F.getTeam()) && (T.getGUID() != F.getGUID()))
 							{
 								if(MainServidor.MOSTRAR_ENVIADOS) System.out.println("EXLUSION DE : "+T.getPersonnage().getNombre());
-								GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, T.getPersonnage().get_GUID(), getTeamID(T.getGUID()));
-								if(_type == Constantes.FIGHT_TYPE_AGRESSION || _type == Constantes.FIGHT_TYPE_CHALLENGE || _type == Constantes.FIGHT_TYPE_PVT) GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, T.getPersonnage().get_GUID(), getOtherTeamID(T.getGUID()));
+								GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, T.getPersonnage().getID(), getTeamID(T.getGUID()));
+								if(_type == Constantes.FIGHT_TYPE_AGRESSION || _type == Constantes.FIGHT_TYPE_CHALLENGE || _type == Constantes.FIGHT_TYPE_PVT) GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, T.getPersonnage().getID(), getOtherTeamID(T.getGUID()));
 								Personaje P = T.getPersonnage();
 								P.set_duelID(-1);
 								P.set_ready(false);
@@ -3961,14 +3954,14 @@ public class Pelea
 							boolean isValid2 = false;
 							if(_init0 != null &&_init0.getPersonnage() != null)
 							{
-								if(F.getPersonnage().get_GUID() == _init0.getPersonnage().get_GUID())
+								if(F.getPersonnage().getID() == _init0.getPersonnage().getID())
 								{
 									isValid2 = true;
 								}
 							}
 							if(_init1 != null &&_init1.getPersonnage() != null)
 							{
-								if(F.getPersonnage().get_GUID() == _init1.getPersonnage().get_GUID())
+								if(F.getPersonnage().getID() == _init1.getPersonnage().getID())
 								{
 									isValid2 = true;
 								}
@@ -3986,7 +3979,7 @@ public class Pelea
 									P.setSitted(false);
 									P.set_away(false);
 									
-									if(F.getPersonnage().get_GUID() != f.getPersonnage().get_GUID())//Celui qui a join le fight revient sur la map
+									if(F.getPersonnage().getID() != f.getPersonnage().getID())//Celui qui a join le fight revient sur la map
 									{
 										if(P.isConectado())
 										{
@@ -4107,8 +4100,8 @@ public class Pelea
 								_ordreJeu = null;
 							}else//Soit il a rejoin le combat => Left de lui seul
 							{
-								GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, F.getPersonnage().get_GUID(), getTeamID(F.getGUID()));
-								if(_type == Constantes.FIGHT_TYPE_AGRESSION || _type == Constantes.FIGHT_TYPE_CHALLENGE || _type == Constantes.FIGHT_TYPE_PVT) GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, F.getPersonnage().get_GUID(), getOtherTeamID(F.getGUID()));
+								GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, F.getPersonnage().getID(), getTeamID(F.getGUID()));
+								if(_type == Constantes.FIGHT_TYPE_AGRESSION || _type == Constantes.FIGHT_TYPE_CHALLENGE || _type == Constantes.FIGHT_TYPE_PVT) GestorSalida.GAME_SEND_ON_FIGHTER_KICK(this, F.getPersonnage().getID(), getOtherTeamID(F.getGUID()));
 								Personaje P = F.getPersonnage();
 								P.set_duelID(-1);
 								P.set_ready(false);
@@ -4185,7 +4178,7 @@ public class Pelea
 		}else//Si perso en spec
 		{
 			GestorSalida.GAME_SEND_GV_PACKET(perso);
-			_spec.remove(perso.get_GUID());
+			_spec.remove(perso.getID());
 			perso.setSitted(false);
 			perso.set_fight(null);
 			perso.set_away(false);
@@ -4319,14 +4312,14 @@ public class Pelea
 			return;
 		}
 		long timeRestant = (MainServidor.CONFIG_MS_PER_TURN - 1) - (System.currentTimeMillis() - _ticMyTimer_startTime);
-		p.getActualCelda().removePlayer(p.get_GUID());
+		p.getActualCelda().removePlayer(p.getID());
 		GestorSalida.GAME_SEND_GJK_PACKET(p, _state, 0, 0, 1, timeRestant, _type);
 		GestorSalida.GAME_SEND_GS_PACKET(p);
 		GestorSalida.GAME_SEND_GTL_PACKET(p,this);
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(p.getActualMapa(), p.get_GUID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(p.getActualMapa(), p.getID());
 		GestorSalida.GAME_SEND_MAP_FIGHT_GMS_PACKETS(this,_map,p);
 		GestorSalida.GAME_SEND_GAMETURNSTART_PACKET(p,_ordreJeu.get(_curPlayer).getGUID(), Constantes.TIME_BY_TURN);
-		_spec.put(p.get_GUID(), p);
+		_spec.put(p.getID(), p);
 		p.set_fight(this);
 		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(this, 7, "036;"+p.getNombre());
 		
@@ -4335,7 +4328,7 @@ public class Pelea
 			for (Entry<Integer, Retos> c : this._challenges.entrySet()) {
 				if (c.getValue() == null) 
 					continue; 
-				GestorSalida.send(p, c.getValue().parseToPacket());
+				GestorSalida.enviar(p, c.getValue().parseToPacket());
 			}
 		}
 		

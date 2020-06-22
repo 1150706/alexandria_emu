@@ -519,7 +519,7 @@ public class JuegoThread implements Runnable {
 				if (_perso.getActualMapa().getID() != MapID) {
 					_perso.teletransportar(MapID, CellID);
 				}
-				Mundo.getCarte(MapID).getFight(FightID).joinPercepteurFight(_perso, _perso.get_GUID(), TiD);
+				Mundo.getCarte(MapID).getFight(FightID).joinPercepteurFight(_perso, _perso.getID(), TiD);
 			}
 		}
 	}
@@ -744,7 +744,7 @@ public class JuegoThread implements Runnable {
 		
 		GestorSalida.GAME_SEND_gS_PACKET(_perso,_perso.getMiembroGremio());
 		
-		if(p != null && p.get_GUID() != _perso.get_GUID())
+		if(p != null && p.getID() != _perso.getID())
 			GestorSalida.GAME_SEND_gS_PACKET(p,p.getMiembroGremio());
 	}
 	
@@ -776,7 +776,7 @@ public class JuegoThread implements Runnable {
 			{
 					toRemGuild = Mundo.getGuild(_perso.get_guild().get_id());//On prend la guilde du perso qui l'�jecte
 			}
-			toRemMember = toRemGuild.getMember(P.get_GUID());
+			toRemMember = toRemGuild.getMember(P.getID());
 			if(toRemMember == null) return;//Si le membre n'est pas dans la guilde.
 			if(toRemMember.getGuild().get_id() != _perso.get_guild().get_id()) return;//Si guilde diff�rente
 		}
@@ -858,11 +858,11 @@ public class JuegoThread implements Runnable {
 				return;
 			}
 			
-			_perso.setInvitation(P.get_GUID());
-			P.setInvitation(_perso.get_GUID());
+			_perso.setInvitation(P.getID());
+			P.setInvitation(_perso.getID());
 
 			GestorSalida.GAME_SEND_gJ_PACKET(_perso,"R"+packet.substring(1));
-			GestorSalida.GAME_SEND_gJ_PACKET(P,"r"+_perso.get_GUID()+"|"+_perso.getNombre()+"|"+_perso.get_guild().get_name());
+			GestorSalida.GAME_SEND_gJ_PACKET(P,"r"+_perso.getID()+"|"+_perso.getNombre()+"|"+_perso.get_guild().get_name());
 		break;
 		case 'E'://ou Refus
 			if(packet.substring(1).equalsIgnoreCase(_perso.getInvitation()+""))
@@ -1075,7 +1075,7 @@ public class JuegoThread implements Runnable {
 					}
 				}
 				MP.set_price(0);//On vide le prix
-				MP.set_owner(_perso.get_GUID());
+				MP.set_owner(_perso.getID());
 				MP.set_guild(_perso.get_guild());
 				GestorSQL.guardar_cercados(MP);
 				GestorSQL.guardar_personaje(_perso, true);
@@ -1102,7 +1102,7 @@ public class JuegoThread implements Runnable {
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "194");
 					return;
 				}
-				if (MP1.get_owner() != _perso.get_GUID()) {
+				if (MP1.get_owner() != _perso.getID()) {
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "195");
 					return;
 				}
@@ -1216,15 +1216,15 @@ public class JuegoThread implements Runnable {
 				if(packet.charAt(3) == '+'){//Si lancement de la traque
 					if(_perso._Follows != null)
 					{
-						_perso._Follows._Follower.remove(_perso.get_GUID());
+						_perso._Follows._Follower.remove(_perso.getID());
 					}
 					GestorSalida.GAME_SEND_FLAG_PACKET(_perso, Wife);
 					_perso._Follows = Wife;
-					Wife._Follower.put(_perso.get_GUID(), _perso);
+					Wife._Follower.put(_perso.getID(), _perso);
 				}else{//On arrete de suivre
 					GestorSalida.GAME_SEND_DELETE_FLAG_PACKET(_perso);
 					_perso._Follows = null;
-					Wife._Follower.remove(_perso.get_GUID());
+					Wife._Follower.remove(_perso.getID());
 				}
 			break;
 		}
@@ -1340,18 +1340,18 @@ public class JuegoThread implements Runnable {
 				if (packet.charAt(2) == '+')//Suivre
 				{
 					if (_perso._Follows != null) {
-						_perso._Follows._Follower.remove(_perso.get_GUID());
+						_perso._Follows._Follower.remove(_perso.getID());
 					}
 					GestorSalida.GAME_SEND_FLAG_PACKET(_perso, P);
-					GestorSalida.GAME_SEND_PF(_perso, "+" + P.get_GUID());
+					GestorSalida.GAME_SEND_PF(_perso, "+" + P.getID());
 					_perso._Follows = P;
-					P._Follower.put(_perso.get_GUID(), _perso);
+					P._Follower.put(_perso.getID(), _perso);
 				} else if (packet.charAt(2) == '-')//Ne plus suivre
 				{
 					GestorSalida.GAME_SEND_DELETE_FLAG_PACKET(_perso);
 					GestorSalida.GAME_SEND_PF(_perso, "-");
 					_perso._Follows = null;
-					P._Follower.remove(_perso.get_GUID());
+					P._Follower.remove(_perso.getID());
 				}
 			}
 //Suivez le tous PG+GUID
@@ -1370,23 +1370,23 @@ public class JuegoThread implements Runnable {
 				if (packet.charAt(2) == '+')//Suivre
 				{
 					for (Personaje T : g2.getMiembrosGrupo()) {
-						if (T.get_GUID() == P2.get_GUID()) continue;
+						if (T.getID() == P2.getID()) continue;
 						if (T._Follows != null) {
-							T._Follows._Follower.remove(_perso.get_GUID());
+							T._Follows._Follower.remove(_perso.getID());
 						}
 						GestorSalida.GAME_SEND_FLAG_PACKET(T, P2);
-						GestorSalida.GAME_SEND_PF(T, "+" + P2.get_GUID());
+						GestorSalida.GAME_SEND_PF(T, "+" + P2.getID());
 						T._Follows = P2;
-						P2._Follower.put(T.get_GUID(), T);
+						P2._Follower.put(T.getID(), T);
 					}
 				} else if (packet.charAt(2) == '-')//Ne plus suivre
 				{
 					for (Personaje T : g2.getMiembrosGrupo()) {
-						if (T.get_GUID() == P2.get_GUID()) continue;
+						if (T.getID() == P2.getID()) continue;
 						GestorSalida.GAME_SEND_DELETE_FLAG_PACKET(T);
 						GestorSalida.GAME_SEND_PF(T, "-");
 						T._Follows = null;
-						P2._Follower.remove(T.get_GUID());
+						P2._Follower.remove(T.getID());
 					}
 				}
 			}
@@ -1411,7 +1411,7 @@ public class JuegoThread implements Runnable {
 		for(Personaje GroupP : _perso.getActualGrupo().getMiembrosGrupo())
 		{
 			if(!isFirst) str += "|";
-			str += GroupP.getActualMapa().getX()+";"+GroupP.getActualMapa().getY()+";"+GroupP.getActualMapa().getID()+";2;"+GroupP.get_GUID()+";"+GroupP.getNombre();
+			str += GroupP.getActualMapa().getX()+";"+GroupP.getActualMapa().getY()+";"+GroupP.getActualMapa().getID()+";2;"+GroupP.getID()+";"+GroupP.getNombre();
 			isFirst = false;
 		}
 		GestorSalida.GAME_SEND_IH_PACKET(_perso, str);
@@ -1427,7 +1427,7 @@ public class JuegoThread implements Runnable {
 			 g.leave(_perso);
 			 GestorSalida.GAME_SEND_PV_PACKET(_out,"");
 			GestorSalida.GAME_SEND_IH_PACKET(_perso, "");
-		}else if(g.isChief(_perso.get_GUID()))//Sinon, c'est qu'il kick un joueur du groupe
+		}else if(g.isChief(_perso.getID()))//Sinon, c'est qu'il kick un joueur du groupe
 		{
 			int guid = -1;
 			try
@@ -1437,7 +1437,7 @@ public class JuegoThread implements Runnable {
 			if(guid == -1)return;
 			Personaje t = Mundo.getPersonnage(guid);
 			g.leave(t);
-			GestorSalida.GAME_SEND_PV_PACKET(t.getCuenta().getJuegoThread().get_out(),""+_perso.get_GUID());
+			GestorSalida.GAME_SEND_PV_PACKET(t.getCuenta().getJuegoThread().get_out(),""+_perso.getID());
 			GestorSalida.GAME_SEND_IH_PACKET(t, "");
 		}
 	}
@@ -1463,8 +1463,8 @@ public class JuegoThread implements Runnable {
 			GestorSalida.GAME_SEND_GROUP_INVITATION_ERROR(_out, "f");
 			return;
 		}
-		target.setInvitation(_perso.get_GUID());	
-		_perso.setInvitation(target.get_GUID());
+		target.setInvitation(_perso.getID());
+		_perso.setInvitation(target.getID());
 		GestorSalida.GAME_SEND_GROUP_INVITATION(_out,_perso.getNombre(),name);
 		GestorSalida.GAME_SEND_GROUP_INVITATION(target.getCuenta().getJuegoThread().get_out(),_perso.getNombre(),name);
 	}
@@ -1659,7 +1659,7 @@ public class JuegoThread implements Runnable {
 			{
 				// LES VERFIS
 				if (exObj == null) 	{// si on place l'obvi sur un emplacement vide
-					GestorSalida.send(_perso, "Im1161");
+					GestorSalida.enviar(_perso, "Im1161");
 					return;	
 				}
 				if (exObj.getObvijevanPos() != 0) {// si il y a d�j� un obvi
@@ -1670,15 +1670,15 @@ public class JuegoThread implements Runnable {
 		        		
 				exObj.setObvijevanPos(obj.getObvijevanPos()); // L'objet qui �tait en place a maintenant un obvi
 					
-				_perso.removeItem(obj.getGuid(), 1, false, false); // on enl�ve l'existance de l'obvi en lui-m�me
-				GestorSalida.send(_perso, "OR" + obj.getGuid()); // on le pr�cise au client
+				_perso.removeItem(obj.getID(), 1, false, false); // on enl�ve l'existance de l'obvi en lui-m�me
+				GestorSalida.enviar(_perso, "OR" + obj.getID()); // on le pr�cise au client
 
 				exObj.clearStats();
 				String cibleNewStats = obj.parseStatsStringSansUserObvi() + "," + exObj.parseStatsStringSansUserObvi() +
 						",3ca#" + Integer.toHexString(objGUID) + "#0#0#0d0+" + objGUID;
 				exObj.parseStringToStats(cibleNewStats);
 					
-				GestorSalida.send(_perso, exObj.obvijevanOCO_Packet(pos));
+				GestorSalida.enviar(_perso, exObj.obvijevanOCO_Packet(pos));
 					
 				if ((objGUID == 9233) || (objGUID == 9234)) 
 					GestorSalida.GAME_SEND_ON_EQUIP_ITEM(_perso.getActualMapa(), _perso); // Si l'obvi �tait cape ou coiffe : packet au client
@@ -1693,7 +1693,7 @@ public class JuegoThread implements Runnable {
 						int newItemQua = obj.getQuantity()-qua;
 						Objeto newItem = Objeto.getCloneObjet(obj,newItemQua);
 						_perso.addObjet(newItem,false);
-						Mundo.addObjet(newItem,true);
+						Mundo.addObjet(newItem, _perso.getID(),true);
 						obj.setQuantity(qua);
 						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
 					}
@@ -1709,9 +1709,9 @@ public class JuegoThread implements Runnable {
 				{
 					obj2.setQuantity(obj2.getQuantity()+exObj.getQuantity());
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj2);
-					Mundo.removeItem(exObj.getGuid());
-					_perso.removeItem(exObj.getGuid());
-					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso, exObj.getGuid());
+					Mundo.removeItem(exObj.getID());
+					_perso.removeItem(exObj.getID());
+					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso, exObj.getID());
 				}
 				else//On ne le poss�de pas
 				{
@@ -1742,9 +1742,9 @@ public class JuegoThread implements Runnable {
 						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
 					}else//Sinon on supprime
 					{
-						Mundo.removeItem(obj.getGuid());
-						_perso.removeItem(obj.getGuid());
-						GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso, obj.getGuid());
+						Mundo.removeItem(obj.getID());
+						_perso.removeItem(obj.getID());
+						GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso, obj.getID());
 					}
 				}
 				else//Pas d'objets similaires
@@ -1760,7 +1760,7 @@ public class JuegoThread implements Runnable {
 							int newItemQua = obj.getQuantity()-qua;
 							Objeto newItem = Objeto.getCloneObjet(obj,newItemQua);
 							_perso.addObjet(newItem,false);
-							Mundo.addObjet(newItem,true);
+							Mundo.addObjet(newItem, _perso.getID(), true);
 							obj.setQuantity(qua);
 							GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
 						}
@@ -2048,23 +2048,23 @@ public class JuegoThread implements Runnable {
 					_perso.removeItem(guid);
 					Mundo.removeItem(guid);
 					//on ajoute la dinde a l'�table
-					MP.addData(DD.getID(), _perso.get_GUID());
+					MP.addData(DD.getID(), _perso.getID());
 					GestorSQL.actualizar_cercado(MP);
 					//On envoie les packet
-					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso,obj.getGuid());
+					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso,obj.getID());
 					GestorSalida.GAME_SEND_Ee_PACKET(_perso, '+', DD.parse());
 				break;
 				case 'c'://Etable => Parcho(Echanger)
 					Dragopavo DD1 = Mundo.getDragopavoPorID(guid);
 					//S'il n'a pas la dinde
 					if(DD1 == null || !MP.getData().containsKey(DD1.getID()))return;
-					if(MP.getData().get(DD1.getID()) != _perso.get_GUID() &&
+					if(MP.getData().get(DD1.getID()) != _perso.getID() &&
 						Mundo.getPersonnage(MP.getData().get(DD1.getID())).get_guild() != _perso.get_guild())
 					{
 						//Pas la m�me guilde, pas le m�me perso
 						return;
 					}
-					if(MP.getData().get(DD1.getID()) != _perso.get_GUID() &&
+					if(MP.getData().get(DD1.getID()) != _perso.getID() &&
 							Mundo.getPersonnage(MP.getData().get(DD1.getID())).get_guild() == _perso.get_guild() &&
 							!_perso.getMiembroGremio().canDo(Constantes.G_OTHDINDE))
 					{
@@ -2086,7 +2086,7 @@ public class JuegoThread implements Runnable {
 					obj1.addTxtStat(997, DD1.get_nom());
 					
 					//On ajoute l'objet au joueur
-					Mundo.addObjet(obj1, true);
+					Mundo.addObjet(obj1, _perso.getID(), true);
 					_perso.addObjet(obj1, false);//Ne seras jamais identique de toute
 					
 					//Packets
@@ -2098,13 +2098,13 @@ public class JuegoThread implements Runnable {
 					//S'il n'a pas la dinde
 					if(DD3 == null || !MP.getData().containsKey(DD3.getID()) || _perso.getMount() != null)return;
 					
-					if(MP.getData().get(DD3.getID()) != _perso.get_GUID() &&
+					if(MP.getData().get(DD3.getID()) != _perso.getID() &&
 							Mundo.getPersonnage(MP.getData().get(DD3.getID())).get_guild() != _perso.get_guild())
 					{
 						//Pas la m�me guilde, pas le m�me perso
 						return;
 					}
-					if(MP.getData().get(DD3.getID()) != _perso.get_GUID() &&
+					if(MP.getData().get(DD3.getID()) != _perso.getID() &&
 							Mundo.getPersonnage(MP.getData().get(DD3.getID())).get_guild() == _perso.get_guild() &&
 							!_perso.getMiembroGremio().canDo(Constantes.G_OTHDINDE))
 					{
@@ -2124,7 +2124,7 @@ public class JuegoThread implements Runnable {
 				break;
 				case 'p'://Equip� => Stocker
 					//Si c'est la dinde �quip�
-					if(_perso.getMount()!=null?_perso.getMount().getID() == guid:false)
+					if(_perso.getMount() != null && _perso.getMount().getID() == guid)
 					{
 						//Si le perso est sur la monture on le fait descendre
 						if(_perso.isOnMount())_perso.toogleOnMount();
@@ -2132,7 +2132,7 @@ public class JuegoThread implements Runnable {
 						if(_perso.isOnMount())return;
 						
 						Dragopavo DD2 = _perso.getMount();
-						MP.addData(DD2.getID(), _perso.get_GUID());
+						MP.addData(DD2.getID(), _perso.getID());
 						GestorSQL.actualizar_cercado(MP);
 						_perso.setMount(null);
 						
@@ -2164,13 +2164,13 @@ public class JuegoThread implements Runnable {
 			_perso.getCurJobAction().startCraft(_perso);
 		}
 		if(_perso.get_curExchange() == null)return;
-		_perso.get_curExchange().toogleOK(_perso.get_GUID());
+		_perso.get_curExchange().toogleOK(_perso.getID());
 	}
 
 	private void Exchange_onMoveItem(String packet)
 	{
 		//Store
-		if(_perso.get_isTradingWith() == _perso.get_GUID())
+		if(_perso.get_isTradingWith() == _perso.getID())
 		{
 			if (packet.charAt(2) == 'O') {//Objets
 				if (packet.charAt(3) == '+') {
@@ -2187,7 +2187,7 @@ public class JuegoThread implements Runnable {
 						if (qua > obj.getQuantity())
 							qua = obj.getQuantity();
 
-						_perso.addinStore(obj.getGuid(), price, qua);
+						_perso.addinStore(obj.getID(), price, qua);
 
 					} catch (NumberFormatException e) {
 					}
@@ -2204,7 +2204,7 @@ public class JuegoThread implements Runnable {
 						if (qua > obj.getQuantity()) return;
 						if (qua < obj.getQuantity()) qua = obj.getQuantity();
 
-						_perso.removeFromStore(obj.getGuid(), qua);
+						_perso.removeFromStore(obj.getID(), qua);
 					} catch (NumberFormatException e) {
 					}
 				}
@@ -2311,7 +2311,7 @@ public class JuegoThread implements Runnable {
 						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
 
 						Objeto newObj = Objeto.getCloneObjet(obj, rAmount);
-						Mundo.addObjet(newObj, true);
+						Mundo.addObjet(newObj, _perso.getID(), true);
 						obj = newObj;
 					}
 					HdvEntry toAdd = new HdvEntry(price, amount, _perso.getCuenta().getID(), obj);
@@ -2487,7 +2487,7 @@ public class JuegoThread implements Runnable {
 						
 						int guid = Integer.parseInt(infos[0]);
 						int qua  = Integer.parseInt(infos[1]);
-						int quaInExch = _perso.get_curExchange().getQuaItem(guid, _perso.get_GUID());
+						int quaInExch = _perso.get_curExchange().getQuaItem(guid, _perso.getID());
 						
 						if(!_perso.hasItemGuid(guid))return;
 						Objeto obj = Mundo.getObjet(guid);
@@ -2498,7 +2498,7 @@ public class JuegoThread implements Runnable {
 							qua = obj.getQuantity()-quaInExch;
 						if(qua <= 0)return;
 						
-						_perso.get_curExchange().addItem(guid,qua,_perso.get_GUID());
+						_perso.get_curExchange().addItem(guid,qua,_perso.getID());
 					}catch(NumberFormatException ignored){}
 				}else
 				{
@@ -2513,9 +2513,9 @@ public class JuegoThread implements Runnable {
 						
 						Objeto obj = Mundo.getObjet(guid);
 						if(obj == null)return;
-						if(qua > _perso.get_curExchange().getQuaItem(guid, _perso.get_GUID()))return;
+						if(qua > _perso.get_curExchange().getQuaItem(guid, _perso.getID()))return;
 						
-						_perso.get_curExchange().removeItem(guid,qua,_perso.get_GUID());
+						_perso.get_curExchange().removeItem(guid,qua,_perso.getID());
 					}catch(NumberFormatException ignored){}
 				}
 			break;
@@ -2525,7 +2525,7 @@ public class JuegoThread implements Runnable {
 					long numb = Integer.parseInt(packet.substring(3));
 					if(_perso.getKamas() < numb)
 						numb = _perso.getKamas();
-					_perso.get_curExchange().setKamas(_perso.get_GUID(), numb);
+					_perso.get_curExchange().setKamas(_perso.getID(), numb);
 				}catch(NumberFormatException ignored){}
 				break;
 		}
@@ -2540,9 +2540,9 @@ public class JuegoThread implements Runnable {
 		GestorSalida.GAME_SEND_EXCHANGE_CONFIRM_OK(target.getCuenta().getJuegoThread().get_out(),1);
 		Mundo.Exchange echg = new Mundo.Exchange(target,_perso);
 		_perso.setCurExchange(echg);
-		_perso.set_isTradingWith(target.get_GUID());
+		_perso.set_isTradingWith(target.getID());
 		target.setCurExchange(echg);
-		target.set_isTradingWith(_perso.get_GUID());
+		target.set_isTradingWith(_perso.getID());
 	}
 
 	private void Exchange_onSellItem(String packet)
@@ -2594,17 +2594,17 @@ public class JuegoThread implements Runnable {
                 if(qua > itemStore.getQuantity()) qua = itemStore.getQuantity();
                 if(qua == itemStore.getQuantity())
                 {
-                	seller.getStoreItems().remove(itemStore.getGuid());
+                	seller.getStoreItems().remove(itemStore.getID());
                 	_perso.addObjet(itemStore, true);
                 }else // si l'�change peut se faire
                 {
-                	seller.getStoreItems().remove(itemStore.getGuid()); // on enl�ve enti�rement l'objet en vente
+                	seller.getStoreItems().remove(itemStore.getID()); // on enl�ve enti�rement l'objet en vente
                 	itemStore.setQuantity(itemStore.getQuantity()-qua); // on modifie la quantit� dans le magasin
-                	GestorSQL.guardar_objeto(itemStore);					// on sauvegarde le magasin
-                	seller.addStoreItem(itemStore.getGuid(), price);	// on remet dans le magasin
+                	GestorSQL.guardar_objeto(itemStore, _perso.getID());					// on sauvegarde le magasin
+                	seller.addStoreItem(itemStore.getID(), price);	// on remet dans le magasin
                 	
                 	Objeto clone = Objeto.getCloneObjet(itemStore, qua);	// on clone l'objet achet�
-                    GestorSQL.guardar_nuevo_objeto(clone);					// on sauvegarde celui-ci
+                    GestorSQL.guardar_nuevo_objeto(clone, _perso.getID());					// on sauvegarde celui-ci
                     _perso.addObjet(clone, true);						// et on le donne au joueur
                 }
 	            //remove kamas
@@ -2619,10 +2619,10 @@ public class JuegoThread implements Runnable {
 	            GestorSalida.GAME_SEND_BUY_OK_PACKET(_out);
 	            if(seller.getStoreItems().isEmpty())
 	            {
-	            	if(Mundo.getSeller(seller.getActualMapa().getID()) != null && Mundo.getSeller(seller.getActualMapa().getID()).contains(seller.get_GUID()))
+	            	if(Mundo.getSeller(seller.getActualMapa().getID()) != null && Mundo.getSeller(seller.getActualMapa().getID()).contains(seller.getID()))
 	        		{
-	        			Mundo.removeSeller(seller.get_GUID(), seller.getActualMapa().getID());
-	        			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(seller.getActualMapa(), seller.get_GUID());
+	        			Mundo.removeSeller(seller.getID(), seller.getActualMapa().getID());
+	        			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(seller.getActualMapa(), seller.getID());
 	        			Exchange_finish_buy();
 	        		}
 	            }
@@ -2661,7 +2661,7 @@ public class JuegoThread implements Runnable {
 			long newKamas = _perso.getKamas() - prix;
 			_perso.setKamas(newKamas);
 			if(_perso.addObjet(newObj,true))//Return TRUE si c'est un nouvel item
-				Mundo.addObjet(newObj,true);
+				Mundo.addObjet(newObj, _perso.getID(),true);
 			GestorSalida.GAME_SEND_BUY_OK_PACKET(_out);
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_perso);
 			GestorSalida.GAME_SEND_Ow_PACKET(_perso);
@@ -2836,10 +2836,10 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_EXCHANGE_REQUEST_ERROR(_out,'O');
 					return;
 				}
-				GestorSalida.GAME_SEND_EXCHANGE_REQUEST_OK(_out, _perso.get_GUID(), guidTarget,1);
-				GestorSalida.GAME_SEND_EXCHANGE_REQUEST_OK(target.getCuenta().getJuegoThread().get_out(),_perso.get_GUID(), guidTarget,1);
+				GestorSalida.GAME_SEND_EXCHANGE_REQUEST_OK(_out, _perso.getID(), guidTarget,1);
+				GestorSalida.GAME_SEND_EXCHANGE_REQUEST_OK(target.getCuenta().getJuegoThread().get_out(),_perso.getID(), guidTarget,1);
 				_perso.set_isTradingWith(guidTarget);
-				target.set_isTradingWith(_perso.get_GUID());
+				target.set_isTradingWith(_perso.getID());
 			}catch(NumberFormatException ignored){}
 			break;
             case '4'://StorePlayer
@@ -2854,12 +2854,12 @@ public class JuegoThread implements Runnable {
 				Personaje seller = Mundo.getPersonnage(pID);
 				if(seller == null) return;
 				_perso.set_isTradingWith(pID);
-				GestorSalida.GAME_SEND_ECK_PACKET(_perso, 4, seller.get_GUID()+"");
+				GestorSalida.GAME_SEND_ECK_PACKET(_perso, 4, seller.getID()+"");
 				GestorSalida.GAME_SEND_ITEM_LIST_PACKET_SELLER(seller, _perso);
             break;
 			case '6'://StoreItems
 				if(_perso.get_isTradingWith() > 0 || _perso.getPelea() != null || _perso.is_away())return;
-                _perso.set_isTradingWith(_perso.get_GUID());
+                _perso.set_isTradingWith(_perso.getID());
                 GestorSalida.GAME_SEND_ECK_PACKET(_perso, 6, "");
                 GestorSalida.GAME_SEND_ITEM_LIST_PACKET_SELLER(_perso, _perso);
 			break;
@@ -2911,7 +2911,7 @@ public class JuegoThread implements Runnable {
 		System.out.println("Set Emote "+_perso.emoteActive());
 		System.out.println("Is sitted "+_perso.isSitted());
 		
-		GestorSalida.GAME_SEND_eUK_PACKET_TO_MAP(_perso.getActualMapa(), _perso.get_GUID(), _perso.emoteActive());
+		GestorSalida.GAME_SEND_eUK_PACKET_TO_MAP(_perso.getActualMapa(), _perso.getID(), _perso.emoteActive());
 	}
 
 	private void Environement_change_direction(String packet)
@@ -2921,7 +2921,7 @@ public class JuegoThread implements Runnable {
 			if(_perso.getPelea() != null)return;
 			int dir = Integer.parseInt(packet.substring(2));
 			_perso.set_orientation(dir);
-			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(_perso.getActualMapa(),_perso.get_GUID(),dir);
+			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(_perso.getActualMapa(),_perso.getID(),dir);
 		}catch(NumberFormatException e){return;}
 	}
 
@@ -3008,24 +3008,24 @@ public class JuegoThread implements Runnable {
 //Aide
 				case 'H' -> {
 					if (_perso.getPelea() == null) return;
-					_perso.getPelea().toggleHelp(_perso.get_GUID());
+					_perso.getPelea().toggleHelp(_perso.getID());
 				}
 //Lister les combats
 				case 'L' -> GestorSalida.GAME_SEND_FIGHT_LIST_PACKET(_out, _perso.getActualMapa());
 //Bloquer le combat
 				case 'N' -> {
 					if (_perso.getPelea() == null) return;
-					_perso.getPelea().toggleLockTeam(_perso.get_GUID());
+					_perso.getPelea().toggleLockTeam(_perso.getID());
 				}
 //Seulement le groupe
 				case 'P' -> {
 					if (_perso.getPelea() == null || _perso.getActualGrupo() == null) return;
-					_perso.getPelea().toggleOnlyGroup(_perso.get_GUID());
+					_perso.getPelea().toggleOnlyGroup(_perso.getID());
 				}
 //Bloquer les specs
 				case 'S' -> {
 					if (_perso.getPelea() == null) return;
-					_perso.getPelea().toggleLockSpec(_perso.get_GUID());
+					_perso.getPelea().toggleLockSpec(_perso.getID());
 				}
 			}
 		}catch(Exception e){e.printStackTrace();}
@@ -3446,25 +3446,25 @@ public class JuegoThread implements Runnable {
                     }
 				}
 				if(_perso.getPelea() == null)
-					GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_perso.getActualMapa(), "", _perso.get_GUID(), _perso.getNombre(), msg);
+					GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_perso.getActualMapa(), "", _perso.getID(), _perso.getNombre(), msg);
 				else
-					GestorSalida.GAME_SEND_cMK_PACKET_TO_FIGHT(_perso.getPelea(), 7, "", _perso.get_GUID(), _perso.getNombre(), msg);
+					GestorSalida.GAME_SEND_cMK_PACKET_TO_FIGHT(_perso.getPelea(), 7, "", _perso.getID(), _perso.getNombre(), msg);
 			break;
 			case '#'://Canal Equipe
 				if(!_perso.get_canaux().contains(packet.charAt(2)+""))return;
 				if(_perso.getPelea() != null)
 				{
 					msg = packet.split("\\|",2)[1];
-					int team = _perso.getPelea().getTeamID(_perso.get_GUID());
+					int team = _perso.getPelea().getTeamID(_perso.getID());
 					if(team == -1)return;
-					GestorSalida.GAME_SEND_cMK_PACKET_TO_FIGHT(_perso.getPelea(), team, "#", _perso.get_GUID(), _perso.getNombre(), msg);
+					GestorSalida.GAME_SEND_cMK_PACKET_TO_FIGHT(_perso.getPelea(), team, "#", _perso.getID(), _perso.getNombre(), msg);
 				}
 			break;
 			case '$'://Canal groupe
 				if(!_perso.get_canaux().contains(packet.charAt(2)+""))return;
 				if(_perso.getActualGrupo() == null)break;
 				msg = packet.split("\\|",2)[1];
-				GestorSalida.GAME_SEND_cMK_PACKET_TO_GROUP(_perso.getActualGrupo(), "$", _perso.get_GUID(), _perso.getNombre(), msg);
+				GestorSalida.GAME_SEND_cMK_PACKET_TO_GROUP(_perso.getActualGrupo(), "$", _perso.getID(), _perso.getNombre(), msg);
 			break;
 			
 			case ':'://Canal commerce
@@ -3478,12 +3478,12 @@ public class JuegoThread implements Runnable {
 				}
 				_timeLastTradeMsg = System.currentTimeMillis();
 				msg = packet.split("\\|",2)[1];
-				GestorSalida.GAME_SEND_cMK_PACKET_TO_ALL(":", _perso.get_GUID(), _perso.getNombre(), msg);
+				GestorSalida.GAME_SEND_cMK_PACKET_TO_ALL(":", _perso.getID(), _perso.getNombre(), msg);
 			break;
 			case '@'://Canal Admin
 				if(_perso.getCuenta().getGMLVL() ==0)return;
 				msg = packet.split("\\|",2)[1];
-				GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", _perso.get_GUID(), _perso.getNombre(), msg);
+				GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", _perso.getID(), _perso.getNombre(), msg);
 			break;
 			case '?'://Canal recrutement
 				if(!_perso.get_canaux().contains(packet.charAt(2)+""))return;
@@ -3496,13 +3496,13 @@ public class JuegoThread implements Runnable {
 				}
 				_timeLastRecrutmentMsg = System.currentTimeMillis();
 				msg = packet.split("\\|",2)[1];
-				GestorSalida.GAME_SEND_cMK_PACKET_TO_ALL("?", _perso.get_GUID(), _perso.getNombre(), msg);
+				GestorSalida.GAME_SEND_cMK_PACKET_TO_ALL("?", _perso.getID(), _perso.getNombre(), msg);
 			break;
 			case '%'://Canal guilde
 				if(!_perso.get_canaux().contains(packet.charAt(2)+""))return;
 				if(_perso.get_guild() == null)return;
 				msg = packet.split("\\|",2)[1];
-				GestorSalida.GAME_SEND_cMK_PACKET_TO_GUILD(_perso.get_guild(), "%", _perso.get_GUID(), _perso.getNombre(), msg);
+				GestorSalida.GAME_SEND_cMK_PACKET_TO_GUILD(_perso.get_guild(), "%", _perso.getID(), _perso.getNombre(), msg);
 			break;
 			case 0xC2://Canal 
 			break;
@@ -3523,7 +3523,7 @@ public class JuegoThread implements Runnable {
 				}
 				_timeLastAlignMsg = System.currentTimeMillis();
 				msg = packet.split("\\|",2)[1];
-				GestorSalida.GAME_SEND_cMK_PACKET_TO_ALIGN("!", _perso.get_GUID(), _perso.getNombre(), msg, _perso);
+				GestorSalida.GAME_SEND_cMK_PACKET_TO_ALIGN("!", _perso.getID(), _perso.getNombre(), msg, _perso);
 			break;
 			case '^':// Canal Incarnam 
 				msg = packet.split("\\|", 2)[1]; 
@@ -3536,7 +3536,7 @@ public class JuegoThread implements Runnable {
 				} 
 				_timeLastIncarnamMsg = System.currentTimeMillis();
 				msg = packet.split("\\|",2)[1];
-				GestorSalida.GAME_SEND_cMK_PACKET_INCARNAM_CHAT(_perso, "^", _perso.get_GUID(), _perso.getNombre(), msg);
+				GestorSalida.GAME_SEND_cMK_PACKET_INCARNAM_CHAT(_perso, "^", _perso.getID(), _perso.getNombre(), msg);
 			break;
 			default:
 				String nom = packet.substring(2).split("\\|")[0];
@@ -3566,8 +3566,8 @@ public class JuegoThread implements Runnable {
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "114;"+target.getNombre());
 						return;
 					}
-					GestorSalida.GAME_SEND_cMK_PACKET(target, "F", _perso.get_GUID(), _perso.getNombre(), msg);
-					GestorSalida.GAME_SEND_cMK_PACKET(_perso, "T", target.get_GUID(), target.getNombre(), msg);
+					GestorSalida.GAME_SEND_cMK_PACKET(target, "F", _perso.getID(), _perso.getNombre(), msg);
+					GestorSalida.GAME_SEND_cMK_PACKET(_perso, "T", target.getID(), target.getNombre(), msg);
 				}
 			break;
 		}
@@ -3647,7 +3647,7 @@ public class JuegoThread implements Runnable {
 		{
 			Personaje target = Mundo.getPersonnage(targetID);
 			//On ne quitte pas un joueur qui : est null, ne combat pas, n'est pas de �a team.
-			if(target == null || target.getPelea() == null || target.getPelea().getTeamID(target.get_GUID()) != _perso.getPelea().getTeamID(_perso.get_GUID()))return;
+			if(target == null || target.getPelea() == null || target.getPelea().getTeamID(target.getID()) != _perso.getPelea().getTeamID(_perso.getID()))return;
 			_perso.getPelea().leftFight(_perso, target);
 			
 		}else
@@ -3667,7 +3667,7 @@ public class JuegoThread implements Runnable {
 			cellID = Integer.parseInt(packet.substring(2));
 		}catch(Exception ignored){}
 		if(cellID == -1)return;
-		_perso.getPelea().showCaseToTeam(_perso.get_GUID(),cellID);
+		_perso.getPelea().showCaseToTeam(_perso.getID(),cellID);
 	}
 
 	private void Game_on_Ready(String packet)
@@ -3676,7 +3676,7 @@ public class JuegoThread implements Runnable {
 		if(_perso.getPelea().get_state() != Constantes.FIGHT_STATE_PLACE)return;
 		_perso.set_ready(packet.substring(2).equalsIgnoreCase("1"));
 		_perso.getPelea().verifIfAllReady();
-		GestorSalida.GAME_SEND_FIGHT_PLAYER_READY_TO_FIGHT(_perso.getPelea(),3,_perso.get_GUID(),packet.substring(2).equalsIgnoreCase("1"));
+		GestorSalida.GAME_SEND_FIGHT_PLAYER_READY_TO_FIGHT(_perso.getPelea(),3,_perso.getID(),packet.substring(2).equalsIgnoreCase("1"));
 	}
 
 	private void Game_on_ChangePlace_packet(String packet)
@@ -3722,7 +3722,7 @@ public class JuegoThread implements Runnable {
 					//Hors Combat
 					if(_perso.getPelea() == null)
 					{
-						_perso.getActualCelda().removePlayer(_perso.get_GUID());
+						_perso.getActualCelda().removePlayer(_perso.getID());
 						GestorSalida.GAME_SEND_BN(_out);
 						String path = GA._args;
 						//On prend la case cibl�e
@@ -3767,7 +3767,7 @@ public class JuegoThread implements Runnable {
 					}catch(Exception e){return;}
 					if(newCellID == -1)return;
 					String path = GA._args;
-					_perso.getActualCelda().removePlayer(_perso.get_GUID());
+					_perso.getActualCelda().removePlayer(_perso.getID());
 					_perso.set_curCell(_perso.getActualMapa().getMapa(newCellID));
 					_perso.set_orientation(GestorEncriptador.getIntByHashedValue(path.charAt(path.length()-3)));
 					_perso.getActualCelda().addPerso(_perso);
@@ -3841,7 +3841,7 @@ public class JuegoThread implements Runnable {
 //Mariage oui
 			case 618 -> {
 				_perso.setisOK(Integer.parseInt(packet.substring(5, 6)));
-				GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_perso.getActualMapa(), "", _perso.get_GUID(), _perso.getNombre(), "Oui");
+				GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_perso.getActualMapa(), "", _perso.getID(), _perso.getNombre(), "Oui");
 				if (Mundo.getMarried(0).getisOK() > 0 && Mundo.getMarried(1).getisOK() > 0) {
 					Mundo.Wedding(Mundo.getMarried(0), Mundo.getMarried(1), 1);
 				}
@@ -3852,7 +3852,7 @@ public class JuegoThread implements Runnable {
 //Mariage non
 			case 619 -> {
 				_perso.setisOK(0);
-				GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_perso.getActualMapa(), "", _perso.get_GUID(), _perso.getNombre(), "Non");
+				GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_perso.getActualMapa(), "", _perso.getID(), _perso.getNombre(), "Non");
 				Mundo.Wedding(Mundo.getMarried(0), Mundo.getMarried(1), 0);
 			}
 //Demande Defie
@@ -3909,7 +3909,7 @@ public class JuegoThread implements Runnable {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_perso, "1180");
 				return;
 			}
-			GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(_perso.getActualMapa(),"", 909, _perso.get_GUID()+"", id+"");
+			GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(_perso.getActualMapa(),"", 909, _perso.getID()+"", id+"");
 			_perso.getActualMapa().startFigthVersusPercepteur(_perso, target);
 		}catch(Exception ignored){}
 	}
@@ -3936,7 +3936,7 @@ public class JuegoThread implements Runnable {
 			}
 
 			_perso.toggleWings('+');
-			GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(_perso.getActualMapa(),"", 906, _perso.get_GUID()+"", id+"");
+			GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(_perso.getActualMapa(),"", 906, _perso.getID()+"", id+"");
 			_perso.getActualMapa().newFight(_perso, target, Constantes.FIGHT_TYPE_AGRESSION);
 		}catch(Exception ignored){}
 	}
@@ -4023,7 +4023,7 @@ public class JuegoThread implements Runnable {
 		int guid = -1;
 		try{guid = Integer.parseInt(packet.substring(5));}catch(NumberFormatException e){return;}
 		if(_perso.get_duelID() != guid || _perso.get_duelID() == -1)return;
-		GestorSalida.GAME_SEND_MAP_START_DUEL_TO_MAP(_perso.getActualMapa(),_perso.get_duelID(),_perso.get_GUID());
+		GestorSalida.GAME_SEND_MAP_START_DUEL_TO_MAP(_perso.getActualMapa(),_perso.get_duelID(),_perso.getID());
 		Pelea fight = _perso.getActualMapa().newFight(Mundo.getPersonnage(_perso.get_duelID()),_perso, Constantes.FIGHT_TYPE_CHALLENGE);
 		_perso.set_fight(fight);
 		Mundo.getPersonnage(_perso.get_duelID()).set_fight(fight);
@@ -4035,7 +4035,7 @@ public class JuegoThread implements Runnable {
 		try
 		{
 			if(_perso.get_duelID() == -1)return;
-			GestorSalida.GAME_SEND_CANCEL_DUEL_TO_MAP(_perso.getActualMapa(),_perso.get_duelID(),_perso.get_GUID());
+			GestorSalida.GAME_SEND_CANCEL_DUEL_TO_MAP(_perso.getActualMapa(),_perso.get_duelID(),_perso.getID());
 			Mundo.getPersonnage(_perso.get_duelID()).set_away(false);
 			Mundo.getPersonnage(_perso.get_duelID()).set_duelID(-1);
 			_perso.set_away(false);
@@ -4047,23 +4047,23 @@ public class JuegoThread implements Runnable {
 	{
 		if(_perso.getActualMapa().getEsquemaPelea().equalsIgnoreCase("|"))
 		{
-			GestorSalida.GAME_SEND_DUEL_Y_AWAY(_out, _perso.get_GUID());
+			GestorSalida.GAME_SEND_DUEL_Y_AWAY(_out, _perso.getID());
 			return;
 		}
 		try
 		{
 			int guid = Integer.parseInt(packet.substring(5));
 			if(_perso.is_away() || _perso.getPelea() != null){
-				GestorSalida.GAME_SEND_DUEL_Y_AWAY(_out, _perso.get_GUID());return;}
+				GestorSalida.GAME_SEND_DUEL_Y_AWAY(_out, _perso.getID());return;}
 			Personaje Target = Mundo.getPersonnage(guid);
 			if(Target == null) return;
 			if(Target.is_away() || Target.getPelea() != null || Target.getActualMapa().getID() != _perso.getActualMapa().getID()){
-				GestorSalida.GAME_SEND_DUEL_E_AWAY(_out, _perso.get_GUID());return;}
+				GestorSalida.GAME_SEND_DUEL_E_AWAY(_out, _perso.getID());return;}
 			_perso.set_duelID(guid);
 			_perso.set_away(true);
-			Mundo.getPersonnage(guid).set_duelID(_perso.get_GUID());
+			Mundo.getPersonnage(guid).set_duelID(_perso.getID());
 			Mundo.getPersonnage(guid).set_away(true);
-			GestorSalida.GAME_SEND_MAP_NEW_DUEL_TO_MAP(_perso.getActualMapa(),_perso.get_GUID(),guid);
+			GestorSalida.GAME_SEND_MAP_NEW_DUEL_TO_MAP(_perso.getActualMapa(),_perso.getID(),guid);
 		}catch(NumberFormatException e){return;}
 	}
 
@@ -4096,13 +4096,13 @@ public class JuegoThread implements Runnable {
 			//Si le path est invalide
 			if(result == -1000)
 			{
-				JuegoServidor.agregar_a_los_logs(_perso.getNombre()+"("+_perso.get_GUID()+") Tentative de  deplacement avec un path invalide");
+				JuegoServidor.agregar_a_los_logs(_perso.getNombre()+"("+_perso.getID()+") Tentative de  deplacement avec un path invalide");
 				path = GestorEncriptador.getHashedValueByInt(_perso.getOrientacion())+ GestorEncriptador.cellID_To_Code(_perso.getActualCelda().getID());
 			}
 			//On sauvegarde le path dans la variable
 			GA._args = path;
 			
-			GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(_perso.getActualMapa(), ""+GA._id, 1, _perso.get_GUID()+"", "a"+ GestorEncriptador.cellID_To_Code(_perso.getActualCelda().getID())+path);
+			GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(_perso.getActualMapa(), ""+GA._id, 1, _perso.getID()+"", "a"+ GestorEncriptador.cellID_To_Code(_perso.getActualCelda().getID())+path);
 			addAction(GA);
 			if(_perso.isSitted())_perso.setSitted(false);
 			_perso.set_away(true);
@@ -4311,7 +4311,7 @@ public class JuegoThread implements Runnable {
 			if ((val >= 21) || (val <= 0)) return;
 			
 			obj.obvijevanChangeStat(972, val);
-			GestorSalida.send(_perso, obj.obvijevanOCO_Packet(pos));
+			GestorSalida.enviar(_perso, obj.obvijevanOCO_Packet(pos));
 			if (pos != -1) GestorSalida.GAME_SEND_ON_EQUIP_ITEM(_perso.getActualMapa(), _perso);
 	}
 	private void Object_obvijevan_feed(String packet)
@@ -4335,13 +4335,13 @@ public class JuegoThread implements Runnable {
 		int qua = objVictime.getQuantity();
 		if (qua <= 1)
 		{
-			_perso.removeItem(objVictime.getGuid());
-			GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso, objVictime.getGuid());
+			_perso.removeItem(objVictime.getID());
+			GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_perso, objVictime.getID());
 		} else {
 			objVictime.setQuantity(qua - 1);
 			GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, objVictime);
 		}
-		GestorSalida.send(_perso, obj.obvijevanOCO_Packet(pos));
+		GestorSalida.enviar(_perso, obj.obvijevanOCO_Packet(pos));
 	}
 	
 	private void Object_obvijevan_desassocier(String packet)
@@ -4377,10 +4377,10 @@ public class JuegoThread implements Runnable {
 			obV.clearStats();
 			obV.parseStringToStats(obviStats);
 			if (_perso.addObjet(obV, true)) {
-				Mundo.addObjet(obV, true);
+				Mundo.addObjet(obV, _perso.getID(), true);
 			}
 			obj.removeAllObvijevanStats();
-			GestorSalida.send(_perso, obj.obvijevanOCO_Packet(pos));
+			GestorSalida.enviar(_perso, obj.obvijevanOCO_Packet(pos));
 			GestorSalida.GAME_SEND_ON_EQUIP_ITEM(_perso.getActualMapa(), _perso);
 	}
 	/*

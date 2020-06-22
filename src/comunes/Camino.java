@@ -14,77 +14,63 @@ public class Camino {
 
 	private static Integer _nSteps = 0;
 
-	public static int isValidPath(Mapa map, int cellID, AtomicReference<String> pathRef, Pelea fight)
-	{
-		synchronized(_nSteps)
-		{
+	public static int isValidPath(Mapa map, int cellID, AtomicReference<String> pathRef, Pelea fight) {
+		synchronized(_nSteps) {
 			_nSteps = 0;
 			int newPos = cellID;
 	        int Steps = 0;
 	        String path = pathRef.get();
-	        String newPath = "";
-	        for (int i = 0; i < path.length(); i += 3)
-	        {
+	        StringBuilder newPath = new StringBuilder();
+	        for (int i = 0; i < path.length(); i += 3) {
 	        	String SmallPath = path.substring(i, i+3);
 	        	char dir = SmallPath.charAt(0);
 	        	int dirCaseID = GestorEncriptador.cellCode_To_ID(SmallPath.substring(1));
 	        	_nSteps = 0;
 	        	//Si en combat et Si Pas début du path, on vérifie tacle
-	    		if(fight != null && i != 0 && getEnemyFighterArround(newPos, map, fight) != null)
-	    		{
-	    			pathRef.set(newPath);
+	    		if(fight != null && i != 0 && getEnemyFighterArround(newPos, map, fight) != null) {
+	    			pathRef.set(newPath.toString());
 	    			return Steps;
 	    		}
 	        	//Si en combat, et pas au début du path
-	    		if(fight != null && i != 0)
-	    		{
-	    			for(Piege p : fight.get_traps())
-	    			{
+	    		if(fight != null && i != 0) {
+	    			for(Piege p : fight.get_traps()) {
 	    				int dist = getDistanceBetween(map,p.get_cell().getID(),newPos);
-	    				if(dist <= p.get_size())
-	    				{
+	    				if(dist <= p.get_size()) {
 	    					//on arrete le déplacement sur la 1ere case du piege
-	    					pathRef.set(newPath);
+	    					pathRef.set(newPath.toString());
 	    	    			return Steps;
 	    				}
 	    			}
 	    		}
 	    		
 	        	String[] aPathInfos = ValidSinglePath(newPos, SmallPath, map, fight).split(":");
-	    		if(aPathInfos[0].equalsIgnoreCase("stop"))
-	    		{
+	    		if(aPathInfos[0].equalsIgnoreCase("stop")) {
 	    			newPos = Integer.parseInt(aPathInfos[1]);
 	    			Steps += _nSteps;
-	    			newPath += dir+ GestorEncriptador.cellID_To_Code(newPos);
-	    			pathRef.set(newPath);
+	    			newPath.append(dir).append(GestorEncriptador.cellID_To_Code(newPos));
+	    			pathRef.set(newPath.toString());
 	    			return -Steps;
-	    		}else if (aPathInfos[0].equalsIgnoreCase("ok"))
-	    		{
+	    		}else if (aPathInfos[0].equalsIgnoreCase("ok")) {
 	    			newPos = dirCaseID;
 	    			Steps += _nSteps;
-	    		}
-	    		else
-	    		{
-	    			pathRef.set(newPath);
+	    		} else {
+	    			pathRef.set(newPath.toString());
 	    			return -1000;
 	    		}
-	    		newPath += dir+ GestorEncriptador.cellID_To_Code(newPos);
+	    		newPath.append(dir).append(GestorEncriptador.cellID_To_Code(newPos));
 	    	}
-	        pathRef.set(newPath);
+	        pathRef.set(newPath.toString());
 	        return Steps;
 		}
 	}
 	
-	public static ArrayList<Fighter> getEnemyFighterArround(int cellID, Mapa map, Pelea fight)
-	{
+	public static ArrayList<Fighter> getEnemyFighterArround(int cellID, Mapa map, Pelea fight) {
 		char[] dirs = {'b','d','f','h'};
 		ArrayList<Fighter> enemy = new ArrayList<>();
 		
-		for(char dir : dirs)
-		{
+		for(char dir : dirs) {
 			Fighter f = map.getMapa(GetCaseIDFromDirrection(cellID, dir, map, false)).getFirstFighter();
-			if(f != null)
-			{
+			if(f != null) {
 				if(f.getTeam() != fight.getCurFighter().getTeam())
 					enemy.add(f);
 			}
@@ -95,21 +81,18 @@ public class Camino {
 		return enemy;
 	}
 
-	public static boolean isNextTo (int cell1, int cell2)
-	{
+	public static boolean isNextTo (int cell1, int cell2) {
 		if(cell1 + 14 == cell2 || cell1 + 15 == cell2 || cell1 - 14 == cell2 || cell1 -15 ==cell2)
 			return true;
 		else
 			return false;
 	}
 	
-	public static ArrayList<Fighter> getFightersAround(int cellID, Mapa map, Pelea fight)
-	{
+	public static ArrayList<Fighter> getFightersAround(int cellID, Mapa map, Pelea fight) {
 		char[] dirs = {'b','d','f','h'};
 		ArrayList<Fighter> fighters = new ArrayList<>();
 		
-		for(char dir : dirs)
-		{
+		for(char dir : dirs) {
 			Fighter f = map.getMapa(GetCaseIDFromDirrection(cellID, dir, map, false)).getFirstFighter();
 			if(f != null)
 				fighters.add(f);
@@ -117,44 +100,36 @@ public class Camino {
 		return fighters;
 	}
 	
-	public static String ValidSinglePath(int CurrentPos, String Path, Mapa map, Pelea fight)
-	{
+	public static String ValidSinglePath(int CurrentPos, String Path, Mapa map, Pelea fight) {
 		_nSteps = 0;
         char dir = Path.charAt(0);
         int dirCaseID = GestorEncriptador.cellCode_To_ID(Path.substring(1));
         if(fight != null && fight.isOccuped(dirCaseID))
         	return "no:";
         int lastPos = CurrentPos;
-        for (_nSteps = 1; _nSteps <= 64; _nSteps++)
-        {
-        	if (GetCaseIDFromDirrection(lastPos, dir, map, fight!=null) == dirCaseID)
-            {
+        for (_nSteps = 1; _nSteps <= 64; _nSteps++) {
+        	if (GetCaseIDFromDirrection(lastPos, dir, map, fight!=null) == dirCaseID) {
             	if(fight != null && fight.isOccuped(dirCaseID))return "stop:"+lastPos;
             	
             	if(map.getMapa(dirCaseID).isWalkable(true))return "ok:";
-            	else
-            	{
+            	else {
             		_nSteps--;
             		return ("stop:"+lastPos);
             	}
             }
             else lastPos = GetCaseIDFromDirrection(lastPos, dir, map, fight!=null);
         	
-            if(fight != null && fight.isOccuped(lastPos))
-            {
+            if(fight != null && fight.isOccuped(lastPos)) {
             	return "no:";
            	}
-            if(fight != null)
-            {
+            if(fight != null) {
 	            if(getEnemyFighterArround(lastPos, map, fight) != null)//Si ennemie proche
 	            {
 	            	return "stop:"+lastPos;
 	            }
-    			for(Piege p : fight.get_traps())
-    			{
+    			for(Piege p : fight.get_traps()) {
     				int dist = getDistanceBetween(map,p.get_cell().getID(),lastPos);
-    				if(dist <= p.get_size())
-    				{
+    				if(dist <= p.get_size()) {
     					//on arrete le déplacement sur la 1ere case du piege
     					return "stop:"+lastPos;
     				}
@@ -165,8 +140,7 @@ public class Camino {
         return "no:";
 	}
 
-	public static int GetCaseIDFromDirrection(int CaseID, char Direction, Mapa map, boolean Combat)
-	{
+	public static int GetCaseIDFromDirrection(int CaseID, char Direction, Mapa map, boolean Combat) {
 		return switch (Direction) {
 			case 'a' -> Combat ? -1 : CaseID + 1;
 			case 'b' -> CaseID + map.get_w();
@@ -180,8 +154,7 @@ public class Camino {
 		};
 	}
 	
-	public static int getDistanceBetween(Mapa map, int id1, int id2)
-	{
+	public static int getDistanceBetween(Mapa map, int id1, int id2) {
 		if(id1 == id2)return 0;
 		if(map == null)return 0;
 		int diffX = Math.abs(getCellXCoord(map, id1) - getCellXCoord(map,id2));
@@ -189,8 +162,7 @@ public class Camino {
 		return (diffX + diffY);
 	}
 
-	public static int newCaseAfterPush(Pelea fight, Case CCase, Case TCase, int value)
-	{
+	public static int newCaseAfterPush(Pelea fight, Case CCase, Case TCase, int value) {
 		//Si c'est les memes case, il n'y a pas a bouger
 		boolean onTrap = false;
 		if(CCase.getID() == TCase.getID())
@@ -198,13 +170,11 @@ public class Camino {
 		Mapa map = fight.get_map();
 		char c = getDirBetweenTwoCase(CCase.getID(), TCase.getID(), map, true);
 		int id = TCase.getID();
-		if(value <0)
-		{
+		if(value <0) {
 			c = getOpositeDirection(c);
 			value = -value;
 		}
-		for(int a = 0; a<value;a++)
-		{
+		for(int a = 0; a<value;a++) {
 			int nextCase = GetCaseIDFromDirrection(id, c,map, true);
 			
 			for(Piege p : fight.get_traps()) {
@@ -230,8 +200,7 @@ public class Camino {
 		return id;
 	}
 	
-	private static char getOpositeDirection(char c)
-	{
+	private static char getOpositeDirection(char c) {
 		return switch (c) {
 			case 'a' -> 'e';
 			case 'b' -> 'f';
@@ -245,15 +214,13 @@ public class Camino {
 		};
 	}
 
-	public static boolean casesAreInSameLine(Mapa map, int c1, int c2, char dir)
-	{
+	public static boolean casesAreInSameLine(Mapa map, int c1, int c2, char dir) {
 		if(c1 == c2)
 			return true;
 		
 		if(dir != 'z')//Si la direction est définie
 		{
-			for(int a = 0;a<70;a++)
-			{
+			for(int a = 0;a<70;a++) {
 				if(GetCaseIDFromDirrection(c1, dir, map, true) == c2)
 					return true;
 				if(GetCaseIDFromDirrection(c1, dir, map, true) == -1)
@@ -263,11 +230,9 @@ public class Camino {
 		}else//Si on doit chercher dans toutes les directions
 		{
 			char[] dirs = {'b','d','f','h'};
-			for(char d : dirs)
-			{
+			for(char d : dirs) {
 				int c = c1;
-				for(int a = 0;a<70;a++)
-				{
+				for(int a = 0;a<70;a++) {
 					if(GetCaseIDFromDirrection(c, d, map, true) == c2)
 						return true;
 					c = GetCaseIDFromDirrection(c, d, map, true);
@@ -340,16 +305,14 @@ public class Camino {
 		return map.getMapa(new2CellID).getFirstFighter();
 	}
 
-	public static char getDirBetweenTwoCase(int cell1ID, int cell2ID, Mapa map, boolean Combat)
-	{
+	public static char getDirBetweenTwoCase(int cell1ID, int cell2ID, Mapa map, boolean Combat) {
 		// ne permet d'avoir que les directions uniques (pas de composition de direction)
 		ArrayList<Character> dirs = new ArrayList<>();
 		dirs.add('b');
 		dirs.add('d');
 		dirs.add('f');
 		dirs.add('h');
-		if(!Combat)
-		{
+		if(!Combat) {
 			dirs.add('a');
 			dirs.add('c');
 			dirs.add('e');
@@ -358,8 +321,7 @@ public class Camino {
 		for(char c : dirs) // pour chaque direction
 		{
 			int cell = cell1ID; // on considère la case de départ
-			for(int i = 0; i <= 64; i++)
-			{
+			for(int i = 0; i <= 64; i++) {
 				if(GetCaseIDFromDirrection(cell, c, map, Combat) == cell2ID) // si pour cette direction la prochaine case est l'arrivée
 					return c; // on renvoie la direction
 				cell = GetCaseIDFromDirrection(cell, c, map, Combat); // on continue dans cette direction
@@ -382,8 +344,8 @@ public class Camino {
 				for(int a = 0; a < taille;a++)
 				{
 					char[] dirs = {'b','d','f','h'};
-					ArrayList<Case> cases2 = new ArrayList<>();//on évite les modifications concurrentes
-					cases2.addAll(cases);
+					//on évite les modifications concurrentes
+					ArrayList<Case> cases2 = new ArrayList<>(cases);
 					for(Case aCell : cases2)
 					{
 						for(char d : dirs)
@@ -603,22 +565,19 @@ public class Camino {
 		return toReturn;
 	}
 
-	public static int getNearestCellAround(Mapa map, int startCell, int endCell, ArrayList<Case> forbidens)
-	{
+	public static int getNearestCellAround(Mapa map, int startCell, int endCell, ArrayList<Case> forbidens) {
 		//On prend la cellule autour de la cible, la plus proche
 		int dist = 1000;
 		int cellID = startCell;
 		if(forbidens == null)forbidens = new ArrayList<>();
 		char[] dirs = {'b','d','f','h'};
-		for(char d : dirs)
-		{
+		for(char d : dirs) {
 			int c = Camino.GetCaseIDFromDirrection(startCell, d, map, true);
 			int dis = Camino.getDistanceBetween(map, endCell, c);
 			
 			if(dis < dist && map.getMapa(c).isWalkable(true)
 					&& map.getMapa(c).getFirstFighter() == null
-					&& !forbidens.contains(map.getMapa(c)))
-			{
+					&& !forbidens.contains(map.getMapa(c))) {
 				dist = dis;
 				cellID = c;
 			}
@@ -626,8 +585,8 @@ public class Camino {
 		//On renvoie -1 si pas trouvé
 		return cellID==startCell?-1:cellID;
 	}
-	public static ArrayList<Case> getShortestPathBetween(Mapa map, int start, int dest, int distMax)
-	{	
+
+	public static ArrayList<Case> getShortestPathBetween(Mapa map, int start, int dest, int distMax) {
 		ArrayList<Case> curPath = new ArrayList<>();
 		ArrayList<Case> curPath2 = new ArrayList<>();
 		ArrayList<Case> closeCells = new ArrayList<>();
@@ -637,28 +596,21 @@ public class Camino {
 		int stepNum = 0;
 		boolean stop = false;
 		
-		while(!stop && stepNum++ <= limit)
-		{
+		while(!stop && stepNum++ <= limit) {
 			int nearestCell = getNearestCellAround(map,curCase.getID(),dest,closeCells);
-			if(nearestCell == -1)
-			{
+			if(nearestCell == -1) {
 				closeCells.add(curCase);
-				if(curPath.size() > 0)
-				{
+				if(curPath.size() > 0) {
 				 	curPath.remove(curPath.size()-1);
 				 	if(curPath.size()>0)curCase = curPath.get(curPath.size()-1);
 				 	else curCase = map.getMapa(start);
-				}
-				else
-				{
+				} else {
 					curCase = map.getMapa(start);
 				}
-			}else if(distMax == 0 && nearestCell == dest)
-			{
+			}else if(distMax == 0 && nearestCell == dest) {
 			 	curPath.add(map.getMapa(dest));
 			 	break;
-			}else if(distMax > Camino.getDistanceBetween(map, nearestCell, dest))
-			{
+			}else if(distMax > Camino.getDistanceBetween(map, nearestCell, dest)) {
 			 	curPath.add(map.getMapa(dest));
 			 	break; 
 			}else//on continue
@@ -671,34 +623,27 @@ public class Camino {
 		
 		curCase = map.getMapa(start);
 		closeCells.clear();
-		if(!curPath.isEmpty())
-		{
+		if(!curPath.isEmpty()) {
 			closeCells.add(curPath.get(0));
 		}
 		
-		while(!stop && stepNum++ <= limit)
-		{
+		while(!stop && stepNum++ <= limit) {
 			
 			int nearestCell = getNearestCellAround(map,curCase.getID(),dest,closeCells);
-			if(nearestCell == -1)
-			{
+			if(nearestCell == -1) {
 				closeCells.add(curCase);
-				if(curPath2.size() > 0)
-				{
+				if(curPath2.size() > 0) {
 					curPath2.remove(curPath2.size()-1);
 				 	if(curPath2.size()>0)curCase = curPath2.get(curPath2.size()-1);
 				 	else curCase = map.getMapa(start);
-				}
-				else//Si retour a zero
+				} else//Si retour a zero
 				{
 					curCase = map.getMapa(start);
 				}
-			}else if(distMax == 0 && nearestCell == dest)
-			{
+			}else if(distMax == 0 && nearestCell == dest) {
 				curPath2.add(map.getMapa(dest));
 			 	break;
-			}else if(distMax > Camino.getDistanceBetween(map, nearestCell, dest))
-			{
+			}else if(distMax > Camino.getDistanceBetween(map, nearestCell, dest)) {
 			 	curPath2.add(map.getMapa(dest));
 			 	break; 
 			}else//on continue
@@ -714,8 +659,7 @@ public class Camino {
 		return curPath;
 	}
 	
-	public static ArrayList<Integer> getListCaseFromFighter(Pelea fight, Fighter fighter)
-	{
+	public static ArrayList<Integer> getListCaseFromFighter(Pelea fight, Fighter fighter) {
 		ArrayList<Integer> cells = new ArrayList<>();
 		int start = fighter.get_fightCell().getID();
 		int[] curPath;
@@ -726,16 +670,13 @@ public class Camino {
 			return null;
 		if(curPath.length == 0)
 			return null;
-		while(curPath[0] != 5)
-		{
+		while(curPath[0] != 5) {
 			curPath[i]++;
 			if(curPath[i] == 5 && i != 0)
 			{
 				curPath[i] = 0;
 				i--;
-			}
-			else 
-			{
+			} else {
 				int curCell = getCellFromPath(start,curPath);
 				if(fight.get_map().getMapa(curCell).isWalkable(true) && fight.get_map().getMapa(curCell).getFirstFighter() == null)
 				{
@@ -752,11 +693,9 @@ public class Camino {
 		return triCellList(fight, fighter,cells);
 	}
 	
-	public static int getCellFromPath(int start,int[] path)
-	{
+	public static int getCellFromPath(int start,int[] path) {
 		int cell = start,i = 0;
-		while(i < path.length)
-		{
+		while(i < path.length) {
 			if(path[i] == 1)
 				cell -= 15;
 			if(path[i] == 2)
@@ -770,21 +709,17 @@ public class Camino {
 		return cell;
 	}
 	
-	public static ArrayList<Integer> triCellList(Pelea fight, Fighter fighter, ArrayList<Integer> cells)
-	{
+	public static ArrayList<Integer> triCellList(Pelea fight, Fighter fighter, ArrayList<Integer> cells) {
 		ArrayList<Integer> Fcells = new ArrayList<>();
 		ArrayList<Integer> copie = cells;
 		int dist = 100;
 		int curCell = 0;
 		int curIndex = 0;
-		while(copie.size() > 0)
-		{
+		while(copie.size() > 0) {
 			dist = 100;
-			for(int i : copie)
-			{
+			for(int i : copie) {
 				int d = getDistanceBetween(fight.get_map(), fighter.get_fightCell().getID(), i);
-				if(dist > d)
-				{
+				if(dist > d) {
 					dist = d;
 					curCell = i;
 					curIndex = copie.indexOf(i);
@@ -797,12 +732,10 @@ public class Camino {
 		return Fcells;
 	}
 	
-	public static boolean isBord1(int id)
-	{
+	public static boolean isBord1(int id) {
 		int[] bords = {1,30,59,88,117,146,175,204,233,262,291,320,349,378,407,436,465,15,44,73,102,131,160,189,218,247,276,305,334,363,392,421,450,479};
 		ArrayList <Integer> test = new ArrayList<>();
-		for(int i : bords)
-		{
+		for(int i : bords) {
 			test.add(i);
 		}
 		
@@ -812,12 +745,10 @@ public class Camino {
 			return false;
 	}
 	
-	public static boolean isBord2(int id)
-	{
+	public static boolean isBord2(int id) {
 		int[] bords = {16,45,74,103,132,161,190,219,248,277,306,335,364,393,422,451,29,58,87,116,145,174,203,232,261,290,319,348,377,406,435,464};
 		ArrayList <Integer> test = new ArrayList<>();
-		for(int i : bords)
-		{
+		for(int i : bords) {
 			test.add(i);
 		}
 		
@@ -833,20 +764,17 @@ public class Camino {
 		boolean next = false;
 		int[] dir1 = {1,-1,29,-29,15,14,-15,-14}; // viable uniquement pour les maps de taille moyenne
 		
-		for(int i : dir1)
-		{
+		for(int i : dir1) {
 			Los.clear();
 			cell = cell1;
 			Los.add(cell);
 			next = false;
-			while(!next)
-			{
+			while(!next) {
 				cell += i;
 				Los.add(cell);
 				if(isBord2(cell) || isBord1(cell) || cell <= 0 || cell >= 480)
 					next=true;
-				if(cell == cell2)
-				{
+				if(cell == cell2) {
 					return Los;
 				}
 			}

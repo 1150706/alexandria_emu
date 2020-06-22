@@ -669,7 +669,7 @@ object GestorSQL {
 
     @JvmStatic
 	fun eliminar_personaje_db(perso: Personaje): Boolean {
-        val guid = perso._GUID
+        val guid = perso.id
         var baseQuery = "DELETE FROM datos_personajes WHERE id = ?;"
         return try {
             var p = nueva_consulta(baseQuery, _dinamicos)
@@ -710,7 +710,7 @@ object GestorSQL {
                 " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'', '');"
         return try {
             val p = nueva_consulta(baseQuery, _dinamicos)
-            p.setInt(1, perso._GUID)
+            p.setInt(1, perso.id)
             p.setString(2, perso.nombre)
             p.setInt(3, perso.sexo)
             p.setInt(4, perso.clase)
@@ -889,7 +889,7 @@ object GestorSQL {
             p.setInt(34, if (_perso.mount != null) _perso.mount.id else -1)
             p.setByte(35, _perso._title)
             p.setInt(36, _perso.wife)
-            p.setInt(37, _perso._GUID)
+            p.setInt(37, _perso.id)
             p.executeUpdate()
             if (_perso.miembroGremio != null) actualizar_miembro_del_gremio(_perso.miembroGremio)
             if (_perso.mount != null) actualizar_informacion_monturas(_perso.mount)
@@ -901,7 +901,7 @@ object GestorSQL {
             exitProcess(1)
         }
         if (saveItem) {
-            baseQuery = "UPDATE `datos_objetos` SET cantidad = ?, ubicacion = ?, caracteristicas = ? WHERE id = ?;"
+            baseQuery = "UPDATE `datos_objetos` SET cantidad = ?, ubicacion = ?, caracteristicas = ?, dueño = ? WHERE id = ?;"
             try {
                 p = nueva_consulta(baseQuery, _dinamicos)
             } catch (e1: SQLException) {
@@ -914,7 +914,8 @@ object GestorSQL {
                     p!!.setInt(1, obj.quantity)
                     p.setInt(2, obj.position)
                     p.setString(3, obj.parseToSave())
-                    p.setInt(4, idStr.toInt())
+                    p.setInt(4, _perso.id)
+                    p.setInt(5, idStr.toInt())
                     p.execute()
                 } catch (e: Exception) {
                     continue
@@ -1094,15 +1095,16 @@ object GestorSQL {
     }
 
     @JvmStatic
-	fun guardar_nuevo_objeto(item: Objeto) {
+	fun guardar_nuevo_objeto(item: Objeto, idpersonaje: Int) {
         try {
-            val baseQuery = "REPLACE INTO `datos_objetos` VALUES(?,?,?,?,?);"
+            val baseQuery = "REPLACE INTO `datos_objetos` VALUES(?,?,?,?,?,?);"
             val p = nueva_consulta(baseQuery, _dinamicos)
-            p.setInt(1, item.guid)
+            p.setInt(1, item.id)
             p.setInt(2, item.template.id)
             p.setInt(3, item.quantity)
             p.setInt(4, item.position)
             p.setString(5, item.parseToSave())
+            p.setInt(6, idpersonaje)
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
@@ -1207,8 +1209,8 @@ object GestorSQL {
     }
 
     @JvmStatic
-	fun cargando_objetos(ids: String) {
-        val req = "SELECT * FROM datos_objetos WHERE id IN ($ids);"
+	fun cargando_objetos(ids: Int) {
+        val req = "SELECT * FROM datos_objetos WHERE dueño = $ids;"
         try {
             val RS = ejecutar_consulta(req, MainServidor.DB_DINAMICOS)
             while (RS!!.next()) {
@@ -1217,13 +1219,14 @@ object GestorSQL {
                 val qua = RS.getInt("cantidad")
                 val pos = RS.getInt("ubicacion")
                 val stats = RS.getString("caracteristicas")
-                addObjet(newObjet(guid, tempID, qua, pos, stats), false)
+                val dueño = RS.getInt("dueño")
+                addObjet(newObjet(guid, tempID, qua, pos, stats), dueño, false)
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
             println("Requete: \n$req")
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -1242,15 +1245,16 @@ object GestorSQL {
     }
 
     @JvmStatic
-	fun guardar_objeto(item: Objeto) {
-        val baseQuery = "REPLACE INTO `datos_objetos` VALUES (?,?,?,?,?);"
+	fun guardar_objeto(item: Objeto, personaje: Int) {
+        val baseQuery = "REPLACE INTO `datos_objetos` VALUES (?,?,?,?,?,?);"
         try {
             val p = nueva_consulta(baseQuery, _dinamicos)
-            p.setInt(1, item.guid)
+            p.setInt(1, item.id)
             p.setInt(2, item.template.id)
             p.setInt(3, item.quantity)
             p.setInt(4, item.position)
             p.setString(5, item.parseToSave())
+            p.setInt(6, personaje)
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
@@ -1948,7 +1952,7 @@ object GestorSQL {
                         obj = t.createNewItem(1, false) //Si mis à "true" l'objet à des jets max. Sinon ce sont des jets aléatoire
                         if (obj == null) continue@loop
                         if (perso.addObjet(obj, true)) //Si le joueur n'avait pas d'item similaire
-                            addObjet(obj, true)
+                            addObjet(obj, perso.id,true)
                         JuegoServidor.addToSockLog("Objet " + nombre + " ajouter a " + perso.nombre + " avec des stats aleatoire")
                         GestorSalida.GAME_SEND_MESSAGE(perso, "L'objet \"" + t.name + "\" viens d'etre ajouter a votre personnage", couleur)
                     }
@@ -1958,7 +1962,7 @@ object GestorSQL {
                         obj = t.createNewItem(1, true) //Si mis à "true" l'objet à des jets max. Sinon ce sont des jets aléatoire
                         if (obj == null) continue@loop
                         if (perso.addObjet(obj, true)) //Si le joueur n'avait pas d'item similaire
-                            addObjet(obj, true)
+                            addObjet(obj, perso.id,true)
                         JuegoServidor.addToSockLog("Objet " + nombre + " ajoute a " + perso.nombre + " avec des stats MAX")
                         GestorSalida.GAME_SEND_MESSAGE(perso, "L'objet \"" + t.name + "\" avec des stats maximum, viens d'etre ajoute a votre personnage", couleur)
                     }
@@ -2058,7 +2062,8 @@ object GestorSQL {
                 val qua = RS.getInt("cantidad")
                 val pos = RS.getInt("ubicacion")
                 val stats = RS.getString("caracteristicas")
-                addObjet(Objeto(guid, tempID, qua, pos, stats), false)
+                val dueño = RS.getInt("dueño")
+                addObjet(Objeto(guid, tempID, qua, pos, stats), dueño, false)
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
@@ -2368,7 +2373,8 @@ object GestorSQL {
                 val qua = RS.getInt("cantidad")
                 val pos = RS.getInt("ubicacion")
                 val stats = RS.getString("caracteristicas")
-                addObjet(newObjet(guid, tempID, qua, pos, stats), false)
+                val dueño = RS.getInt("dueño")
+                addObjet(newObjet(guid, tempID, qua, pos, stats), dueño, false)
             }
 
             //Load HDV entry
@@ -2405,7 +2411,7 @@ object GestorSQL {
                 queries.setInt(2, curEntry.owner)
                 queries.setInt(3, curEntry.price)
                 queries.setInt(4, curEntry.getAmount(false).toInt())
-                queries.setInt(5, curEntry.objet.guid)
+                queries.setInt(5, curEntry.objet.id)
                 queries.execute()
             }
             cerrar_nueva_consulta(queries)

@@ -183,7 +183,7 @@ public class Personaje {
 		
 		public boolean isChief(int guid)
 		{
-			return _chief.get_GUID() == guid;
+			return _chief.getID() == guid;
 		}
 		
 		public void addPerso(Personaje p)
@@ -221,7 +221,7 @@ public class Personaje {
 				if(_persos.get(0).getCuenta() == null || _persos.get(0).getCuenta().getJuegoThread() == null)return;
 				GestorSalida.GAME_SEND_PV_PACKET(_persos.get(0).getCuenta().getJuegoThread().get_out(),"");
 			} else
-				GestorSalida.GAME_SEND_PM_DEL_PACKET_TO_GROUP(this,p.get_GUID());
+				GestorSalida.GAME_SEND_PM_DEL_PACKET_TO_GROUP(this,p.getID());
 		}
 	}
 
@@ -453,7 +453,7 @@ public class Personaje {
 	public Personaje(int _guid, String _name, int _sexe, int _classe,
 					 int _color1, int _color2, int _color3, long _kamas, int pts, int _capital, int _energy, int _lvl, long exp,
 					 int _size, int _gfxid, byte alignement, int _compte, Map<Integer,Integer> stats,
-					 byte seeFriend, byte seeAlign, byte seeSeller, String canaux, short map, int cell, String stuff, String storeObjets, int pdvPer, String spells, String savePos, String jobs,
+					 byte seeFriend, byte seeAlign, byte seeSeller, String canaux, short map, int cell, String objetos, String storeObjets, int pdvPer, String spells, String savePos, String jobs,
 					 int mountXp, int mount, int honor, int deshonor, int alvl, String z, byte title, int wifeGuid)
 	{
 		this._GUID = _guid;
@@ -519,15 +519,15 @@ public class Personaje {
 			MainServidor.closeServers();
 		}
 
-		if(!stuff.equals("")) {
-			if(stuff.charAt(stuff.length()-1) == '|')
-				stuff = stuff.substring(0,stuff.length()-1);
-			GestorSQL.cargando_objetos(stuff.replace("|",","));
+		if(!objetos.equals("")) {
+			if(objetos.charAt(objetos.length()-1) == '|')
+				objetos = objetos.substring(0,objetos.length()-1);
+			GestorSQL.cargando_objetos(this.getID());
 		}
-		for(String item : stuff.split("\\|")) {
+		for(String item : objetos.split("\\|")) {
 			if(item.equals(""))continue;
 			String[] infos = item.split(":");
-			
+
 			int guid = 0;
 			try {
 				guid = Integer.parseInt(infos[0]);
@@ -535,8 +535,9 @@ public class Personaje {
 
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null)continue;
-			_items.put(obj.getGuid(), obj);
-		}
+			_items.put(obj.getID(), obj);
+	}
+
 		if(!storeObjets.equals("")) {
 			for(String _storeObjets : storeObjets.split("\\|")) {
 				String[] infos = _storeObjets.split(",");
@@ -550,7 +551,7 @@ public class Personaje {
 				Objeto obj = Mundo.getObjet(guid);
 				if(obj == null)continue;
 				
-				_storeItems.put(obj.getGuid(), price);
+				_storeItems.put(obj.getID(), price);
 			}
 		}
 		this._PDVMAX = (_lvl-1)*5+ Constantes.getBasePdv(_classe)+getTotalStats().getEffect(Constantes.STATS_ADD_VITA);
@@ -599,7 +600,7 @@ public class Personaje {
 		if(!stuff.equals("")) {
 			if(stuff.charAt(stuff.length()-1) == '|')
 				stuff = stuff.substring(0,stuff.length()-1);
-			GestorSQL.cargando_objetos(stuff.replace("|",","));
+			GestorSQL.cargando_objetos(this.getID());
 		}
 		for(String item : stuff.split("\\|")) {
 			if(item.equals(""))continue;
@@ -607,7 +608,7 @@ public class Personaje {
 			int guid = Integer.parseInt(infos[0]);
 			Objeto obj = Mundo.getObjet(guid);
 			if( obj == null)continue;
-			_items.put(obj.getGuid(), obj);
+			_items.put(obj.getID(), obj);
 		}
 		
 		this._PDVMAX = (_lvl-1)*5+ Constantes.getBasePdv(_classe)+getTotalStats().getEffect(Constantes.STATS_ADD_VITA);
@@ -888,7 +889,7 @@ public class Personaje {
 		_gfxID = _gfxid;
 	}
 
-	public int get_GUID() {
+	public int getID() {
 		return _GUID;
 	}
 
@@ -1152,9 +1153,9 @@ public class Personaje {
 		if(_compte.getJuegoThread() == null) return;
 		PrintWriter out = _compte.getJuegoThread().get_out();
 		
-		if(is_showSeller() == true && Mundo.getSeller(getActualMapa().getID()) != null && Mundo.getSeller(getActualMapa().getID()).contains(get_GUID())) {
-			Mundo.removeSeller(get_GUID(), getActualMapa().getID());
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), get_GUID());
+		if(is_showSeller() == true && Mundo.getSeller(getActualMapa().getID()) != null && Mundo.getSeller(getActualMapa().getID()).contains(getID())) {
+			Mundo.removeSeller(getID(), getActualMapa().getID());
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), getID());
 			set_showSeller(false);
 		}
 		
@@ -1631,7 +1632,7 @@ public class Personaje {
 		if(_items.isEmpty())return "";
 		for(Entry<Integer, Objeto> entry : _items.entrySet()) {
 			Objeto obj = entry.getValue();
-			str.append(obj.getGuid()).append("|");
+			str.append(obj.getID()).append("|");
 		}
 		return str.toString();
 	}
@@ -1646,19 +1647,19 @@ public class Personaje {
 				&& obj.getPosition() == Constantes.ITEM_POS_NO_EQUIPED)//Si meme Template et Memes Stats et Objet non équipé
 			{
 				obj.setQuantity(obj.getQuantity()+newObj.getQuantity());//On ajoute QUA item a la quantité de l'objet existant
-				GestorSQL.guardar_objeto(obj);
+				GestorSQL.guardar_objeto(obj, this.getID());
 				if(_isOnline) GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this,obj);
 				return false;
 			}
 		}
-		_items.put(newObj.getGuid(), newObj);
+		_items.put(newObj.getID(), newObj);
 		GestorSalida.GAME_SEND_OAKO_PACKET(this,newObj);
 		return true;
 	}
 
 	public void addObjet(Objeto newObj)
 	{
-		_items.put(newObj.getGuid(), newObj);
+		_items.put(newObj.getID(), newObj);
 	}
 
 	public Map<Integer, Objeto> getItems()
@@ -1755,12 +1756,12 @@ public class Personaje {
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this, obj);
 			}else {
 				//on supprime de l'inventaire et du Monde
-				_items.remove(obj.getGuid());
+				_items.remove(obj.getID());
 				if(deleteFromWorld)
-					Mundo.removeItem(obj.getGuid());
+					Mundo.removeItem(obj.getID());
 				//on envoie le packet si connecté
 				if(send && _isOnline)
-					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, obj.getGuid());
+					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, obj.getID());
 			}
 		}
 	}
@@ -1839,7 +1840,7 @@ public class Personaje {
 			
 			if(obj.getTemplate().getID() == exObj.getTemplate().getID()
 				&& obj.getStats().isSameStats(exObj.getStats())
-				&& obj.getGuid() != exObj.getGuid()
+				&& obj.getID() != exObj.getID()
 				&& obj.getPosition() == Constantes.ITEM_POS_NO_EQUIPED)
 			return obj;
 		}
@@ -2022,7 +2023,7 @@ public class Personaje {
 				if(t.isConectado())
 					GestorSalida.GAME_SEND_FLAG_PACKET(t, this);
 				else
-					_Follower.remove(t.get_GUID());
+					_Follower.remove(t.getID());
 			}
 		}
 
@@ -2092,10 +2093,10 @@ public class Personaje {
 			//S'il ne reste pas d'item dans le sac
 			if(newQua <= 0) {
 				//On enleve l'objet du sac du joueur
-				removeItem(PersoObj.getGuid());
+				removeItem(PersoObj.getID());
 				//On met l'objet du sac dans la banque, avec la meme quantité
-				_compte.getBank().put(PersoObj.getGuid(), PersoObj);
-				String str = "O+"+PersoObj.getGuid()+"|"+PersoObj.getQuantity()+"|"+PersoObj.getTemplate().getID()+"|"+PersoObj.parseStatsString();
+				_compte.getBank().put(PersoObj.getID(), PersoObj);
+				String str = "O+"+PersoObj.getID()+"|"+PersoObj.getQuantity()+"|"+PersoObj.getTemplate().getID()+"|"+PersoObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, guid);
 				
@@ -2105,11 +2106,11 @@ public class Personaje {
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet a la banque et au monde
 				BankObj = Objeto.getCloneObjet(PersoObj, qua);
-				Mundo.addObjet(BankObj, true);
-				_compte.getBank().put(BankObj.getGuid(), BankObj);
+				Mundo.addObjet(BankObj, this.getID(),true);
+				_compte.getBank().put(BankObj.getID(), BankObj);
 				
 				//Envoie des packets
-				String str = "O+"+BankObj.getGuid()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
+				String str = "O+"+BankObj.getID()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this, PersoObj);
 				
@@ -2119,13 +2120,13 @@ public class Personaje {
 			//S'il ne reste pas d'item dans le sac
 			if(newQua <= 0) {
 				//On enleve l'objet du sac du joueur
-				removeItem(PersoObj.getGuid());
+				removeItem(PersoObj.getID());
 				//On enleve l'objet du monde
-				Mundo.removeItem(PersoObj.getGuid());
+				Mundo.removeItem(PersoObj.getID());
 				//On ajoute la quantité a l'objet en banque
 				BankObj.setQuantity(BankObj.getQuantity() + PersoObj.getQuantity());
 				//on envoie l'ajout a la banque de l'objet
-				String str = "O+"+BankObj.getGuid()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
+				String str = "O+"+BankObj.getID()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				//on envoie la supression de l'objet du sac au joueur
 				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, guid);
@@ -2135,7 +2136,7 @@ public class Personaje {
 				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
 				BankObj.setQuantity(BankObj.getQuantity() + qua);
-				String str = "O+"+BankObj.getGuid()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
+				String str = "O+"+BankObj.getID()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this, PersoObj);
 				
@@ -2186,15 +2187,15 @@ public class Personaje {
 				//On crée une copy de l'item en banque
 				PersoObj = Objeto.getCloneObjet(BankObj, qua);
 				//On l'ajoute au monde
-				Mundo.addObjet(PersoObj, true);
+				Mundo.addObjet(PersoObj, this.getID(),true);
 				//On retire X objet de la banque
 				BankObj.setQuantity(newQua);
 				//On l'ajoute au joueur
-				_items.put(PersoObj.getGuid(), PersoObj);
+				_items.put(PersoObj.getID(), PersoObj);
 				
 				//On envoie les packets
 				GestorSalida.GAME_SEND_OAKO_PACKET(this,PersoObj);
-				String str = "O+"+BankObj.getGuid()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
+				String str = "O+"+BankObj.getID()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				
 			}
@@ -2202,8 +2203,8 @@ public class Personaje {
 			//S'il ne reste rien en banque
 			if(newQua <= 0) {
 				//On retire l'item de la banque
-				_compte.getBank().remove(BankObj.getGuid());
-				Mundo.removeItem(BankObj.getGuid());
+				_compte.getBank().remove(BankObj.getID());
+				Mundo.removeItem(BankObj.getID());
 				//On Modifie la quantité de l'item du sac du joueur
 				PersoObj.setQuantity(PersoObj.getQuantity() + BankObj.getQuantity());
 				
@@ -2221,7 +2222,7 @@ public class Personaje {
 				
 				//On envoie les packets
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this,PersoObj);
-				String str = "O+"+BankObj.getGuid()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
+				String str = "O+"+BankObj.getID()+"|"+BankObj.getQuantity()+"|"+BankObj.getTemplate().getID()+"|"+BankObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(this, str);
 				
 			}
@@ -2238,9 +2239,9 @@ public class Personaje {
 		
 		_inMountPark = _curCarte.getMountPark();
 		_away = true;
-		String str = _inMountPark.parseData(get_GUID(), (_inMountPark.get_owner() == -1));
+		String str = _inMountPark.parseData(getID(), (_inMountPark.get_owner() == -1));
 		
-		if(_inMountPark.get_owner() == -1 || _inMountPark.get_owner() == this.get_GUID())//Public ou le proprio
+		if(_inMountPark.get_owner() == -1 || _inMountPark.get_owner() == this.getID())//Public ou le proprio
 		{
 			GestorSalida.GAME_SEND_ECK_PACKET(this, 16, str);
 		}else if(get_guild() != null && 
@@ -2299,11 +2300,11 @@ public class Personaje {
 				}else
 				{
 					//on supprime de l'inventaire et du Monde
-					_items.remove(obj.getGuid());
-					Mundo.removeItem(obj.getGuid());
+					_items.remove(obj.getID());
+					Mundo.removeItem(obj.getID());
 					//on envoie le packet si connecté
 					if(_isOnline)
-						GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, obj.getGuid());
+						GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, obj.getID());
 				}
 				return;
 			}
@@ -2320,11 +2321,11 @@ public class Personaje {
 					
 					for(Objeto o : remove) {
 						//on supprime de l'inventaire et du Monde
-						_items.remove(o.getGuid());
-						Mundo.removeItem(o.getGuid());
+						_items.remove(o.getID());
+						Mundo.removeItem(o.getID());
 						//on envoie le packet si connecté
 						if(_isOnline)
-							GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, o.getGuid());
+							GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, o.getID());
 					}
 				}else {
 					// on réduit le compteur
@@ -2477,7 +2478,7 @@ public class Personaje {
 		}
 		//on envoie les packets
 		if(getPelea() != null && getPelea().get_state() == 2) {
-			GestorSalida.GAME_SEND_ALTER_FIGHTER_MOUNT(getPelea(), getPelea().getFighterByPerso(this), get_GUID(), getPelea().getTeamID(get_GUID()), getPelea().getOtherTeamID(get_GUID()));
+			GestorSalida.GAME_SEND_ALTER_FIGHTER_MOUNT(getPelea(), getPelea().getFighterByPerso(this), getID(), getPelea().getTeamID(getID()), getPelea().getOtherTeamID(getID()));
 		}else {
 			GestorSalida.GAME_SEND_ALTER_GM_PACKET(_curCarte,this);
 		}
@@ -3045,7 +3046,7 @@ public class Personaje {
 	
 	public void MarryTo(Personaje wife)
 	{
-		_wife = wife.get_GUID();
+		_wife = wife.getID();
 		GestorSQL.guardar_personaje(this,true);
 	}
 	
@@ -3143,7 +3144,7 @@ public class Personaje {
 				|| this.getOrientacion() == 6)
 		{
 			this.set_orientation(toOrientation);
-			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(getActualMapa(), this.get_GUID(), toOrientation);
+			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(getActualMapa(), this.getID(), toOrientation);
 		}
 	}
 	/*
@@ -3179,7 +3180,7 @@ public class Personaje {
 		set_away(false);
 		set_Speed(0);
 		GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(this);
-		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), get_GUID());
+		GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(getActualMapa(), getID());
 		GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(getActualMapa(), this);
 	}
    
@@ -3227,7 +3228,7 @@ public class Personaje {
         {
         	Objeto O = Mundo.getObjet(obj.getKey());
         	if(O == null) continue;
-        	list.append(O.getGuid()).append(";").append(O.getQuantity()).append(";").append(O.getTemplate().getID()).append(";").append(O.parseStatsString()).append(";").append(obj.getValue()).append("|");
+        	list.append(O.getID()).append(";").append(O.getQuantity()).append(";").append(O.getTemplate().getID()).append(";").append(O.parseStatsString()).append(";").append(obj.getValue()).append("|");
         }
         return (list.length()>0?list.toString().substring(0, list.length()-1):list.toString());
     }
@@ -3269,10 +3270,10 @@ public class Personaje {
 			if(newQua <= 0)
 			{
 				//On enleve l'objet du sac du joueur
-				removeItem(PersoObj.getGuid());
+				removeItem(PersoObj.getID());
 				//On met l'objet du sac dans le store, avec la meme quantité
-				_storeItems.put(PersoObj.getGuid(), price);
-				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, PersoObj.getGuid());
+				_storeItems.put(PersoObj.getID(), price);
+				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, PersoObj.getID());
                 GestorSalida.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this);
 			}
 			else//S'il reste des objets au joueur
@@ -3281,8 +3282,8 @@ public class Personaje {
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet a la banque et au monde
 				SimilarObj = Objeto.getCloneObjet(PersoObj, qua);
-				Mundo.addObjet(SimilarObj, true);
-				_storeItems.put(SimilarObj.getGuid(), price);
+				Mundo.addObjet(SimilarObj, this.getID(),true);
+				_storeItems.put(SimilarObj.getID(), price);
 				
 				//Envoie des packets
 				GestorSalida.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this);
@@ -3295,24 +3296,24 @@ public class Personaje {
 			if(newQua <= 0)
 			{
 				//On enleve l'objet du sac du joueur
-				removeItem(PersoObj.getGuid());
+				removeItem(PersoObj.getID());
 				//On enleve l'objet du monde
-				Mundo.removeItem(PersoObj.getGuid());
+				Mundo.removeItem(PersoObj.getID());
 				//On ajoute la quantité a l'objet en banque
 				SimilarObj.setQuantity(SimilarObj.getQuantity() + PersoObj.getQuantity());
-				_storeItems.remove(SimilarObj.getGuid());
-				_storeItems.put(SimilarObj.getGuid(), price);
+				_storeItems.remove(SimilarObj.getID());
+				_storeItems.put(SimilarObj.getID(), price);
 				//on envoie l'ajout a la banque de l'objet
 				GestorSalida.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this);
 				//on envoie la supression de l'objet du sac au joueur
-				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, PersoObj.getGuid());
+				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(this, PersoObj.getID());
 			}else //S'il restait des objets
 			{
 				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
 				SimilarObj.setQuantity(SimilarObj.getQuantity() + qua);
-				_storeItems.remove(SimilarObj.getGuid());
-				_storeItems.put(SimilarObj.getGuid(), price);
+				_storeItems.remove(SimilarObj.getID());
+				_storeItems.put(SimilarObj.getID(), price);
 				GestorSalida.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this);
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(this, PersoObj);
 				
@@ -3371,8 +3372,8 @@ public class Personaje {
 			if(newQua <= 0)
 			{
 				//On retire l'item de la banque
-				_storeItems.remove(SimilarObj.getGuid());
-				Mundo.removeItem(SimilarObj.getGuid());
+				_storeItems.remove(SimilarObj.getID());
+				Mundo.removeItem(SimilarObj.getID());
 				//On Modifie la quantité de l'item du sac du joueur
 				PersoObj.setQuantity(PersoObj.getQuantity() + SimilarObj.getQuantity());
 				

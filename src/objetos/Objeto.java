@@ -398,7 +398,7 @@ public class Objeto {
 		return template;
 	}
 
-	public int getGuid() {
+	public int getID() {
 		return guid;
 	}
 	
@@ -544,7 +544,7 @@ public class Objeto {
 		String strPos = String.valueOf(pos);
 		if (pos == -1) strPos = "";
 		String upPacket = "OCO";
-		upPacket = upPacket + Integer.toHexString(getGuid()) + "~";
+		upPacket = upPacket + Integer.toHexString(getID()) + "~";
 		upPacket = upPacket + Integer.toHexString(getTemplate().getID()) + "~";
 		upPacket = upPacket + Integer.toHexString(getQuantity()) + "~";
 		upPacket = upPacket + strPos + "~";

@@ -35,3 +35,5 @@ v0.00.4
 - Gestor de SQL en kotlin
 - Comandos admin.txt agregado  la carpeta recursos
 - Ediciones en la config.txt (Limite de mapas, version del cliente e ignorar version del cliente)
+- Agregada ID del personaje en la tabla datos_objetos, columna nueva dueño
+- Cargar objetos de la columna objetos de personaje desde la ID del dueño

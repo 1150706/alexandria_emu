@@ -45,7 +45,7 @@ public class Cofres {
 
 			Objeto obj = Mundo.getObjet(guid);
 			if( obj == null)continue;
-			_object.put(obj.getGuid(), obj);
+			_object.put(obj.getID(), obj);
 		}
 
 		_kamas = kamas;
@@ -264,13 +264,12 @@ public class Cofres {
 		if(TrunkObj == null)//S'il n'y pas d'item du meme Template
 		{
 			//S'il ne reste pas d'item dans le sac
-			if(newQua <= 0)
-			{
+			if(newQua <= 0) {
 				//On enleve l'objet du sac du joueur
-				P.removeItem(PersoObj.getGuid());
+				P.removeItem(PersoObj.getID());
 				//On met l'objet du sac dans le coffre, avec la meme quantité
-				_object.put(PersoObj.getGuid() ,PersoObj);
-				str = "O+"+PersoObj.getGuid()+"|"+PersoObj.getQuantity()+"|"+PersoObj.getTemplate().getID()+"|"+PersoObj.parseStatsString();
+				_object.put(PersoObj.getID() ,PersoObj);
+				str = "O+"+PersoObj.getID()+"|"+PersoObj.getQuantity()+"|"+PersoObj.getTemplate().getID()+"|"+PersoObj.parseStatsString();
 				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(P, guid);
 				
 			}
@@ -280,11 +279,11 @@ public class Cofres {
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet au coffre et au monde
 				TrunkObj = Objeto.getCloneObjet(PersoObj, qua);
-				Mundo.addObjet(TrunkObj, true);
-				_object.put(TrunkObj.getGuid() ,TrunkObj);
+				Mundo.addObjet(TrunkObj, P.getID(), true);
+				_object.put(TrunkObj.getID() ,TrunkObj);
 				
 				//Envoie des packets
-				str = "O+"+TrunkObj.getGuid()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
+				str = "O+"+TrunkObj.getID()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(P, PersoObj);
 				
 			}
@@ -294,13 +293,13 @@ public class Cofres {
 			if(newQua <= 0)
 			{
 				//On enleve l'objet du sac du joueur
-				P.removeItem(PersoObj.getGuid());
+				P.removeItem(PersoObj.getID());
 				//On enleve l'objet du monde
-				Mundo.removeItem(PersoObj.getGuid());
+				Mundo.removeItem(PersoObj.getID());
 				//On ajoute la quantité a l'objet dans le coffre
 				TrunkObj.setQuantity(TrunkObj.getQuantity() + PersoObj.getQuantity());
 				//on envoie l'ajout au coffre de l'objet
-			    str = "O+"+TrunkObj.getGuid()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
+			    str = "O+"+TrunkObj.getID()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
 				//on envoie la supression de l'objet du sac au joueur
 				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(P, guid);
 				
@@ -309,7 +308,7 @@ public class Cofres {
 				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
 				TrunkObj.setQuantity(TrunkObj.getQuantity() + qua);
-				str = "O+"+TrunkObj.getGuid()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
+				str = "O+"+TrunkObj.getID()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(P, PersoObj);
 				
 			}
@@ -365,15 +364,15 @@ public class Cofres {
 				//On crée une copy de l'item dans le coffre
 				PersoObj = Objeto.getCloneObjet(TrunkObj, qua);
 				//On l'ajoute au monde
-				Mundo.addObjet(PersoObj, true);
+				Mundo.addObjet(PersoObj, P.getID(), true);
 				//On retire X objet du coffre
 				TrunkObj.setQuantity(newQua);
 				//On l'ajoute au joueur
-				P.getItems().put(PersoObj.getGuid(), PersoObj);
+				P.getItems().put(PersoObj.getID(), PersoObj);
 				
 				//On envoie les packets
 				GestorSalida.GAME_SEND_OAKO_PACKET(P,PersoObj);
-				str = "O+"+TrunkObj.getGuid()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
+				str = "O+"+TrunkObj.getID()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
 				
 			}
 		}
@@ -383,8 +382,8 @@ public class Cofres {
 			if(newQua <= 0)
 			{
 				//On retire l'item du coffre
-				_object.remove(TrunkObj.getGuid());
-				Mundo.removeItem(TrunkObj.getGuid());
+				_object.remove(TrunkObj.getID());
+				Mundo.removeItem(TrunkObj.getID());
 				//On Modifie la quantité de l'item du sac du joueur
 				PersoObj.setQuantity(PersoObj.getQuantity() + TrunkObj.getQuantity());
 				
@@ -402,7 +401,7 @@ public class Cofres {
 				
 				//On envoie les packets
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(P,PersoObj);
-				str = "O+"+TrunkObj.getGuid()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
+				str = "O+"+TrunkObj.getID()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
 			}
 		}
 		
@@ -436,7 +435,7 @@ public class Cofres {
 		for(Entry<Integer, Objeto> entry : _object.entrySet())
 		{
 			Objeto obj = entry.getValue();
-			str.append(obj.getGuid()).append("|");
+			str.append(obj.getID()).append("|");
 		}
 		return str.toString();
 	}

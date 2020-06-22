@@ -68,7 +68,7 @@ public class Retos {
 	public void show_cibleToPerso(Personaje p) {
 		if (!_challengeAlive || _cible == null || _cible.get_fightCell() == null || p == null)
 			return;
-		GestorSalida.send(	p, "Gf" + _cible.getGUID() + "|" + _cible.get_fightCell().getID());
+		GestorSalida.enviar(	p, "Gf" + _cible.getGUID() + "|" + _cible.get_fightCell().getID());
 	}
 
 	public void show_cibleToFight() {

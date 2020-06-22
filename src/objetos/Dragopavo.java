@@ -230,7 +230,7 @@ public class Dragopavo {
 	public String getItemsId()
 	{
 		String str = "";
-		for(Objeto obj : _items)str += (str.length()>0?";":"")+obj.getGuid();
+		for(Objeto obj : _items)str += (str.length()>0?";":"")+obj.getID();
 		return str;
 	}
 

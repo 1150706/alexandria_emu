@@ -52,7 +52,7 @@ public class Recaudador
 			int id = Integer.parseInt(infos[0]);
 			Objeto obj = Mundo.getObjet(id);
 			if(obj == null)continue;
-			_objets.put(obj.getGuid(), obj);
+			_objets.put(obj.getID(), obj);
 		}
 		_xp = xp;
 		_kamas = kamas;
@@ -338,7 +338,7 @@ public class Recaudador
 					for(Fighter f : F.getValue().getFighters(1))//Attaquants
 					{
 						str.append("|");
-						str.append(Integer.toString(f.getPersonnage().get_GUID(), 36)).append(";");
+						str.append(Integer.toString(f.getPersonnage().getID(), 36)).append(";");
 						str.append(f.getPersonnage().getNombre()).append(";");
 						str.append(f.getPersonnage().get_lvl()).append(";");
 						str.append("0;");
@@ -363,7 +363,7 @@ public class Recaudador
 					{
 						if(f.getPersonnage() == null) continue;//On sort le percepteur
 						str.append("|");
-						str.append(Integer.toString(f.getPersonnage().get_GUID(), 36)).append(";");
+						str.append(Integer.toString(f.getPersonnage().getID(), 36)).append(";");
 						str.append(f.getPersonnage().getNombre()).append(";");
 						str.append(f.getPersonnage().get_gfxID()).append(";");
 						str.append(f.getPersonnage().get_lvl()).append(";");
@@ -429,7 +429,7 @@ public class Recaudador
 				//On crée une copy de l'item
 				PersoObj = Objeto.getCloneObjet(PercoObj, qua);
 				//On l'ajoute au monde
-				Mundo.addObjet(PersoObj, true);
+				Mundo.addObjet(PersoObj, P.getID(), true);
 				//On retire X objet
 				PercoObj.setQuantity(newQua);
 				//On l'ajoute au joueur
@@ -437,7 +437,7 @@ public class Recaudador
 				
 				//On envoie les packets
 				GestorSalida.GAME_SEND_OAKO_PACKET(P,PersoObj);
-				String str = "O+"+PercoObj.getGuid()+"|"+PercoObj.getQuantity()+"|"+PercoObj.getTemplate().getID()+"|"+PercoObj.parseStatsString();
+				String str = "O+"+PercoObj.getID()+"|"+PercoObj.getQuantity()+"|"+PercoObj.getTemplate().getID()+"|"+PercoObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(P, str);
 				
 			}
@@ -449,7 +449,7 @@ public class Recaudador
 			{
 				//On retire l'item
 				this.removeObjet(guid);
-				Mundo.removeItem(PercoObj.getGuid());
+				Mundo.removeItem(PercoObj.getID());
 				//On Modifie la quantité de l'item du sac du joueur
 				PersoObj.setQuantity(PersoObj.getQuantity() + PercoObj.getQuantity());
 				
@@ -468,7 +468,7 @@ public class Recaudador
 				
 				//On envoie les packets
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(P,PersoObj);
-				String str = "O+"+PercoObj.getGuid()+"|"+PercoObj.getQuantity()+"|"+PercoObj.getTemplate().getID()+"|"+PercoObj.parseStatsString();
+				String str = "O+"+PercoObj.getID()+"|"+PercoObj.getQuantity()+"|"+PercoObj.getTemplate().getID()+"|"+PercoObj.parseStatsString();
 				GestorSalida.GAME_SEND_EsK_PACKET(P, str);
 				
 			}
@@ -503,7 +503,7 @@ public class Recaudador
 	
 	public void addObjet(Objeto newObj)
 	{
-		_objets.put(newObj.getGuid(), newObj);
+		_objets.put(newObj.getID(), newObj);
 	}
 	
 	public void set_Exchange(boolean Exchange)

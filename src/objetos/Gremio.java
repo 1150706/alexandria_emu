@@ -222,8 +222,8 @@ public class Gremio {
 	}
 
 	public GuildMember addNewMember(Personaje p) {
-		GuildMember GM = new GuildMember(p.get_GUID(),this,0,0,(byte) 0,0);
-		_members.put(p.get_GUID(),GM);
+		GuildMember GM = new GuildMember(p.getID(),this,0,0,(byte) 0,0);
+		_members.put(p.getID(),GM);
 		return GM;
 	}
 
@@ -333,8 +333,8 @@ public class Gremio {
 				GestorSQL.casa_gremio(h, 0, 0);//On retire de la guilde
 			}
 		}
-		_members.remove(perso.get_GUID());
-		GestorSQL.eliminar_miembro_del_gremio(perso.get_GUID());
+		_members.remove(perso.getID());
+		GestorSQL.eliminar_miembro_del_gremio(perso.getID());
 	}
 	
 	public void addXp(long xp) {

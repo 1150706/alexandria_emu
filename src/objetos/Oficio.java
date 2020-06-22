@@ -258,8 +258,8 @@ public class Oficio {
 				Objeto O = T.createNewItem(qua, false);
 				//Si retourne true, on l'ajoute au monde
 				if(P.addObjet(O, true))
-					Mundo.addObjet(O, true);
-				GestorSalida.GAME_SEND_IQ_PACKET(P,P.get_GUID(),qua);
+					Mundo.addObjet(O, P.getID(), true);
+				GestorSalida.GAME_SEND_IQ_PACKET(P,P.getID(),qua);
 				GestorSalida.GAME_SEND_Ow_PACKET(P);
 			}
 		}
@@ -271,7 +271,7 @@ public class Oficio {
 			{
 				IO.setInteractive(false);
 				IO.setState(Constantes.IOBJECT_STATE_EMPTYING);
-				GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(P.getActualMapa(),""+GA._id, 501, P.get_GUID()+"", cell.getID()+","+_time);
+				GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(P.getActualMapa(),""+GA._id, 501, P.getID()+"", cell.getID()+","+_time);
 				GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(P.getActualMapa(),cell);
 				_startTime = System.currentTimeMillis()+_time;//pour eviter le cheat
 			}else
@@ -409,7 +409,7 @@ public class Oficio {
 			if(tID == -1 || !SM.getTemplate().canCraft(_skID, tID))
 			{
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-");
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.getID(),"-");
 				_ingredients.clear();
 				
 				return;
@@ -422,7 +422,7 @@ public class Oficio {
 			if(!success)//Si echec
 			{
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EF");
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-"+tID);
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.getID(),"-"+tID);
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_P, "0118");
 			}else
 			{
@@ -430,10 +430,9 @@ public class Oficio {
 				//Si signé on ajoute la ligne de Stat "Fabriqué par:"
 				if(signed)newObj.addTxtStat(988, _P.getNombre());
 				boolean add = true;
-				int guid = newObj.getGuid();
+				int guid = newObj.getID();
 				
-				for(Entry<Integer, Objeto> entry : _P.getItems().entrySet())
-				{
+				for(Entry<Integer, Objeto> entry : _P.getItems().entrySet()) {
 					Objeto obj = entry.getValue();
 					if(obj.getTemplate().getID() == newObj.getTemplate().getID()
 						&& obj.getStats().isSameStats(newObj.getStats())
@@ -442,21 +441,20 @@ public class Oficio {
 						obj.setQuantity(obj.getQuantity()+newObj.getQuantity());//On ajoute QUA item a la quantité de l'objet existant
 						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_P,obj);
 						add = false;
-						guid = obj.getGuid();
+						guid = obj.getID();
 					}
 				}
-				if(add)
-				{
-					_P.getItems().put(newObj.getGuid(), newObj);
+				if(add) {
+					_P.getItems().put(newObj.getID(), newObj);
 					GestorSalida.GAME_SEND_OAKO_PACKET(_P,newObj);
-					Mundo.addObjet(newObj, true);
+					Mundo.addObjet(newObj, _P.getID(), true);
 				}
 				
 				//on envoie les Packets
 				GestorSalida.GAME_SEND_Ow_PACKET(_P);
 				GestorSalida.GAME_SEND_Em_PACKET(_P,"KO+"+guid+"|1|"+tID+"|"+newObj.parseStatsString().replace(";","#"));
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"K;"+tID);
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"+"+tID);
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.getID(),"+"+tID);
 			}
 			
 			
@@ -489,7 +487,7 @@ public class Oficio {
 				if(!_P.hasItemGuid(guid) || ing == null)
 				{
 					GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-					GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-");
+					GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.getID(),"-");
 					_ingredients.clear();
 					return;
 				}
@@ -998,7 +996,7 @@ public class Oficio {
 			if(SM == null || obj == null || mod == null)
 			{
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EI");
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-");
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.getID(),"-");
 				_ingredients.clear();
 				return;
 			}
@@ -1160,14 +1158,14 @@ public class Oficio {
 				{	
 					obj.setStats(obj.generateNewStatsFromTemplate((obj.parseFMEchecStatsString(obj, poid).replace(";","#")+statsnegatif), false));
 				}
-				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_P, obj.getGuid());//Supprime l'ancien affichage de l'item
+				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_P, obj.getID());//Supprime l'ancien affichage de l'item
 				GestorSalida.GAME_SEND_Ow_PACKET(_P);
 				GestorSalida.GAME_SEND_OAKO_PACKET(_P, obj);
-				GestorSalida.GAME_SEND_Em_PACKET(_P,"EC+"+obj.getGuid()+"|1|"+tID+"|"+obj.parseStatsString().replace(";","#"));//On replace l'item dans l'inventaire
+				GestorSalida.GAME_SEND_Em_PACKET(_P,"EC+"+obj.getID()+"|1|"+tID+"|"+obj.parseStatsString().replace(";","#"));//On replace l'item dans l'inventaire
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"EF");
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"-"+tID);
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.getID(),"-"+tID);
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_P, "0183");
-				GestorSQL.guardar_objeto(obj);
+				GestorSQL.guardar_objeto(obj, _P.getID());
 			}else
 			{
 				int coef = 0;
@@ -1260,13 +1258,13 @@ public class Oficio {
 					}
 				}
 				//On envoie les packets
-				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_P, obj.getGuid());//Supprime l'ancien affichage de l'item
+				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_P, obj.getID());//Supprime l'ancien affichage de l'item
 				GestorSalida.GAME_SEND_Ow_PACKET(_P);//Pods
 				GestorSalida.GAME_SEND_OAKO_PACKET(_P, obj);//Nouveau jet
-				GestorSalida.GAME_SEND_Em_PACKET(_P,"KO+"+obj.getGuid()+"|1|"+tID+"|"+obj.parseStatsString().replace(";","#"));//On replace l'item dans l'inventaire
+				GestorSalida.GAME_SEND_Em_PACKET(_P,"KO+"+obj.getID()+"|1|"+tID+"|"+obj.parseStatsString().replace(";","#"));//On replace l'item dans l'inventaire
 				GestorSalida.GAME_SEND_Ec_PACKET(_P,"K;"+tID);//Réussite
-				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.get_GUID(),"+"+tID);//Icone de réussite
-				GestorSQL.guardar_objeto(obj);//On Save
+				GestorSalida.GAME_SEND_IO_PACKET_TO_MAP(_P.getActualMapa(),_P.getID(),"+"+tID);//Icone de réussite
+				GestorSQL.guardar_objeto(obj, _P.getID());//On Save
 				//TODO : Le repeat ?
 		}
 			//On consumme les runes
@@ -1277,9 +1275,9 @@ public class Oficio {
 				//S'il ne reste rien
 				if(newQua <= 0)
 				{
-					_P.removeItem(sign.getGuid());
-					Mundo.removeItem(sign.getGuid());
-					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_P, sign.getGuid());
+					_P.removeItem(sign.getID());
+					Mundo.removeItem(sign.getID());
+					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_P, sign.getID());
 				}else
 				{
 					sign.setQuantity(newQua);
@@ -1293,9 +1291,9 @@ public class Oficio {
 				//S'il ne reste rien
 				if(newQua <= 0)
 				{
-					_P.removeItem(mod.getGuid());
-					Mundo.removeItem(mod.getGuid());
-					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_P, mod.getGuid());
+					_P.removeItem(mod.getID());
+					Mundo.removeItem(mod.getID());
+					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_P, mod.getID());
 				}else
 				{
 					mod.setQuantity(newQua);

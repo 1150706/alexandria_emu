@@ -51,7 +51,7 @@ public class Condiciones {
 			 	jep.addVariable("PR", (personaje.getWife()>0?1:0));
 			 	jep.addVariable("SI", personaje.getActualMapa().getID());
 			 	//Les pierres d'ames sont lancables uniquement par le lanceur.
-			 	jep.addVariable("MiS",personaje.get_GUID());
+			 	jep.addVariable("MiS",personaje.getID());
 			 	
 			 	jep.parse(requiere);
 			 	Object result = jep.evaluate();

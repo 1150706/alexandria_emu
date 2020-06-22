@@ -164,7 +164,7 @@ public class Comandos {
 				JuegoThread GT = MainServidor.gameServer.getClients().get(b);
 				Personaje P = GT.getPerso();
 				if(P == null)continue;
-				mess = P.getNombre()+"("+P.get_GUID()+") ";
+				mess = P.getNombre()+"("+P.getID()+") ";
 
 				switch (P.getClase()) {
 					case Constantes.CLASS_FECA -> mess += "Feca";
@@ -289,7 +289,7 @@ public class Comandos {
 			}
 			int morphID = target.getClase() *10 + target.getSexo();
 			target.setGFX(morphID);
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.get_GUID());
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.getID());
 			GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(target.getActualMapa(), target);
 			String str = "El personaje ha sido destransformado.";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
@@ -788,7 +788,7 @@ public class Comandos {
 				}
 			}
 			target.setTamaño(size);
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.get_GUID());
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.getID());
 			GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(target.getActualMapa(), target);
 			String str = "El tamaño del personaje "+_personaje.getNombre()+" se ha modificado";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
@@ -814,7 +814,7 @@ public class Comandos {
 				}
 			}
 			target.setGFX(morphID);
-			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.get_GUID());
+			GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(target.getActualMapa(), target.getID());
 			GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(target.getActualMapa(), target);
 			String str = "El personaje "+_personaje.getNombre()+" se ha transformado";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
@@ -878,9 +878,9 @@ public class Comandos {
 				Objeto obj = t.createNewItem(1,useMax);
 				if(perso != null) {
 					if(perso.addObjet(obj, true))//Si le joueur n'avait pas d'item similaire
-						Mundo.addObjet(obj,true);
+						Mundo.addObjet(obj, _personaje.getID(),true);
 				} else if(_personaje.addObjet(obj, true))//Si le joueur n'avait pas d'item similaire
-					Mundo.addObjet(obj,true);
+					Mundo.addObjet(obj, _personaje.getID(),true);
 			}
 			String str = "Se ha creado el set "+tID+" con exito";
 			if(useMax) str += " en sus maximas caracteristicas";
@@ -1008,7 +1008,7 @@ public class Comandos {
 			if(qua <1)qua =1;
 			Objeto obj = t.createNewItem(qua,useMax);
 			if(_personaje.addObjet(obj, true))//Si le joueur n'avait pas d'item similaire
-				Mundo.addObjet(obj,true);
+				Mundo.addObjet(obj, _personaje.getID(),true);
 			String str = "Se ha creado un objeto "+tID+" con exito";
 			if(useMax) str += " en sus maximas caracteristicas";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
@@ -1612,7 +1612,7 @@ public class Comandos {
 					
 					
 					Mundo.getHdv(hdv).addEntry(entry);
-					Mundo.addObjet(objet, false);
+					Mundo.addObjet(objet, _personaje.getID(), false);
 				}
 			}catch (Exception e) {
 				continue;

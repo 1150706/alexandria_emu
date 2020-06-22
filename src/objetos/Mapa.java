@@ -800,7 +800,7 @@ public class Mapa {
 		public void addPerso(Personaje perso)
 		{
 			if(_persos == null) _persos = new TreeMap<>();
-			_persos.put(perso.get_GUID(),perso);
+			_persos.put(perso.getID(),perso);
 			
 		}
 		public void addFighter(Fighter fighter)
@@ -886,7 +886,7 @@ public class Mapa {
 					if (_object.getState() != Constantes.IOBJECT_STATE_FULL) return;//Si le puits est vide
 					_object.setState(Constantes.IOBJECT_STATE_EMPTYING);
 					_object.setInteractive(false);
-					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "" + GA._id, 501, perso.get_GUID() + "", _id + "," + _object.getUseDuration() + "," + _object.getUnknowValue());
+					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "" + GA._id, 501, perso.getID() + "", _id + "," + _object.getUseDuration() + "," + _object.getUnknowValue());
 					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(perso.getActualMapa(), this);
 				}
 //Utiliser (zaap)
@@ -960,7 +960,7 @@ public class Mapa {
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "194");
 						return;
 					}
-					if (MP1.get_owner() != perso.get_GUID()) {
+					if (MP1.get_owner() != perso.getID()) {
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "195");
 						return;
 					}
@@ -1060,8 +1060,8 @@ public class Mapa {
 					int qua = Formulas.getRandomValue(1, 10);//On a entre 1 et 10 eaux
 					Objeto obj = Mundo.getObjTemplate(311).createNewItem(qua, false);
 					if(perso.addObjet(obj, true))
-						Mundo.addObjet(obj,true);
-					GestorSalida.GAME_SEND_IQ_PACKET(perso,perso.get_GUID(),qua);
+						Mundo.addObjet(obj, perso.getID(),true);
+					GestorSalida.GAME_SEND_IQ_PACKET(perso,perso.getID(),qua);
 				break;
 				
 				case 183:
@@ -1730,7 +1730,7 @@ public class Mapa {
 		if(obj != null)
 		{
 			if(perso.addObjet(obj, true))
-				Mundo.addObjet(obj, true);
+				Mundo.addObjet(obj, perso.getID(), true);
 			GestorSalida.GAME_SEND_GDO_PACKET_TO_MAP(this,'-',caseID,0,0);
 			GestorSalida.GAME_SEND_Ow_PACKET(perso);
 			_cases.get(caseID).clearDroppedItem();

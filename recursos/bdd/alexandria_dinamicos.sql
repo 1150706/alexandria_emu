@@ -11,7 +11,7 @@
  Target Server Version : 100411
  File Encoding         : 65001
 
- Date: 17/06/2020 17:23:23
+ Date: 22/06/2020 01:10:30
 */
 
 SET NAMES utf8mb4;
@@ -1638,12 +1638,14 @@ CREATE TABLE `datos_cuenta`  (
   `estable` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '',
   PRIMARY KEY (`id`, `cuenta`) USING BTREE,
   UNIQUE INDEX `account`(`cuenta`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 25 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 27 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of datos_cuenta
 -- ----------------------------
-INSERT INTO `datos_cuenta` VALUES (24, 'admin', '123', 5, 0, '', '127.0.0.1', '2020~06~17~15~34', 'supprimer ?', 'oui', '', 0, 0, 0, '', '', '', 0, 1, '', '0', 0, 0, '');
+INSERT INTO `datos_cuenta` VALUES (24, 'admin', '123', 5, 0, '', '127.0.0.1', '2020~06~22~00~52', 'supprimer ?', 'oui', '', 0, 0, 0, '', '', '', 0, 1, '', '0', 0, 0, '');
+INSERT INTO `datos_cuenta` VALUES (25, 'admin1', '123', 5, 0, '', '127.0.0.1', '2020~06~22~00~04', 'supprimer ?', 'oui', '', 0, 0, 0, '', '', '', 0, 0, '', '0', 0, 0, '');
+INSERT INTO `datos_cuenta` VALUES (26, 'admin2', '123', 5, 0, '', '127.0.0.1', '2020~06~19~21~12', 'supprimer ?', 'oui', '', 0, 0, 0, '', '', '', 0, 0, '', '0', 0, 0, '');
 
 -- ----------------------------
 -- Table structure for datos_gremio
@@ -1727,21 +1729,20 @@ CREATE TABLE `datos_montura`  (
 DROP TABLE IF EXISTS `datos_objetos`;
 CREATE TABLE `datos_objetos`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `modelo` int(11) NOT NULL,
+  `modelo` int(11) NOT NULL COMMENT 'ID del modelo del objeto (datos_objeto_modelo) tabla estaticos',
   `cantidad` int(11) NOT NULL,
   `ubicacion` int(11) NOT NULL,
-  `caracteristicas` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `caracteristicas` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT 'Stats del objeto en particular',
+  `dueño` int(11) NOT NULL DEFAULT 0 COMMENT 'ID del PJ dueño del item',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `guid`(`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 14 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of datos_objetos
 -- ----------------------------
-INSERT INTO `datos_objetos` VALUES (1, 7201, 1, -1, '64#1a#25#0#1d12+25,73#5#0#0#0d0+5,77#15#0#0#0d0+21,7c#18#0#0#0d0+24');
-INSERT INTO `datos_objetos` VALUES (2, 7201, 1, -1, '64#1a#25#0#1d12+25,73#7#0#0#0d0+7,77#10#0#0#0d0+16,7c#14#0#0#0d0+20');
-INSERT INTO `datos_objetos` VALUES (3, 7201, 1, -1, '64#1a#25#0#1d12+25,73#7#0#0#0d0+7,77#19#0#0#0d0+25,7c#14#0#0#0d0+20');
-INSERT INTO `datos_objetos` VALUES (4, 7201, 1, -1, '64#1a#25#0#1d12+25,73#7#0#0#0d0+7,77#14#0#0#0d0+20,7c#14#0#0#0d0+20');
+INSERT INTO `datos_objetos` VALUES (1, 7401, 2, -1, '', 1);
+INSERT INTO `datos_objetos` VALUES (13, 405, 5, -1, '', 1);
 
 -- ----------------------------
 -- Table structure for datos_objetos_cercados
@@ -1825,7 +1826,9 @@ CREATE TABLE `datos_personajes`  (
 -- ----------------------------
 -- Records of datos_personajes
 -- ----------------------------
-INSERT INTO `datos_personajes` VALUES (1, 'Player-xD', 0, 9, -1, -1, -1, 5000033, 129, 745, 10000, 150, 534476000, 100, 90, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '*#%!pi$:?', 7437, 339, 100, '161;5;b,162;1;_,163;1;_,164;1;d,165;1;_,166;1;_,167;1;_,168;1;_,169;1;c,170;1;_,171;1;_,172;1;_,173;1;_,174;1;_,175;1;_,176;1;_,177;1;_,178;1;_,179;1;_,180;1;_,414;1;_,415;5;e', '0|1|2|3|4|', '', '7411,297', '164,528,844,935,951,1158,1242,1841,2191,3022,3250,4263,4739,5295,6137,6855,6954,7411,8037,8088,8125,8163,8437,8785,9454,10297,10304,10317,10349,10643,11170,11210', '', 0, -1, 0, 0);
+INSERT INTO `datos_personajes` VALUES (1, 'Player-xD', 0, 9, -1, -1, -1, 5000838, 110, 5, 10000, 151, 534476095, 100, 90, 0, 0, 0, 0, 24, 14, 3, 8, 283, 13, 9, 0, 1, 0, 0, '*#%!pi$:?', 7412, 396, 100, '161;6;b,162;1;_,163;1;_,164;1;d,165;1;_,166;1;_,167;1;_,168;6;i,169;1;c,170;1;_,171;1;_,172;1;_,173;1;_,174;1;_,175;1;_,176;1;_,177;1;_,178;1;_,179;1;_,180;1;_,414;1;_,415;5;e', '', '', '7411,297', '164,528,844,935,951,1158,1242,1841,2191,3022,3250,4263,4739,5295,6137,6855,6954,7411,8037,8088,8125,8163,8437,8785,9454,10297,10304,10317,10349,10643,11170,11210', '', 0, -1, 0, 0);
+INSERT INTO `datos_personajes` VALUES (2, 'testeo', 0, 9, -1, -1, -1, 5000000, 79, 395, 10000, 80, 38945000, 100, 90, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '*#%!pi$:?', 7412, 440, 100, '161;1;b,162;1;_,163;1;_,164;1;d,165;1;_,166;1;_,167;1;_,168;1;_,169;1;c,170;1;_,171;1;_,172;1;_,173;1;_,174;1;_,175;1;_,176;1;_,177;1;_,178;1;_', '', '', '5,255', '164,528,844,935,951,1158,1242,1841,2191,3022,3250,4263,4739,5295,6137,6855,6954,7411,8037,8088,8125,8163,8437,8785,9454,10297,10304,10317,10349,10643,11170,11210', '', 0, -1, 0, 0);
+INSERT INTO `datos_personajes` VALUES (3, 'testico', 0, 11, -1, -1, -1, 5000000, 79, 395, 10000, 80, 38945000, 100, 110, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '*#%!pi$:?', 7413, 35, 100, '431;1;c,432;1;b,433;1;_,434;1;d,436;1;_,437;1;_,438;1;_,439;1;_,440;1;_,441;1;_,442;1;_,443;1;_,444;1;_,445;1;_,446;1;_,447;1;_,448;1;_,449;1;_', '', '', '5,255', '164,528,844,935,951,1158,1242,1841,2191,3022,3250,4263,4739,5295,6137,6855,6954,7411,8037,8088,8125,8163,8437,8785,9454,10297,10304,10317,10349,10643,11170,11210', '', 0, -1, 0, 0);
 
 -- ----------------------------
 -- Table structure for datos_recaudadores

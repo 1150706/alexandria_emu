@@ -2,11 +2,7 @@ package objetos;
 
 import juego.JuegoThread;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
-import java.util.Map.Entry;
+import java.util.*;
 
 import javax.swing.Timer;
 
@@ -59,6 +55,7 @@ public class Cuenta {
 		this._lastConnectionDate = aLastConnectionDate;
 		this._bankKamas = bankKamas;
 		this._hdvsItems = Mundo.getMyItems(_GUID);
+
 		//Cargando los bancos
 		for(String item : bank.split("\\|")) {
 			if(item.equals(""))continue;
@@ -67,15 +64,17 @@ public class Cuenta {
 
 			Objeto obj = Mundo.getObjet(guid);
 			if( obj == null)continue;
-			_bank.put(obj.getGuid(), obj);
+			_bank.put(obj.getID(), obj);
 		}
-		//Chargement de la liste d'amie
+
+		//Cargando la lista de amigos
 		for(String f : friends.split(";")) {
 			try {
 				_friendGuids.add(Integer.parseInt(f));
 			}catch(Exception ignored){}
 		}
-		//Chargement de la liste d'Enemy
+
+		//Cargando la lista de enemigos
 		for(String f : enemy.split(";")) {
 			try {
 				_EnemyGuids.add(Integer.parseInt(f));
@@ -115,18 +114,18 @@ public class Cuenta {
 			_muteTimer.start(); 
 		}
 	}
-	
+
 	public String parseBankObjetsToDB() {
 		StringBuilder str = new StringBuilder();
 		if(_bank.isEmpty())
 			return "";
-		for(Entry<Integer, Objeto> entry : _bank.entrySet()) {
+		for(Map.Entry<Integer, Objeto> entry : _bank.entrySet()) {
 			Objeto obj = entry.getValue();
-			str.append(obj.getGuid()).append("|");
+			str.append(obj.getID()).append("|");
 		}
 		return str.toString();
 	}
-	
+
 	public Map<Integer, Objeto> getBank() { return _bank; }
 
 	public long getBankKamas()
@@ -244,7 +243,7 @@ public class Cuenta {
 
 	public void addPerso(Personaje perso)
 	{
-		_persos.put(perso.get_GUID(),perso);
+		_persos.put(perso.getID(),perso);
 	}
 	
 	public boolean createPerso(String name, int sexe, int classe,int color1, int color2, int color3) {
@@ -252,7 +251,7 @@ public class Cuenta {
 		if(perso==null) {
 			return false;
 		}
-		_persos.put(perso.get_GUID(), perso);
+		_persos.put(perso.getID(), perso);
 		return true;
 	}
 
@@ -304,14 +303,14 @@ public class Cuenta {
 			if(P.getPelea() != null)P.getPelea().leftFight(P, null);
 			else//Si hors combat
 			{
-				P.getActualCelda().removePlayer(P.get_GUID());
-				if(P.getActualMapa() != null && P.isConectado()) GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(P.getActualMapa(), P.get_GUID());
+				P.getActualCelda().removePlayer(P.getID());
+				if(P.getActualMapa() != null && P.isConectado()) GestorSalida.GAME_SEND_ERASE_ON_MAP_TO_MAP(P.getActualMapa(), P.getID());
 			}
 			P.setConectado(false);
 			//Reset des vars du perso
 			P.resetVars();
 			if(save) GestorSQL.guardar_personaje(P,true);
-			Mundo.unloadPerso(P.get_GUID());
+			Mundo.unloadPerso(P.getID());
 		}
 		_persos.clear();
 	}
@@ -458,7 +457,7 @@ public class Cuenta {
 		
 		boolean OBJ = _curPerso.addObjet(obj,true);//False = Meme item dans l'inventaire donc augmente la qua
 		if(!OBJ) {
-			Mundo.removeItem(obj.getGuid());
+			Mundo.removeItem(obj.getID());
 		}
 		
 		Mundo.getHdv(hdvID).delEntry(entry);//Retire l'item de l'HDV

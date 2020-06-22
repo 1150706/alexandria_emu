@@ -402,7 +402,7 @@ public class Mercadillo {
 			StringBuilder toReturn = new StringBuilder();
 			
 			int count = getAmount(true);//Transfère dans le format (1,10,100) le montant qui etait dans le format (1,2,3)
-			toReturn.append(_obj.getGuid()).append("|").append(count).append("|").append(_obj.getTemplate().getID()).append("|").append(_obj.parseStatsString()).append("|").append(_price).append("|350");//350 = temps restant
+			toReturn.append(_obj.getID()).append("|").append(count).append("|").append(_obj.getTemplate().getID()).append("|").append(_obj.parseStatsString()).append("|").append(_price).append("|350");//350 = temps restant
 			
 			return toReturn.toString();
 		}
@@ -578,9 +578,8 @@ public class Mercadillo {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(Mundo.getCompte(toBuy.getOwner()).get_curPerso(),"065;"+price+"~"+toBuy.getObjet().getTemplate().getID()+"~"+toBuy.getObjet().getTemplate().getID()+"~1");
 				//Si le vendeur est connecter, envoie du packet qui lui annonce la vente de son objet
 			}
-			if(toBuy.getOwner() == -1)
-			{
-				GestorSQL.guardar_objeto(toBuy.getObjet());
+			if(toBuy.getOwner() == -1) {
+				GestorSQL.guardar_objeto(toBuy.getObjet(), newOwner.getID());
 			}
 			toBuy = null;
 		}

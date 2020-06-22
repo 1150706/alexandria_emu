@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import java.util.Timer;
 
 import objetos.Mapa.Case;
-import objetos.Pelea.Fighter;
+import objetos.Pelea.Peleador;
 import objetos.Personaje.Stats;
 import objetos.hechizos.EfectoHechizo;
 import objetos.hechizos.Hechizos;
@@ -534,7 +534,7 @@ public class Monstruo {
 			return PM;
 		}
 
-		public void modifStatByInvocator(Fighter caster)
+		public void modifStatByInvocator(Peleador caster)
 		{
 			int coef = (1 + (caster.get_lvl())/100);
 			PDV = (PDVMAX)*coef;

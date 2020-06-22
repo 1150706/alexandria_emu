@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
-import objetos.Pelea.Fighter;
+import objetos.Pelea.Peleador;
 
 import comunes.MainServidor;
 import comunes.GestorSQL;
@@ -335,7 +335,7 @@ public class Recaudador
 			//Mais cela évite le bug F.getValue().getFighters(1) == null
 				if(F.getValue().get_id() == fightid)
 				{
-					for(Fighter f : F.getValue().getFighters(1))//Attaquants
+					for(Peleador f : F.getValue().getFighters(1))//Attaquants
 					{
 						str.append("|");
 						str.append(Integer.toString(f.getPersonnage().getID(), 36)).append(";");
@@ -359,7 +359,7 @@ public class Recaudador
 			//Mais cela évite le bug F.getValue().getFighters(2) == null
 				if(F.getValue().get_id() == fightid)
 				{
-					for(Fighter f : F.getValue().getFighters(2))//Defenseurs
+					for(Peleador f : F.getValue().getFighters(2))//Defenseurs
 					{
 						if(f.getPersonnage() == null) continue;//On sort le percepteur
 						str.append("|");

@@ -20,10 +20,10 @@ public class Inteligencia {
 	public static class IAThread implements Runnable
 	{
 		private final Pelea _fight;
-		private final Fighter _fighter;
+		private final Peleador _fighter;
 		private static boolean stop = false;
 
-        public IAThread(Fighter fighter, Pelea fight)
+        public IAThread(Peleador fighter, Pelea fight)
 		{
 			_fighter = fighter;
 			_fight = fight;
@@ -92,18 +92,18 @@ public class Inteligencia {
 			}
 		}
 		
-		private static void apply_type0(Fighter F, Pelea fight)
+		private static void apply_type0(Peleador F, Pelea fight)
 		{
 			stop = true;
 		}
 
-		private static void apply_type1(Fighter F, Pelea fight)
+		private static void apply_type1(Peleador F, Pelea fight)
 		{
 			while(!stop && F.canPlay())
 			{
 				int PDVPER = (F.getPDV()*100)/F.getPDVMAX();
-				Fighter T = getNearestEnnemy(fight, F); // Ennemis
-				Fighter T2 = getNearestFriend(fight,F); // Amis
+				Peleador T = getNearestEnnemy(fight, F); // Ennemis
+				Peleador T2 = getNearestFriend(fight,F); // Amis
 				if(T == null)
 					return;
 				if(PDVPER > 15)
@@ -163,11 +163,11 @@ public class Inteligencia {
 			}
 		}
 
-		private static void apply_type2(Fighter F, Pelea fight)
+		private static void apply_type2(Peleador F, Pelea fight)
 		{
 			while(!stop && F.canPlay())
 			{
-				Fighter T = getNearestFriend(fight,F);
+				Peleador T = getNearestFriend(fight,F);
 				if(!HealIfPossible(fight,F,false))//soin allié
 				{
 					if(!buffIfPossible(fight,F,T))//buff allié
@@ -197,11 +197,11 @@ public class Inteligencia {
 			}
 		}
 		
-		private static void apply_type3(Fighter F, Pelea fight)
+		private static void apply_type3(Peleador F, Pelea fight)
 		{
 			while(!stop && F.canPlay())
 			{
-				Fighter T = getNearestFriend(fight,F);
+				Peleador T = getNearestFriend(fight,F);
 					if(!moveNearIfPossible(fight,F,T))//Avancer vers allié
 					{
 						if(!HealIfPossible(fight,F,false))//soin allié
@@ -224,11 +224,11 @@ public class Inteligencia {
 			}		
 		}
 		
-		private static void apply_type4(Fighter F, Pelea fight) //IA propre La Folle
+		private static void apply_type4(Peleador F, Pelea fight) //IA propre La Folle
 		{
 			while(!stop && F.canPlay())
 			{
-				Fighter T = getNearestEnnemy(fight, F);
+				Peleador T = getNearestEnnemy(fight, F);
 				if(T == null) return;
 				int attack = attackIfPossible(fight,F);
 				if(attack != 0)//Attaque
@@ -257,11 +257,11 @@ public class Inteligencia {
 			}
 		}
 		
-		private static void apply_type5(Fighter F, Pelea fight) //IA propre aux énus
+		private static void apply_type5(Peleador F, Pelea fight) //IA propre aux énus
 		{
 			while(!stop && F.canPlay())
 			{
-				Fighter T = getNearestEnnemy(fight, F);
+				Peleador T = getNearestEnnemy(fight, F);
 				if(T == null) return;
 				
 				if(!moveNearIfPossible(fight,F,T))//Avancer vers enemis
@@ -271,13 +271,13 @@ public class Inteligencia {
 			}
 		}
 		
-		private static void apply_type6(Fighter F, Pelea fight)
+		private static void apply_type6(Peleador F, Pelea fight)
 		{
 			while(!stop && F.canPlay())
 			{
 				if(!invocIfPossible(fight,F))
 				{
-					Fighter T = getNearestFriend(fight,F);
+					Peleador T = getNearestFriend(fight,F);
 					if(!HealIfPossible(fight,F,false))//soin allié
 					{
 						if(!buffIfPossible(fight,F,T))//buff allié
@@ -301,11 +301,11 @@ public class Inteligencia {
 			}
 		}
 		
-		private static void apply_typePerco(Fighter F, Pelea fight)
+		private static void apply_typePerco(Peleador F, Pelea fight)
 		{
 			while(!stop && F.canPlay())
 			{
-				Fighter T = getNearestEnnemy(fight, F);
+				Peleador T = getNearestEnnemy(fight, F);
 				if(T == null) return;
 				int attack = attackIfPossiblePerco(fight,F);
 				if(attack != 0)//Attaque
@@ -331,13 +331,13 @@ public class Inteligencia {
 			}
 		}
 		
-		private static boolean moveFarIfPossible(Pelea fight, Fighter F)
+		private static boolean moveFarIfPossible(Pelea fight, Peleador F)
 		{
 			int[] dist = {1000,1000,1000,1000,1000,1000,1000,1000,1000,1000};
 			int[] cell = {0,0,0,0,0,0,0,0,0,0};
 			for(int i = 0; i < 10 ; i++)
 			{
-				for(Fighter f : fight.getFighters(3))
+				for(Peleador f : fight.getFighters(3))
 				{
 					
 					if(f.isDead())continue;
@@ -429,7 +429,7 @@ public class Inteligencia {
 				}
 			}
 			System.out.println("Test MOVEFAR : cell = " + destCase);
-			if(destCase < 0 || destCase > 478 || destCase == F.get_fightCell().getID() || !fight.get_map().getMapa(destCase).isWalkable(false))return false;
+			if(destCase < 0 || destCase > 478 || destCase == F.get_fightCell().getID() || !fight.get_map().getMapa(destCase).isCaminable(false))return false;
 			if(F.getPM() <= 0)return false;
 			ArrayList<Case> path = Camino.getShortestPathBetween(fight.get_map(),F.get_fightCell().getID(),destCase, 0);
 			if(path == null)return false;
@@ -495,9 +495,9 @@ public class Inteligencia {
 			return true;
 		}
 		
-		private static boolean invocIfPossible(Pelea fight, Fighter fighter)
+		private static boolean invocIfPossible(Pelea fight, Peleador fighter)
 		{
-			Fighter nearest = getNearestEnnemy(fight, fighter);
+			Peleador nearest = getNearestEnnemy(fight, fighter);
 			if(nearest == null)
 				return false;
 			int nearestCell = Camino.getNearestCellAround(fight.get_map(),fighter.get_fightCell().getID(),nearest.get_fightCell().getID(),null);
@@ -512,7 +512,7 @@ public class Inteligencia {
 			return true;
 		}
 		
-		private static SortStats getInvocSpell(Pelea fight, Fighter fighter, int nearestCell)
+		private static SortStats getInvocSpell(Pelea fight, Peleador fighter, int nearestCell)
 		{
 			if(fighter.getMob() == null)return null;
 			for(Entry<Integer, SortStats> SS : fighter.getMob().getSpells().entrySet())
@@ -528,10 +528,10 @@ public class Inteligencia {
 			return null;
 		}
 		
-		private static boolean HealIfPossible(Pelea fight, Fighter f, boolean autoSoin)//boolean pour choisir entre auto-soin ou soin allié
+		private static boolean HealIfPossible(Pelea fight, Peleador f, boolean autoSoin)//boolean pour choisir entre auto-soin ou soin allié
 		{
 			if(autoSoin && (f.getPDV()*100)/f.getPDVMAX() > 95 )return false;
-			Fighter target = null;
+			Peleador target = null;
 			SortStats SS = null;
 			if(autoSoin)
 			{
@@ -540,10 +540,10 @@ public class Inteligencia {
 			}
 			else//sélection joueur ayant le moins de pv
 			{
-				Fighter curF = null;
+				Peleador curF = null;
 				int PDVPERmin = 100;
 				SortStats curSS = null;
-				for(Fighter F : fight.getFighters(3))
+				for(Peleador F : fight.getFighters(3))
 				{					
 					if(f.isDead())continue;
 					if(F == f)continue;
@@ -581,10 +581,10 @@ public class Inteligencia {
 			return true;
 		}
 		
-		private static boolean HealIfPossiblePerco(Pelea fight, Fighter f, boolean autoSoin)//boolean pour choisir entre auto-soin ou soin allié
+		private static boolean HealIfPossiblePerco(Pelea fight, Peleador f, boolean autoSoin)//boolean pour choisir entre auto-soin ou soin allié
 		{
 			if(autoSoin && (f.getPDV()*100)/f.getPDVMAX() > 95 )return false;
-			Fighter target = null;
+			Peleador target = null;
 			SortStats SS = null;
 			if(autoSoin)
 			{
@@ -593,10 +593,10 @@ public class Inteligencia {
 			}
 			else//sélection joueur ayant le moins de pv
 			{
-				Fighter curF = null;
+				Peleador curF = null;
 				int PDVPERmin = 100;
 				SortStats curSS = null;
-				for(Fighter F : fight.getFighters(3))
+				for(Peleador F : fight.getFighters(3))
 				{					
 					if(f.isDead())continue;
 					if(F == f)continue;
@@ -635,7 +635,7 @@ public class Inteligencia {
 			return true;
 		}
 		
-		private static boolean buffIfPossible(Pelea fight, Fighter fighter, Fighter target)
+		private static boolean buffIfPossible(Pelea fight, Peleador fighter, Peleador target)
 		{		
 			if(target == null)return false;
 			SortStats SS = getBuffSpell(fight,fighter,target);
@@ -646,7 +646,7 @@ public class Inteligencia {
 			return true;	
 		}
 		
-		private static boolean buffIfPossiblePerco(Pelea fight, Fighter fighter, Fighter target)
+		private static boolean buffIfPossiblePerco(Pelea fight, Peleador fighter, Peleador target)
 		{		
 			if(target == null)return false;
 			SortStats SS = getBuffSpellPerco(fight,fighter,target);
@@ -657,7 +657,7 @@ public class Inteligencia {
 			return true;	
 		}
 
-		private static SortStats getBuffSpell(Pelea fight, Fighter F, Fighter T)
+		private static SortStats getBuffSpell(Pelea fight, Peleador F, Peleador T)
 		{
 			int infl = 0;	
 			SortStats ss = null;
@@ -672,7 +672,7 @@ public class Inteligencia {
 			return ss;				
 		}
 		
-		private static SortStats getBuffSpellPerco(Pelea fight, Fighter F, Fighter T)
+		private static SortStats getBuffSpellPerco(Pelea fight, Peleador F, Peleador T)
 		{
 			int infl = 0;	
 			SortStats ss = null;
@@ -688,7 +688,7 @@ public class Inteligencia {
 			return ss;				
 		}
 		
-		private static SortStats getHealSpell(Pelea fight, Fighter F, Fighter T)
+		private static SortStats getHealSpell(Pelea fight, Peleador F, Peleador T)
 		{
 			int infl = 0;	
 			SortStats ss = null;
@@ -703,7 +703,7 @@ public class Inteligencia {
 			return ss;
 		}
 		
-		private static boolean moveNearIfPossible(Pelea fight, Fighter F, Fighter T)
+		private static boolean moveNearIfPossible(Pelea fight, Peleador F, Peleador T)
 		{
 			if(F.getCurPM(fight) <= 0)
 				return false;
@@ -716,8 +716,8 @@ public class Inteligencia {
 			//On demande le chemin plus court
 			if(cellID == -1)
 			{
-				Map<Integer,Fighter> ennemys = getLowHpEnnemyList(fight,F);
-				for(Entry<Integer, Fighter> target : ennemys.entrySet())
+				Map<Integer, Peleador> ennemys = getLowHpEnnemyList(fight,F);
+				for(Entry<Integer, Peleador> target : ennemys.entrySet())
 				{
 					int cellID2 = Camino.getNearestCellAround(fight.get_map(),target.getValue().get_fightCell().getID(),F.get_fightCell().getID(),null);
 					if(cellID2 != -1)
@@ -774,11 +774,11 @@ public class Inteligencia {
 			return result;
 		}
 
-		private static Fighter getNearestFriend(Pelea fight, Fighter fighter)
+		private static Peleador getNearestFriend(Pelea fight, Peleador fighter)
 		{
 			int dist = 1000;
-			Fighter curF = null;
-			for(Fighter f : fight.getFighters(3))
+			Peleador curF = null;
+			for(Peleador f : fight.getFighters(3))
 			{
 				if(f.isDead())continue;
 				if(f == fighter)continue;
@@ -795,11 +795,11 @@ public class Inteligencia {
 			return curF;
 		}
 		
-		private static Fighter getNearestEnnemy(Pelea fight, Fighter fighter)
+		private static Peleador getNearestEnnemy(Pelea fight, Peleador fighter)
 		{
 			int dist = 1000;
-			Fighter curF = null;
-			for(Fighter f : fight.getFighters(3))
+			Peleador curF = null;
+			for(Peleador f : fight.getFighters(3))
 			{
 				if(f.isDead())continue;
 				if(f.getTeam2() != fighter.getTeam2())//Si c'est un ennemis
@@ -815,11 +815,11 @@ public class Inteligencia {
 			return curF;
 		}
 		
-		private static Map<Integer,Fighter> getLowHpEnnemyList(Pelea fight, Fighter fighter)
+		private static Map<Integer, Peleador> getLowHpEnnemyList(Pelea fight, Peleador fighter)
 		{
-			Map<Integer,Fighter> list = new TreeMap<>();
-			Map<Integer,Fighter> ennemy = new TreeMap<>();
-			for(Fighter f : fight.getFighters(3))
+			Map<Integer, Peleador> list = new TreeMap<>();
+			Map<Integer, Peleador> ennemy = new TreeMap<>();
+			for(Peleador f : fight.getFighters(3))
 			{
 				if(f.isDead())continue;
 				if(f == fighter)continue;
@@ -834,12 +834,12 @@ public class Inteligencia {
 			while ( i < i2)
 			{
 				curHP = 200000;
-				for(Entry<Integer, Fighter> t : ennemy.entrySet())
+				for(Entry<Integer, Peleador> t : ennemy.entrySet())
 				{
 					if (t.getValue().getPDV() < curHP)
 						curHP = t.getValue().getPDV();
 				}
-				Fighter test = ennemy.get(curHP);
+				Peleador test = ennemy.get(curHP);
 				list.put(test.getPDV(), test);
 				ennemy.remove(curHP);
 				i++;
@@ -848,12 +848,12 @@ public class Inteligencia {
 		}
 		
 		
-		private static int attackIfPossible(Pelea fight, Fighter fighter)// 0 = Rien, 5 = EC, 666 = NULL, 10 = SpellNull ou ActionEnCour ou Can'tCastSpell, 0 = AttaqueOK
+		private static int attackIfPossible(Pelea fight, Peleador fighter)// 0 = Rien, 5 = EC, 666 = NULL, 10 = SpellNull ou ActionEnCour ou Can'tCastSpell, 0 = AttaqueOK
 		{	
-			Map<Integer,Fighter> ennemyList = getLowHpEnnemyList(fight,fighter);
+			Map<Integer, Peleador> ennemyList = getLowHpEnnemyList(fight,fighter);
 			SortStats SS = null;
-			Fighter target = null;
-			for(Entry<Integer, Fighter> t : ennemyList.entrySet()) // pour chaque ennemi on cherche le meilleur sort
+			Peleador target = null;
+			for(Entry<Integer, Peleador> t : ennemyList.entrySet()) // pour chaque ennemi on cherche le meilleur sort
 			{
 				SS = getBestSpellForTarget(fight,fighter,t.getValue());
 				if(SS != null) // s'il existe un sort pour un ennemi, on le prend pour cible
@@ -895,12 +895,12 @@ public class Inteligencia {
 			return 0;
 		}
 		
-		private static int attackIfPossiblePerco(Pelea fight, Fighter fighter)
+		private static int attackIfPossiblePerco(Pelea fight, Peleador fighter)
 		{	
-			Map<Integer,Fighter> ennemyList = getLowHpEnnemyList(fight,fighter);
+			Map<Integer, Peleador> ennemyList = getLowHpEnnemyList(fight,fighter);
 			SortStats SS = null;
-			Fighter target = null;
-			for(Entry<Integer, Fighter> t : ennemyList.entrySet())
+			Peleador target = null;
+			for(Entry<Integer, Peleador> t : ennemyList.entrySet())
 			{
 				SS = getBestSpellForTargetPerco(fight,fighter,t.getValue());
 				if(SS != null)
@@ -945,7 +945,7 @@ public class Inteligencia {
 		}
 		
 		
-		private static boolean moveToAttackIfPossible(Pelea fight, Fighter fighter)
+		private static boolean moveToAttackIfPossible(Pelea fight, Peleador fighter)
 		{
 			ArrayList<Integer> cells = Camino.getListCaseFromFighter(fight,fighter);
 			if(cells == null)
@@ -954,7 +954,7 @@ public class Inteligencia {
 			ArrayList <SortStats> sorts = getLaunchableSort(fighter,fight,distMin);
 			if(sorts == null)
 				return false;
-			ArrayList <Fighter> targets = getPotentialTarget(fight,fighter,sorts);
+			ArrayList <Peleador> targets = getPotentialTarget(fight,fighter,sorts);
 			if(targets == null)
 				return false;
 			
@@ -964,7 +964,7 @@ public class Inteligencia {
 			{
 				for(SortStats S : sorts)
 				{
-					for(Fighter T : targets)
+					for(Peleador T : targets)
 					{
 						if(fight.CanCastSpell(fighter,S,T.get_fightCell(),i))
 						{
@@ -1028,7 +1028,7 @@ public class Inteligencia {
 			
 		}
 		
-		private static ArrayList <SortStats> getLaunchableSort(Fighter fighter, Pelea fight, int distMin)
+		private static ArrayList <SortStats> getLaunchableSort(Peleador fighter, Pelea fight, int distMin)
 		{
 			ArrayList <SortStats> sorts = new ArrayList<>();
 			if(fighter.getMob() == null)
@@ -1052,7 +1052,7 @@ public class Inteligencia {
 			return finalS;
 		}
 		
-		private static ArrayList <SortStats> TriInfluenceSorts(Pelea fight, Fighter fighter, ArrayList <SortStats> sorts)
+		private static ArrayList <SortStats> TriInfluenceSorts(Pelea fight, Peleador fighter, ArrayList <SortStats> sorts)
 		{
 			if(sorts == null)
 				return null;
@@ -1089,9 +1089,9 @@ public class Inteligencia {
 			return finalSorts;
 		}
 		
-		private static ArrayList <Fighter> getPotentialTarget(Pelea fight, Fighter fighter, ArrayList<SortStats> sorts)
+		private static ArrayList <Peleador> getPotentialTarget(Pelea fight, Peleador fighter, ArrayList<SortStats> sorts)
 		{
-			ArrayList <Fighter> targets = new ArrayList<>();
+			ArrayList <Peleador> targets = new ArrayList<>();
 			int distMax = 0;
 			for(SortStats S : sorts)
 			{
@@ -1099,8 +1099,8 @@ public class Inteligencia {
 					distMax = S.getMaxPO();
 			}
 			distMax += fighter.getCurPM(fight);
-			Map<Integer,Fighter> potentialsT = getLowHpEnnemyList(fight,fighter);
-			for(Entry<Integer,Fighter> T : potentialsT.entrySet())
+			Map<Integer, Peleador> potentialsT = getLowHpEnnemyList(fight,fighter);
+			for(Entry<Integer, Peleador> T : potentialsT.entrySet())
 			{
 				int dist = Camino.getDistanceBetween(fight.get_map(), fighter.get_fightCell().getID(), T.getValue().get_fightCell().getID());
 				if(dist < distMax)
@@ -1110,7 +1110,7 @@ public class Inteligencia {
 			return targets;
 		}
 		
-		private static SortStats getBestSpellForTarget(Pelea fight, Fighter F, Fighter T)
+		private static SortStats getBestSpellForTarget(Pelea fight, Peleador F, Peleador T)
 		{
 			int inflMax = 0;
 			SortStats ss = null;
@@ -1160,7 +1160,7 @@ public class Inteligencia {
 			return ss;
 		}
 		
-		private static SortStats getBestSpellForTargetPerco(Pelea fight, Fighter F, Fighter T)
+		private static SortStats getBestSpellForTargetPerco(Pelea fight, Peleador F, Peleador T)
 		{
 			int inflMax = 0;
 			SortStats ss = null;
@@ -1211,7 +1211,7 @@ public class Inteligencia {
 			return ss;
 		}
 
-		private static int getBestTargetZone(Pelea fight, Fighter fighter, SortStats spell, int launchCell)
+		private static int getBestTargetZone(Pelea fight, Peleador fighter, SortStats spell, int launchCell)
 		{
 			if(spell.getPorteeType().isEmpty() || (spell.getPorteeType().charAt(0) == 'P' && spell.getPorteeType().charAt(1) == 'a'))
 			{
@@ -1308,7 +1308,7 @@ public class Inteligencia {
 			return inf;
 		}
 		
-		private static int calculInfluence(Pelea fight, SortStats ss, Fighter C, Fighter T)
+		private static int calculInfluence(Pelea fight, SortStats ss, Peleador C, Peleador T)
 		{		
 			//FIXME TODO
 			int infTot = 0;
@@ -1333,12 +1333,12 @@ public class Inteligencia {
 				for(Case C1 : cells)
 				{
 					if(C1 == null)continue;
-					Fighter F = C1.getFirstFighter();
+					Peleador F = C1.getFirstFighter();
 					if(F == null)continue;
 					//Ne touche pas les alliés
 					if(((TE & 1) == 1) && (F.getTeam() == C.getTeam()))continue;
 					//Ne touche pas le lanceur
-					if((((TE>>1) & 1) == 1) && (F.getGUID() == C.getGUID()))continue;
+					if((((TE>>1) & 1) == 1) && (F.getID() == C.getID()))continue;
 					//Ne touche pas les ennemies
 					if((((TE>>2) & 1) == 1) && (F.getTeam() != C.getTeam()))continue;
 					//Ne touche pas les combatants (seulement invocations)
@@ -1346,7 +1346,7 @@ public class Inteligencia {
 					//Ne touche pas les invocations
 					if((((TE>>4) & 1) == 1) && (F.isInvocation()))continue;
 					//N'affecte que le lanceur
-					if((((TE>>5) & 1) == 1) && (F.getGUID() != C.getGUID()))continue;
+					if((((TE>>5) & 1) == 1) && (F.getID() != C.getID()))continue;
 					//Si pas encore eu de continue, on ajoute la case
 					finalCells.add(C1);
 				}
@@ -1354,8 +1354,8 @@ public class Inteligencia {
 				if(((TE>>5) & 1) == 1)
 					if(!finalCells.contains(C.get_fightCell()))
 						finalCells.add(C.get_fightCell());
-				ArrayList<Fighter> cibles = EfectoHechizo.getTargets(SE,fight,finalCells);
-				for (Fighter fighter : cibles)
+				ArrayList<Peleador> cibles = EfectoHechizo.getTargets(SE,fight,finalCells);
+				for (Peleador fighter : cibles)
 				{
 					if (fighter.getTeam() == C.getTeam())
 						allies++;

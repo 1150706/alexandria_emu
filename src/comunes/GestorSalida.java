@@ -21,7 +21,7 @@ import objetos.Pelea;
 import objetos.Mapa.Case;
 import objetos.Mapa.InteractiveObject;
 import objetos.Mapa.MountPark;
-import objetos.Pelea.Fighter;
+import objetos.Pelea.Peleador;
 import objetos.Gremio.GuildMember;
 import objetos.Mercadillo.HdvEntry;
 import objetos.Oficio.StatsMetier;
@@ -455,7 +455,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_ON_FIGHTER_KICK(Pelea f, int guid, int team) {
 		String packet = "GM|-"+guid;
-		for(Fighter F : f.getFighters(team)) {
+		for(Peleador F : f.getFighters(team)) {
 			if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getJuegoThread() == null || F.getPersonnage().getID() == guid)continue;
 			enviar(F.getPersonnage().getCuenta().getJuegoThread().get_out(),packet);
 		}
@@ -463,15 +463,15 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Fighter ID "+f.get_id()+": Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ALTER_FIGHTER_MOUNT(Pelea fight, Fighter fighter, int guid, int team, int otherteam) {
+	public static void GAME_SEND_ALTER_FIGHTER_MOUNT(Pelea fight, Peleador fighter, int guid, int team, int otherteam) {
 		StringBuilder packet = new StringBuilder();
 		packet.append("GM|-").append(guid).append((char)0x00).append(fighter.getGmPacket('~'));
-		for(Fighter F : fight.getFighters(team)) {
+		for(Peleador F : fight.getFighters(team)) {
 			if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getJuegoThread() == null || !F.getPersonnage().isConectado())continue;
 			enviar(F.getPersonnage().getCuenta().getJuegoThread().get_out(),packet.toString());
 		}
 		if(otherteam > -1) {
-			for(Fighter F : fight.getFighters(otherteam)) {
+			for(Peleador F : fight.getFighters(otherteam)) {
 				if(F.getPersonnage() == null || F.getPersonnage().getCuenta().getJuegoThread() == null || !F.getPersonnage().isConectado())continue;
 				enviar(F.getPersonnage().getCuenta().getJuegoThread().get_out(),packet.toString());
 			}
@@ -534,7 +534,7 @@ public class GestorSalida {
 		packet.append("GJK").append(state).append("|");
 		packet.append(cancelBtn).append("|").append(duel).append("|");
 		packet.append(spec).append("|").append(time).append("|").append(type);
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())
 				continue;
@@ -546,7 +546,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_FIGHT_PLACES_PACKET_TO_FIGHT(Pelea fight, int teams, String places, int team) {
 		String packet = "GP"+places+"|"+team;
-		for(Fighter f : fight.getFighters(teams)) {
+		for(Peleador f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			enviar(f.getPersonnage(),packet);
@@ -585,25 +585,25 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(Mapa map, int teamID, Fighter perso) {
+	public static void GAME_SEND_ADD_IN_TEAM_PACKET_TO_MAP(Mapa map, int teamID, Peleador perso) {
 		StringBuilder packet = new StringBuilder();
-		packet.append("Gt").append(teamID).append("|+").append(perso.getGUID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
+		packet.append("Gt").append(teamID).append("|+").append(perso.getID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
 		for(Personaje z : map.getPersos()) enviar(z,packet.toString());
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
 	}
 	
-	public static void GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(Personaje p, Mapa map, int teamID, Fighter perso) {
+	public static void GAME_SEND_ADD_IN_TEAM_PACKET_TO_PLAYER(Personaje p, Mapa map, int teamID, Peleador perso) {
 		StringBuilder packet = new StringBuilder();
-		packet.append("Gt").append(teamID).append("|+").append(perso.getGUID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
+		packet.append("Gt").append(teamID).append("|+").append(perso.getID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
 		enviar(p,packet.toString());
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
 	}
 	
-	public static void GAME_SEND_REMOVE_IN_TEAM_PACKET_TO_MAP(Mapa map, int teamID, Fighter perso) {
+	public static void GAME_SEND_REMOVE_IN_TEAM_PACKET_TO_MAP(Mapa map, int teamID, Peleador perso) {
 		StringBuilder packet = new StringBuilder();
-		packet.append("Gt").append(teamID).append("|-").append(perso.getGUID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
+		packet.append("Gt").append(teamID).append("|-").append(perso.getID()).append(";").append(perso.getPacketsName()).append(";").append(perso.get_lvl());
 		for(Personaje z : map.getPersos()) enviar(z,packet.toString());
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet.toString());
@@ -639,13 +639,13 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Map: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_ON_EQUIP_ITEM_FIGHT(Personaje _perso, Fighter f, Pelea F) {
+	public static void GAME_SEND_ON_EQUIP_ITEM_FIGHT(Personaje _perso, Peleador f, Pelea F) {
 		String packet = _perso.parseToOa();
-		for(Fighter z : F.getFighters(f.getTeam2())) {
+		for(Peleador z : F.getFighters(f.getTeam2())) {
 			if(z.getPersonnage() == null) continue;
 			enviar(z.getPersonnage(),packet);
 		}
-		for(Fighter z : F.getFighters(f.getOtherTeam())) {
+		for(Peleador z : F.getFighters(f.getOtherTeam())) {
 			if(z.getPersonnage() == null) continue;
 			enviar(z.getPersonnage(),packet);
 		}
@@ -656,7 +656,7 @@ public class GestorSalida {
 	public static void GAME_SEND_FIGHT_CHANGE_PLACE_PACKET_TO_FIGHT(Pelea fight, int teams, Mapa map, int guid, int cell)
 	{
 		String packet = "GIC|"+guid+";"+cell+";1";
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -678,7 +678,7 @@ public class GestorSalida {
 	{
 		String packet = "GR"+(b?"1":"0")+guid;
 		if(fight.get_state() != 2)return;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			if(f.hasLeft())continue;
@@ -749,7 +749,7 @@ public class GestorSalida {
 
 	public static void ENVIAR_MENSAJE_DESDE_LANG_EN_PELEA(Pelea fight, int teams, String id) {
 		String packet = "Im"+id;
-		for(Fighter f : fight.getFighters(teams)) {
+		for(Peleador f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			enviar(f.getPersonnage(),packet);
@@ -784,12 +784,12 @@ public class GestorSalida {
 	{
 		StringBuilder packet = new StringBuilder();
 		packet.append("GIC|");
-		for(Fighter p : fight.getFighters(3))
+		for(Peleador p : fight.getFighters(3))
 		{
 			if(p.get_fightCell() == null)continue;
-			packet.append(p.getGUID()).append(";").append(p.get_fightCell().getID()).append(";1|");
+			packet.append(p.getID()).append(";").append(p.get_fightCell().getID()).append(";1|");
 		}
-		for(Fighter perso:fight.getFighters(teams))
+		for(Peleador perso:fight.getFighters(teams))
 		{
 			if(perso.hasLeft())continue;
 			if(perso.getPersonnage() == null || !perso.getPersonnage().isConectado())continue;
@@ -798,12 +798,12 @@ public class GestorSalida {
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet.toString());
 	}
-	public static void GAME_SEND_GIC_PACKET_TO_FIGHT(Pelea fight, int teams, Fighter f)
+	public static void GAME_SEND_GIC_PACKET_TO_FIGHT(Pelea fight, int teams, Peleador f)
 	{
 		StringBuilder packet = new StringBuilder();
-		packet.append("GIC|").append(f.getGUID()).append(";").append(f.get_fightCell().getID()).append(";1|");
+		packet.append("GIC|").append(f.getID()).append(";").append(f.get_fightCell().getID()).append(";1|");
 
-		for(Fighter perso:fight.getFighters(teams))
+		for(Peleador perso:fight.getFighters(teams))
 		{
 			if(perso.hasLeft())continue;
 			if(perso.getPersonnage() == null || !perso.getPersonnage().isConectado())continue;
@@ -815,7 +815,7 @@ public class GestorSalida {
 	public static void GAME_SEND_GS_PACKET_TO_FIGHT(Pelea fight, int teams)
 	{
 		String packet = "GS";
-		for(Fighter f:fight.getFighters(teams))
+		for(Peleador f:fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			f.initBuffStats();
@@ -834,7 +834,7 @@ public class GestorSalida {
 	}
 	public static void GAME_SEND_GTL_PACKET_TO_FIGHT(Pelea fight, int teams)
 	{
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -854,9 +854,9 @@ public class GestorSalida {
 	{
 		StringBuilder packet = new StringBuilder();
 		packet.append("GTM");
-		for(Fighter f : fight.getFighters(3))
+		for(Peleador f : fight.getFighters(3))
 		{
-			packet.append("|").append(f.getGUID()).append(";");
+			packet.append("|").append(f.getID()).append(";");
 			if(f.isDead())
 			{
 				packet.append("1");
@@ -867,7 +867,7 @@ public class GestorSalida {
 			packet.append(";");//??
 			packet.append(f.getPDVMAX());
 		}
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -880,7 +880,7 @@ public class GestorSalida {
 	public static void GAME_SEND_GAMETURNSTART_PACKET_TO_FIGHT(Pelea fight, int teams, int guid, int time)
 	{
 		String packet = "GTS"+guid+"|"+time;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -920,7 +920,7 @@ public class GestorSalida {
 	public static void GAME_SEND_GAS_PACKET_TO_FIGHT(Pelea fight, int teams, int guid)
 	{
 		String packet = "GAS"+guid;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -936,7 +936,7 @@ public class GestorSalida {
 		if(!s2.equals(""))
 			packet+=";"+s2;
 		
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -962,7 +962,7 @@ public class GestorSalida {
 	public static void GAME_SEND_GA_PACKET_TO_FIGHT(Pelea fight, int teams, int gameActionID, String s1, String s2, String s3)
 	{
 		String packet = "GA"+gameActionID+";"+s1+";"+s2+";"+s3;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -974,7 +974,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_GAMEACTION_TO_FIGHT(Pelea fight, int teams, String packet)
 	{
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -987,7 +987,7 @@ public class GestorSalida {
 	public static void GAME_SEND_GAF_PACKET_TO_FIGHT(Pelea fight, int teams, int i1, int guid)
 	{
 		String packet = "GAF"+i1+"|"+guid;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			enviar(f.getPersonnage(),packet);
@@ -1015,7 +1015,7 @@ public class GestorSalida {
 	public static void GAME_SEND_GAMETURNSTOP_PACKET_TO_FIGHT(Pelea fight, int teams, int guid)
 	{
 		String packet = "GTF"+guid;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -1028,7 +1028,7 @@ public class GestorSalida {
 	public static void GAME_SEND_GTR_PACKET_TO_FIGHT(Pelea fight, int teams, int guid)
 	{
 		String packet = "GTR"+guid;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -1073,7 +1073,7 @@ public class GestorSalida {
 	public static void GAME_SEND_FIGHT_PLAYER_DIE_TO_FIGHT(Pelea fight, int teams, int guid)
 	{
 		String packet = "GA;103;"+guid+";"+guid;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft() || f.getPersonnage() == null)continue;
 			if(f.getPersonnage().isConectado())
@@ -1086,7 +1086,7 @@ public class GestorSalida {
 	public static void GAME_SEND_FIGHT_GE_PACKET_TO_FIGHT(Pelea fight, int teams, int win)
 	{
 		String packet = fight.GetGE(win);
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft() || f.getPersonnage() == null)continue;
 			if(f.getPersonnage().isConectado())
@@ -1108,7 +1108,7 @@ public class GestorSalida {
 	{
 		StringBuilder packet = new StringBuilder();
 		packet.append("GIE").append(mType).append(";").append(cible).append(";").append(value).append(";").append(mParam2).append(";").append(mParam3).append(";").append(mParam4).append(";").append(turn).append(";").append(spellID);
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft() || f.getPersonnage() == null)continue;
 			if(f.getPersonnage().isConectado())
@@ -1121,7 +1121,7 @@ public class GestorSalida {
 	public static void GAME_SEND_MAP_FIGHT_GMS_PACKETS_TO_FIGHT(Pelea fight, int teams, Mapa map)
 	{
 		String packet = map.getFightersGMsPackets();
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -1141,11 +1141,11 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Fight: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_FIGHT_PLAYER_JOIN(Pelea fight, int teams, Fighter _fighter)
+	public static void GAME_SEND_FIGHT_PLAYER_JOIN(Pelea fight, int teams, Peleador _fighter)
 	{
 		String packet = _fighter.getGmPacket('+');
 		
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if (f != _fighter)
 			{
@@ -1235,7 +1235,7 @@ public class GestorSalida {
 		
         String packet = "cMK" + suffix + "|" + guid + "|" + name + "|" + msg;
 		assert fight != null;
-		for(Fighter f : fight.getFighters(teams)) {
+		for(Peleador f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			enviar(f.getPersonnage(),packet);
@@ -1246,7 +1246,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_GDZ_PACKET_TO_FIGHT(Pelea fight, int teams, String suffix, int cell, int size, int unk) {
 		String packet = "GDZ"+suffix+cell+";"+size+";"+unk;
-		for(Fighter f : fight.getFighters(teams)) {
+		for(Peleador f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			enviar(f.getPersonnage(),packet);
@@ -1257,7 +1257,7 @@ public class GestorSalida {
 	
 	public static void GAME_SEND_GDC_PACKET_TO_FIGHT(Pelea fight, int teams, int cell) {
 		String packet = "GDC"+cell;
-		for(Fighter f : fight.getFighters(teams)) {
+		for(Peleador f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			enviar(f.getPersonnage(),packet);
@@ -1438,7 +1438,7 @@ public class GestorSalida {
         
 		String packet = "cS" + guid + "|" + id;
 		assert fight != null;
-		for(Fighter f : fight.getFighters(teams))
+		for(Peleador f : fight.getFighters(teams))
 		{
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
@@ -1619,9 +1619,9 @@ public class GestorSalida {
 		if(fight == null)return;
 		StringBuilder packet = new StringBuilder();
 		packet.append("fD").append(fight.get_id()).append("|");
-		for(Fighter f : fight.getFighters(1))packet.append(f.getPacketsName()).append("~").append(f.get_lvl()).append(";");
+		for(Peleador f : fight.getFighters(1))packet.append(f.getPacketsName()).append("~").append(f.get_lvl()).append(";");
 		packet.append("|");
-		for(Fighter f : fight.getFighters(2))packet.append(f.getPacketsName()).append("~").append(f.get_lvl()).append(";");
+		for(Peleador f : fight.getFighters(2))packet.append(f.getPacketsName()).append("~").append(f.get_lvl()).append(";");
 		enviar(out,packet.toString());
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			JuegoServidor.addToSockLog("Game: Send>>"+packet.toString());
@@ -2314,7 +2314,7 @@ public class GestorSalida {
     }
 
 	public static void GAME_SEND_PACKET_TO_FIGHT(Pelea fight, int i, String packet) {
-		for(Fighter f : fight.getFighters(i)) {
+		for(Peleador f : fight.getFighters(i)) {
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			enviar(f.getPersonnage(),packet);

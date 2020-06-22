@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import objetos.*;
 import objetos.Mapa.Case;
-import objetos.Pelea.Fighter;
+import objetos.Pelea.Peleador;
 import objetos.Pelea.Piege;
 
 public class Camino {
@@ -64,12 +64,12 @@ public class Camino {
 		}
 	}
 	
-	public static ArrayList<Fighter> getEnemyFighterArround(int cellID, Mapa map, Pelea fight) {
+	public static ArrayList<Peleador> getEnemyFighterArround(int cellID, Mapa map, Pelea fight) {
 		char[] dirs = {'b','d','f','h'};
-		ArrayList<Fighter> enemy = new ArrayList<>();
+		ArrayList<Peleador> enemy = new ArrayList<>();
 		
 		for(char dir : dirs) {
-			Fighter f = map.getMapa(GetCaseIDFromDirrection(cellID, dir, map, false)).getFirstFighter();
+			Peleador f = map.getMapa(GetCaseIDFromDirrection(cellID, dir, map, false)).getFirstFighter();
 			if(f != null) {
 				if(f.getTeam() != fight.getCurFighter().getTeam())
 					enemy.add(f);
@@ -88,12 +88,12 @@ public class Camino {
 			return false;
 	}
 	
-	public static ArrayList<Fighter> getFightersAround(int cellID, Mapa map, Pelea fight) {
+	public static ArrayList<Peleador> getFightersAround(int cellID, Mapa map, Pelea fight) {
 		char[] dirs = {'b','d','f','h'};
-		ArrayList<Fighter> fighters = new ArrayList<>();
+		ArrayList<Peleador> fighters = new ArrayList<>();
 		
 		for(char dir : dirs) {
-			Fighter f = map.getMapa(GetCaseIDFromDirrection(cellID, dir, map, false)).getFirstFighter();
+			Peleador f = map.getMapa(GetCaseIDFromDirrection(cellID, dir, map, false)).getFirstFighter();
 			if(f != null)
 				fighters.add(f);
 		}
@@ -104,14 +104,14 @@ public class Camino {
 		_nSteps = 0;
         char dir = Path.charAt(0);
         int dirCaseID = GestorEncriptador.cellCode_To_ID(Path.substring(1));
-        if(fight != null && fight.isOccuped(dirCaseID))
+        if(fight != null && fight.isOcupada(dirCaseID))
         	return "no:";
         int lastPos = CurrentPos;
         for (_nSteps = 1; _nSteps <= 64; _nSteps++) {
         	if (GetCaseIDFromDirrection(lastPos, dir, map, fight!=null) == dirCaseID) {
-            	if(fight != null && fight.isOccuped(dirCaseID))return "stop:"+lastPos;
+            	if(fight != null && fight.isOcupada(dirCaseID))return "stop:"+lastPos;
             	
-            	if(map.getMapa(dirCaseID).isWalkable(true))return "ok:";
+            	if(map.getMapa(dirCaseID).isCaminable(true))return "ok:";
             	else {
             		_nSteps--;
             		return ("stop:"+lastPos);
@@ -119,7 +119,7 @@ public class Camino {
             }
             else lastPos = GetCaseIDFromDirrection(lastPos, dir, map, fight!=null);
         	
-            if(fight != null && fight.isOccuped(lastPos)) {
+            if(fight != null && fight.isOcupada(lastPos)) {
             	return "no:";
            	}
             if(fight != null) {
@@ -184,7 +184,7 @@ public class Camino {
 			}			
 			
 			if(map.getMapa(nextCase) != null
-					&& map.getMapa(nextCase).isWalkable(true)
+					&& map.getMapa(nextCase).isCaminable(true)
 					&& map.getMapa(nextCase).getFighters().isEmpty())
 				id = nextCase;
 			else
@@ -242,9 +242,9 @@ public class Camino {
 		return false;
 	}
 
-	public static ArrayList<Fighter> getCiblesByZoneByWeapon(Pelea fight, int type, Case cell, int castCellID)
+	public static ArrayList<Peleador> getCiblesByZoneByWeapon(Pelea fight, int type, Case cell, int castCellID)
 	{
-		ArrayList<Fighter> cibles = new ArrayList<>();
+		ArrayList<Peleador> cibles = new ArrayList<>();
 		char c = getDirBetweenTwoCase(castCellID,cell.getID(),fight.get_map(),true);
 		if(c == 0)
 		{
@@ -257,32 +257,32 @@ public class Camino {
 		//Cases devant celle ou l'on vise
 		switch (type) {
 			case Constantes.ITEM_TYPE_MARTEAU -> {
-				Fighter f = getFighter2CellBefore(castCellID, c, fight.get_map());
+				Peleador f = getFighter2CellBefore(castCellID, c, fight.get_map());
 				if (f != null)
 					cibles.add(f);
-				Fighter g = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c - 1));
+				Peleador g = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c - 1));
 				if (g != null)
 					cibles.add(g);//Ajoute case a gauche
-				Fighter h = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c + 1));
+				Peleador h = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c + 1));
 				if (h != null)
 					cibles.add(h);//Ajoute case a droite
-				Fighter i = cell.getFirstFighter();
+				Peleador i = cell.getFirstFighter();
 				if (i != null)
 					cibles.add(i);
 			}
 			case Constantes.ITEM_TYPE_BATON -> {
-				Fighter j = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c - 1));
+				Peleador j = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c - 1));
 				if (j != null)
 					cibles.add(j);//Ajoute case a gauche
-				Fighter k = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c + 1));
+				Peleador k = get1StFighterOnCellFromDirection(fight.get_map(), castCellID, (char) (c + 1));
 				if (k != null)
 					cibles.add(k);//Ajoute case a droite
-				Fighter l = cell.getFirstFighter();
+				Peleador l = cell.getFirstFighter();
 				if (l != null)
 					cibles.add(l);//Ajoute case cible
 			}
 			case Constantes.ITEM_TYPE_PIOCHE, Constantes.ITEM_TYPE_EPEE, Constantes.ITEM_TYPE_FAUX, Constantes.ITEM_TYPE_DAGUES, Constantes.ITEM_TYPE_BAGUETTE, Constantes.ITEM_TYPE_PELLE, Constantes.ITEM_TYPE_ARC, Constantes.ITEM_TYPE_HACHE -> {
-				Fighter m = cell.getFirstFighter();
+				Peleador m = cell.getFirstFighter();
 				if (m != null)
 					cibles.add(m);
 			}
@@ -290,7 +290,7 @@ public class Camino {
 		return cibles;
 	}
 
-	private static Fighter get1StFighterOnCellFromDirection(Mapa map, int id, char c)
+	private static Peleador get1StFighterOnCellFromDirection(Mapa map, int id, char c)
 	{ 
 		if(c == (char)('a'-1))
 			c = 'h';
@@ -299,7 +299,7 @@ public class Camino {
 		return map.getMapa(GetCaseIDFromDirrection(id,c,map,false)).getFirstFighter();
 	}
 
-	private static Fighter getFighter2CellBefore(int CellID, char c, Mapa map)
+	private static Peleador getFighter2CellBefore(int CellID, char c, Mapa map)
 	{
 		int new2CellID = GetCaseIDFromDirrection(GetCaseIDFromDirrection(CellID,c,map,false),c,map,false);
 		return map.getMapa(new2CellID).getFirstFighter();
@@ -433,7 +433,7 @@ public class Camino {
 		return (loc5 - loc7);
 	}
 	
-	public static boolean checkLoS(Mapa map, int cell1, int cell2, Fighter fighter, boolean isPeur)
+	public static boolean checkLoS(Mapa map, int cell1, int cell2, Peleador fighter, boolean isPeur)
 	{
 		if(fighter != null && fighter.getPersonnage() != null) // on ne revérifie pas (en plus du client) pour les joueurs
 			return true;
@@ -447,7 +447,7 @@ public class Camino {
 		for(Integer cellID : CellsToConsider) {
 			//System.out.print(cellID+";");
 			if(map.getMapa(cellID) != null)
-				if(!map.getMapa(cellID).blockLoS() || ( !map.getMapa(cellID).isWalkable(false) && isPeur )) {
+				if(!map.getMapa(cellID).blockLoS() || ( !map.getMapa(cellID).isCaminable(false) && isPeur )) {
 					//System.out.println("Il y a une case au moins qui gene la ligne de vue");
 					return false;
 				}
@@ -575,7 +575,7 @@ public class Camino {
 			int c = Camino.GetCaseIDFromDirrection(startCell, d, map, true);
 			int dis = Camino.getDistanceBetween(map, endCell, c);
 			
-			if(dis < dist && map.getMapa(c).isWalkable(true)
+			if(dis < dist && map.getMapa(c).isCaminable(true)
 					&& map.getMapa(c).getFirstFighter() == null
 					&& !forbidens.contains(map.getMapa(c))) {
 				dist = dis;
@@ -659,7 +659,7 @@ public class Camino {
 		return curPath;
 	}
 	
-	public static ArrayList<Integer> getListCaseFromFighter(Pelea fight, Fighter fighter) {
+	public static ArrayList<Integer> getListCaseFromFighter(Pelea fight, Peleador fighter) {
 		ArrayList<Integer> cells = new ArrayList<>();
 		int start = fighter.get_fightCell().getID();
 		int[] curPath;
@@ -678,7 +678,7 @@ public class Camino {
 				i--;
 			} else {
 				int curCell = getCellFromPath(start,curPath);
-				if(fight.get_map().getMapa(curCell).isWalkable(true) && fight.get_map().getMapa(curCell).getFirstFighter() == null)
+				if(fight.get_map().getMapa(curCell).isCaminable(true) && fight.get_map().getMapa(curCell).getFirstFighter() == null)
 				{
 					if(!cells.contains(curCell))
 					{
@@ -709,7 +709,7 @@ public class Camino {
 		return cell;
 	}
 	
-	public static ArrayList<Integer> triCellList(Pelea fight, Fighter fighter, ArrayList<Integer> cells) {
+	public static ArrayList<Integer> triCellList(Pelea fight, Peleador fighter, ArrayList<Integer> cells) {
 		ArrayList<Integer> Fcells = new ArrayList<>();
 		ArrayList<Integer> copie = cells;
 		int dist = 100;

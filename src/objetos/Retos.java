@@ -6,7 +6,7 @@ import comunes.GestorSalida;
 import java.util.ArrayList;
 import java.util.List;
 
-import objetos.Pelea.Fighter;
+import objetos.Pelea.Peleador;
 
 public class Retos {
   private final int _type;
@@ -16,11 +16,11 @@ public class Retos {
   private final int _gainXp;
   private final int _gainDrop;
   private int _args = -1;
-  private Fighter _cible;
+  private Peleador _cible;
   private String _lastActions;
   private String _arguments = new String();
   private long _lastActions_time;
-  private final List<Pelea.Fighter> _ordreJeu = new ArrayList<>();
+  private final List<Peleador> _ordreJeu = new ArrayList<>();
 
   public Retos(Pelea fight, int challengeType, int gainXp, int gainDrop) {
     _lastActions = "";
@@ -54,8 +54,8 @@ public class Retos {
 		switch(_type) {
 		case 44: // Partage
 		case 46: // Chacun son monstre
-			for(Fighter fighter : _fight.getFighters(1))
-				if(!_arguments.contains(";"+fighter.getGUID()+";")) {
+			for(Peleador fighter : _fight.getFighters(1))
+				if(!_arguments.contains(";"+fighter.getID()+";")) {
 					challenge_Foirer(fighter);
 					break;
 				}
@@ -68,13 +68,13 @@ public class Retos {
 	public void show_cibleToPerso(Personaje p) {
 		if (!_challengeAlive || _cible == null || _cible.get_fightCell() == null || p == null)
 			return;
-		GestorSalida.enviar(	p, "Gf" + _cible.getGUID() + "|" + _cible.get_fightCell().getID());
+		GestorSalida.enviar(	p, "Gf" + _cible.getID() + "|" + _cible.get_fightCell().getID());
 	}
 
 	public void show_cibleToFight() {
 		if (!_challengeAlive || _cible == null || _cible.get_fightCell() == null)
 			return;
-		GestorSalida.GAME_SEND_PACKET_TO_FIGHT(_fight, 7, "Gf" + _cible.getGUID() + "|" + _cible.get_fightCell().getID());
+		GestorSalida.GAME_SEND_PACKET_TO_FIGHT(_fight, 7, "Gf" + _cible.getID() + "|" + _cible.get_fightCell().getID());
 	}
 	
 	public String parseToPacket() {
@@ -82,7 +82,7 @@ public class Retos {
 		packet.append("Gd");
 		packet.append(_type).append(";");
 		packet.append(_cible != null ? "1" : "0").append(";");
-		packet.append(_cible != null ? (Integer.valueOf(_cible.getGUID())) : "").append(";");
+		packet.append(_cible != null ? (Integer.valueOf(_cible.getID())) : "").append(";");
 		packet.append(_gainXp).append(";0;");
 		packet.append(_gainDrop).append(";0;");
 		if (!_challengeAlive)
@@ -99,7 +99,7 @@ public class Retos {
 	    GestorSalida.GAME_SEND_PACKET_TO_FIGHT(_fight, 7, "GdOK" + _type);
 	}
 
-	public void challenge_Foirer(Fighter graceAqui) {
+	public void challenge_Foirer(Peleador graceAqui) {
 		String nom = "";
 		try {
 			nom = graceAqui.getPersonnage().getNombre();
@@ -122,7 +122,7 @@ public class Retos {
 	        int noBoucle = 0;
 	        while (_cible == null)
 	          if (_ordreJeu.size() > 0) {
-	            Pelea.Fighter f = _ordreJeu.get(Formulas.getRandomValue(0, _ordreJeu.size() - 1));
+	            Peleador f = _ordreJeu.get(Formulas.getRandomValue(0, _ordreJeu.size() - 1));
 	            if (f.getPersonnage() == null)
 	              _cible = f;
 	            noBoucle++;
@@ -134,7 +134,7 @@ public class Retos {
 	    case 10 : // Cruel
 	    	try {
 	    		int levelMin = 2000;
-	    		for(Fighter fighter : _fight.getFighters(2)) {
+	    		for(Peleador fighter : _fight.getFighters(2)) {
 	    			if(fighter.getPersonnage() == null && fighter.get_lvl() < levelMin) {
 	    				levelMin = fighter.get_lvl();
 	    				_cible = fighter;
@@ -147,7 +147,7 @@ public class Retos {
 	    case 25 : // Ordonné
 	    	try {
 	    		int levelMax = 0;
-	    		for(Fighter fighter : _fight.getFighters(2)) {
+	    		for(Peleador fighter : _fight.getFighters(2)) {
 	    			if(fighter.getPersonnage() == null && fighter.get_lvl() > levelMax) {
 	    				levelMax = fighter.get_lvl();
 	    				_cible = fighter;
@@ -160,7 +160,7 @@ public class Retos {
 	    }
 	  }
 	  
-	public void onFighter_die(Fighter fighter) {
+	public void onFighter_die(Peleador fighter) {
 		if(!_challengeAlive)
 			return;
 		switch (_type) {
@@ -169,7 +169,7 @@ public class Retos {
 // Protégez vos mules
 			case 49 -> {
 				int lvlMin = 5000;
-				for (Fighter f : _fight.getFighters(1))
+				for (Peleador f : _fight.getFighters(1))
 					if (f.get_lvl() < lvlMin)
 						lvlMin = f.get_lvl();
 				if (fighter.get_lvl() <= lvlMin) {
@@ -180,7 +180,7 @@ public class Retos {
 		}
 	}
 	
-	public void onFighters_attacked(ArrayList<Fighter> targets, Fighter caster, int effectID) {
+	public void onFighters_attacked(ArrayList<Peleador> targets, Peleador caster, int effectID) {
 		if (!_challengeAlive)
 			return;
 		String DamagingEffects = "|82|85|86|87|88|89|91|92|93|94|95|96|97|98|99|100|141|";
@@ -197,7 +197,7 @@ public class Retos {
 		switch(_type) {
 		case 17: // Intouchable
 			if(DamagingEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 0 && !target.isInvocation()) {
 						challenge_Foirer(caster);
 						break;
@@ -211,7 +211,7 @@ public class Retos {
 			
 		case 19: // Mains propres
 			if((caster.getTeam() == 0) && DamagingEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 1 && !target.isInvocation()) {
 						challenge_Foirer(caster);
 						break;
@@ -244,7 +244,7 @@ public class Retos {
 			
 		case 21: // Circulez !
 			if((caster.getTeam() == 0) && MPEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 1) {
 						challenge_Foirer(caster);
 						break;
@@ -253,7 +253,7 @@ public class Retos {
 			
 		case 22: // Le temps qui court !
 			if((caster.getTeam() == 0) && APEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 1) {
 						challenge_Foirer(caster);
 						break;
@@ -262,7 +262,7 @@ public class Retos {
 			
 		case 23: // Perdu de vue !
 			if((caster.getTeam() == 0) && OPEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 1) {
 						challenge_Foirer(caster);
 						break;
@@ -271,67 +271,67 @@ public class Retos {
 			
 		case 31: // Focus
 			if((caster.getTeam() == 0) && DamagingEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 1)
 						if(_arguments.isEmpty())
-							_arguments += ""+target.getGUID();
-						else if(!_arguments.contains(""+target.getGUID()))
+							_arguments += ""+target.getID();
+						else if(!_arguments.contains(""+target.getID()))
 							challenge_Foirer(caster);
 			break;
 			
 		case 32: // Elitiste
 		case 34: // Imprévisible
 			if((caster.getTeam() == 0) && DamagingEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 1)
-						if(_cible == null || _cible.getGUID() != target.getGUID())
+						if(_cible == null || _cible.getID() != target.getID())
 							challenge_Foirer(caster);
 			break;
 			
 		case 38: // Blitzkrieg
 			if((caster.getTeam() == 0) && DamagingEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 1) {
 						StringBuilder ID = new StringBuilder();
-						ID.append(";").append(target.getGUID()).append(",");
+						ID.append(";").append(target.getID()).append(",");
 						if(!_arguments.contains(ID.toString())) {
-							ID.append(caster.getGUID());
+							ID.append(caster.getID());
 							_arguments += ID.toString();
 						}
 					}
 			
 		case 43: // Abnégation
 			if((caster.getTeam() == 0) && HealingEffects.contains("|"+effectID+"|") && caster.getInvocator() == null)
-				for(Fighter target : targets)
-					if(target.getGUID() == caster.getGUID())
+				for(Peleador target : targets)
+					if(target.getID() == caster.getID())
 						challenge_Foirer(caster);
 			break;
 			
 		case 45: // Duel
 		case 46: // Chacun son monstre
 			if((caster.getTeam() == 0) && DamagingEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 1)
-						if(!_arguments.contains(";"+target.getGUID()+","))
-							_arguments += ";"+target.getGUID()+","+caster.getGUID()+";";
-						else if(_arguments.contains(";"+target.getGUID()+",") && !_arguments.contains(";"+target.getGUID()+","+caster.getGUID()+";"))
+						if(!_arguments.contains(";"+target.getID()+","))
+							_arguments += ";"+target.getID()+","+caster.getID()+";";
+						else if(_arguments.contains(";"+target.getID()+",") && !_arguments.contains(";"+target.getID()+","+caster.getID()+";"))
 							challenge_Foirer(target);
 			break;
 			
 		case 47: // Contamination
 			if(DamagingEffects.contains("|"+effectID+"|"))
-				for(Fighter target : targets)
+				for(Peleador target : targets)
 					if(target.getTeam() == 0) {
-						if(!_arguments.contains(";"+target.getGUID()+","))
-							_arguments += ";"+target.getGUID()+","+"3;";
+						if(!_arguments.contains(";"+target.getID()+","))
+							_arguments += ";"+target.getID()+","+"3;";
 					}
 			break;
 		}
 	}
 
-	public void onMob_die(Fighter mob, Fighter killer) {
+	public void onMob_die(Peleador mob, Peleador killer) {
 		
-		boolean isKiller = (killer.getGUID() == mob.getGUID() ? false : true);
+		boolean isKiller = (killer.getID() == mob.getID() ? false : true);
 		if (!_challengeAlive)
 			return;
 
@@ -340,7 +340,7 @@ public class Retos {
 			if (_cible == null)
 				return;
 			
-			if (_cible.getGUID() != mob.getGUID()) {
+			if (_cible.getID() != mob.getID()) {
 				challenge_Foirer(_fight.getCurFighter());
 			} else {
 				challenge_Gagner();
@@ -353,7 +353,7 @@ public class Retos {
 			if(_cible == null)
 				return;
 			
-			if(_cible.getGUID() == mob.getGUID() && !_fight.verifIfTeamIsDead()) {
+			if(_cible.getID() == mob.getID() && !_fight.verifIfTeamIsDead()) {
 				challenge_Foirer(_fight.getCurFighter());
 			}
 			break;
@@ -373,14 +373,14 @@ public class Retos {
 			break;
 			
 		case 31: // Focus
-			if(_arguments.contains(""+mob.getGUID()))
+			if(_arguments.contains(""+mob.getID()))
 				_arguments = "";
 			else
 				challenge_Foirer(killer);
 			break;
 			
 		case 32: // Elitiste
-			if(_cible.getGUID() == mob.getGUID())
+			if(_cible.getID() == mob.getID())
 				challenge_Gagner();
 			break;
 			
@@ -391,13 +391,13 @@ public class Retos {
 		case 44: // Partage
 		case 46: // Chacun son monstre
 			if(isKiller)
-				_arguments += ";"+killer.getGUID()+";";		
+				_arguments += ";"+killer.getID()+";";
 			break;
 		case 30: // Les petits d'abord
 		case 48: // Les mules d'abord
 			if(isKiller) {
 				int lvlMin = 5000;
-				for(Fighter f : _fight.getFighters(1))
+				for(Peleador f : _fight.getFighters(1))
 					if(f.get_lvl() < lvlMin)
 						lvlMin = f.get_lvl();
 				if(killer.get_lvl() > lvlMin) {
@@ -410,7 +410,7 @@ public class Retos {
 	    	if (_cible == null)
 				return;
 			
-			if (_cible.getGUID() != mob.getGUID()) {
+			if (_cible.getID() != mob.getID()) {
 				challenge_Foirer(_fight.getCurFighter());
 			}
 			try {
@@ -419,7 +419,7 @@ public class Retos {
 				while (_cible == null)
 					if (_ordreJeu.size() > 0) {
 						GUID = Formulas.getRandomValue(0, _ordreJeu.size() - 1);
-						Pelea.Fighter f = _ordreJeu.get(GUID);
+						Peleador f = _ordreJeu.get(GUID);
 						if (f.getPersonnage() == null && !f.isDead())
 							_cible = f;
 						noBoucle++;
@@ -433,12 +433,12 @@ public class Retos {
 	    	if (_cible == null)
 				return;
 			
-			if (_cible.getGUID() != mob.getGUID()) {
+			if (_cible.getID() != mob.getID()) {
 				challenge_Foirer(_fight.getCurFighter());
 			}
 	    	try {
 	    		int levelMin = 2000;
-	    		for(Fighter fighter : _fight.getFighters(2)) {
+	    		for(Peleador fighter : _fight.getFighters(2)) {
 	    			if(fighter.isDead()) 
 	    				continue;
 	    			if(fighter.getPersonnage() == null && fighter.get_lvl() < levelMin) {
@@ -457,12 +457,12 @@ public class Retos {
 	    	if (_cible == null)
 				return;
 			
-			if (_cible.getGUID() != mob.getGUID()) {
+			if (_cible.getID() != mob.getID()) {
 				challenge_Foirer(_fight.getCurFighter());
 			}
 	    	try {
 	    		int levelMax = 0;
-	    		for(Fighter fighter : _fight.getFighters(2)) {
+	    		for(Peleador fighter : _fight.getFighters(2)) {
 	    			if(fighter.isDead()) 
 	    				continue;
 	    			if(fighter.getPersonnage() == null && fighter.get_lvl() > levelMax) {
@@ -478,7 +478,7 @@ public class Retos {
 		return;
 	}
 
-	public void onPlayer_move(Fighter fighter)
+	public void onPlayer_move(Peleador fighter)
 	{
 		if(!_challengeAlive)
 			return;
@@ -490,7 +490,7 @@ public class Retos {
 		return;
 	}
 	
-	public void onPlayer_action(Fighter fighter, int actionID)
+	public void onPlayer_action(Peleador fighter, int actionID)
 	{
 		if(!_challengeAlive || fighter.getTeam() == 1)
 			return;
@@ -499,7 +499,7 @@ public class Retos {
 		
 		_lastActions_time = System.currentTimeMillis();
 		StringBuilder action = new StringBuilder();
-		action.append(";").append(fighter.getGUID());
+		action.append(";").append(fighter.getID());
 		action.append(",").append(actionID).append(";");
 		switch (_type) {
 // Econome
@@ -510,7 +510,7 @@ public class Retos {
 			}
 // Borné
 			case 24 -> {
-				if (!_lastActions.contains(action.toString()) && _lastActions.contains(";" + fighter.getGUID() + ","))
+				if (!_lastActions.contains(action.toString()) && _lastActions.contains(";" + fighter.getID() + ","))
 					challenge_Foirer(_fight.getCurFighter());
 				_lastActions += action.toString();
 			}
@@ -519,7 +519,7 @@ public class Retos {
 		
 	}
 	
-	public void onPlayer_cac(Fighter fighter) {
+	public void onPlayer_cac(Peleador fighter) {
 		
 		if (!_challengeAlive)
 			return;
@@ -533,7 +533,7 @@ public class Retos {
 					return;
 				_lastActions_time = System.currentTimeMillis();
 				StringBuilder action = new StringBuilder();
-				action.append(";").append(fighter.getGUID());
+				action.append(";").append(fighter.getID());
 				action.append(",").append("cac").append(";");
 				if (_lastActions.contains(action.toString()))
 					challenge_Foirer(_fight.getCurFighter());
@@ -543,7 +543,7 @@ public class Retos {
 		return;
 	}
 
-	public void onPlayer_spell(Fighter fighter) {
+	public void onPlayer_spell(Peleador fighter) {
 
 		if (!_challengeAlive)
 			return;
@@ -554,7 +554,7 @@ public class Retos {
 		return;
 	}
 
-	public void onPlayer_startTurn(Fighter fighter) {
+	public void onPlayer_startTurn(Peleador fighter) {
 		
 		if (!_challengeAlive)
 			return;
@@ -578,7 +578,7 @@ public class Retos {
 				while (_cible == null)
 					if (_ordreJeu.size() > 0) {
 						GUID = Formulas.getRandomValue(0, _ordreJeu.size() - 1);
-						Fighter f = _ordreJeu.get(GUID);
+						Peleador f = _ordreJeu.get(GUID);
 						if (f.getPersonnage() == null && !f.isDead())
 							_cible = f;
 						noBoucle++;
@@ -589,27 +589,27 @@ public class Retos {
 	        break;
 	        
 		case 38: // Blitzkrieg
-			if(fighter.getTeam() == 1 && _arguments.contains(";"+fighter.getGUID()+",")) {
+			if(fighter.getTeam() == 1 && _arguments.contains(";"+fighter.getID()+",")) {
 				// on récupère le premier fighter qui l'a attaqué
 				String[] str = _arguments.split(";");
 				int fighterID = 0;
 				for(String string : str) {
-					if(string.contains(""+fighter.getGUID())) {
+					if(string.contains(""+fighter.getID())) {
 						for(String test : string.split(",")) {
 							fighterID = Integer.parseInt(test);
 						}
 						break;
 					}
 				}
-				for(Fighter f : _fight.getFighters(1))
-					if(f.getGUID() == fighterID)
+				for(Peleador f : _fight.getFighters(1))
+					if(f.getID() == fighterID)
 						challenge_Foirer(f);
 			}
 			break;
 		
 		case 47: // Contamination
 			if(fighter.getTeam() == 0) {
-				String str = ";"+fighter.getGUID()+",";
+				String str = ";"+fighter.getID()+",";
 				if(_arguments.contains(str+"1;"))
 					challenge_Foirer(fighter);
 				else if(_arguments.contains(str+"2;"))
@@ -623,12 +623,12 @@ public class Retos {
 		return;
 	}
 
-	public void onPlayer_endTurn(Fighter fighter)
+	public void onPlayer_endTurn(Peleador fighter)
 	{
 		boolean hasFailed = false;
 		if(!_challengeAlive)
 			return;
-		ArrayList<Fighter> Neighbours = new ArrayList<>();
+		ArrayList<Peleador> Neighbours = new ArrayList<>();
 		Neighbours = Camino.getFightersAround(fighter.get_fightCell().getID(), _fight.get_map(),_fight);
 		switch(_type) {
 			case 1: // Zombie
@@ -678,7 +678,7 @@ public class Retos {
 			case 36 : // Hardi
 				hasFailed = true;
 				if(!Neighbours.isEmpty())
-					for(Fighter f : Neighbours)
+					for(Peleador f : Neighbours)
 						if(f.getTeam() != fighter.getTeam())
 							hasFailed = false;
 				break;
@@ -686,21 +686,21 @@ public class Retos {
 			case 37 : // Collant
 				hasFailed = true;
 				if(!Neighbours.isEmpty())
-					for(Fighter f : Neighbours)
+					for(Peleador f : Neighbours)
 						if(f.getTeam() == fighter.getTeam())
 							hasFailed = false;
 				break;
 			
 			case 39 : // Anachorète
 				if(!Neighbours.isEmpty())
-					for(Fighter f : Neighbours)
+					for(Peleador f : Neighbours)
 						if(f.getTeam() == fighter.getTeam())
 							challenge_Foirer(fighter);
 				break;
 				
 			case 40 : // Pusillanime
 				if(!Neighbours.isEmpty())
-					for(Fighter f : Neighbours)
+					for(Peleador f : Neighbours)
 						if(f.getTeam() != fighter.getTeam())
 							challenge_Foirer(fighter);
 				break;
@@ -711,7 +711,7 @@ public class Retos {
 				break;
 				
 			case 42 : // Deux pour le prix d'un
-				String GUID = ""+fighter.getGUID();
+				String GUID = ""+fighter.getID();
 				int compteur = 0;
 				for(String ID : _arguments.split(";"))
 					if(ID.equals(GUID))

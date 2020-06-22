@@ -13,7 +13,7 @@ import comunes.Camino;
 import comunes.Mundo;
 import objetos.Mapa.Case;
 import objetos.Pelea;
-import objetos.Pelea.Fighter;
+import objetos.Pelea.Peleador;
 
 public class Hechizos {
 	private final int spellID;
@@ -178,7 +178,7 @@ public class Hechizos {
 		}
 
 		
-		public void applySpellEffectToFight(Pelea fight, Fighter perso, Case cell, ArrayList<Case> cells, boolean isCC)
+		public void applySpellEffectToFight(Pelea fight, Peleador perso, Case cell, ArrayList<Case> cells, boolean isCC)
 		{
 			//Seulement appellé par les pieges, or les sorts de piege
 			ArrayList<EfectoHechizo> effets;
@@ -203,14 +203,14 @@ public class Hechizos {
 					curMin += SE.getChance();
 				}
 				
-				ArrayList<Fighter> cibles = EfectoHechizo.getTargets(SE,fight,cells);
+				ArrayList<Peleador> cibles = EfectoHechizo.getTargets(SE,fight,cells);
 				SE.applyToFight(fight, perso, cell,cibles);
 
 				//num++;
 			}
 		}
 		
-		public void applySpellEffectToFight(Pelea fight, Fighter perso, Case cell, boolean isCC)
+		public void applySpellEffectToFight(Pelea fight, Peleador perso, Case cell, boolean isCC)
 		{
 			ArrayList<EfectoHechizo> effets;
 			
@@ -252,12 +252,12 @@ public class Hechizos {
 				for(Case C : cells)
 				{
 					if(C == null)continue;
-					Fighter F = C.getFirstFighter();
+					Peleador F = C.getFirstFighter();
 					if(F == null)continue;
 					//Ne touche pas les alliés
 					if(((TE & 1) == 1) && (F.getTeam() == perso.getTeam()))continue;
 					//Ne touche pas le lanceur
-					if((((TE>>1) & 1) == 1) && (F.getGUID() == perso.getGUID()))continue;
+					if((((TE>>1) & 1) == 1) && (F.getID() == perso.getID()))continue;
 					//Ne touche pas les ennemies
 					if((((TE>>2) & 1) == 1) && (F.getTeam() != perso.getTeam()))continue;
 					//Ne touche pas les combatants (seulement invocations)
@@ -265,13 +265,13 @@ public class Hechizos {
 					//Ne touche pas les invocations
 					if((((TE>>4) & 1) == 1) && (F.isInvocation()))continue;
 					//N'affecte que le lanceur
-					if((((TE>>5) & 1) == 1) && (F.getGUID() != perso.getGUID()))continue;
+					if((((TE>>5) & 1) == 1) && (F.getID() != perso.getID()))continue;
 					//Si pas encore eu de continue, on ajoute la case
 					finalCells.add(C);
 				}
 				//Si le sort n'affecte que le lanceur et que le lanceur n'est pas dans la zone
 				if(((TE>>5) & 1) == 1)if(!finalCells.contains(perso.get_fightCell()))finalCells.add(perso.get_fightCell());
-				ArrayList<Fighter> cibles = EfectoHechizo.getTargets(SE,fight,finalCells);
+				ArrayList<Peleador> cibles = EfectoHechizo.getTargets(SE,fight,finalCells);
 				SE.applyToFight(fight, perso, cell,cibles);
 				num++;
 			}

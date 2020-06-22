@@ -2584,25 +2584,25 @@ public class Constantes {
 		}
 		if(_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()+cellFront).getDroppedItem() == null
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellFront).getPersos().isEmpty()
-				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellFront).isWalkable(false))
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellFront).isCaminable(false))
 		{
 			return cellFront;
 		}else
 		if(_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()-cellBack).getDroppedItem() == null
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellBack).getPersos().isEmpty()
-				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellBack).isWalkable(false))
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellBack).isCaminable(false))
 		{
 			return cellBack;
 		}else
 		if(_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()+cellRight).getDroppedItem() == null
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellRight).getPersos().isEmpty()
-				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellRight).isWalkable(false))
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()+cellRight).isCaminable(false))
 		{
 			return cellRight;
 		}else
 		if(_perso.getActualMapa().getMapa(_perso.getActualCelda().getID()-cellLeft).getDroppedItem() == null
 				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellLeft).getPersos().isEmpty()
-				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellLeft).isWalkable(false))
+				&& _perso.getActualMapa().GetCases().get(_perso.getActualCelda().getID()-cellLeft).isCaminable(false))
 		{
 			return cellLeft;
 		}

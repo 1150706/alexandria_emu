@@ -50,11 +50,11 @@ public class Formulas {
 			return num;
 		}catch(NumberFormatException e){return 0;}
 	}
-	public static int getTacleChance(Fighter tacleur, ArrayList<Fighter> tacle)
+	public static int getTacleChance(Peleador tacleur, ArrayList<Peleador> tacle)
 	{
 		int agiTR = tacleur.getTotalStats().getEffect(Constantes.STATS_ADD_AGIL);
 		int agiT = 0;
-		for(Fighter T : tacle) 
+		for(Peleador T : tacle)
 		{
 			agiT += T.getTotalStats().getEffect(Constantes.STATS_ADD_AGIL);
 		}
@@ -66,16 +66,16 @@ public class Formulas {
 		return chance;
 	}
 	
-	  public static long XPdefie(Fighter perso, ArrayList<Pelea.Fighter> winners, ArrayList<Pelea.Fighter> looser)      {
+	  public static long XPdefie(Peleador perso, ArrayList<Peleador> winners, ArrayList<Peleador> looser)      {
           if(perso.getPersonnage()== null)return 0;
-          if(winners.contains(perso.getGUID()))//Si winner
+          if(winners.contains(perso.getID()))//Si winner
           {
                   int lvlLoosers = 0; // on initialise la variable lvlLoosers
-                  for(Fighter entry : looser)
+                  for(Peleador entry : looser)
                           lvlLoosers += entry.get_lvl(); // on r�cupere le level du perdant
           
                   int lvlWinners = 0; // pareil pour les gagnants
-                  for(Fighter entry : winners)
+                  for(Peleador entry : winners)
                           lvlWinners += entry.get_lvl();
 
 //Ici on calcule l'xp gagn� en fonction du quotient des deux levels et du taux d�finit dans votre config pour l'xp Pvp ainsi que l'xp qu'il reste � gagner avant le prochain level. (En gros l'xp gagn�e = lvl du perdant/lvl du gagnant * l'xp qu'il reste avant de up / 100 * la rate xp pvp)
@@ -108,7 +108,7 @@ public class Formulas {
 		return jet * (100 + statC) / 100 + soins;
 	}
 	
-	public static int calculFinalDommage(Pelea fight, Fighter caster, Fighter target, int statID, int jet, boolean isHeal, boolean isCaC, int spellid)
+	public static int calculFinalDommage(Pelea fight, Peleador caster, Peleador target, int statID, int jet, boolean isHeal, boolean isCaC, int spellid)
 	{
 		float i = 0;//Bonus maitrise
 		float j = 100; //Bonus de Classe
@@ -277,11 +277,11 @@ public class Formulas {
 					statC = caster.getTotalStats().getEffect(Constantes.STATS_ADD_AGIL);
 					num = (jet * ((100 + statC + perdomC + (multiplier * 100)) / 100)) + domC;
 					if (target.hasBuff(105)) {
-						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getGUID() + "", target.getGUID() + "," + target.getBuff(105).getValue());
+						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getID() + "", target.getID() + "," + target.getBuff(105).getValue());
 						return 0;
 					}
 					if (target.hasBuff(184)) {
-						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getGUID() + "", target.getGUID() + "," + target.getBuff(184).getValue());
+						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getID() + "", target.getID() + "," + target.getBuff(184).getValue());
 						return 0;
 					}
 					return (int) num;
@@ -290,11 +290,11 @@ public class Formulas {
 					statC = caster.getTotalStats().getEffect(Constantes.STATS_ADD_FORC);
 					num = (jet * ((100 + statC + perdomC + (multiplier * 100)) / 100)) + domC;
 					if (target.hasBuff(105)) {
-						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getGUID() + "", target.getGUID() + "," + target.getBuff(105).getValue());
+						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getID() + "", target.getID() + "," + target.getBuff(105).getValue());
 						return 0;
 					}
 					if (target.hasBuff(184)) {
-						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getGUID() + "", target.getGUID() + "," + target.getBuff(184).getValue());
+						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getID() + "", target.getID() + "," + target.getBuff(184).getValue());
 						return 0;
 					}
 					return (int) num;
@@ -303,11 +303,11 @@ public class Formulas {
 					statC = caster.getTotalStats().getEffect(Constantes.STATS_ADD_INTE);
 					num = (jet * ((100 + statC + perdomC + (multiplier * 100)) / 100)) + domC;
 					if (target.hasBuff(105)) {
-						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getGUID() + "", target.getGUID() + "," + target.getBuff(105).getValue());
+						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getID() + "", target.getID() + "," + target.getBuff(105).getValue());
 						return 0;
 					}
 					if (target.hasBuff(184)) {
-						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getGUID() + "", target.getGUID() + "," + target.getBuff(184).getValue());
+						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getID() + "", target.getID() + "," + target.getBuff(184).getValue());
 						return 0;
 					}
 					return (int) num;
@@ -320,11 +320,11 @@ public class Formulas {
 		{
 			if(renvoie > num)renvoie = (int)num;
 			num -= renvoie;
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 107, "-1", target.getGUID()+","+renvoie);
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 107, "-1", target.getID()+","+renvoie);
 			if(renvoie>caster.getPDV())renvoie = caster.getPDV();
 			if(num<1)num =0;
 			caster.removePDV(renvoie);
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getGUID()+"", caster.getGUID()+",-"+renvoie);
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster.getID()+"", caster.getID()+",-"+renvoie);
 		}
 		
 		if(!isHeal)num -= resfT;//resis fixe
@@ -333,7 +333,7 @@ public class Formulas {
 		
 		int armor = getArmorResist(target,statID);
 		if(!isHeal)num -= armor;
-		if(!isHeal)if(armor > 0) GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getGUID()+"", target.getGUID()+","+armor);
+		if(!isHeal)if(armor > 0) GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 105, caster.getID()+"", target.getID()+","+armor);
 		//d�gats finaux
 		if(num < 1)num=0;
 		
@@ -362,12 +362,12 @@ public class Formulas {
 	{
 		return 10*(Math.abs(map2.getX()-map1.getX())+Math.abs(map2.getY()-map1.getY())-1);
 	}
-	private static int getArmorResist(Fighter target, int statID)
+	private static int getArmorResist(Peleador target, int statID)
 	{
 		int armor = 0;
 		for(EfectoHechizo SE : target.getBuffsByEffectID(265))
 		{
-			Fighter fighter;
+			Peleador fighter;
 
 			//Si pas element feu, on ignore l'armure
 			//Les stats du f�ca sont prises en compte
@@ -430,7 +430,7 @@ public class Formulas {
 		return armor;
 	}
 
-	public static int getPointsLost(char z, int value, Fighter caster,Fighter target)
+	public static int getPointsLost(char z, int value, Peleador caster, Peleador target)
 	{
 		float esquiveC = z=='a'?caster.getTotalStats().getEffect(Constantes.STATS_ADD_AFLEE):caster.getTotalStats().getEffect(Constantes.STATS_ADD_MFLEE);
 		float esquiveT = z=='a'?target.getTotalStats().getEffect(Constantes.STATS_ADD_AFLEE):target.getTotalStats().getEffect(Constantes.STATS_ADD_MFLEE);
@@ -475,7 +475,7 @@ public class Formulas {
 		return retrait;
 	}
 	
-	public static long getXpWinPerco(Recaudador perco, ArrayList<Fighter> winners, ArrayList<Fighter> loosers, long groupXP)
+	public static long getXpWinPerco(Recaudador perco, ArrayList<Peleador> winners, ArrayList<Peleador> loosers, long groupXP)
 	{
 			Gremio G = Mundo.getGuild(perco.get_guildID());
 			float sag = G.get_Stats(Constantes.STATS_ADD_SAGE);
@@ -483,13 +483,13 @@ public class Formulas {
 			int taux = MainServidor.XP_PVM;
 			long xpWin = 0;
 			int lvlmax = 0;
-			for(Fighter entry : winners)
+			for(Peleador entry : winners)
 			{
 				if(entry.get_lvl() > lvlmax)
 					lvlmax = entry.get_lvl();
 			}
 			int nbbonus = 0;
-			for(Fighter entry : winners)
+			for(Peleador entry : winners)
 			{
 				if(entry.get_lvl() > (lvlmax / 3))
 					nbbonus += 1;				
@@ -512,10 +512,10 @@ public class Formulas {
 				bonus = 3.5;
 			
 			int lvlLoosers = 0;
-			for(Fighter entry : loosers)
+			for(Peleador entry : loosers)
 				lvlLoosers += entry.get_lvl();
 			int lvlWinners = 0;
-			for(Fighter entry : winners)
+			for(Peleador entry : winners)
 				lvlWinners += entry.get_lvl();
 			double rapport = 1+((double)lvlLoosers/(double)lvlWinners);
 			if (rapport <= 1.3)
@@ -543,7 +543,7 @@ public class Formulas {
 			return xpWin;	
 	}
 	
-	public static long getXpWinPvm2(Fighter perso, ArrayList<Fighter> winners,ArrayList<Fighter> loosers,long groupXP)
+	public static long getXpWinPvm2(Peleador perso, ArrayList<Peleador> winners, ArrayList<Peleador> loosers, long groupXP)
 	{
 		if(perso.getPersonnage()== null)return 0;
 		if(winners.contains(perso))//Si winner
@@ -553,13 +553,13 @@ public class Formulas {
 			int taux = MainServidor.XP_PVM;
 			long xpWin = 0;
 			int lvlmax = 0;
-			for(Fighter entry : winners)
+			for(Peleador entry : winners)
 			{
 				if(entry.get_lvl() > lvlmax)
 					lvlmax = entry.get_lvl();
 			}
 			int nbbonus = 0;
-			for(Fighter entry : winners)
+			for(Peleador entry : winners)
 			{
 				if(entry.get_lvl() > (lvlmax / 3))
 					nbbonus += 1;				
@@ -582,10 +582,10 @@ public class Formulas {
 				bonus = 3.5;
 			
 			int lvlLoosers = 0;
-			for(Fighter entry : loosers)
+			for(Peleador entry : loosers)
 				lvlLoosers += entry.get_lvl();
 			int lvlWinners = 0;
-			for(Fighter entry : winners)
+			for(Peleador entry : winners)
 				lvlWinners += entry.get_lvl();
 			double rapport = 1+((double)lvlLoosers/(double)lvlWinners);
 			if (rapport <= 1.3)
@@ -615,12 +615,12 @@ public class Formulas {
 		return 0;
 	}
 	
-     public static long getXpWinPvm(Fighter perso, ArrayList<Fighter> team,ArrayList<Fighter> loose, long groupXP)
+     public static long getXpWinPvm(Peleador perso, ArrayList<Peleador> team, ArrayList<Peleador> loose, long groupXP)
      {
          int lvlwin = 0;
-         for(Fighter entry : team)lvlwin += entry.get_lvl();
+         for(Peleador entry : team)lvlwin += entry.get_lvl();
          int lvllos = 0;
-         for(Fighter entry : loose)lvllos += entry.get_lvl();
+         for(Peleador entry : loose)lvllos += entry.get_lvl();
          float bonusSage = (perso.getTotalStats().getEffect(Constantes.STATS_ADD_SAGE)+100)/100;
          //* Formule 1
          float taux = perso.get_lvl()/lvlwin;
@@ -634,9 +634,9 @@ public class Formulas {
          return xp* MainServidor.XP_PVM;
      }
 
-    public static long getXpWinPvm3(Fighter perso, ArrayList<Fighter> winners, ArrayList<Fighter> loosers, long groupXP, int star) {
+    public static long getXpWinPvm3(Peleador perso, ArrayList<Peleador> winners, ArrayList<Peleador> loosers, long groupXP, int star) {
         int lvlWinners = 0, lvlLoosers = 0, lvlLoosersmax = 0, lvlmax = 0;
-        for(Fighter entry : loosers){
+        for(Peleador entry : loosers){
             lvlLoosers += entry.get_lvl();
             if (lvlLoosersmax < entry.get_lvl())
                 lvlLoosersmax = entry.get_lvl();
@@ -644,7 +644,7 @@ public class Formulas {
             if (lvlmax < entry.get_lvl())
                 lvlmax = entry.get_lvl();
         }
-        for(Fighter entry : winners){
+        for(Peleador entry : winners){
             lvlWinners += entry.get_lvl();
             if (lvlmax < entry.get_lvl()){
                 lvlmax = entry.get_lvl();
@@ -660,7 +660,7 @@ public class Formulas {
 
 
             int nbbonus = 0;
-            for(Fighter entry : winners) {
+            for(Peleador entry : winners) {
                 if(entry.get_lvl() > (lvlmax / 3)) {
                     nbbonus += 1;
                 }
@@ -738,9 +738,9 @@ public class Formulas {
                 xpWin = 1;
             }
 
-            for(Fighter entry : winners)
+            for(Peleador entry : winners)
             {
-                for(Fighter loos : loosers)
+                for(Peleador loos : loosers)
                 {
                     if(perso.getPersonnage() == null) {
                         return 0;
@@ -768,17 +768,17 @@ public class Formulas {
         return 0;
     }
 
-	  public static long XPDefie(Pelea.Fighter perso, ArrayList winners, ArrayList looser)
+	  public static long XPDefie(Peleador perso, ArrayList winners, ArrayList looser)
 	  {
 	      int lvlLoosers = 0;
 		  for (Object o : looser) {
-			  Fighter entry = (Fighter) o;
+			  Peleador entry = (Peleador) o;
 			  lvlLoosers += entry.get_lvl();
 		  }
 
 	      int lvlWinners = 0;
 		  for (Object winner : winners) {
-			  Fighter entry = (Fighter) winner;
+			  Peleador entry = (Peleador) winner;
 			  lvlWinners += entry.get_lvl();
 		  }
 
@@ -802,7 +802,7 @@ public class Formulas {
 		return xp;
 	}
 
-	public static long getGuildXpWin(Fighter perso, AtomicReference<Long> xpWin)
+	public static long getGuildXpWin(Peleador perso, AtomicReference<Long> xpWin)
 	{
 		if(perso.getPersonnage()== null)return 0;
 		if(perso.getPersonnage().getMiembroGremio() == null)return 0;
@@ -835,7 +835,7 @@ public class Formulas {
 		return Math.round(toGuild);
 	}
 	
-	public static long getMountXpWin(Fighter perso, AtomicReference<Long> xpWin)
+	public static long getMountXpWin(Peleador perso, AtomicReference<Long> xpWin)
 	{
 		if(perso.getPersonnage()== null)return 0;
 		if(perso.getPersonnage().getMount() == null)return 0;
@@ -870,13 +870,13 @@ public class Formulas {
 		return Math.round(xp * pToMount * coeff);
 	}
 
-	public static int getKamasWin(Fighter i, ArrayList<Fighter> winners, int maxk, int mink)
+	public static int getKamasWin(Peleador i, ArrayList<Peleador> winners, int maxk, int mink)
 	{
 		maxk++;
 		int rkamas = (int)(Math.random() * (maxk-mink)) + mink;
 		return rkamas* MainServidor.KAMAS;
 	}
-	public static int getKamasWinPVP(Fighter i, ArrayList<Fighter> winners, int maxk, int mink)
+	public static int getKamasWinPVP(Peleador i, ArrayList<Peleador> winners, int maxk, int mink)
 	{
 		maxk++;
 		int rkamas = (int)(Math.random() * (MainServidor.CONFIG_KAMASMAX- MainServidor.CONFIG_KAMASMIN)) + MainServidor.CONFIG_KAMASMIN;
@@ -899,20 +899,20 @@ public class Formulas {
 		return (lvlM*100)/(K + lvlA);
 	}
 
-	public static int calculHonorWin(ArrayList<Fighter> winners,ArrayList<Fighter> loosers,Fighter F)
+	public static int calculHonorWin(ArrayList<Peleador> winners, ArrayList<Peleador> loosers, Peleador F)
 	{
 		float totalGradeWin = 0;
 		float totalLevelWin = 0;
 		float totalGradeLoose = 0;
 		float totalLevelLoose = 0;
-		for(Fighter f : winners)
+		for(Peleador f : winners)
 		{
 			if(f.getPersonnage() == null )continue;
 			totalLevelWin += f.get_lvl();
 			totalGradeWin += f.getPersonnage().getGrade();
 
 		}
-		for(Fighter f : loosers)
+		for(Peleador f : loosers)
 		{
 			if(f.getPersonnage() == null)continue;
 			totalLevelLoose += f.get_lvl();

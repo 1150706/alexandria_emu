@@ -562,7 +562,7 @@ public class Personaje {
 		
 		_exPdv = _PDV;
 		
-		//Chargement des métiers
+		//Cargando los oficios
 		if(!jobs.equals("")) {
 			for(String aJobData : jobs.split(";")) {
 				String[] infos = aJobData.split(",");
@@ -1269,7 +1269,7 @@ public class Personaje {
         int pdv = get_PDV();
         int pdvMax = get_PDVMAX();
         if(_fight != null) {
-            Pelea.Fighter f = _fight.getFighterByPerso(this);
+            Pelea.Peleador f = _fight.getFighterByPerso(this);
             if(f != null) {
                 pdv = f.getPDV();
                 pdvMax = f.getPDVMAX();
@@ -2699,7 +2699,7 @@ public class Personaje {
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;
 		}
-		if(!Mundo.getCarte(mapID).getMapa(cellID).isWalkable(true)) {
+		if(!Mundo.getCarte(mapID).getMapa(cellID).isCaminable(true)) {
 			JuegoServidor.agregar_a_los_logs("La cellule associee au zaap "+id+" n'est pas 'walkable', Zaap refuse");
 			GestorSalida.GAME_SEND_WUE_PACKET(this);
 			return;

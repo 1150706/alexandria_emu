@@ -273,7 +273,7 @@ public class Mapa {
 	public static class Case {
 		private final int _id;
 		private Map<Integer, Personaje>	_persos;		//= new TreeMap<Integer, Personnage>();
-		private Map<Integer, Fighter> 		_fighters;	//= new TreeMap<Integer, Fighter>();
+		private Map<Integer, Peleador> 		_fighters;	//= new TreeMap<Integer, Fighter>();
 		private boolean _Walkable = true;
 		private boolean _LoS = true;
 		private final short _map;
@@ -803,26 +803,26 @@ public class Mapa {
 			_persos.put(perso.getID(),perso);
 			
 		}
-		public void addFighter(Fighter fighter)
+		public void addFighter(Peleador fighter)
 		{
 			if(_fighters == null) _fighters = new TreeMap<>();
-			_fighters.put(fighter.getGUID(),fighter);
+			_fighters.put(fighter.getID(),fighter);
 		}
-		public void removeFighter(Fighter fighter)
+		public void removeFighter(Peleador fighter)
 		{
-			_fighters.remove(fighter.getGUID());
+			_fighters.remove(fighter.getID());
 		}
-		public boolean isWalkable(boolean useObject)
-		{
+
+		public boolean isCaminable(boolean useObject) {
 			if(_object != null && useObject)
 				return _Walkable && _object.isWalkable();
 			return _Walkable;
 		}
-		public boolean blockLoS()
-		{
+
+		public boolean blockLoS() {
 			if(_fighters == null) return _LoS;
 			boolean fighter = true;
-			for(Entry<Integer,Fighter> f : _fighters.entrySet())
+			for(Entry<Integer, Peleador> f : _fighters.entrySet())
 			{
 				if(!f.getValue().isHide())fighter = false;
 			}
@@ -843,16 +843,16 @@ public class Mapa {
 			if(_persos == null) return new TreeMap<>();
 			return _persos;
 		}
-		public Map<Integer, Fighter> getFighters()
+		public Map<Integer, Peleador> getFighters()
 		{
 			if(_fighters == null) return new TreeMap<>();
 			return _fighters;
 		}
-		public Fighter getFirstFighter()
+		public Peleador getFirstFighter()
 		{
 			if(_fighters == null) 
 				return null;
-			for(Entry<Integer,Fighter> entry : _fighters.entrySet())
+			for(Entry<Integer, Peleador> entry : _fighters.entrySet())
 				return entry.getValue();
 			return null;
 		}
@@ -1195,10 +1195,10 @@ public class Mapa {
 				final int cell1 = group.getCeldaID();
 				final Case cell2 = this.getMapa((cell1 - 15)), cell3 = this.getMapa((cell1 - 15 + 1));
 				final Case cell4 = this.getMapa((cell1 + 15 - 1)), cell5 = this.getMapa((cell1 + 15));
-				boolean case2 = (cell2 != null && (cell2.isWalkable(true) && (cell2.getPersos().isEmpty())));
-				boolean case3 = (cell3 != null && (cell3.isWalkable(true) && (cell3.getPersos().isEmpty())));
-				boolean case4 = (cell4 != null && (cell4.isWalkable(true) && (cell4.getPersos().isEmpty())));
-				boolean case5 = (cell5 != null && (cell5.isWalkable(true) && (cell5.getPersos().isEmpty())));
+				boolean case2 = (cell2 != null && (cell2.isCaminable(true) && (cell2.getPersos().isEmpty())));
+				boolean case3 = (cell3 != null && (cell3.isCaminable(true) && (cell3.getPersos().isEmpty())));
+				boolean case4 = (cell4 != null && (cell4.isCaminable(true) && (cell4.getPersos().isEmpty())));
+				boolean case5 = (cell5 != null && (cell5.isCaminable(true) && (cell5.getPersos().isEmpty())));
 				ArrayList<Boolean> array = new ArrayList<>();
 				array.add(case2);
 				array.add(case3);
@@ -1312,7 +1312,7 @@ public class Mapa {
 	}
 
 	public boolean checkCell(int id) {
-		return this.getMapa(id - 15) != null && this.getMapa(id - 15).isWalkable(true);
+		return this.getMapa(id - 15) != null && this.getMapa(id - 15).isCaminable(true);
 	}
 
 	public void setMountPark(MountPark mountPark)
@@ -1480,7 +1480,7 @@ public class Mapa {
 		StringBuilder packet = new StringBuilder();
 		for(Entry<Integer,Case> cell : _cases.entrySet())
 		{
-			for(Entry<Integer,Fighter> f : cell.getValue().getFighters().entrySet())
+			for(Entry<Integer, Peleador> f : cell.getValue().getFighters().entrySet())
 			{
 				packet.append(f.getValue().getGmPacket('+')).append('\u0000');
 			}
@@ -1566,7 +1566,7 @@ public class Mapa {
 		ArrayList<Integer> freecell = new ArrayList<>();
 		for(Entry<Integer,Case> entry : _cases.entrySet()) {
 			//Si la case n'est pas marchable
-			if(!entry.getValue().isWalkable(true))continue;
+			if(!entry.getValue().isCaminable(true))continue;
 			//Si la case est prise par un groupe de monstre
 			boolean ok = true;
 			for(Entry<Integer,MobGroup> mgEntry : _mobGroups.entrySet()) {
@@ -1679,7 +1679,7 @@ public class Mapa {
 			if(gameCase.getOnCellStopAction())
 				continue;
 			//Si la case n'est pas marchable
-			if (!gameCase.isWalkable(true))
+			if (!gameCase.isCaminable(true))
 				continue;
 			//Si la case est prise par un groupe de monstre
 			boolean ok = true;
@@ -1785,7 +1785,7 @@ public class Mapa {
 					new Case(
 							map,
 							entry.getValue().getID(),
-							entry.getValue().isWalkable(false),
+							entry.getValue().isCaminable(false),
 							entry.getValue().isLoS(),
 							(entry.getValue().getObject()==null?-1:entry.getValue().getObject().getID())
 							)

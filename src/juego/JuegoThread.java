@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import objetos.*;
 import objetos.Mapa.*;
-import objetos.Pelea.Fighter;
+import objetos.Pelea.Peleador;
 import objetos.Gremio.GuildMember;
 import objetos.Mercadillo.HdvEntry;
 import objetos.Oficio.StatsMetier;
@@ -4108,7 +4108,7 @@ public class JuegoThread implements Runnable {
 			_perso.set_away(true);
 		}else
 		{
-			Fighter F = _perso.getPelea().getFighterByPerso(_perso);
+			Peleador F = _perso.getPelea().getFighterByPerso(_perso);
 			if(F == null)return;
 			GA._args = path;
 			_perso.getPelea().fighterDeplace(F,GA);

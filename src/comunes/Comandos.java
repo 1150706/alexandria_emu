@@ -1159,7 +1159,7 @@ public class Comandos {
 				GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
 				return;
 			}
-			if(cell <0 || _personaje.getActualMapa().getMapa(cell) == null || !_personaje.getActualMapa().getMapa(cell).isWalkable(true)) {
+			if(cell <0 || _personaje.getActualMapa().getMapa(cell) == null || !_personaje.getActualMapa().getMapa(cell).isCaminable(true)) {
 				cell = _personaje.getActualCelda().getID();
 			}
 			String places = _personaje.getActualMapa().getEsquemaPelea();

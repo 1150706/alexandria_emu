@@ -44,3 +44,4 @@ v0.00.5
 - Salir del estado portador cuando el panda lanza a un jugador lleva 0ms de espera, instantaneo
 - Agregada la verificacion de trampas en la celda al lanzar un personaje
 - Agregado break; faltante en efecto hechizo
+- Recambio de accion de las trampas de 307 a 306, con delay correcto del cliente

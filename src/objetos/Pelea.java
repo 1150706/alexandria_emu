@@ -114,7 +114,7 @@ public class Pelea {
 			desappear(); //On efface le piege
 			//On d?clenche ses effets
 			String str = _spell+","+ _celda.getID()+",0,1,1,"+ _lanzador.getID();
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 307, target.getID()+"", str);
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 306, target.getID()+"", str);
 			
 			ArrayList<Case> cells = new ArrayList<>();
 			cells.add(_celda);

@@ -193,8 +193,7 @@ public class NPCModelo {
 		
 		public void addAction(Accion act)
 		{
-			ArrayList<Accion> c = new ArrayList<>();
-			c.addAll(_actions);
+            ArrayList<Accion> c = new ArrayList<>(_actions);
 			for(Accion a : c)if(a.get_id() == act.get_id())_actions.remove(a);
 			_actions.add(act);
 		}

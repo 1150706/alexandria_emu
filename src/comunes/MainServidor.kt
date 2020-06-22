@@ -257,7 +257,7 @@ object MainServidor {
         println("Atento a las conexiones de nuevos usuarios")
         if (CONFIG_SOCKET_USE_COMPACT_DATA) {
             println("Lanzando FlushTimer")
-            GestorEnvio.FlushTimer().start()
+            GestorEnvio.flush_timer().start()
             println("Lanzado!")
         }
     }

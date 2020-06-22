@@ -155,8 +155,10 @@ public class Monstruo {
 			boolean haveSameAlign = false;
 			for(MobGrade mob : possibles)
 			{
-				if(mob.getTemplate().getAlign() == align)
+				if (mob.getTemplate().getAlign() == align) {
 					haveSameAlign = true;
+					break;
+				}
 			}
 			
 			if(!haveSameAlign)return;//S'il n'y en a pas
@@ -459,8 +461,7 @@ public class Monstruo {
 
 		public MobGrade getCopy()
 		{
-			Map<Integer,Integer> newStats = new TreeMap<>();
-			newStats.putAll(stats);
+			Map<Integer, Integer> newStats = new TreeMap<>(stats);
 			return new MobGrade(template,grade,level,PDV,PDVMAX,PA,PM,newStats,spells,baseXp);
 		}
 

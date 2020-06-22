@@ -36,7 +36,7 @@ public class Cuenta {
 	private final ArrayList<Integer> _EnemyGuids = new ArrayList<>();
 	private boolean _mute = false;
 	public Timer _muteTimer;
-	public int _position = -1;//Position du joueur
+	public final int _position = -1;//Position du joueur
 	private final Map<Integer,ArrayList<HdvEntry>> _hdvsItems;// Contient les items des HDV format : <hdvID,<cheapestID>>
 	
 	private final Map<Integer, Personaje> _persos = new TreeMap<>();
@@ -197,7 +197,7 @@ public class Cuenta {
 		return _lastIP;
 	}
 
-	public String get_question() {
+	public String getPregunta() {
 		return _question;
 	}
 

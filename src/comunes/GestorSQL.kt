@@ -748,7 +748,7 @@ object GestorSQL {
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -779,8 +779,7 @@ object GestorSQL {
     @JvmStatic
 	fun cargar_mapas() {
         try {
-            var RS: ResultSet?
-            RS = ejecutar_consulta("SELECT * FROM datos_mapas LIMIT " + MainServidor.LIMITE_DE_MAPAS + ";", MainServidor.DB_ESTATICOS)
+            var RS: ResultSet? = ejecutar_consulta("SELECT * FROM datos_mapas LIMIT " + MainServidor.LIMITE_DE_MAPAS + ";", MainServidor.DB_ESTATICOS)
             while (RS!!.next()) {
                 addCarte(Mapa(
                         RS.getShort("id"),
@@ -991,7 +990,7 @@ object GestorSQL {
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -1025,13 +1024,11 @@ object GestorSQL {
             stats
         } catch (e: Exception) {
             e.printStackTrace()
-            var nbr = 0
             println("[DEBUG]Sort $id lvl $lvl")
-            for (z in str.split(",".toRegex()).toTypedArray()) {
+            for ((nbr, z) in str.split(",".toRegex()).toTypedArray().withIndex()) {
                 println("[DEBUG]$nbr $z")
-                nbr++
             }
-            System.exit(1)
+            exitProcess(1)
             null
         }
     }
@@ -1055,14 +1052,13 @@ object GestorSQL {
                 val MK = RS.getInt("kamasmaximas")
                 val IAType = RS.getInt("tipoia")
                 val xp = RS.getString("experiencia")
-                var capturable: Boolean
-                capturable = RS.getInt("capturable") == 1
+                var capturable: Boolean = RS.getInt("capturable") == 1
                 addMobTemplate(id, Monstruo(id, gfxID, align, colors, grades, spells, stats, pdvs, pts, inits, mK, MK, xp, IAType, capturable))
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -1090,7 +1086,7 @@ object GestorSQL {
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -1144,7 +1140,7 @@ object GestorSQL {
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -1162,7 +1158,7 @@ object GestorSQL {
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -1181,7 +1177,7 @@ object GestorSQL {
             return nbr
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
         return nbr
     }
@@ -1203,7 +1199,7 @@ object GestorSQL {
             return nbr
         } catch (e: SQLException) {
             println("Game: SQL ERROR: " + e.message)
-            System.exit(1)
+            exitProcess(1)
         }
         return nbr
     }
@@ -1666,7 +1662,7 @@ object GestorSQL {
         return false
     }
 
-    fun eliminar_fin_pelea_accion(mapID: Int, type: Int, aid: Int): Boolean {
+    private fun eliminar_fin_pelea_accion(mapID: Int, type: Int, aid: Int): Boolean {
         val baseQuery = "DELETE FROM `datos_fin_pelea_accion` WHERE mapa = ? AND tipopelea = ? AND accion = ?;"
         return try {
             val p = nueva_consulta(baseQuery, _estaticos)
@@ -2422,7 +2418,7 @@ object GestorSQL {
         }
     }
 
-    fun guardar_mercadillo_precio_medio() {
+    private fun guardar_mercadillo_precio_medio() {
         val baseQuery = "UPDATE `datos_objeto_modelo` SET vendido = ?, preciomedio = ? WHERE id = ?;"
         var queries: PreparedStatement? = null
         try {

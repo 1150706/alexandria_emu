@@ -955,7 +955,7 @@ public class Formulas {
 	
 	public static String parseReponse(String reponse)
 	{
-		StringBuilder toReturn = new StringBuilder("");
+		StringBuilder toReturn = new StringBuilder();
 		
 		String[] cut = reponse.split("[%]");
 		

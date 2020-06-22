@@ -450,7 +450,7 @@ public class Inteligencia {
 				if(path.size() == a)break;
 				finalPath.add(path.get(a));
 			}
-			String pathstr = "";
+			StringBuilder pathstr = new StringBuilder();
 			try{
 			int curCaseID = F.get_fightCell().getID();
 			int curDir = 0;
@@ -461,17 +461,17 @@ public class Inteligencia {
 				if(curDir != d)
 				{
 					if(finalPath.indexOf(c) != 0)
-						pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
-					pathstr += d;
+						pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
+					pathstr.append(d);
 				}
 				curCaseID = c.getID();
 			}
 			if(curCaseID != F.get_fightCell().getID())
-				pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
+				pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
 			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
 			GameAction GA = new GameAction(0,1, "");
-			GA._args = pathstr;
+			GA._args = pathstr.toString();
 			boolean result = fight.fighterDeplace(F, GA);
 			try {
 				Thread.sleep(100);
@@ -745,7 +745,7 @@ public class Inteligencia {
 				if(path.size() == a)break;
 				finalPath.add(path.get(a));
 			}
-			String pathstr = "";
+			StringBuilder pathstr = new StringBuilder();
 			try{
 			int curCaseID = F.get_fightCell().getID();
 			int curDir = 0;
@@ -756,17 +756,17 @@ public class Inteligencia {
 				if(curDir != d)
 				{
 					if(finalPath.indexOf(c) != 0)
-						pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
-					pathstr += d;
+						pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
+					pathstr.append(d);
 				}
 				curCaseID = c.getID();
 			}
 			if(curCaseID != F.get_fightCell().getID())
-				pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
+				pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
 			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
 			GameAction GA = new GameAction(0,1, "");
-			GA._args = pathstr;
+			GA._args = pathstr.toString();
 			boolean result = fight.fighterDeplace(F, GA);
 			try {
 				Thread.sleep(100);
@@ -998,7 +998,7 @@ public class Inteligencia {
 				return false;
 			ArrayList<Case> path = Camino.getShortestPathBetween(fight.get_map(),fighter.get_fightCell().getID(),CellDest, 0);
 			if(path == null)return false;
-			String pathstr = "";
+			StringBuilder pathstr = new StringBuilder();
 			try{
 			int curCaseID = fighter.get_fightCell().getID();
 			int curDir = 0;
@@ -1009,17 +1009,17 @@ public class Inteligencia {
 				if(curDir != d)
 				{
 					if(path.indexOf(c) != 0)
-						pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
-					pathstr += d;
+						pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
+					pathstr.append(d);
 				}
 				curCaseID = c.getID();
 			}
 			if(curCaseID != fighter.get_fightCell().getID())
-				pathstr += GestorEncriptador.cellID_To_Code(curCaseID);
+				pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
 			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
 			GameAction GA = new GameAction(0,1, "");
-			GA._args = pathstr;
+			GA._args = pathstr.toString();
 			boolean result = fight.fighterDeplace(fighter, GA);
 			try {
 				Thread.sleep(100);
@@ -1260,8 +1260,7 @@ public class Inteligencia {
 						continue;
 					int num = 0;
 					int curTarget = 0;
-					ArrayList<EfectoHechizo> test = new ArrayList<>();
-					test.addAll(spell.getEffects());
+					ArrayList<EfectoHechizo> test = new ArrayList<>(spell.getEffects());
 					
 					for(EfectoHechizo SE : test)
 					{

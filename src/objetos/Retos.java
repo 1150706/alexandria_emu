@@ -18,7 +18,7 @@ public class Retos {
   private int _args = -1;
   private Peleador _cible;
   private String _lastActions;
-  private String _arguments = new String();
+  private String _arguments = "";
   private long _lastActions_time;
   private final List<Peleador> _ordreJeu = new ArrayList<>();
 
@@ -87,9 +87,9 @@ public class Retos {
 		packet.append(_gainDrop).append(";0;");
 		if (!_challengeAlive)
 			if (_challengeOk)
-				packet.append("").append(_type);
+				packet.append(_type);
 			else
-				packet.append("").append(_type);
+				packet.append(_type);
 		return packet.toString();
 	}
 
@@ -679,16 +679,20 @@ public class Retos {
 				hasFailed = true;
 				if(!Neighbours.isEmpty())
 					for(Peleador f : Neighbours)
-						if(f.getTeam() != fighter.getTeam())
-							hasFailed = false;
+                        if (f.getTeam() != fighter.getTeam()) {
+                            hasFailed = false;
+                            break;
+                        }
 				break;
 				
 			case 37 : // Collant
 				hasFailed = true;
 				if(!Neighbours.isEmpty())
 					for(Peleador f : Neighbours)
-						if(f.getTeam() == fighter.getTeam())
-							hasFailed = false;
+                        if (f.getTeam() == fighter.getTeam()) {
+                            hasFailed = false;
+                            break;
+                        }
 				break;
 			
 			case 39 : // Anachorète

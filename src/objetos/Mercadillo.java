@@ -18,7 +18,7 @@ public class Mercadillo {
 	 * @author Mathieu
 	 *
 	 */
-	private class Categorie {
+	private static class Categorie {
 		final Map<Integer,Template> _templates = new HashMap<>();//Dans le format <templateID,Template>
 		
 		@SuppressWarnings("unused")

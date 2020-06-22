@@ -144,7 +144,7 @@ public class Recaudador
 				Gremio G = Mundo.getGuild(perco.getValue()._GuildID);
 				sock.append(50+G.get_lvl()).append(";");
 				sock.append(G.get_lvl()).append(";");
-				sock.append(G.get_name()).append(";"+G.get_emblem());
+				sock.append(G.get_name()).append(";").append(G.get_emblem());
 				isFirst = false;
 			}else
 			{
@@ -393,12 +393,12 @@ public class Recaudador
 	
 	public String parseItemPercepteur()
 	{
-		String items = "";
+		StringBuilder items = new StringBuilder();
 		for(Objeto obj : _objets.values())
 		{
-			items+= obj.guid+"|";
+			items.append(obj.guid).append("|");
 		}
-		return items;
+		return items.toString();
 	}
 	
 	

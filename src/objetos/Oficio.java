@@ -517,78 +517,38 @@ public class Oficio {
 				//TODO : N'existe plus.
 				switch (id) {
 //Potion Etincelle
-					case 1333 -> {
+					case 1333, 1345, 1343 -> {
 						stat = 99;
 						isElementChanging = ing.getTemplate().getLevel();
 						mod = ing;
 					}
 //Potion crachin
-					case 1335 -> {
+					case 1335, 1346, 1341 -> {
 						stat = 96;
 						isElementChanging = ing.getTemplate().getLevel();
 						mod = ing;
 					}
 //Potion de courant d'air
-					case 1337 -> {
+					case 1337, 1347, 1342 -> {
 						stat = 98;
 						isElementChanging = ing.getTemplate().getLevel();
 						mod = ing;
 					}
 //Potion de secousse
-					case 1338 -> {
+					case 1338, 1348, 1340 -> {
 						stat = 97;
 						isElementChanging = ing.getTemplate().getLevel();
 						mod = ing;
 					}
 //Potion d'eboulement
-					case 1340 -> {
-						stat = 97;
-						isElementChanging = ing.getTemplate().getLevel();
-						mod = ing;
-					}
-//Potion Averse
-					case 1341 -> {
-						stat = 96;
-						isElementChanging = ing.getTemplate().getLevel();
-						mod = ing;
-					}
-//Potion de rafale
-					case 1342 -> {
-						stat = 98;
-						isElementChanging = ing.getTemplate().getLevel();
-						mod = ing;
-					}
-//Potion de Flambée
-					case 1343 -> {
-						stat = 99;
-						isElementChanging = ing.getTemplate().getLevel();
-						mod = ing;
-					}
-//Potion Incendie
-					case 1345 -> {
-						stat = 99;
-						isElementChanging = ing.getTemplate().getLevel();
-						mod = ing;
-					}
-//Potion Tsunami
-					case 1346 -> {
-						stat = 96;
-						isElementChanging = ing.getTemplate().getLevel();
-						mod = ing;
-					}
-//Potion Ouragan
-					case 1347 -> {
-						stat = 98;
-						isElementChanging = ing.getTemplate().getLevel();
-						mod = ing;
-					}
-//Potion de seisme
-					case 1348 -> {
-						stat = 97;
-						isElementChanging = ing.getTemplate().getLevel();
-						mod = ing;
-					}
-//Force
+					//Potion Averse
+					//Potion de rafale
+					//Potion de Flambée
+					//Potion Incendie
+					//Potion Tsunami
+					//Potion Ouragan
+					//Potion de seisme
+					//Force
 					case 1519 -> {
 						mod = ing;
 						stats = "76";

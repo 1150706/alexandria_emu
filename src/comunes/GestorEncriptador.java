@@ -17,7 +17,7 @@ public class GestorEncriptador {
                 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'};
 
-        String _Crypted = "#1";
+        StringBuilder _Crypted = new StringBuilder("#1");
 
         for (int i = 0; i < Password.length(); i++)
         {
@@ -31,16 +31,16 @@ public class GestorEncriptador {
             int ANB = (APass + (int)PKey) % HASH.length;
             int ANB2 = (AKey + (int)PKey) % HASH.length;
 
-            _Crypted += HASH[ANB];
-            _Crypted += HASH[ANB2];
+            _Crypted.append(HASH[ANB]);
+            _Crypted.append(HASH[ANB2]);
         }
-        return _Crypted;
+        return _Crypted.toString();
     }
 
     public static String decryptpass(String pass,String key)
     {
         int l1, l2, l3, l4, l5;
-        String l7 = "";
+        StringBuilder l7 = new StringBuilder();
         String Chaine = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
         for(l1 = 0; l1<= (pass.length()-1);l1+=2)
         {
@@ -52,15 +52,15 @@ public class GestorEncriptador {
             l5 = (64 + l2) - l3;
             if(l5 < 0)l5 = 64 + l5;
 
-            l7 = l7 + (char)(16 * l4 + l5);
+            l7.append((char) (16 * l4 + l5));
         }
-        return l7;
+        return l7.toString();
     }
 
     public static String CryptIP(String IP)
     {
         String[] Splitted = IP.split("\\.");
-        String Encrypted = "";
+        StringBuilder Encrypted = new StringBuilder();
         int Count = 0;
         for (int i = 0; i < 50; i++)
         {
@@ -70,12 +70,12 @@ public class GestorEncriptador {
                 {
                     char A = (char)(i+48);
                     char B = (char)(o + 48);
-                    Encrypted += Character.toString(A) + Character.toString(B);
+                    Encrypted.append(A).append(Character.toString(B));
                     i = 0;
                     o = 0;
                     Count++;
                     if (Count == 4)
-                        return Encrypted;
+                        return Encrypted.toString();
                 }
             }
         }
@@ -88,13 +88,13 @@ public class GestorEncriptador {
                 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'};
         int P = config_game_port;
-        String nbr64 = "";
+        StringBuilder nbr64 = new StringBuilder();
         for(int a = 2;a>=0;a--)
         {
-            nbr64 += HASH[(int)(P/(java.lang.Math.pow(64,a)))];
+            nbr64.append(HASH[(int) (P / (Math.pow(64, a)))]);
             P = P%(int)(Math.pow(64,a));
         }
-        return nbr64;
+        return nbr64.toString();
     }
 
     public static String cellID_To_Code(int cellID)

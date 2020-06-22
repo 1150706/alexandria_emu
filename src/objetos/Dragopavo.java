@@ -185,14 +185,14 @@ public class Dragopavo {
 
 	private String parseStats()
 	{
-		String stats = "";
+		StringBuilder stats = new StringBuilder();
 		for(Entry<Integer,Integer> entry : _stats.getMap().entrySet())
 		{
 			if(entry.getValue() <= 0)continue;
-			if(stats.length() >0)stats += ",";
-			stats += Integer.toHexString(entry.getKey())+"#"+Integer.toHexString(entry.getValue())+"#0#0";
+			if(stats.length() >0) stats.append(",");
+			stats.append(Integer.toHexString(entry.getKey())).append("#").append(Integer.toHexString(entry.getValue())).append("#0#0");
 		}
-		return stats;
+		return stats.toString();
 	}
 
 	private int getMaxEnergie()
@@ -229,9 +229,9 @@ public class Dragopavo {
 
 	public String getItemsId()
 	{
-		String str = "";
-		for(Objeto obj : _items)str += (str.length()>0?";":"")+obj.getID();
-		return str;
+		StringBuilder str = new StringBuilder();
+		for(Objeto obj : _items) str.append(str.length() > 0 ? ";" : "").append(obj.getID());
+		return str.toString();
 	}
 
 	public void setName(String packet)

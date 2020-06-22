@@ -164,7 +164,7 @@ public class Gremio {
 				
 			initRight();	//Remplissage des droits
 			
-			Integer[] mapKey = haveRight.keySet().toArray(new Integer[haveRight.size()]);	//Récupère les clef de map dans un tableau d'Integer
+			Integer[] mapKey = haveRight.keySet().toArray(new Integer[0]);	//Récupère les clef de map dans un tableau d'Integer
 			
 			while(total > 0) {
 				for (int i = haveRight.size()-1; i < haveRight.size(); i--) {

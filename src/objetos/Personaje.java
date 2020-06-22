@@ -721,7 +721,7 @@ public class Personaje {
 				sorts.append("_");
 			sorts.append(",");
 		}
-		return sorts.substring(0, sorts.length()-1).toString();
+		return sorts.substring(0, sorts.length()-1);
 	}
 	
 	private void parseSpells(String str) {
@@ -1265,7 +1265,7 @@ public class Personaje {
         StringBuilder ASData = new StringBuilder();
         ASData.append("As").append(xpString(",")).append("|");
         ASData.append(_kamas).append("|").append(_capital).append("|").append(_spellPts).append("|");
-        ASData.append(_align).append("~").append(_align).append(",").append(_aLvl).append(",").append(getGrade()).append(",").append(_honor).append(",").append(String.valueOf(_deshonor) + ",").append(_showWings ? "1" : "0").append("|");
+        ASData.append(_align).append("~").append(_align).append(",").append(_aLvl).append(",").append(getGrade()).append(",").append(_honor).append(",").append(_deshonor).append(",").append(_showWings ? "1" : "0").append("|");
         int pdv = get_PDV();
         int pdvMax = get_PDVMAX();
         if(_fight != null) {
@@ -1292,7 +1292,7 @@ public class Personaje {
         ASData.append(_baseStats.getEffect(112)).append(",").append(getStuffStats().getEffect(112)).append(",").append(getDonsStats().getEffect(112)).append(",").append(getBuffsStats().getEffect(112)).append("|");
         ASData.append(_baseStats.getEffect(142)).append(",").append(getStuffStats().getEffect(142)).append(",").append(getDonsStats().getEffect(142)).append(",").append(getBuffsStats().getEffect(142)).append("|");
         ASData.append("0,0,0,0|");
-        ASData.append(_baseStats.getEffect(138)).append(",").append(getStuffStats().getEffect(138)).append("," + getDonsStats().getEffect(138)).append(",").append(getBuffsStats().getEffect(138)).append("|");
+        ASData.append(_baseStats.getEffect(138)).append(",").append(getStuffStats().getEffect(138)).append(",").append(getDonsStats().getEffect(138)).append(",").append(getBuffsStats().getEffect(138)).append("|");
         ASData.append(_baseStats.getEffect(178)).append(",").append(getStuffStats().getEffect(178)).append(",").append(getDonsStats().getEffect(178)).append(",").append(getBuffsStats().getEffect(178)).append("|");
         ASData.append(_baseStats.getEffect(225)).append(",").append(getStuffStats().getEffect(225)).append(",").append(getDonsStats().getEffect(225)).append(",").append(getBuffsStats().getEffect(225)).append("|");
         ASData.append(_baseStats.getEffect(226)).append(",").append(getStuffStats().getEffect(226)).append(",").append(getDonsStats().getEffect(226)).append(",").append(getBuffsStats().getEffect(226)).append("|");

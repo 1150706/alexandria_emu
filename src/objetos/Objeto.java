@@ -173,8 +173,10 @@ public class Objeto {
 				boolean follow = true;
 				
 				for(int a : Constantes.ARMES_EFFECT_IDS)//Si c'est un Effet Actif
-					if(a == statID)
+					if (a == statID) {
 						follow = false;
+						break;
+					}
 				if(!follow)continue;//Si c'était un effet Actif d'arme
 				
 				String jet = "";
@@ -439,11 +441,11 @@ public class Objeto {
 		{
 			if(!isFirst)
 				stats.append(",");
-			int statID = (Integer) entry.getKey();
+			int statID = entry.getKey();
 
 			if ((statID == 970) || (statID == 971) || (statID == 972) || (statID == 973) || (statID == 974))
 			{
-				int jet = (Integer) entry.getValue();
+				int jet = entry.getValue();
 				if ((statID == 974) || (statID == 972) || (statID == 970))
 					stats.append(Integer.toHexString(statID)).append("#0#0#").append(Integer.toHexString(jet));
 				else {
@@ -455,7 +457,7 @@ public class Objeto {
 			else {
 				String jet = "0d0+" + entry.getValue();
 				stats.append(Integer.toHexString(statID)).append("#");
-				stats.append(Integer.toHexString((Integer) entry.getValue())).append("#0#0#").append(jet);
+				stats.append(Integer.toHexString(entry.getValue())).append("#0#0#").append(jet);
 			}
 			//String jet = "0d0+"+entry.getValue();
 			//stats.append(Integer.toHexString(entry.getKey())).append("#").append(Integer.toHexString(entry.getValue()));
@@ -577,7 +579,7 @@ public class Objeto {
 	{
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
-			if ((Integer) entry.getKey() != statID) continue; entry.setValue(Integer.valueOf(val));
+			if (entry.getKey() != statID) continue; entry.setValue(Integer.valueOf(val));
 		}
 	}
 	
@@ -586,10 +588,10 @@ public class Objeto {
 		Personaje.Stats StatsSansObvi = new Personaje.Stats();
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
-			int statID = (Integer) entry.getKey();
+			int statID = entry.getKey();
 			if ((statID == 970) || (statID == 971) || (statID == 972) || (statID == 973) || (statID == 974))
 				continue;
-			StatsSansObvi.addOneStat(statID, (Integer) entry.getValue());
+			StatsSansObvi.addOneStat(statID, entry.getValue());
 		}
 		Stats = StatsSansObvi;
 	}
@@ -600,10 +602,10 @@ public class Objeto {
 		Personaje.Stats StatsSansObvi = new Personaje.Stats();
 		for (Map.Entry<Integer, Integer> entry : Stats.getMap().entrySet())
 		{
-			int statID = (Integer) entry.getKey();
+			int statID = entry.getKey();
 			if ((statID != 971) && (statID != 972) && (statID != 973) && (statID != 974))
 				continue;
-			StatsSansObvi.addOneStat(statID, (Integer) entry.getValue());
+			StatsSansObvi.addOneStat(statID, entry.getValue());
 		}
 		Stats = StatsSansObvi;
 	}
@@ -758,8 +760,10 @@ public class Objeto {
 			boolean follow = true;
 			
 			for(int a : Constantes.ARMES_EFFECT_IDS)//Si c'est un Effet Actif
-				if(a == statID)
+				if (a == statID) {
 					follow = false;
+					break;
+				}
 			if(!follow)continue;//Si c'était un effet Actif d'arme
 			
 			String jet = "";
@@ -802,8 +806,10 @@ public class Objeto {
 			boolean follow = true;
 			
 			for(int a : Constantes.ARMES_EFFECT_IDS)//Si c'est un Effet Actif
-				if(a == statID)
+				if (a == statID) {
 					follow = false;
+					break;
+				}
 			if(!follow)continue;//Si c'était un effet Actif d'arme
 			
 			String jet = "";
@@ -897,8 +903,10 @@ public class Objeto {
 			boolean follow = true;
 			
 			for(int a : Constantes.ARMES_EFFECT_IDS)//Si c'est un Effet Actif
-				if(a == statID)
+				if (a == statID) {
 					follow = false;
+					break;
+				}
 			if(!follow)continue;//Si c'était un effet Actif d'arme
 			
 			String jet = "";
@@ -979,7 +987,11 @@ public class Objeto {
 		for(EfectoHechizo SE : Effects) {
 			try {
 				boolean boost = true;
-				for(int i : Constantes.NO_BOOST_CC_IDS)if(i == SE.getEffectID())boost = false;
+				for(int i : Constantes.NO_BOOST_CC_IDS)
+					if (i == SE.getEffectID()) {
+						boost = false;
+						break;
+					}
 				String[] infos = SE.getArgs().split(";");
 				if(!boost)
 				{

@@ -471,7 +471,7 @@ public class Accion {
 				GestorSalida.GAME_SEND_GUILDENCLO_PACKET(perso);
 			break;
 			case 27://startFigthVersusMonstres args : monsterID,monsterLevel| ...
-				String ValidMobGroup = "";
+				StringBuilder ValidMobGroup = new StringBuilder();
 				try
 		        {
 					for(String MobAndLevel : _argumento.split("\\|"))
@@ -487,10 +487,10 @@ public class Accion {
 							if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Monstre invalide : monsterID:"+monsterID+" monsterLevel:"+monsterLevel);
 							continue;
 						}
-						ValidMobGroup += monsterID+","+monsterLevel+","+monsterLevel+";";
+						ValidMobGroup.append(monsterID).append(",").append(monsterLevel).append(",").append(monsterLevel).append(";");
 					}
-					if(ValidMobGroup.isEmpty()) return;
-					MobGroup group  = new MobGroup(perso.getActualMapa()._nextObjectID,perso.getActualCelda().getID(),ValidMobGroup);
+					if(ValidMobGroup.length() == 0) return;
+					MobGroup group  = new MobGroup(perso.getActualMapa()._nextObjectID,perso.getActualCelda().getID(), ValidMobGroup.toString());
 					perso.getActualMapa().startFigthVersusMonstres(perso, group);
 		        }catch(Exception e){
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}

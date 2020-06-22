@@ -8,14 +8,13 @@ object Pending {
     //TODO : Gestion du paquet Af + position dans la file d'attente.
 
 	@JvmStatic
-	fun PendingSystem(C: Cuenta?) {
+	fun sistema_de_pendientes(C: Cuenta?) {
         if (C == null) return
         if (C._position <= 1) {
             try {
                 Thread.sleep(750)
                 if (C == null || C.realmThread._imprimir == null) return
                 GestorSalida.MULTI_SEND_Af_PACKET(C.realmThread._imprimir, 1, RealmServer.totalabonado, RealmServer.totalnoabonado, "" + 1, RealmServer.idcola)
-                C._position = -1
                 RealmServer.totalabonado--
             } catch (e: InterruptedException) {
                 GestorSalida.ENVIAR_ESTA_CONECTADO(C.realmThread._imprimir)
@@ -26,7 +25,6 @@ object Pending {
                 Thread.sleep(750 * C._position.toLong())
                 if (C == null || C.realmThread._imprimir == null) return
                 GestorSalida.MULTI_SEND_Af_PACKET(C.realmThread._imprimir, 1, RealmServer.totalabonado, RealmServer.totalnoabonado, "" + 1, RealmServer.idcola)
-                C._position = -1
                 RealmServer.totalabonado--
             } catch (e: InterruptedException) {
                 GestorSalida.ENVIAR_ESTA_CONECTADO(C.realmThread._imprimir)

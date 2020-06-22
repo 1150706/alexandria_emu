@@ -34,7 +34,10 @@ public class JuegoThread implements Runnable {
 	private Cuenta _compte;
 	private Personaje _perso;
 	private final Map<Integer,GameAction> _actions = new TreeMap<>();
-	private long _timeLastTradeMsg = 0, _timeLastRecrutmentMsg = 0, _timeLastsave = 0, _timeLastAlignMsg = 0;
+	private long _timeLastTradeMsg = 0;
+	private long _timeLastRecrutmentMsg = 0;
+	private final long _timeLastsave = 0;
+	private long _timeLastAlignMsg = 0;
 	private long _timeLastIncarnamMsg = 0;
 	private Comandos command;
 	
@@ -488,7 +491,7 @@ public class JuegoThread implements Runnable {
 			int TiD = -1;
 			try {
 				TiD = Integer.parseInt(PercoID);
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 
 			Recaudador perco = Mundo.getPerco(TiD);
@@ -497,19 +500,19 @@ public class JuegoThread implements Runnable {
 			int FightID = -1;
 			try {
 				FightID = perco.get_inFightID();
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 
 			short MapID = -1;
 			try {
-				MapID = Mundo.getCarte((short) perco.get_mapID()).getFight(FightID).get_map().getID();
-			} catch (Exception e) {
+				MapID = Mundo.getCarte(perco.get_mapID()).getFight(FightID).get_map().getID();
+			} catch (Exception ignored) {
 			}
 
 			int CellID = -1;
 			try {
 				CellID = perco.get_cellID();
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 
 			if (MainServidor.MOSTRAR_ENVIADOS)
@@ -1406,15 +1409,15 @@ public class JuegoThread implements Runnable {
 		if(_perso == null)return;
 		Grupo g = _perso.getActualGrupo();
 		if(g == null)return;
-		String str = "";
+		StringBuilder str = new StringBuilder();
 		boolean isFirst = true;
 		for(Personaje GroupP : _perso.getActualGrupo().getMiembrosGrupo())
 		{
-			if(!isFirst) str += "|";
-			str += GroupP.getActualMapa().getX()+";"+GroupP.getActualMapa().getY()+";"+GroupP.getActualMapa().getID()+";2;"+GroupP.getID()+";"+GroupP.getNombre();
+			if(!isFirst) str.append("|");
+			str.append(GroupP.getActualMapa().getX()).append(";").append(GroupP.getActualMapa().getY()).append(";").append(GroupP.getActualMapa().getID()).append(";2;").append(GroupP.getID()).append(";").append(GroupP.getNombre());
 			isFirst = false;
 		}
-		GestorSalida.GAME_SEND_IH_PACKET(_perso, str);
+		GestorSalida.GAME_SEND_IH_PACKET(_perso, str.toString());
 	}
 	
 	private void group_quit(String packet)
@@ -2189,7 +2192,7 @@ public class JuegoThread implements Runnable {
 
 						_perso.addinStore(obj.getID(), price, qua);
 
-					} catch (NumberFormatException e) {
+					} catch (NumberFormatException ignored) {
 					}
 				} else {
 					String[] infos = packet.substring(4).split("\\|");
@@ -2205,7 +2208,7 @@ public class JuegoThread implements Runnable {
 						if (qua < obj.getQuantity()) qua = obj.getQuantity();
 
 						_perso.removeFromStore(obj.getID(), qua);
-					} catch (NumberFormatException e) {
+					} catch (NumberFormatException ignored) {
 					}
 				}
 			}
@@ -2749,7 +2752,7 @@ public class JuegoThread implements Runnable {
 
 	private void Exchange_start(String packet)
 	{
-		if(packet.substring(2,4).equals("11"))//Ouverture HDV achat
+		if(packet.startsWith("11", 2))//Ouverture HDV achat
 		{
 			if(_perso.get_isTradingWith() < 0)//Si d�j� ouvert
 				GestorSalida.GAME_SEND_EV_PACKET(_out);
@@ -2775,7 +2778,7 @@ public class JuegoThread implements Runnable {
 			_perso.set_isTradingWith(0 - _perso.getActualMapa().getID());	//R�cup�re l'ID de la map et rend cette valeur n�gative
 			return;
 		}
-		else if(packet.substring(2,4).equals("10"))//Ouverture HDV vente
+		else if(packet.startsWith("10", 2))//Ouverture HDV vente
 		{
 			if(_perso.get_isTradingWith() < 0)//Si d�j� ouvert
 				GestorSalida.GAME_SEND_EV_PACKET(_out);
@@ -2999,7 +3002,7 @@ public class JuegoThread implements Runnable {
 				case 'D' -> {
 					int key = -1;
 					try {
-						key = Integer.parseInt(packet.substring(2).replace(((int) 0x0) + "", ""));
+						key = Integer.parseInt(packet.substring(2).replace(0x0 + "", ""));
 					} catch (Exception ignored) {
 					}
 					if (key == -1) return;

@@ -229,8 +229,7 @@ public class Pelea {
 		
 		public void ActualiseLaunchedSort()
 		{
-			ArrayList<LaunchedSort> copie = new ArrayList<>();
-			copie.addAll(_launchedSort);
+			ArrayList<LaunchedSort> copie = new ArrayList<>(_launchedSort);
 			int i = 0;
 			for(LaunchedSort S : copie)
 			{
@@ -934,8 +933,7 @@ public class Pelea {
 				return; 
 				}
 			}
-			ArrayList<EfectoHechizo> buffs = new ArrayList<>();
-			buffs.addAll(get_fightBuff());
+			ArrayList<EfectoHechizo> buffs = new ArrayList<>(get_fightBuff());
 			for(EfectoHechizo SE : buffs)
 			{
 				if(SE.getEffectID() == 150)
@@ -1352,9 +1350,8 @@ public class Pelea {
 		}
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.getID()+"", init1.getID()+","+ Constantes.ETAT_PORTE+",0");
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init1.getID()+"", init1.getID()+","+ Constantes.ETAT_PORTEUR+",0");
-		
-		List<Entry<Integer, Peleador>> e = new ArrayList<>();
-		e.addAll(_team1.entrySet());
+
+		List<Entry<Integer, Peleador>> e = new ArrayList<>(_team1.entrySet());
 		for(Entry<Integer, Peleador> entry : e)
 		{
 			Peleador f = entry.getValue();
@@ -1443,9 +1440,8 @@ public class Pelea {
 		}
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTE+",0");
 		GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, perso.getID()+"", perso.getID()+","+ Constantes.ETAT_PORTEUR+",0");
-		
-		List<Entry<Integer, Peleador>> e = new ArrayList<>();
-		e.addAll(_team1.entrySet());
+
+		List<Entry<Integer, Peleador>> e = new ArrayList<>(_team1.entrySet());
 		for(Entry<Integer, Peleador> entry : e)
 		{
 			Peleador f = entry.getValue();
@@ -1813,8 +1809,8 @@ public class Pelea {
 		//reset des Max des Chatis
 		_ordreJeu.get(_curPlayer).get_chatiValue().clear();
 		//Gestion des glyphes
-		ArrayList<Glyphe> glyphs = new ArrayList<>();//Copie du tableau
-		glyphs.addAll(_glyphs);
+		//Copie du tableau
+		ArrayList<Glyphe> glyphs = new ArrayList<>(_glyphs);
 		
 		for(Glyphe g : glyphs)
 		{
@@ -1959,8 +1955,8 @@ public class Pelea {
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 100, SE.getLanzador().getID()+"", _ordreJeu.get(_curPlayer).getID()+","+dgt);
 				
 			}
-			ArrayList<Glyphe> glyphs = new ArrayList<>();//Copie du tableau
-			glyphs.addAll(_glyphs);
+			//Copie du tableau
+			ArrayList<Glyphe> glyphs = new ArrayList<>(_glyphs);
 			for(Glyphe g : glyphs)
 			{
 				if(_state >= Constantes.FIGHT_STATE_FINISHED)return;
@@ -2462,8 +2458,7 @@ public class Pelea {
     		} catch (InterruptedException ignored) {}
 			GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
     		_curAction = "";
-    		ArrayList<Trampa> P = new ArrayList<>();
-    		P.addAll(_traps);
+			ArrayList<Trampa> P = new ArrayList<>(_traps);
     		for(Trampa p : P)
     		{
     			Peleador F = _ordreJeu.get(_curPlayer);
@@ -2919,22 +2914,22 @@ public class Pelea {
 	        {
 		        boolean isFirst = true;
 		        int maxLvl = 0;
-		        String pierreStats = "";
+		        StringBuilder pierreStats = new StringBuilder();
 
 		        
 		        for(Peleador F : TEAM2)	//Cr?ation de la pierre et verifie si le groupe peut ?tre captur?
 		        {
 		        	if(!isFirst)
-		        		pierreStats += "|";
+		        		pierreStats.append("|");
 		        	
-		        	pierreStats += F.getMob().getTemplate().getID() + "," + F.get_lvl();//Converti l'ID du monstre en Hex et l'ajoute au stats de la futur pierre d'?me
+		        	pierreStats.append(F.getMob().getTemplate().getID()).append(",").append(F.get_lvl());//Converti l'ID du monstre en Hex et l'ajoute au stats de la futur pierre d'?me
 		        	
 		        	isFirst = false;
 		        	
 		        	if(F.get_lvl() > maxLvl)	//Trouve le monstre au plus haut lvl du groupe (pour la puissance de la pierre)
 		        		maxLvl = F.get_lvl();
 		        }
-		        pierrePleine = new PiedraAlma(Mundo.getNewItemGuid(),1,7010, Constantes.ITEM_POS_NO_EQUIPED,pierreStats);	//Cr?e la pierre d'?me
+		        pierrePleine = new PiedraAlma(Mundo.getNewItemGuid(),1,7010, Constantes.ITEM_POS_NO_EQUIPED, pierreStats.toString());	//Cr?e la pierre d'?me
 		        
 		        for(Peleador F : TEAM1)	//R?cup?re les captureur
 		        {
@@ -3021,9 +3016,8 @@ public class Pelea {
         		int winKamas	= Formulas.getKamasWin(i,TEAM1,minkamas,maxkamas);
         		StringBuilder drops = new StringBuilder();
         		//Drop system
-        		
-        		ArrayList<Drop> temp = new ArrayList<>();
-        		temp.addAll(possibleDrops);
+
+				ArrayList<Drop> temp = new ArrayList<>(possibleDrops);
         		Map<Integer,Integer> itemWon = new TreeMap<>();
     			int PP = i.getTotalStats().getEffect(Constantes.STATS_ADD_PROS);
         		boolean allIsDropped = false;
@@ -4128,12 +4122,12 @@ public class Pelea {
 	
 	public String getGTL()
 	{
-		String packet = "GTL";
+		StringBuilder packet = new StringBuilder("GTL");
 		for(Peleador f: get_ordreJeu())
 		{
-			packet += "|"+f.getID();
+			packet.append("|").append(f.getID());
 		}
-		return packet+(char)0x00;
+		return packet.toString() +(char)0x00;
 	}
 
 	public int getNextLowerFighterGuid()

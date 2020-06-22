@@ -25,28 +25,28 @@ object GestorEnvio {
         return PacketBuffer
     }
 
-    fun FlushTimer(): Timer {
+    fun flush_timer(): Timer {
         val action = ActionListener {
             for ((key, value) in getPacketBuffer()) {
                 if ((getPacketBuffer()[key] ?: error("")).isEmpty()) continue
-                val Totaldata = StringBuilder()
+                val datostotales = StringBuilder()
                 var pw: PrintWriter? = null
                 for ((key1) in getPacketBuffer()[key] ?: error("")) {
                     for ((key2, value1) in (getPacketBuffer()[key] ?: error(""))[key1]!!) {
-                        Totaldata.append(value1).append(0x00.toChar())
+                        datostotales.append(value1).append(0x00.toChar())
                         if (pw != null && pw.hashCode() == key2.hashCode()) continue
                         pw = key2
                     }
                     set_BufferRemove("$key1,")
                 }
-                if (Totaldata.toString().isEmpty()) continue
+                if (datostotales.toString().isEmpty()) continue
                 for (id in get_BufferRemove().split(",".toRegex()).toTypedArray()) {
                     value.remove(id.toLong())
                 }
                 del_BufferRemove()
-                pw!!.print(Totaldata.toString())
+                pw!!.print(datostotales.toString())
                 pw.flush()
-                if (MainServidor.MOSTRAR_ENVIADOS) println("Multi: Send>>$Totaldata")
+                if (MainServidor.MOSTRAR_ENVIADOS) println("Multi: Send>>$datostotales")
             }
         }
         return Timer(MainServidor.CONFIG_SOCKET_TIME_COMPACT_DATA, action)

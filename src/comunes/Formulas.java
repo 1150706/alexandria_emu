@@ -377,26 +377,26 @@ public class Formulas {
 			//Les stats du f�ca sont prises en compte
 			//Si pas element eau, on ignore l'armure
 			//Les stats du f�ca sont prises en compte
-			switch (SE.getSpell()) {
+			switch (SE.getHechizo()) {
 //Armure incandescente
 				case 1 -> {
 					if (statID != Constantes.ELEMENT_FEU) continue;
-					fighter = SE.getCaster();
+					fighter = SE.getLanzador();
 				}
 //Armure Terrestre
 				case 6 -> {
 					if (statID != Constantes.ELEMENT_TERRE && statID != Constantes.ELEMENT_NEUTRE) continue;
-					fighter = SE.getCaster();
+					fighter = SE.getLanzador();
 				}
 //Armure Venteuse
 				case 14 -> {
 					if (statID != Constantes.ELEMENT_AIR) continue;
-					fighter = SE.getCaster();
+					fighter = SE.getLanzador();
 				}
 //Armure aqueuse
 				case 18 -> {
 					if (statID != Constantes.ELEMENT_EAU) continue;
-					fighter = SE.getCaster();
+					fighter = SE.getLanzador();
 				}
 //Dans les autres cas on prend les stats de la cible et on ignore l'element de l'attaque
 				default -> fighter = target;

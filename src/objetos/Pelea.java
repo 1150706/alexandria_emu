@@ -27,17 +27,15 @@ import objetos.hechizos.Hechizos.SortStats;
 import comunes.*;
 import comunes.Mundo.*;
 
-public class Pelea
-{
+public class Pelea {
 	/*
 	 * TODO:
 	 * Effets de combat
 	 */
-	public static class Piege
-	{
-		private final Peleador _caster;
-		private final Case _cell;
-		private final byte _size;
+	public static class Trampa {
+		private final Peleador _lanzador;
+		private final Case _celda;
+		private final byte _tamaño;
 		private final int _spell;
 		private final SortStats _trapSpell;
 		private final Pelea _fight;
@@ -46,31 +44,29 @@ public class Pelea
 		private int _teamUnHide = -1;
 		//private Map<Integer, Challenge> _challenges = new TreeMap<Integer, Challenge>();
 		
-		public Piege(Pelea fight, Peleador caster, Case cell, byte size, SortStats trapSpell, int spell)
-		{
+		public Trampa(Pelea fight, Peleador caster, Case cell, byte size, SortStats trapSpell, int spell) {
 			_fight = fight;
-			_caster = caster;
-			_cell =cell;
+			_lanzador = caster;
+			_celda =cell;
 			_spell = spell;
-			_size = size;
+			_tamaño = size;
 			_trapSpell = trapSpell;
 			_color = Constantes.getTrapsColor(spell);
 		}
 
-		public Case get_cell() {
-			return _cell;
+		public Case get_celda() {
+			return _celda;
 		}
 
-		public byte get_size() {
-			return _size;
+		public byte get_tamaño() {
+			return _tamaño;
 		}
 
-		public Peleador get_caster() {
-			return _caster;
+		public Peleador get_lanzador() {
+			return _lanzador;
 		}
 		
-		public void set_isunHide(Peleador f)
-		{
+		public void set_isunHide(Peleador f) {
 			_isunHide = true;
 			_teamUnHide = f.getTeam();
 		}
@@ -80,77 +76,69 @@ public class Pelea
 			return _isunHide;
 		}
 		
-		public void desappear()
-		{
+		public void desappear() {
 			StringBuilder str = new StringBuilder();
 			StringBuilder str2 = new StringBuilder();
 			StringBuilder str3 = new StringBuilder();
 			StringBuilder str4 = new StringBuilder();
 			
-			int team = _caster.getTeam()+1;
-			str.append("GDZ-").append(_cell.getID()).append(";").append(_size).append(";").append(_color);
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team, 999, _caster.getID()+"", str.toString());
-			str2.append("GDC"+_cell.getID());
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team, 999, _caster.getID()+"", str2.toString());
-			if(get_isunHide())
-			{
+			int team = _lanzador.getTeam()+1;
+			str.append("GDZ-").append(_celda.getID()).append(";").append(_tamaño).append(";").append(_color);
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team, 999, _lanzador.getID()+"", str.toString());
+			str2.append("GDC").append(_celda.getID());
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team, 999, _lanzador.getID()+"", str2.toString());
+			if(get_isunHide()) {
 				int team2 = _teamUnHide+1;
-				str3.append("GDZ-").append(_cell.getID()).append(";").append(_size).append(";").append(_color);
-				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team2, 999, _caster.getID()+"", str3.toString());
-				str4.append("GDC").append(_cell.getID());
-				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team2, 999, _caster.getID()+"", str4.toString());
+				str3.append("GDZ-").append(_celda.getID()).append(";").append(_tamaño).append(";").append(_color);
+				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team2, 999, _lanzador.getID()+"", str3.toString());
+				str4.append("GDC").append(_celda.getID());
+				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team2, 999, _lanzador.getID()+"", str4.toString());
 			}
 		}
 		
-		public void appear(Peleador f)
-		{
+		public void appear(Peleador f) {
 			StringBuilder str = new StringBuilder();
 			StringBuilder str2 = new StringBuilder();
 			
 			int team = f.getTeam()+1;
-			str.append("GDZ+").append(_cell.getID()).append(";").append(_size).append(";").append(_color);
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team, 999, _caster.getID()+"", str.toString());
-			str2.append("GDC").append(_cell.getID()).append(";Haaaaaaaaz3005;");
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team, 999, _caster.getID()+"", str2.toString());
+			str.append("GDZ+").append(_celda.getID()).append(";").append(_tamaño).append(";").append(_color);
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team, 999, _lanzador.getID()+"", str.toString());
+			str2.append("GDC").append(_celda.getID()).append(";Haaaaaaaaz3005;");
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, team, 999, _lanzador.getID()+"", str2.toString());
 		}
 		
-		public void onTraped(Peleador target)
-		{
+		public void onTraped(Peleador target) {
 			if(target.isDead())
 				return;
-			_fight.get_traps().remove(this); // on enlï¿½ve le piï¿½ge sur lequel target a marchï¿½
+			_fight.getTrampas().remove(this); // on enl?ve le pi?ge sur lequel target a march?
 			desappear(); //On efface le piege
-			//On dï¿½clenche ses effets
-			String str = _spell+","+_cell.getID()+",0,1,1,"+_caster.getID();
+			//On d?clenche ses effets
+			String str = _spell+","+ _celda.getID()+",0,1,1,"+ _lanzador.getID();
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_fight, 7, 307, target.getID()+"", str);
 			
 			ArrayList<Case> cells = new ArrayList<>();
-			cells.add(_cell);
-			//on ajoute les autres cases que couvre le piï¿½ge
-			for(int a = 0; a < _size;a++)
-			{
+			cells.add(_celda);
+			//on ajoute les autres cases que couvre le pi?ge
+			for(int a = 0; a < _tamaño; a++) {
 				char[] dirs = {'b','d','f','h'};
-				ArrayList<Case> cases2 = new ArrayList<>();//on ï¿½vite les modifications concurrentes
-				cases2.addAll(cells); 
-				for(Case aCell : cases2)
-				{
-					for(char d : dirs)
-					{
+				//on ?vite les modifications concurrentes
+				ArrayList<Case> cases2 = new ArrayList<>(cells);
+				for(Case aCell : cases2) {
+					for(char d : dirs) {
 						Case cell = _fight.get_map().getMapa(Camino.GetCaseIDFromDirrection(aCell.getID(), d, _fight.get_map(), true));
 						if(cell == null)continue;
-						if(!cells.contains(cell))
-						{
+						if(!cells.contains(cell)) {
 							cells.add(cell);
 						}
 					}
 				}
 			}
 			Peleador fakeCaster;
-			if(_caster.getPersonnage() == null)
-					fakeCaster = new Peleador(_fight,_caster.getMob());
-			else 	fakeCaster = new Peleador(_fight,_caster.getPersonnage());
+			if(_lanzador.getPersonnage() == null)
+					fakeCaster = new Peleador(_fight, _lanzador.getMob());
+			else 	fakeCaster = new Peleador(_fight, _lanzador.getPersonnage());
 
-			fakeCaster.set_fightCell(_cell);
+			fakeCaster.set_fightCell(_celda);
 			_trapSpell.applySpellEffectToFight(_fight,fakeCaster,target.get_fightCell(),cells,false);
 			_fight.verifIfTeamAllDead();
 		}
@@ -450,7 +438,7 @@ public class Pelea
 					str.append(G.get_lvl()).append(";");
 					str.append("1;");//FIXME
 					str.append("2;4;");//FIXME
-					str.append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";");//Rï¿½sistances
+					str.append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";").append((int) Math.floor(G.get_lvl() / 2)).append(";");//R?sistances
 					str.append(_team);
 				}
 //Double
@@ -511,10 +499,10 @@ public class Pelea
 		}
 		
 		public void decrementStates() {
-			//Copie pour ï¿½vident les modif concurrentes
+			//Copie pour ?vident les modif concurrentes
 			ArrayList<Entry<Integer, Integer>> entries = new ArrayList<>(_estado.entrySet());
 			for(Entry<Integer,Integer> e : entries) {
-				//Si la valeur est nï¿½gative, on y touche pas
+				//Si la valeur est n?gative, on y touche pas
 				if(e.getKey() < 0)continue;
 				
 				_estado.remove(e.getKey());
@@ -522,7 +510,7 @@ public class Pelea
 				//Si 0 on ne remet pas la valeur dans le tableau
 				if(nVal == 0)//ne pas mettre plus petit, -1 = infinie
 				{
-					//on envoie au client la desactivation de l'ï¿½tat
+					//on envoie au client la desactivation de l'?tat
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_pelea, 7, 950, getID()+"", getID()+","+e.getKey()+",0");
 					continue;
 				}
@@ -544,7 +532,7 @@ public class Pelea
 		public void applyBeginningTurnBuff(Pelea fight) {
 			synchronized(_fightBuffs) {
 				for(int effectID : Constantes.BEGIN_TURN_BUFF) {
-					//On ï¿½vite les modifications concurrentes
+					//On ?vite les modifications concurrentes
 					ArrayList<EfectoHechizo> buffs = new ArrayList<>(_fightBuffs);
 					for(EfectoHechizo entry : buffs) {
 						if(entry.getEffectID() == effectID) {
@@ -558,7 +546,7 @@ public class Pelea
 
 		public EfectoHechizo getBuff(int id) {
 			for(EfectoHechizo entry : _fightBuffs) {
-				if(entry.getEffectID() == id && entry.getDuration() >0) {
+				if(entry.getEffectID() == id && entry.getDuracion() >0) {
 					return entry;
 				}
 			}
@@ -567,7 +555,7 @@ public class Pelea
 		
 		public boolean hasBuff(int id) {
 			for(EfectoHechizo entry : _fightBuffs) {
-				if(entry.getEffectID() == id && entry.getDuration() >0) {
+				if(entry.getEffectID() == id && entry.getDuracion() >0) {
 					return true;
 				}
 			}
@@ -586,7 +574,7 @@ public class Pelea
 		public int getMaitriseDmg(int id) {
 			int value = 0;
 			for(EfectoHechizo entry : _fightBuffs) {
-				if(entry.getSpell() == id)
+				if(entry.getHechizo() == id)
 					value += entry.getValue();
 			}
 			return value;
@@ -595,7 +583,7 @@ public class Pelea
 		
 		public boolean getSpellValueBool(int id) {
 			for(EfectoHechizo entry : _fightBuffs) {
-				if(entry.getSpell() == id)
+				if(entry.getHechizo() == id)
 					return true;
 			}
 			return false;
@@ -612,7 +600,7 @@ public class Pelea
 					if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Suppression du buff "+entry.getEffectID()+" sur le joueur Fighter ID= "+ getID());
 					switch(entry.getEffectID()) {
 						case 108:
-							if(entry.getSpell() == 441) {
+							if(entry.getHechizo() == 441) {
 								//Baisse des pdvs max
 								_PDVMAX = (_PDVMAX-entry.getValue());
 								
@@ -628,8 +616,8 @@ public class Pelea
 							}
 						break;
 					
-						case 150://Invisibilitï¿½
-							GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_pelea, 7, 150, entry.getCaster().getID()+"", getID()+",0");
+						case 150://Invisibilit?
+							GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_pelea, 7, 150, entry.getLanzador().getID()+"", getID()+",0");
 						break;
 						
 						case 950:
@@ -640,8 +628,8 @@ public class Pelea
 								id = Integer.parseInt(args.split(";")[2]);
 							}catch(Exception ignored){}
 							if(id == -1)return;
-							setEstado(id,0, entry.getCaster()._id);
-							GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_pelea, 7, 950, entry.getCaster().getID()+"", entry.getCaster().getID()+","+id+",0");
+							setEstado(id,0, entry.getLanzador()._id);
+							GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(_pelea, 7, 950, entry.getLanzador().getID()+"", entry.getLanzador().getID()+","+id+",0");
 						break;
 					}
 				}
@@ -671,11 +659,11 @@ public class Pelea
 			   spellID == 704
 			   )
 			{
-				//Trï¿½ve
+				//Tr?ve
 				//Immu
-				//Prï¿½vention
+				//Pr?vention
 				//Momification
-				//Dï¿½vouement
+				//D?vouement
 				//Mot stimulant
 				//Odorat
 				//Ronce Apaisante
@@ -684,13 +672,13 @@ public class Pelea
 				//Armure Terrestre
 				//Armure Venteuse
 				//Armure Aqueuse
-				//Bouclier Fï¿½ca
-				//Accï¿½lï¿½ration Poupesque
+				//Bouclier F?ca
+				//Acc?l?ration Poupesque
 				//Puissance Sylvestre
 				//Pandanlku
 				debuff = true;
 			}
-			//Si c'est le jouer actif qui s'autoBuff, on ajoute 1 a la durï¿½e
+			//Si c'est le jouer actif qui s'autoBuff, on ajoute 1 a la dur?e
 			_fightBuffs.add(new EfectoHechizo(id,val,(_canPlay?duration+1:duration),turns,debuff,caster,args,spellID));
 			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Ajout du Buff "+id+" sur le personnage Fighter ID = "+this.getID()+" val : "+val+" duration : "+duration+" turns : "+turns+" debuff : "+debuff+" spellid : "+spellID+" args : "+args);
 
@@ -698,7 +686,7 @@ public class Pelea
 			switch (id) {
 //Renvoie de sort
 				case 6 -> GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_pelea, 7, id, getID(), -1, val + "", "10", "", duration, spellID);
-//Chance ï¿½ca
+//Chance ?ca
 				case 79 -> {
 					val = Integer.parseInt(args.split(";")[0]);
 					String valMax = args.split(";")[1];
@@ -712,7 +700,7 @@ public class Pelea
 					if (Integer.parseInt(args.split(";")[0]) == 108) return;
 					GestorSalida.GAME_SEND_FIGHT_GIE_TO_FIGHT(_pelea, 7, id, getID(), val, "" + val, "" + valMax2, "", duration, spellID);
 				}
-//Maï¿½trises
+//Ma?trises
 				case 98, 107, 100, 108, 165 -> {
 					val = Integer.parseInt(args.split(";")[0]);
 					String valMax1 = args.split(";")[1];
@@ -904,7 +892,7 @@ public class Pelea
 		public void debuff()
 		{
 			ArrayList<EfectoHechizo> newBuffs = new ArrayList<>();
-			//on vï¿½rifie chaque buff en cours, si pas dï¿½buffable, on l'ajout a la nouvelle liste
+			//on v?rifie chaque buff en cours, si pas d?buffable, on l'ajout a la nouvelle liste
 			for(EfectoHechizo SE : _fightBuffs)
 			{
 				if(!SE.isDebuffabe())newBuffs.add(SE);
@@ -1162,11 +1150,11 @@ public class Pelea
 	private List<Peleador> _ordreJeu = new ArrayList<>();
 	private Timer _turnTimer;
 	private final List<Glyphe> _glyphs = new ArrayList<>();
-	private final List<Piege> _traps = new ArrayList<>();
+	private final List<Trampa> _traps = new ArrayList<>();
 	private MobGroup _mobGroup;
 	private Recaudador _perco;
 	
-	private final ArrayList<Peleador> _captureur = new ArrayList<>(8);	//Crï¿½ation d'une liste de longueur 8. Les combats contiennent un max de 8 Attaquant
+	private final ArrayList<Peleador> _captureur = new ArrayList<>(8);	//Cr?ation d'une liste de longueur 8. Les combats contiennent un max de 8 Attaquant
 	private boolean isCapturable = false;
 	private int captWinner = -1;
 	private PiedraAlma pierrePleine;
@@ -1180,7 +1168,7 @@ public class Pelea
 		notifyAll(); 
 	}
 	// Fin changement
-	//TIMER dï¿½compte toutes les secondes
+	//TIMER d?compte toutes les secondes
 	/*private Timer TurnTimer (final int timer, final Percepteur perco)
 	{
 	    ActionListener action = new ActionListener ()
@@ -1204,14 +1192,14 @@ public class Pelea
 	
 	public void ticMyTimer()
 	  {
-	      if(_startTime == 0L) {// si le combat n'a pas commencï¿½
-	    	  // temps qui reste ï¿½ s'ï¿½couler en ms
+	      if(_startTime == 0L) {// si le combat n'a pas commenc?
+	    	  // temps qui reste ? s'?couler en ms
 	          long timeRestant = (MainServidor.CONFIG_MS_FOR_START_FIGHT - 1L) -
 	          			(System.currentTimeMillis() - _ticMyTimer_startTime); 
-	          if(timeRestant <= 0L) // si tout le temps est ï¿½coulï¿½
+	          if(timeRestant <= 0L) // si tout le temps est ?coul?
 	          {
 	        	  if(_type != Constantes.FIGHT_TYPE_CHALLENGE)
-	        		  try {// on essaye de dï¿½marrer le combat si ce n'est pas un challenge
+	        		  try {// on essaye de d?marrer le combat si ce n'est pas un challenge
 	        			  startFight(); }
 	              catch(Exception e){
 	                  GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-FIGHT", "startFight(); Dans ticMyTimer() a \351chou\351. MAPID: " + get_map().getID());
@@ -1223,14 +1211,14 @@ public class Pelea
 	            	  _perco.set_timeTurn((int)timeRestant);
 	              return;
 	          }
-	      } else {// si le combat a commencï¿½
+	      } else {// si le combat a commenc?
 	          if(!_ticMyTimer_endTurn) // et qu'on a endturn
 	        	  return;
 	          long timeRestant = (MainServidor.CONFIG_MS_PER_TURN - 3L) - (System.currentTimeMillis() - _ticMyTimer_startTime); // temps qui reste avant la fin du tour en ms
-	          if(timeRestant <= 0L) // si le temps est ï¿½coulï¿½
+	          if(timeRestant <= 0L) // si le temps est ?coul?
 	          {
 	              _ticMyTimer_endTurn = false; // on a pas fait la fin du tour
-	              _ticMyTimer_startTime = 0L; // on rï¿½initialise le dï¿½but du tour ï¿½ 0
+	              _ticMyTimer_startTime = 0L; // on r?initialise le d?but du tour ? 0
 	              try
 	              {
 	                  endTurn(); // on essaye de terminer le tour
@@ -1245,7 +1233,7 @@ public class Pelea
 	
 	public Pelea(int type, int id, Mapa map, Personaje init1, Personaje init2)
 	{
-		_type = type; //0: Dï¿½fie (4: Pvm) 1:PVP (5:Perco)
+		_type = type; //0: D?fie (4: Pvm) 1:PVP (5:Perco)
 		_id = id;
 		_map = map.getMapCopy();
 		_mapOld = map;
@@ -1253,7 +1241,7 @@ public class Pelea
 		_init1 = new Peleador(this,init2);
 		_team0.put(init1.getID(), _init0);
 		_team1.put(init2.getID(), _init1);
-		//on desactive le timer de regen cotï¿½ client
+		//on desactive le timer de regen cot? client
 		GestorSalida.GAME_SEND_ILF_PACKET(init1, 0);
 		GestorSalida.GAME_SEND_ILF_PACKET(init2, 0);
 		
@@ -1321,7 +1309,7 @@ public class Pelea
 	public Pelea(int id, Mapa map, Personaje init1, MobGroup group)
 	{
 		_mobGroup = group;
-		_type = Constantes.FIGHT_TYPE_PVM; //(0: Dï¿½fie) 4: Pvm (1:PVP) (5:Perco)
+		_type = Constantes.FIGHT_TYPE_PVM; //(0: D?fie) 4: Pvm (1:PVP) (5:Perco)
 		_id = id;
 		_map = map.getMapCopy();
 		_mapOld = map;
@@ -1334,7 +1322,7 @@ public class Pelea
 			Peleador mob = new Peleador(this,entry.getValue());
 			_team1.put(entry.getKey(), mob);
 		}
-		//on desactive le timer de regen cotï¿½ client
+		//on desactive le timer de regen cot? client
 		GestorSalida.GAME_SEND_ILF_PACKET(init1, 0);
 		
 		// on envoie le timer ?
@@ -1415,7 +1403,7 @@ public class Pelea
 		perco.set_inFight((byte)1);
 		perco.set_inFightID((byte)id);
 		
-		_type = Constantes.FIGHT_TYPE_PVT; //(0: Dï¿½fie) (4: Pvm) (1:PVP) 5:Perco
+		_type = Constantes.FIGHT_TYPE_PVT; //(0: D?fie) (4: Pvm) (1:PVP) 5:Perco
 		_id = id;
 		_map = map.getMapCopy();
 		_mapOld = map;
@@ -1423,7 +1411,7 @@ public class Pelea
 		_ticMyTimer_startTime = 0L;
 	    _ticMyTimer_endTurn = false;
 	    _perco = perco;
-	    //on desactive le timer de regen cotï¿½ client
+	    //on desactive le timer de regen cot? client
 	  	GestorSalida.GAME_SEND_ILF_PACKET(perso, 0);
 	  		
 		_team0.put(perso.getID(), _init0);
@@ -1516,7 +1504,7 @@ public class Pelea
 		return _map;
 	}
 
-	public List<Piege> get_traps() {
+	public List<Trampa> getTrampas() {
 		return _traps;
 	}
 
@@ -1729,7 +1717,7 @@ public class Pelea
 	    				  inDungeon = true;
 	    		  }
 	    	  }
-	    	  //BR,tournesol affamï¿½, Mob l'ï¿½ponge, scara dorï¿½, bworker, blops royaux, wa wab, 
+	    	  //BR,tournesol affam?, Mob l'?ponge, scara dor?, bworker, blops royaux, wa wab, 
 	    	  //rat noir, rat blanc, spincter, skeunk, croca, toror, tot, meulou, DC, CM, AA
 	    	  //Ougah, Krala
 	    	  String IDisBoss = ";147;799;928;1001;797;478;1184;1185;1186;1187;1188;180;939;940;943;780;854;121;827;232;113;257;173;1159;423;";
@@ -1831,15 +1819,15 @@ public class Pelea
 		for(Glyphe g : glyphs)
 		{
 			if(_state >= Constantes.FIGHT_STATE_FINISHED)return;
-			//Si c'est ce joueur qui l'a lancï¿½
+			//Si c'est ce joueur qui l'a lanc?
 			if(g.get_caster().getID() == _ordreJeu.get(_curPlayer).getID())
 			{
-				//on rï¿½duit la durï¿½e restante, et si 0, on supprime
+				//on r?duit la dur?e restante, et si 0, on supprime
 				if(g.decrementDuration() == 0)
 				{
 					_glyphs.remove(g);
 					g.desapear();
-					continue;//Continue pour pas que le joueur active le glyphe s'il ï¿½tait dessus
+					continue;//Continue pour pas que le joueur active le glyphe s'il ?tait dessus
 				}
 			}
 			//Si dans le glyphe
@@ -1930,7 +1918,7 @@ public class Pelea
 			_ordreJeu.get(_curPlayer).setCanPlay(false);
 			_curAction = "";
 			
-			//Si empoisonnï¿½ (Crï¿½er une fonction applyEndTurnbuff si d'autres effets existent)
+			//Si empoisonn? (Cr?er une fonction applyEndTurnbuff si d'autres effets existent)
 			for(EfectoHechizo SE : _ordreJeu.get(_curPlayer).getBuffsByEffectID(131))
 			{
 				int pas = SE.getValue();
@@ -1944,11 +1932,11 @@ public class Pelea
 				int nbr = (int) Math.floor((double)_curFighterUsedPA/(double)pas);
 				int dgt = val * nbr;
 				//Si poison paralysant
-				if(SE.getSpell() == 200)
+				if(SE.getHechizo() == 200)
 				{
-					int inte = SE.getCaster().getTotalStats().getEffect(Constantes.STATS_ADD_INTE);
+					int inte = SE.getLanzador().getTotalStats().getEffect(Constantes.STATS_ADD_INTE);
 					if(inte < 0)inte = 0;
-					int pdom = SE.getCaster().getTotalStats().getEffect(Constantes.STATS_ADD_PERDOM);
+					int pdom = SE.getLanzador().getTotalStats().getEffect(Constantes.STATS_ADD_PERDOM);
 					if(pdom < 0)pdom = 0;
 					//on applique le boost
 					dgt = ((100+inte+pdom)/100) * dgt;
@@ -1956,7 +1944,7 @@ public class Pelea
 				if(_ordreJeu.get(_curPlayer).hasBuff(184))
 				{
 					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 105, _ordreJeu.get(_curPlayer).getID()+"", _ordreJeu.get(_curPlayer).getID()+","+_ordreJeu.get(_curPlayer).getBuff(184).getValue());
-					dgt = dgt-_ordreJeu.get(_curPlayer).getBuff(184).getValue();//Rï¿½duction physique
+					dgt = dgt-_ordreJeu.get(_curPlayer).getBuff(184).getValue();//R?duction physique
 				}
 				if(_ordreJeu.get(_curPlayer).hasBuff(105))
 				{
@@ -1968,7 +1956,7 @@ public class Pelea
 				if(dgt>_ordreJeu.get(_curPlayer).getPDV())dgt = _ordreJeu.get(_curPlayer).getPDV();//va mourrir
 				_ordreJeu.get(_curPlayer).removePDV(dgt);
 				dgt = -(dgt);
-				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 100, SE.getCaster().getID()+"", _ordreJeu.get(_curPlayer).getID()+","+dgt);
+				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 100, SE.getLanzador().getID()+"", _ordreJeu.get(_curPlayer).getID()+","+dgt);
 				
 			}
 			ArrayList<Glyphe> glyphs = new ArrayList<>();//Copie du tableau
@@ -2131,7 +2119,7 @@ public class Pelea
 			perso.set_fight(this);
 			f.set_fightCell(cell);
 			f.get_fightCell().addFighter(f);
-			//Dï¿½sactive le timer de regen
+			//D?sactive le timer de regen
 			GestorSalida.GAME_SEND_ILF_PACKET(perso, 0);
 		}else if(_team1.containsKey(guid))
 		{
@@ -2362,16 +2350,16 @@ public class Pelea
 		ArrayList<Peleador> tacle = Camino.getEnemyFighterArround(f.get_fightCell().getID(), _map, this);
 		if(tacle != null && !f.isEstado(6))//Tentative de Tacle : Si stabilisation alors pas de tacle possible
 		{
-			//Les stabilisï¿½s ne taclent pas
+			//Les stabilis?s ne taclent pas
 			tacle.removeIf(T -> T.isEstado(6));
-			if(!tacle.isEmpty())//Si tous les tacleur ne sont pas stabilisï¿½s
+			if(!tacle.isEmpty())//Si tous les tacleur ne sont pas stabilis?s
 			{
 				if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("Le personnage est a cote de ("+tacle.size()+") ennemi(s)");// ("+tacle.getPacketsName()+","+tacle.get_fightCell().getID()+") => Tentative de tacle:");
 				int chance = Formulas.getTacleChance(f, tacle);
 				int rand = Formulas.getRandomValue(0, 99);
 				if(rand > chance)
 				{
-					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7,GA._id, "104",_ordreJeu.get(_curPlayer).getID()+";", "");//Joueur taclï¿½
+					GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7,GA._id, "104",_ordreJeu.get(_curPlayer).getID()+";", "");//Joueur tacl?
 					int pertePA = _curFighterPA*chance/100;
 					
 					if(pertePA  < 0)pertePA = -pertePA;
@@ -2409,17 +2397,17 @@ public class Pelea
         //Si le joueur n'est pas invisible
         if(!_ordreJeu.get(_curPlayer).isHide())
 	        GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, GA._id, "1", _ordreJeu.get(_curPlayer).getID()+"", "a"+ GestorEncriptador.cellID_To_Code(f.get_fightCell().getID())+newPath);
-        else//Si le joueur est planquï¿½ x)
+        else//Si le joueur est planqu? x)
         {
         	if(_ordreJeu.get(_curPlayer).getPersonnage() != null)
         	{
-        		//On envoie le path qu'au joueur qui se dï¿½place
+        		//On envoie le path qu'au joueur qui se d?place
         		PrintWriter out = _ordreJeu.get(_curPlayer).getPersonnage().getCuenta().getJuegoThread().get_out();
         		GestorSalida.GAME_SEND_GA_PACKET(out,  GA._id+"", "1", _ordreJeu.get(_curPlayer).getID()+"", "a"+ GestorEncriptador.cellID_To_Code(f.get_fightCell().getID())+newPath);
         	}
         }
        
-        //Si portï¿½
+        //Si port?
         Peleador po = _ordreJeu.get(_curPlayer).get_holdedBy();
         if(po != null
         && _ordreJeu.get(_curPlayer).isEstado(Constantes.ETAT_PORTE)
@@ -2431,13 +2419,13 @@ public class Pelea
         	//si le joueur va bouger
        		if(nextCellID != po.get_fightCell().getID())
        		{
-       			//on retire les ï¿½tats
+       			//on retire les ?tats
        			po.setEstado(Constantes.ETAT_PORTEUR, 0, po._id);
        			_ordreJeu.get(_curPlayer).setEstado(Constantes.ETAT_PORTE,0, _ordreJeu.get(_curPlayer).getID());
-       			//on retire dï¿½ lie les 2 fighters
+       			//on retire d? lie les 2 fighters
        			po.set_isHolding(null);
        			_ordreJeu.get(_curPlayer).set_holdedBy(null);
-       			//La nouvelle case sera dï¿½finie plus tard dans le code
+       			//La nouvelle case sera d?finie plus tard dans le code
        			//On envoie les packets
        			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 950, po.getID()+"", po.getID()+","+ Constantes.ETAT_PORTEUR+",0");
     			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 950, _ordreJeu.get(_curPlayer).getID()+"", _ordreJeu.get(_curPlayer).getID()+","+ Constantes.ETAT_PORTE+",0");
@@ -2448,7 +2436,7 @@ public class Pelea
 		if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Fighter ID= "+f.getID()+" se deplace de la case "+_ordreJeu.get(_curPlayer).get_fightCell().getID()+" vers "+ GestorEncriptador.cellCode_To_ID(encriptarcelda));
         _ordreJeu.get(_curPlayer).set_fightCell(_map.getMapa(nextCellID));
         _ordreJeu.get(_curPlayer).get_fightCell().addFighter(_ordreJeu.get(_curPlayer));
-        if(po != null) po.get_fightCell().addFighter(po);// mï¿½me erreur que tantï¿½t, bug ou plus de fighter sur la case
+        if(po != null) po.get_fightCell().addFighter(po);// m?me erreur que tant?t, bug ou plus de fighter sur la case
        if(nStep < 0) 
        {
     	   if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Fighter ID= "+f.getID()+" nStep negatives, reconversion");
@@ -2462,7 +2450,7 @@ public class Pelea
         && _ordreJeu.get(_curPlayer).isEstado(Constantes.ETAT_PORTEUR)
         && po.isEstado(Constantes.ETAT_PORTE))
         {
-       		//on dï¿½place le portï¿½ sur la case
+       		//on d?place le port? sur la case
         	po.set_fightCell(_ordreJeu.get(_curPlayer).get_fightCell());
         	if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs(po.getPacketsName()+" se deplace vers la case "+nextCellID);
       	}
@@ -2470,18 +2458,18 @@ public class Pelea
         if(f.getPersonnage() == null)
         {
         	try {
-    			Thread.sleep(900+100*nStep);//Estimation de la durï¿½e du dï¿½placement
+    			Thread.sleep(900+100*nStep);//Estimation de la dur?e du d?placement
     		} catch (InterruptedException ignored) {}
 			GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
     		_curAction = "";
-    		ArrayList<Piege> P = new ArrayList<>();
+    		ArrayList<Trampa> P = new ArrayList<>();
     		P.addAll(_traps);
-    		for(Piege p : P)
+    		for(Trampa p : P)
     		{
     			Peleador F = _ordreJeu.get(_curPlayer);
-    			int dist = Camino.getDistanceBetween(_map,p.get_cell().getID(),F.get_fightCell().getID());
+    			int dist = Camino.getDistanceBetween(_map,p.get_celda().getID(),F.get_fightCell().getID());
     			//on active le piege
-    			if(dist <= p.get_size())p.onTraped(F);
+    			if(dist <= p.get_tamaño())p.onTraped(F);
     		}
     		return true;
         }
@@ -2506,14 +2494,14 @@ public class Pelea
 		GestorSalida.GAME_SEND_GAMEACTION_TO_FIGHT(this,7,_curAction);
 		GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this,7,2,_ordreJeu.get(_curPlayer).getID());
 		//copie
-		ArrayList<Piege> P = (new ArrayList<>());
+		ArrayList<Trampa> P = (new ArrayList<>());
 		P.addAll(_traps);
-		for(Piege p : P)
+		for(Trampa p : P)
 		{
 			Peleador F = getFighterByPerso(perso);
-			int dist = Camino.getDistanceBetween(_map,p.get_cell().getID(),F.get_fightCell().getID());
+			int dist = Camino.getDistanceBetween(_map,p.get_celda().getID(),F.get_fightCell().getID());
 			//on active le piege
-			if(dist <= p.get_size())
+			if(dist <= p.get_tamaño())
 				p.onTraped(F);
 			if(_state == Constantes.FIGHT_STATE_FINISHED)break;
 		}
@@ -2550,7 +2538,7 @@ public class Pelea
 				JuegoServidor.agregar_a_los_logs(fighter.getPacketsName()+" tentative de lancer le sort "+Spell.getSpellID()+" sur la case "+caseID);
 			_curFighterPA -= Spell.getPACost();
 			_curFighterUsedPA += Spell.getPACost();
-			GestorSalida.GAME_SEND_GAS_PACKET_TO_FIGHT(this, 7, fighter.getID()); // infos concernant la dï¿½pense de PA ?
+			GestorSalida.GAME_SEND_GAS_PACKET_TO_FIGHT(this, 7, fighter.getID()); // infos concernant la d?pense de PA ?
 			boolean isEc = Spell.getTauxEC() != 0 && Formulas.getRandomValue(1, Spell.getTauxEC()) == Spell.getTauxEC();
 			if(isEc)
 			{
@@ -2592,7 +2580,7 @@ public class Pelea
 				//on applique les effets de l'arme
 				Spell.applySpellEffectToFight(this,fighter,Cell,isCC);
 			}
-			// le client ne peut continuer sans l'envoi de ce packet qui annonce le coï¿½t en PA
+			// le client ne peut continuer sans l'envoi de ce packet qui annonce le co?t en PA
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 102,fighter.getID()+"",fighter.getID()+",-"+Spell.getPACost());
 			GestorSalida.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, fighter.getID());
 			//Refresh des Stats
@@ -2624,7 +2612,7 @@ public class Pelea
 			return 10;
 		}
 		if(fighter.getPersonnage() != null)
-			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 102,fighter.getID()+"",fighter.getID()+",-0"); // annonce le coï¿½t en PA
+			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 102,fighter.getID()+"",fighter.getID()+",-0"); // annonce le co?t en PA
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException ignored) {}
@@ -2675,7 +2663,7 @@ public class Pelea
 			}
 			return false;
 		}
-		//Si la cellule visï¿½e n'existe pas
+		//Si la cellule vis?e n'existe pas
 		if(cell == null)
 		{
 			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") La cellule visee n'existe pas");
@@ -2685,7 +2673,7 @@ public class Pelea
 			}
 			return false;
 		}
-		//Si la cellule visï¿½e n'est pas alignï¿½e avec le joueur alors que le sort le demande
+		//Si la cellule vis?e n'est pas align?e avec le joueur alors que le sort le demande
 		if(spell.isLineLaunch() && !Camino.casesAreInSameLine(_map, ValidlaunchCase, cell.getID(), 'z'))
 		{
 			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Le sort demande un lancer en ligne, or la case n'est pas alignee avec le joueur");
@@ -2695,7 +2683,7 @@ public class Pelea
 			}
 			return false;
 		}
-		//Si le sort demande une ligne de vue et que la case demandï¿½e n'en fait pas partie
+		//Si le sort demande une ligne de vue et que la case demand?e n'en fait pas partie
 		if(spell.hasLDV() && !Camino.checkLoS(_map, ValidlaunchCase, cell.getID(), fighter, false))
 		{
 			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") Le sort demande une ligne de vue, mais la case visee n'est pas visible pour le joueur");
@@ -2705,7 +2693,7 @@ public class Pelea
 			}
 			return false;
 		}
-		// Pour peur si la personne poussï¿½e a la ligne de vue vers la case
+		// Pour peur si la personne pouss?e a la ligne de vue vers la case
 		char dir = Camino.getDirBetweenTwoCase(ValidlaunchCase, cell.getID(), _map, true);
 		if(spell.getSpellID() == 67)
 			if(!Camino.checkLoS(_map, Camino.GetCaseIDFromDirrection(ValidlaunchCase, dir, _map, true), cell.getID(), null, true)) {
@@ -2721,7 +2709,7 @@ public class Pelea
 		{
 			MaxPO += fighter.getTotalStats().getEffect(Constantes.STATS_ADD_PO);
 		}
-		//Vï¿½rification Portï¿½e mini / maxi
+		//V?rification Port?e mini / maxi
 		if(dist < spell.getMinPO() || dist > MaxPO)
 		{
 			if(MainServidor.MOSTRAR_ENVIADOS) JuegoServidor.agregar_a_los_logs("("+_curPlayer+") La case est trop proche ou trop eloignee Min: "+spell.getMinPO()+" Max: "+spell.getMaxPO()+" Dist: "+dist);
@@ -2731,18 +2719,18 @@ public class Pelea
 			}
 			return false;
 		}
-		//vï¿½rification cooldown
+		//v?rification cooldown
 		if(!LaunchedSort.coolDownGood(fighter,spell.getSpellID()))
 		{
 			return false;
 		}
-		//vï¿½rification nombre de lancer par tour
+		//v?rification nombre de lancer par tour
 		int nbLancer = spell.getMaxLaunchbyTurn();
 		if(nbLancer - LaunchedSort.getNbLaunch(fighter, spell.getSpellID()) <= 0 && nbLancer > 0)
 		{
 			return false;
 		}
-		//vï¿½rification nombre de lancer par cible
+		//v?rification nombre de lancer par cible
 		Peleador target = cell.getFirstFighter();
 		int nbLancerT = spell.getMaxLaunchbyByTarget();
 		if(nbLancerT - LaunchedSort.getNbLaunchTarget(fighter, target, spell.getSpellID()) <= 0 && nbLancerT > 0)
@@ -2765,7 +2753,7 @@ public class Pelea
 		StringBuilder Packet = new StringBuilder();
         Packet.append("GE").append(time);
 		//String Packet = "GE"+time;
-        // si c'est un combat PVM alors bonus potentiel en ï¿½toiles
+        // si c'est un combat PVM alors bonus potentiel en ?toiles
 		if(_type == Constantes.FIGHT_TYPE_PVM && _mobGroup != null)
 			Packet.append(";").append(_mobGroup.get_bonusValue());
 		Packet.append("|").append(initGUID).append("|").append(type).append("|");
@@ -2793,7 +2781,7 @@ public class Pelea
         	if(TEAM1.size() == 1) curp = F.getPersonnage();
         	//TEAM1lvl += F.get_lvl();
         }
-        //Evaluation de la prï¿½sence de la traque
+        //Evaluation de la pr?sence de la traque
         for(Peleador F : TEAM2)
         {
         	if(F.isInvocation())continue;
@@ -2824,7 +2812,7 @@ public class Pelea
   	       } catch (Exception e) {
   	    	   System.out.println("-------------Erreur du facteur de drop de challenge. GetGE;");
   	       }
-  	     factChalDrop += _mobGroup.get_bonusValue(); // on ajoute le bonus en ï¿½toiles
+  	     factChalDrop += _mobGroup.get_bonusValue(); // on ajoute le bonus en ?toiles
 		}
  		factChalDrop /= 100;
         	//Calcul de la PP de groupe
@@ -2839,7 +2827,7 @@ public class Pelea
 	        ArrayList<Drop> possibleDrops = new ArrayList<>();
 	        for(Peleador F : TEAM2)
 	        {
-	        	//Evaluation de l'argent ï¿½ gagner
+	        	//Evaluation de l'argent ? gagner
 	        	if(F.isInvocation() || F.getMob() == null)continue;
 	        	minkamas += F.getMob().getTemplate().getMinKamas();
 	        	maxkamas += F.getMob().getTemplate().getMaxKamas();
@@ -2858,7 +2846,7 @@ public class Pelea
 	        	maxkamas = minkamas;
 	        	possibleDrops = _perco.getDrops();
 	        }
-	        //On Rï¿½ordonne la liste des combattants en fonction de la PP
+	        //On R?ordonne la liste des combattants en fonction de la PP
 	        ArrayList<Peleador> Temp = new ArrayList<>();
 	        Peleador curMax = null;
 	        while(Temp.size() < TEAM1.size())
@@ -2866,7 +2854,7 @@ public class Pelea
 	        	int curPP = -1;
 		        for(Peleador F : TEAM1)
 		        {
-	        		//S'il a plus de PP et qu'il n'est pas listï¿½
+	        		//S'il a plus de PP et qu'il n'est pas list?
 		        	if(F.getTotalStats().getEffect(Constantes.STATS_ADD_PROS) > curPP && !Temp.contains(F))
 		        	{
 		        		curMax = F;
@@ -2900,7 +2888,7 @@ public class Pelea
      	    			   continue; 
      	    		   totalGainXp += c.getValue().get_gainXp();
      	           }
-     	    	   totalGainXp += _mobGroup.get_bonusValue(); // on ajoute le bonus en ï¿½toiles
+     	    	   totalGainXp += _mobGroup.get_bonusValue(); // on ajoute le bonus en ?toiles
  	    		   totalXP *= 100L + totalGainXp; //on multiplie par la somme des boost chal
  	    		   totalXP /= 100L;
 
@@ -2913,7 +2901,7 @@ public class Pelea
 	        System.out.println("TEAM1: xpTotal="+totalXP);
 	        //*/
 	    //FIN XP SYSTEM
-		//Capture d'ï¿½mes
+		//Capture d'?mes
 	        boolean mobCapturable = true;
 	        for(Peleador F : TEAM2)
 	        {
@@ -2934,21 +2922,21 @@ public class Pelea
 		        String pierreStats = "";
 
 		        
-		        for(Peleador F : TEAM2)	//Crï¿½ation de la pierre et verifie si le groupe peut ï¿½tre capturï¿½
+		        for(Peleador F : TEAM2)	//Cr?ation de la pierre et verifie si le groupe peut ?tre captur?
 		        {
 		        	if(!isFirst)
 		        		pierreStats += "|";
 		        	
-		        	pierreStats += F.getMob().getTemplate().getID() + "," + F.get_lvl();//Converti l'ID du monstre en Hex et l'ajoute au stats de la futur pierre d'ï¿½me
+		        	pierreStats += F.getMob().getTemplate().getID() + "," + F.get_lvl();//Converti l'ID du monstre en Hex et l'ajoute au stats de la futur pierre d'?me
 		        	
 		        	isFirst = false;
 		        	
 		        	if(F.get_lvl() > maxLvl)	//Trouve le monstre au plus haut lvl du groupe (pour la puissance de la pierre)
 		        		maxLvl = F.get_lvl();
 		        }
-		        pierrePleine = new PiedraAlma(Mundo.getNewItemGuid(),1,7010, Constantes.ITEM_POS_NO_EQUIPED,pierreStats);	//Crï¿½e la pierre d'ï¿½me
+		        pierrePleine = new PiedraAlma(Mundo.getNewItemGuid(),1,7010, Constantes.ITEM_POS_NO_EQUIPED,pierreStats);	//Cr?e la pierre d'?me
 		        
-		        for(Peleador F : TEAM1)	//Rï¿½cupï¿½re les captureur
+		        for(Peleador F : TEAM1)	//R?cup?re les captureur
 		        {
 		        	if(!F.isInvocation() && F.isEstado(Constantes.ETAT_CAPT_AME))
 		        	{
@@ -2961,13 +2949,13 @@ public class Pelea
 	    			{
 	    				try
 	    				{
-			        		Peleador f = _captureur.get(Formulas.getRandomValue(0, _captureur.size()-1));	//Rï¿½cupï¿½re un captureur au hasard dans la liste
+			        		Peleador f = _captureur.get(Formulas.getRandomValue(0, _captureur.size()-1));	//R?cup?re un captureur au hasard dans la liste
 			        		if(!(f.getPersonnage().getObjetByPos(Constantes.ITEM_POS_ARME).getTemplate().getType() == Constantes.ITEM_TYPE_PIERRE_AME))
 		    				{
 			    				_captureur.remove(f);
 		    					continue;
 		    				}
-			    			Couple<Integer,Integer> pierreJoueur = Formulas.decompPierreAme(f.getPersonnage().getObjetByPos(Constantes.ITEM_POS_ARME));//Rï¿½cupï¿½re les stats de la pierre ï¿½quippï¿½
+			    			Couple<Integer,Integer> pierreJoueur = Formulas.decompPierreAme(f.getPersonnage().getObjetByPos(Constantes.ITEM_POS_ARME));//R?cup?re les stats de la pierre ?quipp?
 			    			
 			    			if(pierreJoueur.second < maxLvl)	//Si la pierre est trop faible
 			    			{
@@ -3063,7 +3051,7 @@ public class Pelea
     				if(possibleDrops.isEmpty())
 						allIsDropped = true;
     			}
-    	        if(i._id == captWinner && pierrePleine != null)	//S'il ï¿½ capturï¿½ le groupe
+    	        if(i._id == captWinner && pierrePleine != null)	//S'il ? captur? le groupe
         		{
         			if(drops.length() >0) drops.append(",");
         			drops.append(pierrePleine.getTemplate().getID()).append("~").append(1);
@@ -3303,7 +3291,7 @@ public class Pelea
 				perso.set_ready(false);
 				perso.set_fight(null);
 			}
-			switch(_type)//Team mobs sauf en dï¿½fi/aggro
+			switch(_type)//Team mobs sauf en d?fi/aggro
 			{
 				case Constantes.FIGHT_TYPE_AGRESSION://Aggro
 					for(Entry<Integer, Peleador> entry : _team1.entrySet())
@@ -3461,15 +3449,15 @@ public class Pelea
 
 	public void onFighterDie(Peleador target, Peleador caster) {
 		target.setIsDead(true);
-		if(!target.hasLeft()) deadList.put(target.getID(), target);//on ajoute le joueur ï¿½ la liste des cadavres ;)
+		if(!target.hasLeft()) deadList.put(target.getID(), target);//on ajoute le joueur ? la liste des cadavres ;)
 		GestorSalida.GAME_SEND_FIGHT_PLAYER_DIE_TO_FIGHT(this,7,target.getID());
-		target.get_fightCell().getFighters().clear();// Supprime tout causait bug si portï¿½/porteur
+		target.get_fightCell().getFighters().clear();// Supprime tout causait bug si port?/porteur
 		
 		if(target.isEstado(Constantes.ETAT_PORTEUR)) {
 			Peleador f = target.get_isHolding();
 			f.set_fightCell(f.get_fightCell());
 			f.get_fightCell().addFighter(f);//Le bug venait par manque de ceci, il ni avait plus de firstFighter
-			f.setEstado(Constantes.ETAT_PORTE, 0, f._id);//J'ajoute ceci quand mï¿½me pour signaler qu'ils ne sont plus en ï¿½tat portï¿½/porteur
+			f.setEstado(Constantes.ETAT_PORTE, 0, f._id);//J'ajoute ceci quand m?me pour signaler qu'ils ne sont plus en ?tat port?/porteur
 			target.setEstado(Constantes.ETAT_PORTEUR, 0, target._id);
 			f.set_holdedBy(null);
 			target.set_isHolding(null);
@@ -3483,7 +3471,7 @@ public class Pelea
 				if(entry.getValue().getInvocator() == null)continue;
 				if(entry.getValue().getPDV() == 0)continue;
 				if(entry.getValue().isDead())continue;
-				if(entry.getValue().getInvocator().getID() == target.getID())//si il a ï¿½tï¿½ invoquï¿½ par le joueur mort
+				if(entry.getValue().getInvocator().getID() == target.getID())//si il a ?t? invoqu? par le joueur mort
 				{
 					onFighterDie(entry.getValue(), caster);
 					
@@ -3508,7 +3496,7 @@ public class Pelea
 				if(entry.getValue().getInvocator() == null)continue;
 				if(entry.getValue().getPDV() == 0)continue;
 				if(entry.getValue().isDead())continue;
-				if(entry.getValue().getInvocator().getID() == target.getID())//si il a ï¿½tï¿½ invoquï¿½ par le joueur mort
+				if(entry.getValue().getInvocator().getID() == target.getID())//si il a ?t? invoqu? par le joueur mort
 				{
 					onFighterDie(entry.getValue(), caster);
 					
@@ -3527,19 +3515,19 @@ public class Pelea
 				boolean isStatic = false;
 				for(int id : Constantes.STATIC_INVOCATIONS)if(id == target.getMob().getTemplate().getID())isStatic = true;
 				if(target.isInvocation() && !isStatic) {
-					//Il ne peut plus jouer, et est mort on revient au joueur prï¿½cedent pour que le startTurn passe au suivant
+					//Il ne peut plus jouer, et est mort on revient au joueur pr?cedent pour que le startTurn passe au suivant
 					if(!target.canPlay() && _ordreJeu.get(_curPlayer).getID() == target.getID()) {
 						_curPlayer--;
 					}
-					//Il peut jouer, et est mort alors on passe son tour pour que l'autre joue, puis on le supprime de l'index sans problï¿½mes
+					//Il peut jouer, et est mort alors on passe son tour pour que l'autre joue, puis on le supprime de l'index sans probl?mes
 					if(target.canPlay() && _ordreJeu.get(_curPlayer).getID() == target.getID()) {
 	    				endTurn();
 					}
 					
-					//On ne peut pas supprimer l'index tant que le tour du prochain joueur n'est pas lancï¿½
+					//On ne peut pas supprimer l'index tant que le tour du prochain joueur n'est pas lanc?
 					int index = _ordreJeu.indexOf(target);
 					
-					//Si le joueur courant a un index plus ï¿½levï¿½, on le diminue pour ï¿½viter le outOfBound
+					//Si le joueur courant a un index plus ?lev?, on le diminue pour ?viter le outOfBound
 					if(_curPlayer > index) _curPlayer--;
 					
 					if(index != -1)_ordreJeu.remove(index);
@@ -3563,7 +3551,7 @@ public class Pelea
 		//Copie du tableau
 		ArrayList<Glyphe> glyphs = new ArrayList<>(_glyphs);
 		for(Glyphe g : glyphs) {
-			//Si c'est ce joueur qui l'a lancï¿½
+			//Si c'est ce joueur qui l'a lanc?
 			if(g.get_caster().getID() == target.getID()) {
 				GestorSalida.GAME_SEND_GDZ_PACKET_TO_FIGHT(this, 7, "-", g.get_cell().getID(), g.get_size(), 4);
 				GestorSalida.GAME_SEND_GDC_PACKET_TO_FIGHT(this, 7, g.get_cell().getID());
@@ -3572,9 +3560,9 @@ public class Pelea
 		}
 		
 		//on supprime les pieges du joueur
-		ArrayList<Piege> Ps = new ArrayList<>(_traps);
-		for(Piege p : Ps) {
-			if(p.get_caster().getID() == target.getID()) {
+		ArrayList<Trampa> Ps = new ArrayList<>(_traps);
+		for(Trampa p : Ps) {
+			if(p.get_lanzador().getID() == target.getID()) {
 				p.desappear();
 				_traps.remove(p);
 			}
@@ -3612,7 +3600,7 @@ public class Pelea
 		
 		if(_ordreJeu.get(_curPlayer).getID() != caster.getID())//Si ce n'est pas a lui de jouer
 			return;
-		 // Pour les challenges, vï¿½rif sur CaC
+		 // Pour les challenges, v?rif sur CaC
 		if ((this._type == 4) && (this._challenges.size() > 0) && !this._ordreJeu.get(this._curPlayer).isInvocation() && !this._ordreJeu.get(this._curPlayer).isDouble() && !this._ordreJeu.get(this._curPlayer).isPerco()) {
 			for (Entry<Integer, Retos> c : this._challenges.entrySet()) {
 				if (c.getValue() == null) 
@@ -3639,7 +3627,7 @@ public class Pelea
 			if(target != null) {
 				int dmg = Formulas.getRandomJet("1d5+0");
 				int finalDommage = Formulas.calculFinalDommage(this,caster, target, Constantes.ELEMENT_NEUTRE, dmg,false,true, -1);
-				finalDommage = EfectoHechizo.applyOnHitBuffs(finalDommage,target,caster,this);//S'il y a des buffs spï¿½ciaux
+				finalDommage = EfectoHechizo.applyOnHitBuffs(finalDommage,target,caster,this);//S'il y a des buffs sp?ciaux
 				
 				if(finalDommage>target.getPDV())
 					finalDommage = target.getPDV();//Target va mourir
@@ -3657,7 +3645,7 @@ public class Pelea
 		} else {
 			Objeto arme = perso.getObjetByPos(Constantes.ITEM_POS_ARME);
 			
-			//Pierre d'ï¿½mes = EC
+			//Pierre d'?mes = EC
 			if(arme.getTemplate().getType() == 83)
 			{
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 305, perso.getID()+"", "");//Echec Critique Cac
@@ -3759,7 +3747,7 @@ public class Pelea
 			
 			switch(_type)
 			{
-				case Constantes.FIGHT_TYPE_CHALLENGE://Dï¿½fie
+				case Constantes.FIGHT_TYPE_CHALLENGE://D?fie
 				case Constantes.FIGHT_TYPE_AGRESSION://PVP
 				case Constantes.FIGHT_TYPE_PVM://PVM
 				case Constantes.FIGHT_TYPE_PVT://Perco
@@ -3775,7 +3763,7 @@ public class Pelea
 							StillInFight = verifyStillInFight();
 						}
 						
-						if(!StillInFight)//S'arrï¿½te ici si il ne reste plus personne dans le combat et dans la team
+						if(!StillInFight)//S'arr?te ici si il ne reste plus personne dans le combat et dans la team
 						{
 							//Met fin au combat
 							verifIfTeamAllDead();
@@ -3836,7 +3824,7 @@ public class Pelea
 								P.refreshMapAfterFight();
 							}
 							
-							//si c'ï¿½tait a son tour de jouer
+							//si c'?tait a son tour de jouer
 							if(_ordreJeu.get(_curPlayer) == null)return;
 							if(_ordreJeu.get(_curPlayer).getID() == F.getID())
 							{
@@ -3902,7 +3890,7 @@ public class Pelea
 								}
 								for(Personaje z : _mapOld.getPersos()) FightStateAddFlag(this._mapOld, z);
 							}
-						}else if(T == null)//Il leave de son plein grï¿½ donc (T = null)
+						}else if(T == null)//Il leave de son plein gr? donc (T = null)
 						{
 							boolean isValid2 = false;
 							if(_init0 != null &&_init0.getPersonnage() != null)
@@ -4015,7 +4003,7 @@ public class Pelea
 										}
 									}
 								}
-								_state = 4;//Nous assure de ne pas dï¿½marrer le combat
+								_state = 4;//Nous assure de ne pas d?marrer le combat
 								Mundo.getCarte(_map.getID()).removeFight(_id);
 								GestorSalida.GAME_SEND_MAP_FIGHT_COUNT_TO_MAP(Mundo.getCarte(_map.getID()));
 								GestorSalida.GAME_SEND_GAME_REMFLAG_PACKET_TO_MAP(this._mapOld,_init0.getID());

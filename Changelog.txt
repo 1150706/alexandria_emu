@@ -40,3 +40,6 @@ v0.00.4
 
 v0.00.5
 - Reparado bug de yopuka al estar en estado portado y lanzar salto el estado portado no es eliminado
+- Reparado bug de levantar a alguien en estado portador o portado
+- Salir del estado portador cuando el panda lanza a un jugador lleva 0ms de espera, instantaneo
+- Agregada la verificacion de trampas en la celda al lanzar un personaje

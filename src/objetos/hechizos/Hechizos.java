@@ -193,14 +193,14 @@ public class Hechizos {
 			//int num = 0;
 			for(EfectoHechizo SE : effets)
 			{
-				if(SE.getChance() != 0 && SE.getChance() != 100)//Si pas 100% lancement
+				if(SE.get_suerte() != 0 && SE.get_suerte() != 100)//Si pas 100% lancement
 				{
-					if(jetChance <= curMin || jetChance >= (SE.getChance() + curMin))
+					if(jetChance <= curMin || jetChance >= (SE.get_suerte() + curMin))
 					{
-						curMin += SE.getChance();
+						curMin += SE.get_suerte();
 						continue;
 					}
-					curMin += SE.getChance();
+					curMin += SE.get_suerte();
 				}
 				
 				ArrayList<Peleador> cibles = EfectoHechizo.getTargets(SE,fight,cells);
@@ -225,14 +225,14 @@ public class Hechizos {
 			for(EfectoHechizo SE : effets)
 			{
 				if(fight.get_state()>= Constantes.FIGHT_STATE_FINISHED)return;
-				if(SE.getChance() != 0 && SE.getChance() != 100)//Si pas 100% lancement
+				if(SE.get_suerte() != 0 && SE.get_suerte() != 100)//Si pas 100% lancement
 				{
-					if(jetChance <= curMin || jetChance >= (SE.getChance() + curMin))
+					if(jetChance <= curMin || jetChance >= (SE.get_suerte() + curMin))
 					{
-						curMin += SE.getChance();
+						curMin += SE.get_suerte();
 						continue;
 					}
-					curMin += SE.getChance();
+					curMin += SE.get_suerte();
 				}
 				
 				int POnum = num*2;

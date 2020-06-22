@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import objetos.*;
 import objetos.Mapa.Case;
 import objetos.Pelea.Peleador;
-import objetos.Pelea.Piege;
+import objetos.Pelea.Trampa;
 
 public class Camino {
 
@@ -33,9 +33,9 @@ public class Camino {
 	    		}
 	        	//Si en combat, et pas au début du path
 	    		if(fight != null && i != 0) {
-	    			for(Piege p : fight.get_traps()) {
-	    				int dist = getDistanceBetween(map,p.get_cell().getID(),newPos);
-	    				if(dist <= p.get_size()) {
+	    			for(Trampa p : fight.getTrampas()) {
+	    				int dist = getDistanceBetween(map,p.get_celda().getID(),newPos);
+	    				if(dist <= p.get_tamaño()) {
 	    					//on arrete le déplacement sur la 1ere case du piege
 	    					pathRef.set(newPath.toString());
 	    	    			return Steps;
@@ -127,9 +127,9 @@ public class Camino {
 	            {
 	            	return "stop:"+lastPos;
 	            }
-    			for(Piege p : fight.get_traps()) {
-    				int dist = getDistanceBetween(map,p.get_cell().getID(),lastPos);
-    				if(dist <= p.get_size()) {
+    			for(Trampa p : fight.getTrampas()) {
+    				int dist = getDistanceBetween(map,p.get_celda().getID(),lastPos);
+    				if(dist <= p.get_tamaño()) {
     					//on arrete le déplacement sur la 1ere case du piege
     					return "stop:"+lastPos;
     				}
@@ -177,9 +177,9 @@ public class Camino {
 		for(int a = 0; a<value;a++) {
 			int nextCase = GetCaseIDFromDirrection(id, c,map, true);
 			
-			for(Piege p : fight.get_traps()) {
-				int dist = Camino.getDistanceBetween(map,p.get_cell().getID(),nextCase);
-				if(dist <= p.get_size())
+			for(Trampa p : fight.getTrampas()) {
+				int dist = Camino.getDistanceBetween(map,p.get_celda().getID(),nextCase);
+				if(dist <= p.get_tamaño())
 					onTrap = true;
 			}			
 			

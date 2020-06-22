@@ -22,7 +22,7 @@ public class NPCModelo {
 	private final int _customArtWork;
 	private int _initQuestionID;
 	private ArrayList<ObjTemplate> _ventes = new ArrayList<>();
-	private Quest _quest;
+	private Misiones _quest;
 
 	public static class NPC_question
 	{

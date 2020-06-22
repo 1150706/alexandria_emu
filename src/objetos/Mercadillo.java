@@ -18,8 +18,7 @@ public class Mercadillo {
 	 * @author Mathieu
 	 *
 	 */
-	private class Categorie
-	{
+	private class Categorie {
 		final Map<Integer,Template> _templates = new HashMap<>();//Dans le format <templateID,Template>
 		
 		@SuppressWarnings("unused")
@@ -30,21 +29,19 @@ public class Mercadillo {
 			this.categID = categID;
 		}
 		
-		public void addEntry(HdvEntry toAdd)
-		{
+		public void addEntry(HdvEntry toAdd) {
 			int tempID = toAdd.getObjet().getTemplate().getID();
 			if(_templates.get(tempID) == null)
 				addTemplate(tempID,toAdd);
 			else
 				_templates.get(tempID).addEntry(toAdd);
 		}
-		public void addTemplate(int templateID, HdvEntry toAdd)
-		{
+
+		public void addTemplate(int templateID, HdvEntry toAdd) {
 			_templates.put(templateID, new Template(templateID, toAdd));
 		}
 		
-		public boolean delEntry(HdvEntry toDel)
-		{
+		public boolean delEntry(HdvEntry toDel) {
 			boolean toReturn = false;
 			_templates.get(toDel.getObjet().getTemplate().getID()).delEntry(toDel);
 			
@@ -59,33 +56,29 @@ public class Mercadillo {
 			return _templates.get(templateID);
 		}
 		
-		public ArrayList<HdvEntry> getAllEntry()
-		{
+		public ArrayList<HdvEntry> getAllEntry() {
 			ArrayList<HdvEntry> toReturn = new ArrayList<>();
 			
-			for(Template curTemp : _templates.values())
-			{
+			for(Template curTemp : _templates.values()) {
 				toReturn.addAll(curTemp.getAllEntry());
 			}
 			return toReturn;
 		}
 		
-		public String parseTemplate()
-		{
+		public String parseTemplate() {
 			boolean isFirst = true;
-			String strTemplate = "";
+			StringBuilder strTemplate = new StringBuilder();
 			
-			for(int curTemp : _templates.keySet())
-			{
+			for(int curTemp : _templates.keySet()) {
 				if(!isFirst)
-					strTemplate += ";";
+					strTemplate.append(";");
 				
-				strTemplate += curTemp;
+				strTemplate.append(curTemp);
 				
 				isFirst = false;
 			}
 			
-			return strTemplate;
+			return strTemplate.toString();
 		}
 		
 		public void delTemplate(int templateID)
@@ -99,20 +92,17 @@ public class Mercadillo {
 	 * @author Mathieu
 	 *
 	 */
-	private static class Template
-	{
+	private static class Template {
 		final int templateID;
 		final Map<Integer, Ligne> _lignes = new HashMap<>();
 		
-		public Template(int templateID, HdvEntry toAdd)
-		{
+		public Template(int templateID, HdvEntry toAdd) {
 			this.templateID = templateID;
 			
 			addEntry(toAdd);
 		}
 		
-		public void addEntry(HdvEntry toAdd)
-		{
+		public void addEntry(HdvEntry toAdd) {
 			//TODO : Peut-être catché un nullPointerException à cause du for
 			for(Ligne curLine : _lignes.values())//Boucle dans toutes les lignes pour essayer de trouver des objets de mêmes stats
 			{
@@ -124,13 +114,12 @@ public class Mercadillo {
 			int ligneID = Mundo.getNextLigneID();
 			_lignes.put(ligneID, new Ligne(ligneID, toAdd));
 		}
-		public Ligne getLigne(int ligneID)
-		{
+
+		public Ligne getLigne(int ligneID) {
 			return _lignes.get(ligneID);
 		}
 		
-		public boolean delEntry(HdvEntry toDel)
-		{
+		public boolean delEntry(HdvEntry toDel) {
 			boolean toReturn =  _lignes.get(toDel.getLigneID()).delEntry(toDel);
 			if(_lignes.get(toDel.getLigneID()).isEmpty())//Si la ligne est devenue vide
 			{
@@ -140,8 +129,7 @@ public class Mercadillo {
 			return toReturn;
 		}
 		
-		public ArrayList<HdvEntry> getAllEntry()
-		{
+		public ArrayList<HdvEntry> getAllEntry() {
 			ArrayList<HdvEntry> toReturn = new ArrayList<>();
 			
 			for(Ligne curLine : _lignes.values())
@@ -151,25 +139,22 @@ public class Mercadillo {
 			return toReturn;
 		}
 		
-		public String parseToEHl()
-		{
-			String toReturn = templateID + "|";
+		public String parseToEHl() {
+			StringBuilder toReturn = new StringBuilder(templateID + "|");
 			
 			boolean isFirst = true;
-			for (Ligne curLine : _lignes.values())
-			{
+			for (Ligne curLine : _lignes.values()) {
 				if(!isFirst)
-					toReturn += "|";
+					toReturn.append("|");
 					
-				toReturn += curLine.parseToEHl();
+				toReturn.append(curLine.parseToEHl());
 				
 				isFirst = false;
 			}
-			return toReturn;
+			return toReturn.toString();
 		}
 		
-		public boolean isEmpty()
-		{
+		public boolean isEmpty() {
 			if(_lignes.size() == 0)
 				return true;
 			
@@ -182,15 +167,13 @@ public class Mercadillo {
 	 * @author Mathieu
 	 *
 	 */
-	public static class Ligne
-	{
+	public static class Ligne {
 		private final int ligneID;
 		private final ArrayList<ArrayList<HdvEntry>> _entries = new ArrayList<>(3);//La première ArrayList est un tableau de 3 (0=1 1=10 2=100 de quantité)
 		private final String _strStats;
 		private final int templateID;
 		
-		public Ligne(int ligneID, HdvEntry toAdd)
-		{
+		public Ligne(int ligneID, HdvEntry toAdd) {
 			this.ligneID = ligneID;
 			this._strStats = toAdd.getObjet().parseStatsString();
 			this.templateID = toAdd.getObjet().getTemplate().getID();
@@ -212,8 +195,7 @@ public class Mercadillo {
 		 * @param toAdd L'objet HdvEntry à ajouter à la ligne
 		 * @return Cette fonction retourne false dans le cas où l'objet à ajouter n'a pas les mêmes stats que la ligne. Dans tout les autres cas, elle retourne true.
 		 */
-		public boolean addEntry(HdvEntry toAdd)
-		{
+		public boolean addEntry(HdvEntry toAdd) {
 			if(!haveSameStats(toAdd) && !isEmpty())
 				return false;
 			
@@ -225,17 +207,15 @@ public class Mercadillo {
 			
 			return true;//Anonce que l'objet à été accepté
 		}
-		public boolean haveSameStats(HdvEntry toAdd)
-		{
+
+		public boolean haveSameStats(HdvEntry toAdd) {
 			return _strStats.equalsIgnoreCase(toAdd.getObjet().parseToSave())
 					&& toAdd.getObjet().getTemplate().getType() != 85;//Récupère les stats de l'objet et compare avec ceux de la ligne
 		}
 		
-		public HdvEntry doYouHave(int amount, int price)
-		{
+		public HdvEntry doYouHave(int amount, int price) {
 			int index = amount-1;
-			for (int i = 0; i < _entries.get(index).size(); i++) 
-			{
+			for (int i = 0; i < _entries.get(index).size(); i++) {
 				if(_entries.get(index).get(i).getPrice() == price)
 					return _entries.get(index).get(i);
 			}
@@ -244,12 +224,10 @@ public class Mercadillo {
 			return null;
 		}
 		
-		public int[] getFirsts()
-		{
+		public int[] getFirsts() {
 			int[] toReturn = new int[3];
 			
-			for (int i = 0; i < _entries.size(); i++) 
-			{
+			for (int i = 0; i < _entries.size(); i++) {
 				try{
 					toReturn[i] = _entries.get(i).get(0).getPrice();//Récupère le premier objet de chaque liste
 				}catch(IndexOutOfBoundsException e){toReturn[i] = 0;}
@@ -257,8 +235,8 @@ public class Mercadillo {
 			
 			return toReturn;
 		}
-		public ArrayList<HdvEntry> getAll()
-		{
+
+		public ArrayList<HdvEntry> getAll() {
 			//Additionne le nombre d'objet de chaque quantité
 			int totalSize = _entries.get(0).size() + _entries.get(1).size() + _entries.get(2).size();
 			ArrayList<HdvEntry> toReturn = new ArrayList<>(totalSize);
@@ -267,11 +245,10 @@ public class Mercadillo {
 			for (ArrayList<HdvEntry> entry : _entries) {
 				toReturn.addAll(entry);
 			}
-			
 			return toReturn;
 		}
-		public boolean delEntry(HdvEntry toDel)
-		{
+
+		public boolean delEntry(HdvEntry toDel) {
 			byte index = (byte) (toDel.getAmount(false) - 1);
 			
 			boolean toReturn = _entries.get(index).remove(toDel);
@@ -280,30 +257,25 @@ public class Mercadillo {
 			
 			return toReturn;
 		}
-		public HdvEntry delEntry(byte amount)
-		{
+
+		public HdvEntry delEntry(byte amount) {
 			byte index = (byte) (amount -1);
 			HdvEntry toReturn = _entries.get(index).remove(0);
 			trier(index);
 			return toReturn;
 		}
 		
-		public String parseToEHl()
-		{
+		public String parseToEHl() {
 			StringBuilder toReturn = new StringBuilder();
-
 			int[] price = getFirsts();
 			toReturn.append(ligneID).append(";").append(_strStats).append(";").append((price[0]==0?"":price[0])).append(";").append((price[1]==0?"":price[1])).append(";").append((price[2]==0?"":price[2]));
-			
 			return toReturn.toString();
-		}		
-		public String parseToEHm()
-		{
+		}
+
+		public String parseToEHm() {
 			StringBuilder toReturn = new StringBuilder();
-			
 			int[] prix = getFirsts();
 			toReturn.append(ligneID).append("|").append(templateID).append("|").append(_strStats).append("|").append((prix[0]==0?"":prix[0])).append("|").append((prix[1]==0?"":prix[1])).append("|").append((prix[2]==0?"":prix[2]));
-			
 			return toReturn.toString();
 		}
 		
@@ -312,8 +284,7 @@ public class Mercadillo {
 			Collections.sort(_entries.get(index));
 		}
 		
-		public boolean isEmpty()
-		{
+		public boolean isEmpty() {
 			for (ArrayList<HdvEntry> entry : _entries) {
 				try {
 					if (entry.get(0) != null)//Vérifie s'il existe un objet dans chacune des 3 quantité
@@ -335,8 +306,7 @@ public class Mercadillo {
 	 * @author Mathieu
 	 *
 	 */
-	public static class HdvEntry implements Comparable<HdvEntry>
-	{
+	public static class HdvEntry implements Comparable<HdvEntry> {
 		private int _hdvID;
 		private final int _price;
 		private final byte _amount;//Dans le format : 1=1 2=10 3=100
@@ -344,8 +314,7 @@ public class Mercadillo {
 		private int _ligneID;
 		private final int _owner;
 		
-		public HdvEntry(int price, byte amount, int owner, Objeto obj)
-		{
+		public HdvEntry(int price, byte amount, int owner, Objeto obj) {
 			this._price = price;
 			this._amount = amount;
 			this._obj = obj;
@@ -365,8 +334,7 @@ public class Mercadillo {
 		{
 			return this._price;
 		}
-		public byte getAmount(boolean parseToRealNumber)
-		{
+		public byte getAmount(boolean parseToRealNumber) {
 			if(parseToRealNumber)
 				return (byte)(Math.pow(10, _amount) / 10);
 			else
@@ -388,8 +356,8 @@ public class Mercadillo {
 		{
 			return this._owner;
 		}
-		public String parseToEL()
-		{
+
+		public String parseToEL() {
 			StringBuilder toReturn = new StringBuilder();
 			
 			int count = getAmount(true);//Transfère dans le format (1,10,100) le montant qui etait dans le format (1,2,3)
@@ -397,8 +365,8 @@ public class Mercadillo {
 			
 			return toReturn.toString();
 		}
-		public String parseToEmK()
-		{
+
+		public String parseToEmK() {
 			StringBuilder toReturn = new StringBuilder();
 			
 			int count = getAmount(true);//Transfère dans le format (1,10,100) le montant qui etait dans le format (1,2,3)
@@ -413,8 +381,7 @@ public class Mercadillo {
 			return _ligneID+divider+count+divider+_obj.getTemplate().getID()+divider+_obj.parseStatsString()+divider+_price+divider+"350";//350 = temps restant
 		}
 		*/
-		public int compareTo(HdvEntry o)
-		{
+		public int compareTo(HdvEntry o) {
 			HdvEntry e = o;
 			int celuiCi = this.getPrice();
 			int autre = e.getPrice();
@@ -440,16 +407,14 @@ public class Mercadillo {
 	
 	private final DecimalFormat pattern = new DecimalFormat("0.0");
 	
-	public Mercadillo(int hdvID, float taxe, short sellTime, short maxItemCompte, short lvlMax, String categories)
-	{
+	public Mercadillo(int hdvID, float taxe, short sellTime, short maxItemCompte, short lvlMax, String categories) {
 		this._hdvID = hdvID;
 		this._taxe = taxe;
 		this._maxCompteItem = maxItemCompte;
 		this._strCategories = categories;
 		this._lvlMax = lvlMax;
 		int categID;
-		for(String strCategID : categories.split(","))
-		{
+		for(String strCategID : categories.split(",")) {
 			categID = Integer.parseInt(strCategID);
 			_categories.put(categID, new Categorie(categID));
 		}
@@ -480,49 +445,43 @@ public class Mercadillo {
 		return this._lvlMax;
 	}
 	
-	public String parseToEHl(int templateID)
-	{
+	public String parseToEHl(int templateID) {
 		int type = Mundo.getObjTemplate(templateID).getType();
 		
 		return _categories.get(type).getTemplate(templateID).parseToEHl();
 	}
+
 	public String parseTemplate(int categID)
 	{
 		return _categories.get(categID).parseTemplate();
 	}
+
 	public String parseTaxe()
 	{
 		return pattern.format(_taxe).replace(",", ".");
 	}
 	
-	public Ligne getLigne(int ligneID)
-	{
-		try
-		{
+	public Ligne getLigne(int ligneID) {
+		try {
 			int categ = _path.get(ligneID).first;
 			int template = _path.get(ligneID).second;
 			
 			return _categories.get(categ).getTemplate(template).getLigne(ligneID);
-		}
-		catch(NullPointerException e)
-		{
+		} catch(NullPointerException e) {
 			return null;
 		}
 	}
 	
-	public ArrayList<HdvEntry> getAllEntry()
-	{
+	public ArrayList<HdvEntry> getAllEntry() {
 		ArrayList<HdvEntry> toReturn = new ArrayList<>();
-		for(Categorie curCat : _categories.values())
-		{
+		for(Categorie curCat : _categories.values()) {
 			toReturn.addAll(curCat.getAllEntry());
 		}
 		
 		return toReturn;
 	}
 	
-	public void addEntry(HdvEntry toAdd)
-	{
+	public void addEntry(HdvEntry toAdd) {
 		toAdd.setHdvID(this._hdvID);
 		int categ = toAdd.getObjet().getTemplate().getType();
 		int template = toAdd.getObjet().getTemplate().getID();
@@ -531,11 +490,10 @@ public class Mercadillo {
 		
 		Mundo.addHdvItem(toAdd.getOwner(), _hdvID, toAdd);
 	}
-	public boolean delEntry(HdvEntry toDel)
-	{
+
+	public boolean delEntry(HdvEntry toDel) {
 		boolean toReturn =  _categories.get(toDel.getObjet().getTemplate().getType()).delEntry(toDel);
-		if(toReturn)
-		{
+		if(toReturn) {
 			_path.remove(toDel.getLigneID());
 			Mundo.removeHdvItem(toDel.getOwner(), toDel.getHdvID(), toDel);
 		}
@@ -543,12 +501,10 @@ public class Mercadillo {
 		return toReturn;
 	}
 	
-	public synchronized boolean buyItem(int ligneID,byte amount, int price, Personaje newOwner)
-	{
+	public synchronized boolean buyItem(int ligneID,byte amount, int price, Personaje newOwner) {
 		boolean toReturn = true;
 		
-		try
-		{
+		try {
 			if(newOwner.getKamas() < price)
 				return false;
 			
@@ -558,11 +514,9 @@ public class Mercadillo {
 			
 			newOwner.addKamas(price * -1);//Retire l'argent à l'acheteur (prix et taxe de vente)
 			
-			if(toBuy.getOwner() != -1)
-			{
+			if(toBuy.getOwner() != -1) {
 				Cuenta C = Mundo.getCompte(toBuy.getOwner());
-				if(C != null)
-				{
+				if(C != null) {
 					C.setBankKamas(C.getBankKamas()+toBuy.getPrice());//Ajoute l'argent au vendeur
 				}
 			}
@@ -573,8 +527,7 @@ public class Mercadillo {
 			
 			delEntry(toBuy);//Retire l'item de l'HDV ainsi que de la liste du vendeur
 			
-			if(Mundo.getCompte(toBuy.getOwner()) != null && Mundo.getCompte(toBuy.getOwner()).get_curPerso() != null)
-			{
+			if(Mundo.getCompte(toBuy.getOwner()) != null && Mundo.getCompte(toBuy.getOwner()).get_curPerso() != null) {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(Mundo.getCompte(toBuy.getOwner()).get_curPerso(),"065;"+price+"~"+toBuy.getObjet().getTemplate().getID()+"~"+toBuy.getObjet().getTemplate().getID()+"~1");
 				//Si le vendeur est connecter, envoie du packet qui lui annonce la vente de son objet
 			}
@@ -582,9 +535,7 @@ public class Mercadillo {
 				GestorSQL.guardar_objeto(toBuy.getObjet(), newOwner.getID());
 			}
 			toBuy = null;
-		}
-		catch(NullPointerException e)
-		{
+		} catch(NullPointerException e) {
 			toReturn = false;
 		}
 		

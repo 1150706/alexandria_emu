@@ -6,7 +6,7 @@
 import java.util.TreeMap;
 //import objects.Quest.Step;
       
-	public class Quest
+	public class Misiones
 	{
 		private final int _ID;
 		private final int _lvl;
@@ -16,7 +16,7 @@ import java.util.TreeMap;
 		private final String _name;
 		//private int _lastquestrequired;
       
-		public Quest(int ID, String step, int lvl, long xp, int ali, String gainob, String gainbb, int kamas, String name, int lastquestrequired)
+		public Misiones(int ID, String step, int lvl, long xp, int ali, String gainob, String gainbb, int kamas, String name, int lastquestrequired)
 		{
 			this._ID = ID;
 			this._lvl = lvl;

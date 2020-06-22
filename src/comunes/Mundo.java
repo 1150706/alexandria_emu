@@ -54,8 +54,8 @@ public class Mundo {
 	private static final Map<Integer, Recaudador> Percepteurs = new TreeMap<>();
 	private static final Map<Integer, Casas> Houses = new TreeMap<>();
 	private static final Map<Short,Collection<Integer>> Seller	= new TreeMap<>();
-	public static final Map<Integer, Quest.Step> Steps = new TreeMap<>();
-	public static final Map<Integer, Quest> Quests = new TreeMap<>();
+	public static final Map<Integer, Misiones.Step> Steps = new TreeMap<>();
+	public static final Map<Integer, Misiones> Quests = new TreeMap<>();
 	public static final ArrayList<String> Publicidad = new ArrayList<>();
 	 
 	private static int nextHdvID;	//Contient le derniere ID utilis? pour cr?e un HDV, pour obtenir un ID non utilis? il faut imp?rativement l'incr?menter
@@ -90,23 +90,23 @@ public class Mundo {
 	      	}
 	  	}
 	
-	public static void addStep(Quest.Step s)
+	public static void addStep(Misiones.Step s)
 	{
 		Steps.put(s.get_id(), s);
 	}
 	
-	public static Quest.Step getStep(int guid) {
+	public static Misiones.Step getStep(int guid) {
 		return Steps.get(guid);
 	}
 	
-	public static void addquest(Quest q) {
+	public static void addquest(Misiones q) {
 		Quests.put(q.get_id(), q);
 		System.out.println("Quest ID : " + q.get_id());
 		System.out.println("Ali ID : " + q.get_ali());
 		System.out.println("Lvl : " + q.get_lvl());
 	}
 	
-	public static Quest getQuest(int q) {
+	public static Misiones getQuest(int q) {
 		return Quests.get(q);
 	}
 	

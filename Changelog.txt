@@ -43,3 +43,4 @@ v0.00.5
 - Reparado bug de levantar a alguien en estado portador o portado
 - Salir del estado portador cuando el panda lanza a un jugador lleva 0ms de espera, instantaneo
 - Agregada la verificacion de trampas en la celda al lanzar un personaje
+- Agregado break; faltante en efecto hechizo

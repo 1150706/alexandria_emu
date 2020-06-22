@@ -34,8 +34,8 @@ public class Camino {
 	        	//Si en combat, et pas au début du path
 	    		if(fight != null && i != 0) {
 	    			for(Trampa p : fight.getTrampas()) {
-	    				int dist = getDistanceBetween(map,p.get_celda().getID(),newPos);
-	    				if(dist <= p.get_tamaño()) {
+	    				int dist = getDistanceBetween(map,p.getCelda().getID(),newPos);
+	    				if(dist <= p.getTamaño()) {
 	    					//on arrete le déplacement sur la 1ere case du piege
 	    					pathRef.set(newPath.toString());
 	    	    			return Steps;
@@ -128,8 +128,8 @@ public class Camino {
 	            	return "stop:"+lastPos;
 	            }
     			for(Trampa p : fight.getTrampas()) {
-    				int dist = getDistanceBetween(map,p.get_celda().getID(),lastPos);
-    				if(dist <= p.get_tamaño()) {
+    				int dist = getDistanceBetween(map,p.getCelda().getID(),lastPos);
+    				if(dist <= p.getTamaño()) {
     					//on arrete le déplacement sur la 1ere case du piege
     					return "stop:"+lastPos;
     				}
@@ -178,8 +178,8 @@ public class Camino {
 			int nextCase = GetCaseIDFromDirrection(id, c,map, true);
 			
 			for(Trampa p : fight.getTrampas()) {
-				int dist = Camino.getDistanceBetween(map,p.get_celda().getID(),nextCase);
-				if(dist <= p.get_tamaño())
+				int dist = Camino.getDistanceBetween(map,p.getCelda().getID(),nextCase);
+				if(dist <= p.getTamaño())
 					onTrap = true;
 			}			
 			

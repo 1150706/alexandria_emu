@@ -181,9 +181,9 @@ public class EfectoHechizo {
 							ArrayList<Trampa> P = (new ArrayList<>());
 							P.addAll(fight.getTrampas());
 							for(Trampa p : P) {
-								int dist = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(),target.get_fightCell().getID());
+								int dist = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(),target.get_fightCell().getID());
 								//on active le piege
-								if(dist <= p.get_tamaño())p.onTraped(target);
+								if(dist <= p.getTamaño())p.onTraped(target);
 							}
 							//si le joueur a bouger
 							if(exCase != newCellID)
@@ -385,24 +385,31 @@ public class EfectoHechizo {
 				case 94://Vol de Vie feu
 					applyEffect_94(cibles,fight,isCaC);
 				break;
+
 				case 95://Vol de Vie neutre
 					applyEffect_95(cibles,fight,isCaC);
 				break;
+
 				case 96://Dommage Eau
 					applyEffect_96(cibles,fight,isCaC);
 				break;
+
 				case 97://Dommage Terre 
 					applyEffect_97(cibles,fight,isCaC);
-				break; 
+				break;
+
 				case 98://Dommage Air 
 					applyEffect_98(cibles,fight,isCaC);
 				break;
+
 				case 99://Dommage feu 
 					applyEffect_99(cibles,fight,isCaC);
 				break;
+
 				case 100://Dommage neutre
 					applyEffect_100(cibles,fight,isCaC);
 				break;
+
 				case 101://Retrait PA
 					applyEffect_101(cibles,fight);
 				break;
@@ -410,24 +417,31 @@ public class EfectoHechizo {
 				case 105://Dommages réduits de X
 					applyEffect_105(cibles,fight);
 				break;
+
 				case 106://Renvoie de sort
 					applyEffect_106(cibles,fight);
 				break;
+
 				case 107://Renvoie de dom
 					applyEffect_107(cibles,fight);
 				break;
+
 				case 108://Soin
 					applyEffect_108(cibles,fight);
 				break;
+
 				case 109://Dommage pour le lanceur
 					applyEffect_109(fight);
 				break;
+
 				case 110://+ X vie
 					applyEffect_110(cibles,fight);
 				break;
+
 				case 111://+ X PA
 					applyEffect_111(cibles,fight);
 				break;
+
 				case 112://+Dom
 					applyEffect_112(cibles,fight);
 				break;
@@ -435,47 +449,62 @@ public class EfectoHechizo {
 				case 114://Multiplie les dommages par X
 					applyEffect_114(cibles,fight);
 				break;
+
 				case 115://+Cc
 					applyEffect_115(cibles,fight);
 				break;
+
 				case 116://Malus PO
 					applyEffect_116(cibles,fight);
 				break;
+
 				case 117://Bonus PO
 					applyEffect_117(cibles,fight);
 				break;
+
 				case 118://Bonus force
 					applyEffect_118(cibles,fight);
 				break;
+
 				case 119://Bonus Agilité
 					applyEffect_119(cibles,fight);
 				break;
+
 				case 120://Bonus PA
 					applyEffect_120(cibles,fight);
 				break;
+
 				case 121://+Dom
 					applyEffect_121(cibles,fight);
 				break;
+
 				case 122://+EC
 					applyEffect_122(cibles,fight);
 				break;
+
 				case 123://+Chance
 					applyEffect_123(cibles,fight);
 				break;
+
 				case 124://+Sagesse
 					applyEffect_124(cibles,fight);
 				break;
+
 				case 125://+Vitalité
+				break;
 
 				case 610:
 					applyEffect_125(cibles,fight);
 				break;
+
 				case 126://+Intelligence
 					applyEffect_126(cibles,fight);
 				break;
+
 				case 127://Retrait PM
 					applyEffect_127(cibles,fight);
 				break;
+
 				case 128://+PM
 					applyEffect_128(cibles,fight);
 				break;
@@ -483,9 +512,11 @@ public class EfectoHechizo {
 				case 130://Vol de Kamas
 					applyEffect_130(cibles,fight);
 				break;
+
 				case 131://Poison : X Pdv  par PA
 					applyEffect_131(cibles,fight);
 				break;
+
 				case 132://Enleve les envoutements
 					applyEffect_132(cibles,fight);
 				break;
@@ -497,9 +528,11 @@ public class EfectoHechizo {
 				case 140://Passer le tour
 					applyEffect_140(cibles,fight);
 				break;
+
 				case 141://Tue la cible
 					applyEffect_141(fight,cibles);
 				break;
+
 				case 142:// + Dommages physique
 					applyEffect_142(fight,cibles);
 				break;
@@ -507,6 +540,7 @@ public class EfectoHechizo {
 				case 144://Dommages non boostés
 					applyEffect_144(cibles,fight);
 				break;
+
 				case 145://Malus Dommage
 					applyEffect_145(fight,cibles);
 				break;
@@ -514,6 +548,7 @@ public class EfectoHechizo {
 				case 149://Change l'apparence
 					applyEffect_149(fight,cibles);
 				break;
+
 				case 150://Invisibilité
 					applyEffect_150(fight,cibles);
 				break;
@@ -524,7 +559,8 @@ public class EfectoHechizo {
 
 				case 154:// - Agi
 					applyEffect_154(fight,cibles);
-				break;				
+				break;
+
 				case 155:// - Intell
 					applyEffect_155(fight,cibles);
 				break;
@@ -536,15 +572,19 @@ public class EfectoHechizo {
 				case 160:// + Esquive PA
 					applyEffect_160(fight,cibles);
 				break;
+
 				case 161:// + Esquive PM
 					applyEffect_161(fight,cibles);
 				break;
+
 				case 162:// - Esquive PA
 					applyEffect_162(fight,cibles);
 				break;
+
 				case 163:// - Esquive PM
 					applyEffect_163(fight,cibles);
 				break;
+
 				case 165:// Maîtrises
 					applyEffect_165(fight,cibles);
 				break;
@@ -552,6 +592,7 @@ public class EfectoHechizo {
 				case 168://Perte PA non esquivable
 					applyEffect_168(fight,cibles);
 				break;
+
 				case 169://Perte PM non esquivable
 					applyEffect_169(fight,cibles);
 				break;
@@ -563,26 +604,35 @@ public class EfectoHechizo {
 				case 178://Bonus soin
 					applyEffect_178(fight,cibles);
 				break;
+
 				case 179://Malus soin
 					applyEffect_179(fight,cibles);
+				break;
+
 				case 180://Double du sram
 					applyEffect_180(fight);
 				break;
+
 				case 181://Invoque une créature
 					applyEffect_181(fight);
 				break;
+
 				case 182://+ Crea Invoc
 					applyEffect_182(fight,cibles);
 				break;
+
 				case 183://Resist Magique
 					applyEffect_183(fight,cibles);
 				break;
+
 				case 184://Resist Physique
 					applyEffect_184(fight,cibles);
 				break;
+
 				case 185://Invoque une creature statique
 					applyEffect_185(fight);
 				break;
+
 				case 186://Malus % dommage
 					applyEffect_186(fight,cibles);
 				break;
@@ -594,30 +644,39 @@ public class EfectoHechizo {
 				case 210://Resist % terre
 					applyEffect_210(fight,cibles);
 				break;
+
 				case 211://Resist % eau
 					applyEffect_211(fight,cibles);
 				break;
+
 				case 212://Resist % air
 					applyEffect_212(fight,cibles);
 				break;
+
 				case 213://Resist % feu
 					applyEffect_213(fight,cibles);
 				break;
+
 				case 214://Resist % neutre
 					applyEffect_214(fight,cibles);
 				break;
+
 				case 215://Faiblesse % terre
 					applyEffect_215(fight,cibles);
 				break;
+
 				case 216://Faiblesse % eau
 					applyEffect_216(fight,cibles);
 				break;
+
 				case 217://Faiblesse % air
 					applyEffect_217(fight,cibles);
 				break;
+
 				case 218://Faiblesse % feu
 					applyEffect_218(fight,cibles);
 				break;
+
 				case 219://Faiblesse % neutre
 					applyEffect_219(fight,cibles);
 				break;
@@ -629,21 +688,27 @@ public class EfectoHechizo {
 				case 265://Reduit les Dom de X
 					applyEffect_265(fight,cibles);
 				break;
+
 				case 266://Vol Chance
 					applyEffect_266(fight,cibles);
 				break;
+
 				case 267://Vol vitalité
 					applyEffect_267(fight,cibles);
 				break;
+
 				case 268://Vol agitlité
 					applyEffect_268(fight,cibles);
 				break;
+
 				case 269://Vol intell
 					applyEffect_269(fight,cibles);
 				break;
+
 				case 270://Vol sagesse
 					applyEffect_270(fight,cibles);
 				break;
+
 				case 271://Vol force
 					applyEffect_271(fight,cibles);
 				break;
@@ -659,6 +724,7 @@ public class EfectoHechizo {
 				case 400://Créer un  piège
 					applyEffect_400(fight);
 				break;
+
 				case 401://Créer un glyphe
 					applyEffect_401(fight);
 				break;
@@ -672,6 +738,8 @@ public class EfectoHechizo {
 				
 				case 671://Dommages : X% de la vie de la victime (neutre)
 					applyEffect_671(cibles,fight); // Combustion Spontanée
+				break;
+
 				case 672://Dommages : X% de la vie de l'attaquant // PUNITION
 					applyEffect_672(cibles,fight);
 				break;
@@ -687,9 +755,11 @@ public class EfectoHechizo {
 				case 782://Maximise les effets aléatoires
 					applyEffect_782(cibles,fight);
 				break;
+
 				case 783://Pousse jusqu'a la case visé
 					applyEffect_783(cibles,fight);
 				break;
+
 				case 784://Raulebaque
 					applyEffect_784(cibles,fight);
 				break;
@@ -697,6 +767,7 @@ public class EfectoHechizo {
 				case 787://Mot Lotof
 					applyEffect_787(cibles,fight);
 				break;
+
 				case 788://Chatiment de X sur Y tours
 					applyEffect_788(cibles,fight);
 				break;
@@ -704,6 +775,7 @@ public class EfectoHechizo {
 				case 950://Etat X
 					applyEffect_950(fight,cibles);
 				break;
+
 				case 951://Enleve l'Etat X
 					applyEffect_951(fight,cibles);
 				break;
@@ -811,9 +883,9 @@ public class EfectoHechizo {
 			ArrayList<Trampa> trampa = (new ArrayList<>());
 			trampa.addAll(pelea.getTrampas());
 			for(Trampa tramaps : trampa) {
-				int dist = Camino.getDistanceBetween(pelea.get_map(),tramaps.get_celda().getID(), _lanzador.get_fightCell().getID());
+				int dist = Camino.getDistanceBetween(pelea.get_map(),tramaps.getCelda().getID(), _lanzador.get_fightCell().getID());
 				//on active le piege
-				if(dist <= tramaps.get_tamaño())tramaps.onTraped(_lanzador);
+				if(dist <= tramaps.getTamaño())tramaps.onTraped(_lanzador);
 			}
 		}
 
@@ -1059,9 +1131,9 @@ public class EfectoHechizo {
 			P.addAll(fight.getTrampas());
 			for(Trampa p : P)
 			{
-				int dist = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(),target.get_fightCell().getID());
+				int dist = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(),target.get_fightCell().getID());
 				//on active le piege
-				if(dist <= p.get_tamaño())p.onTraped(target);
+				if(dist <= p.getTamaño())p.onTraped(target);
 			}
 		}
 
@@ -1111,11 +1183,11 @@ public class EfectoHechizo {
 			P.addAll(fight.getTrampas());
 			for(Trampa p : P)
 			{
-				int dist = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(),target.get_fightCell().getID());
-				int dist2 = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(), _lanzador.get_fightCell().getID());
+				int dist = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(),target.get_fightCell().getID());
+				int dist2 = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(), _lanzador.get_fightCell().getID());
 				//on active le piege
-				if(dist <= p.get_tamaño())p.onTraped(target);
-				else if(dist2 <= p.get_tamaño())p.onTraped(_lanzador);
+				if(dist <= p.getTamaño())p.onTraped(target);
+				else if(dist2 <= p.getTamaño())p.onTraped(_lanzador);
 			}
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 4, _lanzador.getID()+"", target.getID()+","+exCaster.getID());
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 4, _lanzador.getID()+"", _lanzador.getID()+","+exTarget.getID());
@@ -1769,7 +1841,7 @@ public class EfectoHechizo {
 			if(_celda.getFirstFighter() != null)return;//Si la case est prise par un joueur
 			
 			//Si la case est prise par le centre d'un piege
-			for(Trampa p :fight.getTrampas())if(p.get_celda().getID() == _celda.getID())return;
+			for(Trampa p :fight.getTrampas())if(p.getCelda().getID() == _celda.getID())return;
 
 			String[] infos = args.split(";");
 			int spellID = Short.parseShort(infos[0]);
@@ -1896,9 +1968,9 @@ public class EfectoHechizo {
 			P.addAll(fight.getTrampas());
 			for(Trampa p : P)
 			{
-				int dist = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(),F.get_fightCell().getID());
+				int dist = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(),F.get_fightCell().getID());
 				//on active le piege
-				if(dist <= p.get_tamaño())p.onTraped(F);
+				if(dist <= p.getTamaño())p.onTraped(F);
 			}
 		}
 		
@@ -1942,9 +2014,9 @@ public class EfectoHechizo {
 			P.addAll(fight.getTrampas());
 			for(Trampa p : P)
 			{
-				int dist = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(),F.get_fightCell().getID());
+				int dist = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(),F.get_fightCell().getID());
 				//on active le piege
-				if(dist <= p.get_tamaño())p.onTraped(F);
+				if(dist <= p.getTamaño())p.onTraped(F);
 			}
 		}
 
@@ -2422,9 +2494,9 @@ public class EfectoHechizo {
 				ArrayList<Trampa> P = (new ArrayList<>());
 				P.addAll(fight.getTrampas());
 				for(Trampa p : P) {
-					int dist = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(), _lanzador.get_fightCell().getID());
+					int dist = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(), _lanzador.get_fightCell().getID());
 					//on active le piege
-					if(dist <= p.get_tamaño())p.onTraped(_lanzador);
+					if(dist <= p.getTamaño())p.onTraped(_lanzador);
 				}
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 4, _lanzador.getID()+"", _lanzador.getID()+","+ _celda.getID());
 			}else {
@@ -2557,9 +2629,9 @@ public class EfectoHechizo {
 					P.addAll(fight.getTrampas());
 					for(Trampa p : P)
 					{
-						int dist = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(),target.get_fightCell().getID());
+						int dist = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(),target.get_fightCell().getID());
 						//on active le piege
-						if(dist <= p.get_tamaño())p.onTraped(target);
+						if(dist <= p.getTamaño())p.onTraped(target);
 					}
 				}
 			}
@@ -2643,9 +2715,9 @@ public class EfectoHechizo {
 					P.addAll(fight.getTrampas());
 					for(Trampa p : P)
 					{
-						int dist = Camino.getDistanceBetween(fight.get_map(),p.get_celda().getID(),target.get_fightCell().getID());
+						int dist = Camino.getDistanceBetween(fight.get_map(),p.getCelda().getID(),target.get_fightCell().getID());
 						//on active le piege
-						if(dist <= p.get_tamaño())p.onTraped(target);
+						if(dist <= p.getTamaño())p.onTraped(target);
 					}
 				}
 			}

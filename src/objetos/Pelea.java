@@ -54,15 +54,15 @@ public class Pelea {
 			_color = Constantes.getTrapsColor(spell);
 		}
 
-		public Case get_celda() {
+		public Case getCelda() {
 			return _celda;
 		}
 
-		public byte get_tamaño() {
+		public byte getTamaño() {
 			return _tamaño;
 		}
 
-		public Peleador get_lanzador() {
+		public Peleador getLanzador() {
 			return _lanzador;
 		}
 		
@@ -2467,9 +2467,9 @@ public class Pelea {
     		for(Trampa p : P)
     		{
     			Peleador F = _ordreJeu.get(_curPlayer);
-    			int dist = Camino.getDistanceBetween(_map,p.get_celda().getID(),F.get_fightCell().getID());
+    			int dist = Camino.getDistanceBetween(_map,p.getCelda().getID(),F.get_fightCell().getID());
     			//on active le piege
-    			if(dist <= p.get_tamaño())p.onTraped(F);
+    			if(dist <= p.getTamaño())p.onTraped(F);
     		}
     		return true;
         }
@@ -2499,9 +2499,9 @@ public class Pelea {
 		for(Trampa p : P)
 		{
 			Peleador F = getFighterByPerso(perso);
-			int dist = Camino.getDistanceBetween(_map,p.get_celda().getID(),F.get_fightCell().getID());
+			int dist = Camino.getDistanceBetween(_map,p.getCelda().getID(),F.get_fightCell().getID());
 			//on active le piege
-			if(dist <= p.get_tamaño())
+			if(dist <= p.getTamaño())
 				p.onTraped(F);
 			if(_state == Constantes.FIGHT_STATE_FINISHED)break;
 		}
@@ -3562,7 +3562,7 @@ public class Pelea {
 		//on supprime les pieges du joueur
 		ArrayList<Trampa> Ps = new ArrayList<>(_traps);
 		for(Trampa p : Ps) {
-			if(p.get_lanzador().getID() == target.getID()) {
+			if(p.getLanzador().getID() == target.getID()) {
 				p.desappear();
 				_traps.remove(p);
 			}

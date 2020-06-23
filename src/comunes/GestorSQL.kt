@@ -2318,7 +2318,7 @@ object GestorSQL {
                         RS.getInt("dueño"),
                         getObjet(RS.getInt("objeto"))))
             }
-            println((System.currentTimeMillis() - (time1)).toString() + "ms pour loader les HDVS items") //TIME
+            println((System.currentTimeMillis() - (time1)).toString() + "ms en cargar los objetos de mercadillos") //TIME
             cerrar_resultado(RS)
         } catch (e: SQLException) {
             JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)

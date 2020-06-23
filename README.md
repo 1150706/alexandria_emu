@@ -1,6 +1,10 @@
 # alexandria_emu
 Emulador para Dofus v1.29 - Basado en AncestraR rev47
 
+<b>JAVA v14</b><br>
+JDK Bell-Soft: <a href="https://download.bell-sw.com/java/14.0.1+8/bellsoft-jdk14.0.1+8-windows-amd64-full.msi">DESCARGAR</a><br>
+JRE Bell-Soft: <a href="https://download.bell-sw.com/java/14.0.1+8/bellsoft-jre14.0.1+8-windows-amd64-full.msi">DESCARGAR</a>
+
 <b>v0.00.1</b>
 - Actualizacion de las librerias e implementada la libreria de Hikari
 - MainServer a Kotlin, ex Ancestra.java

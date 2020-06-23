@@ -701,7 +701,7 @@ public class Mundo {
 		System.out.print("Cargando las ID maximas: ");
 		GestorSQL.cargar_maximo_de_objetos();
 		System.out.println("Cargado!");
-		System.out.println("Cargando objetos de los personajes:");
+		System.out.print("Cargando objetos de los personajes: ");
 		GestorSQL.cargando_objetos();
 		System.out.println(Objetos.size()+" objetos cargados");
 		System.out.print("Cargando las cuentas: ");
@@ -745,12 +745,13 @@ public class Mundo {
 		System.out.println(nbr+" IP baneadas cargadas");
 		System.out.print("Cargando los mercadillos: ");
 		GestorSQL.cargar_mercadillos();
-		System.out.print("\nCargando los objetos de los mercadillos: ");
+		System.out.println(Hdvs.size()+" mercadillos cargados");
+		System.out.print("Cargando los objetos de los mercadillos: ");
 		GestorSQL.cargar_objetos_mercadillos();
 		nextObjetID = GestorSQL.siguiente_id_objeto();
 		System.out.print("Cargando publicidades automaticas: ");
 		GestorSQL.cargar_publicidades_automaticas();
-		System.out.print(Publicidad.size()+" publicidades cargadas.\n");
+		System.out.println(Publicidad.size()+" publicidades cargadas.\n");
 	}
 	
 	public static Area getArea(int areaID)

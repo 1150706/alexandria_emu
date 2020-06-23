@@ -454,8 +454,11 @@ public class Mundo {
 					obj.setQuantity(obj.getQuantity()-couple.second);
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(perso1, obj);
 					Objeto newObj = Objeto.getCloneObjet(obj, couple.second);
-					if(perso2.addObjet(newObj, true))//Si le joueur n'avait pas d'item similaire
-						Mundo.addObjet(newObj,perso2.getID(), true);//On ajoute l'item au World
+					if(perso2.addObjet(newObj, true)){
+						newObj.setDueño(perso2.getID());
+						Mundo.addObjet(newObj, true);//On ajoute l'item au World
+					}
+
 				}
 			}
 			for(Couple<Integer, Integer> couple : items2) {
@@ -477,9 +480,10 @@ public class Mundo {
 					obj.setQuantity(obj.getQuantity()-couple.second);
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(perso2, obj);
 					Objeto newObj = Objeto.getCloneObjet(obj, couple.second);
-					if(perso1.addObjet(newObj, true))//Si le joueur n'avait pas d'item similaire
-						Mundo.addObjet(newObj, perso1.getID(),true);//On ajoute l'item au World
-				}
+					if(perso1.addObjet(newObj, true)){//Si le joueur n'avait pas d'item similaire
+						newObj.setDueño(perso1.getID());
+						Mundo.addObjet(newObj,true);//On ajoute l'item au World
+				}}
 			}
 			//Fin
 			perso1.set_isTradingWith(0);
@@ -697,6 +701,9 @@ public class Mundo {
 		System.out.print("Cargando las ID maximas: ");
 		GestorSQL.cargar_maximo_de_objetos();
 		System.out.println("Cargado!");
+		System.out.println("Cargando objetos de los personajes:");
+		GestorSQL.cargando_objetos();
+		System.out.println(Objetos.size()+" objetos cargados");
 		System.out.print("Cargando las cuentas: ");
 		GestorSQL.cargar_cuentas();
 		System.out.println(Cuentas.size()+" cuentas cargadas");
@@ -968,8 +975,7 @@ public class Mundo {
 		CuentaPorNombre.put(compte.getNombre(), compte.getID());
 	}
 
-	public static void agregar_personaje(Personaje perso)
-	{
+	public static void agregar_personaje(Personaje perso) {
 		Personajes.put(perso.getID(), perso);
 	}
 
@@ -1071,20 +1077,39 @@ public class Mundo {
 		return online;
 	}
 
-	public static void addObjet(Objeto item, int idpersonaje, boolean saveSQL) {
+	public static void addObjet(Objeto item, boolean saveSQL) {
 		Objetos.put(item.getID(), item);
 		if(saveSQL)
-			GestorSQL.guardar_nuevo_objeto(item, idpersonaje);
+			GestorSQL.guardar_nuevo_objeto(item);
 	}
 
-	public static Objeto getObjet(int guid)
-	{
+	public static Objeto getObjet(int guid) {
 		return Objetos.get(guid);
 	}
 
 	public static void removeItem(int guid) {
 		Objetos.remove(guid);
 		GestorSQL.eliminar_objeto(guid);
+	}
+
+	public static Map<Integer,Objeto> getObjetoPersonaje(int perso){
+		Map<Integer,Objeto> objetos = new TreeMap<>();
+		for(Objeto objeto : Objetos.values()){
+			if(objeto.getDueño()==perso){
+				objetos.put(objeto.getID(),objeto);
+			}
+		}
+		return objetos;
+	}
+
+	public static Map<Integer,Personaje> getPersonajePorCuenta(int idcuenta){
+		Map<Integer,Personaje> personajes = new TreeMap<>();
+		for(Personaje personaje : Personajes.values()){
+			if(personaje.getCuenta().getID() == idcuenta){
+				personajes.put(personaje.getID(), personaje);
+			}
+		}
+		return personajes;
 	}
 
 	public static void addIOTemplate(IOTemplate IOT)
@@ -1315,17 +1340,6 @@ public class Mundo {
 		return Experiencias.get(_lvl+1).guilde;
 	}
 
-	public static void ReassignAccountToChar(Cuenta C) {
-		C.get_persos().clear();
-		GestorSQL.cargar_personaje_por_cuenta(C.getID());
-		for(Personaje P : Personajes.values()) {
-			if(P.getAccID() == C.getID()) {
-				C.addPerso(P);
-				P.setAccount(C);
-			}
-		}
-	}
-
 	public static int getZaapCellIdByMapId(short i) {
 		for(Entry<Integer, Integer> zaap : Constantes.ZAAPS.entrySet()) {
 			if(zaap.getKey() == i)return zaap.getValue();
@@ -1339,7 +1353,6 @@ public class Mundo {
 				return Mundo.getCarte(i).getMountPark().get_cellid();
 			}
 		}
-		
 		return -1;
 	}
 
@@ -1385,7 +1398,7 @@ public class Mundo {
 		return false;
 	}
 
-	public static Objeto newObjet(int Guid, int template, int qua, int pos, String strStats) {
+	public static Objeto newObjet(int Guid, int template, int qua, int pos, String strStats, int dueño) {
 		if(Mundo.getObjTemplate(template) == null) {
 			System.out.println("ItemTemplate "+template+" inexistant, GUID dans la table `items`:"+Guid);
 			MainServidor.closeServers();
@@ -1394,7 +1407,7 @@ public class Mundo {
 		if(Mundo.getObjTemplate(template).getType() == 85)
 			return new PiedraAlma(Guid, qua, template, pos, strStats);
 		else
-			return new Objeto(Guid, template, qua, pos, strStats);
+			return new Objeto(Guid, template, qua, pos, strStats, dueño);
 	}
 	
 	

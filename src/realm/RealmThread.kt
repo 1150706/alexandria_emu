@@ -2,7 +2,6 @@ package realm
 
 import comunes.Constantes
 import comunes.GestorSQL.Cargar_cuenta_por_usuario
-import comunes.GestorSQL.cargar_personaje_por_cuenta
 import comunes.GestorSalida
 import comunes.MainServidor
 import comunes.Mundo
@@ -212,15 +211,18 @@ class RealmThread(sock: Socket?) : Runnable {
                 packet.startsWith("Af") -> {
                     _numerodepaquete--
                     sistema_de_pendientes(_cuenta)
+                    Mundo.getPersonajePorCuenta(_cuenta!!.id)
                 }
                 packet.startsWith("Ax") -> {
                     if (_cuenta == null) return
-                    cargar_personaje_por_cuenta(_cuenta!!.id)
+                    //cargar_personaje_por_cuenta(_cuenta!!.id)
+                    //Mundo.getPersonajePorCuenta(_cuenta!!.id)
                     GestorSalida.REALM_SEND_PERSO_LIST(_imprimir, _cuenta!!.numeroDePersonajes)
                 }
                 packet == "AX1" -> {
                     MainServidor.gameServer!!.addWaitingCompte(_cuenta)
                     val ip = _cuenta!!.actualIP
+                    Mundo.getPersonajePorCuenta(_cuenta!!.id)
                     GestorSalida.REALM_SEND_GAME_SERVER_IP(_imprimir, _cuenta!!.id, ip == "127.0.0.1")
                 }
             }

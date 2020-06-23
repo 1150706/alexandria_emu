@@ -566,6 +566,8 @@ public class Camino {
 	}
 
 	public static int getNearestCellAround(Mapa map, int startCell, int endCell, ArrayList<Case> forbidens) {
+		if (map == null)
+			return -1;
 		//On prend la cellule autour de la cible, la plus proche
 		int dist = 1000;
 		int cellID = startCell;
@@ -573,6 +575,9 @@ public class Camino {
 		char[] dirs = {'b','d','f','h'};
 		for(char d : dirs) {
 			int c = Camino.GetCaseIDFromDirrection(startCell, d, map, true);
+			//Evitamos null point en movimiento de Moobs
+			if (map.getMapa(c) == null)
+				continue;
 			int dis = Camino.getDistanceBetween(map, endCell, c);
 			
 			if(dis < dist && map.getMapa(c).isCaminable(true)

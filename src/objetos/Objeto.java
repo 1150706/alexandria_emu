@@ -259,6 +259,7 @@ public class Objeto {
 	protected ObjTemplate template;
 	protected int quantity = 1;
 	protected int position = Constantes.ITEM_POS_NO_EQUIPED;
+	protected int dueño = -1;
 	protected int guid;
 	protected int obvijevan;
 	protected int obvijevanLook;
@@ -274,17 +275,27 @@ public class Objeto {
 	//private Speaking linkedItem = null;
 	//private boolean isLinked = false;
 
-	public Objeto(int Guid, int template, int qua, int pos, String strStats) {
+	public Objeto(int Guid, int template, int qua, int pos, String strStats, int dueño) {
 		this.guid = Guid;
 		this.template = Mundo.getObjTemplate(template);
 		this.quantity = qua;
 		this.position = pos;
 		Stats = new Stats();
+		this.dueño = dueño;
 		parseStringToStats(strStats);
 	}
 
 	public Objeto() { }
-	
+
+	public int getDueño() {
+		return dueño;
+	}
+
+	public void setDueño(int dueño) {
+		this.dueño = dueño;
+		GestorSQL.guardar_nuevo_objeto(this);
+	}
+
 	public int getObvijevanPos() {
 		return obvijevan;
 	}
@@ -293,6 +304,7 @@ public class Objeto {
 		obvijevan = pos;
 		
 	}
+
 	public int getObvijevanLook() {
 		return obvijevanLook;
 	}
@@ -301,37 +313,28 @@ public class Objeto {
 		obvijevanLook = look;
 	}
 
-	  
-	
-	public void parseStringToStats(String strStats)
-	{
+	public void parseStringToStats(String strStats) {
 		String[] split = strStats.split(",");
-		for(String s : split)
-		{	
-			try
-			{
+		for(String s : split) {
+			try {
 				String[] stats = s.split("#");
 				int statID = Integer.parseInt(stats[0],16);
 				
 				//Stats spécials
-				if(statID == 997 || statID == 996)
-				{
+				if(statID == 997 || statID == 996) {
 					txtStats.put(statID, stats[4]);
 					continue;
 				}
 				//Si stats avec Texte (Signature, apartenance, etc)
-				if((!stats[3].equals("") && !stats[3].equals("0")))
-				{
+				if((!stats[3].equals("") && !stats[3].equals("0"))) {
 					txtStats.put(statID, stats[3]);
 					continue;
 				}
 				
 				String jet = stats[4];
 				boolean follow = true;
-				for(int a : Constantes.ARMES_EFFECT_IDS)
-				{
-					if(a == statID)
-					{
+				for(int a : Constantes.ARMES_EFFECT_IDS) {
+					if(a == statID) {
 						int id = statID;
 						String min = stats[1];
 						String max = stats[2];
@@ -352,13 +355,9 @@ public class Objeto {
 		txtStats.put(i, s);
 	}
 	
-	public String getTraquedName()
-	{
-		for(Entry<Integer,String> entry : txtStats.entrySet())
-		{
-			if(Integer.toHexString(entry.getKey()).compareTo("3dd") == 0)
-			{
-				
+	public String getTraquedName() {
+		for(Entry<Integer,String> entry : txtStats.entrySet()) {
+			if(Integer.toHexString(entry.getKey()).compareTo("3dd") == 0) {
 				return entry.getValue();	
 			}
 		}

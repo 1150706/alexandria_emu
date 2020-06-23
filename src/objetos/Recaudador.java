@@ -428,12 +428,12 @@ public class Recaudador
 			{
 				//On crée une copy de l'item
 				PersoObj = Objeto.getCloneObjet(PercoObj, qua);
-				//On l'ajoute au monde
-				Mundo.addObjet(PersoObj, P.getID(), true);
-				//On retire X objet
-				PercoObj.setQuantity(newQua);
 				//On l'ajoute au joueur
 				P.addObjet(PersoObj);
+				//On l'ajoute au monde
+				Mundo.addObjet(PersoObj, true);
+				//On retire X objet
+				PercoObj.setQuantity(newQua);
 				
 				//On envoie les packets
 				GestorSalida.GAME_SEND_OAKO_PACKET(P,PersoObj);

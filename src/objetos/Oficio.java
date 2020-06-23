@@ -258,7 +258,7 @@ public class Oficio {
 				Objeto O = T.createNewItem(qua, false);
 				//Si retourne true, on l'ajoute au monde
 				if(P.addObjet(O, true))
-					Mundo.addObjet(O, P.getID(), true);
+					Mundo.addObjet(O, true);
 				GestorSalida.GAME_SEND_IQ_PACKET(P,P.getID(),qua);
 				GestorSalida.GAME_SEND_Ow_PACKET(P);
 			}
@@ -447,7 +447,7 @@ public class Oficio {
 				if(add) {
 					_P.getItems().put(newObj.getID(), newObj);
 					GestorSalida.GAME_SEND_OAKO_PACKET(_P,newObj);
-					Mundo.addObjet(newObj, _P.getID(), true);
+					Mundo.addObjet(newObj, true);
 				}
 				
 				//on envoie les Packets

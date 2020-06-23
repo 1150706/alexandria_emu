@@ -279,7 +279,7 @@ public class Cofres {
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet au coffre et au monde
 				TrunkObj = Objeto.getCloneObjet(PersoObj, qua);
-				Mundo.addObjet(TrunkObj, P.getID(), true);
+				Mundo.addObjet(TrunkObj, true);
 				_object.put(TrunkObj.getID() ,TrunkObj);
 				
 				//Envoie des packets
@@ -363,12 +363,12 @@ public class Cofres {
 			{
 				//On crée une copy de l'item dans le coffre
 				PersoObj = Objeto.getCloneObjet(TrunkObj, qua);
-				//On l'ajoute au monde
-				Mundo.addObjet(PersoObj, P.getID(), true);
-				//On retire X objet du coffre
-				TrunkObj.setQuantity(newQua);
 				//On l'ajoute au joueur
 				P.getItems().put(PersoObj.getID(), PersoObj);
+				//On l'ajoute au monde
+				Mundo.addObjet(PersoObj, true);
+				//On retire X objet du coffre
+				TrunkObj.setQuantity(newQua);
 				
 				//On envoie les packets
 				GestorSalida.GAME_SEND_OAKO_PACKET(P,PersoObj);

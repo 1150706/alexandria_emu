@@ -1060,7 +1060,7 @@ public class Mapa {
 					int qua = Formulas.getRandomValue(1, 10);//On a entre 1 et 10 eaux
 					Objeto obj = Mundo.getObjTemplate(311).createNewItem(qua, false);
 					if(perso.addObjet(obj, true))
-						Mundo.addObjet(obj, perso.getID(),true);
+						Mundo.addObjet(obj,true);
 					GestorSalida.GAME_SEND_IQ_PACKET(perso,perso.getID(),qua);
 				break;
 				
@@ -1730,7 +1730,7 @@ public class Mapa {
 		if(obj != null)
 		{
 			if(perso.addObjet(obj, true))
-				Mundo.addObjet(obj, perso.getID(), true);
+				Mundo.addObjet(obj, true);
 			GestorSalida.GAME_SEND_GDO_PACKET_TO_MAP(this,'-',caseID,0,0);
 			GestorSalida.GAME_SEND_Ow_PACKET(perso);
 			_cases.get(caseID).clearDroppedItem();

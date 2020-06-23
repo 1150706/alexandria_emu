@@ -1696,7 +1696,7 @@ public class JuegoThread implements Runnable {
 						int newItemQua = obj.getQuantity()-qua;
 						Objeto newItem = Objeto.getCloneObjet(obj,newItemQua);
 						_perso.addObjet(newItem,false);
-						Mundo.addObjet(newItem, _perso.getID(),true);
+						Mundo.addObjet(newItem,true);
 						obj.setQuantity(qua);
 						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
 					}
@@ -1763,7 +1763,7 @@ public class JuegoThread implements Runnable {
 							int newItemQua = obj.getQuantity()-qua;
 							Objeto newItem = Objeto.getCloneObjet(obj,newItemQua);
 							_perso.addObjet(newItem,false);
-							Mundo.addObjet(newItem, _perso.getID(), true);
+							Mundo.addObjet(newItem, true);
 							obj.setQuantity(qua);
 							GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
 						}
@@ -2089,9 +2089,9 @@ public class JuegoThread implements Runnable {
 					obj1.addTxtStat(997, DD1.get_nom());
 					
 					//On ajoute l'objet au joueur
-					Mundo.addObjet(obj1, _perso.getID(), true);
 					_perso.addObjet(obj1, false);//Ne seras jamais identique de toute
-					
+					Mundo.addObjet(obj1, true);
+
 					//Packets
 					GestorSalida.GAME_SEND_Ow_PACKET(_perso);
 					GestorSalida.GAME_SEND_Ee_PACKET(_perso,'-',DD1.getID()+"");
@@ -2314,7 +2314,7 @@ public class JuegoThread implements Runnable {
 						GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_perso, obj);
 
 						Objeto newObj = Objeto.getCloneObjet(obj, rAmount);
-						Mundo.addObjet(newObj, _perso.getID(), true);
+						Mundo.addObjet(newObj, true);
 						obj = newObj;
 					}
 					HdvEntry toAdd = new HdvEntry(price, amount, _perso.getCuenta().getID(), obj);
@@ -2607,8 +2607,9 @@ public class JuegoThread implements Runnable {
                 	seller.addStoreItem(itemStore.getID(), price);	// on remet dans le magasin
                 	
                 	Objeto clone = Objeto.getCloneObjet(itemStore, qua);	// on clone l'objet achet�
-                    GestorSQL.guardar_nuevo_objeto(clone, _perso.getID());					// on sauvegarde celui-ci
-                    _perso.addObjet(clone, true);						// et on le donne au joueur
+					_perso.addObjet(clone, true);
+					GestorSQL.guardar_nuevo_objeto(clone);					// on sauvegarde celui-ci
+					// et on le donne au joueur
                 }
 	            //remove kamas
 	            _perso.addKamas(-price * qua);
@@ -2664,7 +2665,7 @@ public class JuegoThread implements Runnable {
 			long newKamas = _perso.getKamas() - prix;
 			_perso.setKamas(newKamas);
 			if(_perso.addObjet(newObj,true))//Return TRUE si c'est un nouvel item
-				Mundo.addObjet(newObj, _perso.getID(),true);
+				Mundo.addObjet(newObj,true);
 			GestorSalida.GAME_SEND_BUY_OK_PACKET(_out);
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_perso);
 			GestorSalida.GAME_SEND_Ow_PACKET(_perso);
@@ -4380,7 +4381,7 @@ public class JuegoThread implements Runnable {
 			obV.clearStats();
 			obV.parseStringToStats(obviStats);
 			if (_perso.addObjet(obV, true)) {
-				Mundo.addObjet(obV, _perso.getID(), true);
+				Mundo.addObjet(obV, true);
 			}
 			obj.removeAllObvijevanStats();
 			GestorSalida.enviar(_perso, obj.obvijevanOCO_Packet(pos));

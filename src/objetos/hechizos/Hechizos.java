@@ -22,8 +22,7 @@ public class Hechizos {
 	private final Map<Integer,SortStats> sortStats = new TreeMap<>();
 	private final ArrayList<Integer> effectTargets = new ArrayList<>();
 
-    public static class SortStats
-	{
+    public static class SortStats {
 		private final int spellID;
 		private final int level;
 		private final int PACost;
@@ -46,8 +45,7 @@ public class Hechizos {
 		
 		public SortStats(int AspellID,int Alevel,int cost, int minPO, int maxPO, int tauxCC,int tauxEC, boolean isLineLaunch, boolean hasLDV,
 				boolean isEmptyCell, boolean isModifPO, int maxLaunchbyTurn,int maxLaunchbyByTarget, int coolDown,
-				int reqLevel,boolean isEcEndTurn, String effects,String ceffects,String typePortee)
-		{
+				int reqLevel,boolean isEcEndTurn, String effects,String ceffects,String typePortee) {
 			this.spellID = AspellID;
 			this.level = Alevel;
 			this.PACost = cost;
@@ -69,14 +67,11 @@ public class Hechizos {
 			this.porteeType = typePortee;
 		}
 		
-		private ArrayList<EfectoHechizo> parseEffect(String e)
-		{
+		private ArrayList<EfectoHechizo> parseEffect(String e) {
 			ArrayList<EfectoHechizo> effets = new ArrayList<>();
 			String[] splt = e.split("\\|");
-			for(String a : splt)
-			{
-				try
-				{
+			for(String a : splt) {
+				try {
 					if(e.equals("-1"))continue;
 					int id = Integer.parseInt(a.split(";",2)[0]);
 					String args = a.split(";",2)[1];
@@ -178,8 +173,7 @@ public class Hechizos {
 		}
 
 		
-		public void applySpellEffectToFight(Pelea fight, Peleador perso, Case cell, ArrayList<Case> cells, boolean isCC)
-		{
+		public void applySpellEffectToFight(Pelea fight, Peleador perso, Case cell, ArrayList<Case> cells, boolean isCC) {
 			//Seulement appellé par les pieges, or les sorts de piege
 			ArrayList<EfectoHechizo> effets;
 			
@@ -191,12 +185,10 @@ public class Hechizos {
 			int jetChance = Formulas.getRandomValue(0, 99);
 			int curMin = 0;
 			//int num = 0;
-			for(EfectoHechizo SE : effets)
-			{
+			for(EfectoHechizo SE : effets) {
 				if(SE.get_suerte() != 0 && SE.get_suerte() != 100)//Si pas 100% lancement
 				{
-					if(jetChance <= curMin || jetChance >= (SE.get_suerte() + curMin))
-					{
+					if(jetChance <= curMin || jetChance >= (SE.get_suerte() + curMin)) {
 						curMin += SE.get_suerte();
 						continue;
 					}
@@ -210,8 +202,7 @@ public class Hechizos {
 			}
 		}
 		
-		public void applySpellEffectToFight(Pelea fight, Peleador perso, Case cell, boolean isCC)
-		{
+		public void applySpellEffectToFight(Pelea pelea, Peleador lanzador, Case cell, boolean isCC) {
 			ArrayList<EfectoHechizo> effets;
 			
 			if(isCC)
@@ -222,13 +213,10 @@ public class Hechizos {
 			int jetChance = Formulas.getRandomValue(0, 99);
 			int curMin = 0;
 			int num = 0;
-			for(EfectoHechizo SE : effets)
-			{
-				if(fight.get_state()>= Constantes.FIGHT_STATE_FINISHED)return;
-				if(SE.get_suerte() != 0 && SE.get_suerte() != 100)//Si pas 100% lancement
-				{
-					if(jetChance <= curMin || jetChance >= (SE.get_suerte() + curMin))
-					{
+			for(EfectoHechizo SE : effets) {
+				if(pelea.get_state()>= Constantes.FIGHT_STATE_FINISHED)return;
+				if(SE.get_suerte() != 0 && SE.get_suerte() != 100) { //Si no es 100% de lanzamiento
+					if(jetChance <= curMin || jetChance >= (SE.get_suerte() + curMin)) {
 						curMin += SE.get_suerte();
 						continue;
 					}
@@ -236,89 +224,78 @@ public class Hechizos {
 				}
 				
 				int POnum = num*2;
-				if(isCC)
-				{
-					POnum += effects.size()*2;//On zaap la partie du String des effets hors CC
+				if(isCC) {
+					POnum += effects.size() * 2;//On zaap la partie du String des effets hors CC
 				} 
-				ArrayList<Case> cells = Camino.getCellListFromAreaString(fight.get_map(),cell.getID(),perso.get_fightCell().getID(),porteeType,POnum,isCC);
-				
+				ArrayList<Case> cells = Camino.getCellListFromAreaString(pelea.get_map(),cell.getID(),lanzador.get_fightCell().getID(),porteeType,POnum,isCC);
 				ArrayList<Case> finalCells = new ArrayList<>();
 				
 				int TE = 0;
 				Hechizos S = Mundo.getSort(spellID);
 				//on prend le targetFlag corespondant au num de l'effet
-				if(S!= null?S.getEffectTargets().size()>num:false)TE = S.getEffectTargets().get(num);
+				if(S != null && S.getEffectTargets().size() > num)TE = S.getEffectTargets().get(num);
 				
-				for(Case C : cells)
-				{
+				for(Case C : cells) {
 					if(C == null)continue;
 					Peleador F = C.getFirstFighter();
 					if(F == null)continue;
-					//Ne touche pas les alliés
-					if(((TE & 1) == 1) && (F.getTeam() == perso.getTeam()))continue;
-					//Ne touche pas le lanceur
-					if((((TE>>1) & 1) == 1) && (F.getID() == perso.getID()))continue;
-					//Ne touche pas les ennemies
-					if((((TE>>2) & 1) == 1) && (F.getTeam() != perso.getTeam()))continue;
+					//No toques a los aliados
+					if(((TE & 1) == 1) && (F.getTeam() == lanzador.getTeam())) {continue;}
+					//No tocar al lanzador
+					if((((TE>>1) & 1) == 1) && (F.getID() == lanzador.getID())) {continue;}
+					//No tocar a los enemigos
+					if((((TE>>2) & 1) == 1) && (F.getTeam() != lanzador.getTeam())) {continue;}
 					//Ne touche pas les combatants (seulement invocations)
-					if((((TE>>3) & 1) == 1) && (!F.isInvocation()))continue;
+					if((((TE>>3) & 1) == 1) && (!F.isInvocation())) {continue;}
 					//Ne touche pas les invocations
-					if((((TE>>4) & 1) == 1) && (F.isInvocation()))continue;
+					if((((TE>>4) & 1) == 1) && (F.isInvocation())) {continue;}
 					//N'affecte que le lanceur
-					if((((TE>>5) & 1) == 1) && (F.getID() != perso.getID()))continue;
+					if((((TE>>5) & 1) == 1) && (F.getID() != lanzador.getID())) {continue;}
+					// 32 y 64 son de agregar si o si, respectivamente lanzador e invocador
+					if ((TE == 32) && F.getID() != lanzador.getID()) { continue; }
+					if ((TE == 64) && lanzador.getInvocator() != null && lanzador.getInvocator().getID() != F.getID()) { continue; }
 					//Si pas encore eu de continue, on ajoute la case
 					finalCells.add(C);
 				}
 				//Si le sort n'affecte que le lanceur et que le lanceur n'est pas dans la zone
-				if(((TE>>5) & 1) == 1)if(!finalCells.contains(perso.get_fightCell()))finalCells.add(perso.get_fightCell());
-				ArrayList<Peleador> cibles = EfectoHechizo.getTargets(SE,fight,finalCells);
-				SE.applyToFight(fight, perso, cell,cibles);
+				if(((TE>>5) & 1) == 1)if(!finalCells.contains(lanzador.get_fightCell()))finalCells.add(lanzador.get_fightCell());
+				ArrayList<Peleador> cibles = EfectoHechizo.getTargets(SE,pelea,finalCells);
+				SE.applyToFight(pelea, lanzador, cell,cibles);
 				num++;
 			}
 		}
-		
-		
 	}
 	
-	public Hechizos(int aspellID, int aspriteID, String aspriteInfos, String ET)
-	{
+	public Hechizos(int aspellID, int aspriteID, String aspriteInfos, String ET) {
 		spellID = aspellID;
 		spriteID = aspriteID;
 		spriteInfos = aspriteInfos;
 		String nET = ET.split(":")[0];
 		String ccET = "";
 		if(ET.split(":").length>1)ccET = ET.split(":")[1];
-		for(String num : nET.split(";"))
-		{
-			try
-			{
+		for(String num : nET.split(";")) {
+			try {
 				effectTargets.add(Integer.parseInt(num));
-			}catch(Exception e)
-			{
+			}catch(Exception e) {
 				effectTargets.add(0);
 				continue;
 			}
 		}
-		for(String num : ccET.split(";"))
-		{
+		for(String num : ccET.split(";")) {
             ArrayList<Integer> CCeffectTargets = new ArrayList<>();
-            try
-			{
+            try {
 				CCeffectTargets.add(Integer.parseInt(num));
-			}catch(Exception e)
-			{
+			}catch(Exception e) {
 				CCeffectTargets.add(0);
 				continue;
 			}
 		}
 	}
-	
-	
+
 	public ArrayList<Integer> getEffectTargets()
 	{
 		return effectTargets;
 	}
-
 
 	public int getSpriteID() {
 		return spriteID;
@@ -337,10 +314,8 @@ public class Hechizos {
 		return sortStats.get(lvl);
 	}
 	
-	public void addSortStats(Integer lvl,SortStats stats)
-	{
+	public void addSortStats(Integer lvl,SortStats stats) {
 		if(sortStats.get(lvl) != null)return;
 		sortStats.put(lvl,stats);
 	}
-	
 }

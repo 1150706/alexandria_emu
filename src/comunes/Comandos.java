@@ -878,9 +878,9 @@ public class Comandos {
 				Objeto obj = t.createNewItem(1,useMax);
 				if(perso != null) {
 					if(perso.addObjet(obj, true))//Si le joueur n'avait pas d'item similaire
-						Mundo.addObjet(obj, _personaje.getID(),true);
+						Mundo.addObjet(obj,true);
 				} else if(_personaje.addObjet(obj, true))//Si le joueur n'avait pas d'item similaire
-					Mundo.addObjet(obj, _personaje.getID(),true);
+					Mundo.addObjet(obj,true);
 			}
 			String str = "Se ha creado el set "+tID+" con exito";
 			if(useMax) str += " en sus maximas caracteristicas";
@@ -1008,7 +1008,7 @@ public class Comandos {
 			if(qua <1)qua =1;
 			Objeto obj = t.createNewItem(qua,useMax);
 			if(_personaje.addObjet(obj, true))//Si le joueur n'avait pas d'item similaire
-				Mundo.addObjet(obj, _personaje.getID(),true);
+				Mundo.addObjet(obj,true);
 			String str = "Se ha creado un objeto "+tID+" con exito";
 			if(useMax) str += " en sus maximas caracteristicas";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir,str);
@@ -1612,7 +1612,7 @@ public class Comandos {
 					
 					
 					Mundo.getHdv(hdv).addEntry(entry);
-					Mundo.addObjet(objet, _personaje.getID(), false);
+					Mundo.addObjet(objet, false);
 				}
 			}catch (Exception e) {
 				continue;

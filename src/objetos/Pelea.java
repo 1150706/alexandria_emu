@@ -3050,7 +3050,7 @@ public class Pelea {
         			if(drops.length() >0) drops.append(",");
         			drops.append(pierrePleine.getTemplate().getID()).append("~").append(1);
         			if(i.getPersonnage().addObjet(pierrePleine, false))
-        				Mundo.addObjet(pierrePleine, i.getID(), true);
+        				Mundo.addObjet(pierrePleine, true);
         		}
         		for(Entry<Integer,Integer> entry : itemWon.entrySet())
         		{
@@ -3060,9 +3060,9 @@ public class Pelea {
         			drops.append(entry.getKey()).append("~").append(entry.getValue());
         			Objeto obj = OT.createNewItem(entry.getValue(), false);
         			if(i.getPersonnage() != null && i.getPersonnage().addObjet(obj, true))
-        				Mundo.addObjet(obj, i.getID(), true);
+        				Mundo.addObjet(obj, true);
         			else if (i.isInvocation() && i.getMob().getTemplate().getID() == 285 && i.getInvocator().getPersonnage().addObjet(obj, true))
-        				Mundo.addObjet(obj, i.getID(), true);
+        				Mundo.addObjet(obj, true);
         		}
         		//fin drop system
         		winxp = XP.get();
@@ -3196,7 +3196,7 @@ public class Pelea {
     			drops.append(entry.getKey()).append("~").append(entry.getValue());
     			Objeto obj = OT.createNewItem(entry.getValue(), false);
     			p.addObjet(obj);
-    			Mundo.addObjet(obj, _init1.getID(), true);
+    			Mundo.addObjet(obj, true);
     		}
     		Packet.append(drops).append(";");//Drop
     		Packet.append(winkamas).append("|");

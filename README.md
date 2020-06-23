@@ -43,3 +43,8 @@ Emulador para Dofus v1.29 - Basado en AncestraR rev47
 - Agregada la verificacion de trampas en la celda al lanzar un personaje
 - Agregado break; faltante en efecto hechizo
 - Recambio de accion de las trampas de 307 a 306, con delay correcto del cliente
+- Agregado JRE y JDK en la carpeta recursos (Java v14 - BellSoft)
+- Objetos tomados desde la tabla datos_objetos por ID del personaje (Creditos: JEAUX)
+- Eliminada la columna objetos de la tabla datos_personajes
+- Correjido nullpoint en el movimiento automatico de los moobs del mapa
+- Eliminamos consultas obsoletas a la base de datos

@@ -1744,16 +1744,11 @@ public class EfectoHechizo {
 			}
 		}
 		
-		private void applyEffect_144(ArrayList<Peleador> cibles, Pelea fight)
-		{
-			if(_turnos <= 0)
-			{
-				for(Peleador target : cibles)
-				{
-					if(target.hasBuff(765))//sacrifice
-					{
-						if(target.getBuff(765) != null && !target.getBuff(765).getLanzador().isDead())
-						{
+		private void applyEffect_144(ArrayList<Peleador> cibles, Pelea fight) {
+			if(_turnos <= 0) {
+				for(Peleador target : cibles) {
+					if(target.hasBuff(765)) { //sacrifice
+						if(target.getBuff(765) != null && !target.getBuff(765).getLanzador().isDead()) {
 							applyEffect_765B(fight,target);
 							target = target.getBuff(765).getLanzador();
 						}
@@ -1761,8 +1756,7 @@ public class EfectoHechizo {
 					
 					int dmg = Formulas.getRandomJet(args.split(";")[5]);
 					//si la cible a le buff renvoie de sort et que le sort peut etre renvoyer
-					if(target.hasBuff(106) && target.getBuffValue(106) >= _hechizonivel && _hechizo != 0)
-					{
+					if(target.hasBuff(106) && target.getBuffValue(106) >= _hechizonivel && _hechizo != 0) {
 						GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 106, target.getID()+"", target.getID()+",1");
 						//le lanceur devient donc la cible
 						target = _lanzador;
@@ -1775,27 +1769,22 @@ public class EfectoHechizo {
 					if(target.getPDV() <=0)
 						fight.onFighterDie(target, _lanzador);
 				}
-			}else
-			{
-				for(Peleador target : cibles)
-				{
+			} else {
+				for(Peleador target : cibles) {
 					target.addBuff(effectID, 0, _turnos, 0, true, _hechizo, args, _lanzador);//on applique un buff
 				}
 			}
 		}
 
-		private void applyEffect_150(Pelea fight, ArrayList<Peleador> cibles)
-		{
+		private void applyEffect_150(Pelea fight, ArrayList<Peleador> cibles) {
 			if(_turnos == 0)return;
-			for(Peleador target : cibles)
-			{
+			for(Peleador target : cibles) {
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 150, _lanzador.getID()+"", target.getID()+",4");
 				target.addBuff(effectID, 0, _turnos, 0, true, _hechizo, args, _lanzador);
 			}
 		}
 		
-		private void applyEffect_402(Pelea fight)
-		{
+		private void applyEffect_402(Pelea fight) {
 			if(!_celda.isCaminable(true))return;//Si case pas marchable
 			
 			String[] infos = args.split(";");
@@ -1814,8 +1803,7 @@ public class EfectoHechizo {
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 999, _lanzador.getID()+"", str);
 		}
 
-		private void applyEffect_401(Pelea fight)
-		{
+		private void applyEffect_401(Pelea fight) {
 			if(!_celda.isCaminable(true))return;//Si case pas marchable
 			if(_celda.getFirstFighter() != null)return;//Si la case est prise par un joueur
 			
@@ -1835,8 +1823,7 @@ public class EfectoHechizo {
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 999, _lanzador.getID()+"", str);
 		}
 
-		private void applyEffect_400(Pelea fight)
-		{
+		private void applyEffect_400(Pelea fight) {
 			if(!_celda.isCaminable(true))return;//Si case pas marchable
 			if(_celda.getFirstFighter() != null)return;//Si la case est prise par un joueur
 			
@@ -1859,16 +1846,13 @@ public class EfectoHechizo {
 			GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, team, 999, _lanzador.getID()+"", str);
 		}
 		
-		private void applyEffect_116(ArrayList<Peleador> cibles, Pelea fight)//Malus PO
-		{
+		private void applyEffect_116(ArrayList<Peleador> cibles, Pelea fight){ //Malus PO
 			int val = Formulas.getRandomJet(jet);
-			if(val == -1)
-			{
+			if(val == -1){
 				JuegoServidor.agregar_a_los_logs("Erreur de valeur pour getRandomJet (applyEffect_"+effectID+")");
 				return;
 			}
-			for(Peleador target : cibles)
-			{
+			for(Peleador target : cibles) {
 				target.addBuff(effectID, val, _turnos, 1, false, _hechizo, args, _lanzador);
 				GestorSalida.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, effectID, _lanzador.getID()+"", target.getID()+","+val+","+ _turnos);
 			}		

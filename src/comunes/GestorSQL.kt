@@ -538,73 +538,6 @@ object GestorSQL {
         }
 
     @JvmStatic
-	fun cargar_personaje_por_cuenta(accID: Int) {
-        try {
-            val RS = ejecutar_consulta("SELECT * FROM datos_personajes WHERE cuenta = '$accID';", MainServidor.DB_DINAMICOS)
-            while (RS!!.next()) {
-                val stats = TreeMap<Int, Int>()
-                stats[Constantes.STATS_ADD_VITA] = RS.getInt("vitalidad")
-                stats[Constantes.STATS_ADD_FORC] = RS.getInt("fuerza")
-                stats[Constantes.STATS_ADD_SAGE] = RS.getInt("sabiduria")
-                stats[Constantes.STATS_ADD_INTE] = RS.getInt("inteligencia")
-                stats[Constantes.STATS_ADD_CHAN] = RS.getInt("suerte")
-                stats[Constantes.STATS_ADD_AGIL] = RS.getInt("agilidad")
-                val perso = Personaje(
-                        RS.getInt("id"),
-                        RS.getString("nombre"),
-                        RS.getInt("sexo"),
-                        RS.getInt("clase"),
-                        RS.getInt("color1"),
-                        RS.getInt("color2"),
-                        RS.getInt("color3"),
-                        RS.getLong("kamas"),
-                        RS.getInt("puntoshechizo"),
-                        RS.getInt("capital"),
-                        RS.getInt("energia"),
-                        RS.getInt("nivel"),
-                        RS.getLong("experiencia"),
-                        RS.getInt("tamaño"),
-                        RS.getInt("gfx"),
-                        RS.getByte("alineacion"),
-                        RS.getInt("cuenta"), stats,
-                        RS.getByte("veramigos"),
-                        RS.getByte("veralineacion"),
-                        RS.getByte("vervendedor"),
-                        RS.getString("canales"),
-                        RS.getShort("mapa"),
-                        RS.getInt("celda"),
-                        RS.getString("objetos"),
-                        RS.getString("objetosmercante"),
-                        RS.getInt("puntosdevida"),
-                        RS.getString("hechizos"),
-                        RS.getString("puntoguardado"),
-                        RS.getString("oficios"),
-                        RS.getInt("xpmontura"),
-                        RS.getInt("montura"),
-                        RS.getInt("honor"),
-                        RS.getInt("deshonor"),
-                        RS.getInt("nivelalineacion"),
-                        RS.getString("zaaps"),
-                        RS.getByte("titulo"),
-                        RS.getInt("esposo"))
-                //Vérifications pré-connexion
-                perso.VerifAndChangeItemPlace()
-                agregar_personaje(perso)
-                val guildId = personaje_esta_en_gremio(RS.getInt("id"))
-                if (guildId >= 0) {
-                    perso.setGuildMember(getGuild(guildId).getMember(RS.getInt("id")))
-                }
-                if (getCompte(accID) != null) getCompte(accID).addPerso(perso)
-            }
-            cerrar_resultado(RS)
-        } catch (e: SQLException) {
-            agregar_a_los_logs("SQL ERROR: " + e.message)
-            e.printStackTrace()
-            closeServers()
-        }
-    }
-
-    @JvmStatic
 	fun cargar_personaje() {
         try {
             val RS = ejecutar_consulta("SELECT * FROM datos_personajes;", MainServidor.DB_DINAMICOS)
@@ -640,7 +573,6 @@ object GestorSQL {
                         RS.getString("canales"),
                         RS.getShort("mapa"),
                         RS.getInt("celda"),
-                        RS.getString("objetos"),
                         RS.getString("objetosmercante"),
                         RS.getInt("puntosdevida"),
                         RS.getString("hechizos"),
@@ -657,7 +589,12 @@ object GestorSQL {
                 //Vérifications pré-connexion
                 perso.VerifAndChangeItemPlace()
                 agregar_personaje(perso)
-                if (getCompte(RS.getInt("cuenta")) != null) getCompte(RS.getInt("cuenta")).addPerso(perso)
+                if (perso.cuenta != null) {
+                    perso.cuenta.addPerso(perso)
+                    getObjetoPersonaje(perso.id)
+                }else{
+                    println("este personaje tiene cuenta null: "+perso.nombre)
+                }
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
@@ -706,8 +643,8 @@ object GestorSQL {
 
     @JvmStatic
 	fun agregar_personaje_db(perso: Personaje): Boolean {
-        val baseQuery = "INSERT INTO datos_personajes( `id` , `nombre` , `sexo` , `clase` , `color1` , `color2` , `color3` , `kamas` , `puntoshechizo` , `capital` , `energia` , `nivel` , `experiencia`, `tamaño`, `gfx`, `cuenta`, `celda`,`mapa`,`hechizos`,`objetos`, `objetosmercante`)" +
-                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'', '');"
+        val baseQuery = "INSERT INTO datos_personajes( `id` , `nombre` , `sexo` , `clase` , `color1` , `color2` , `color3` , `kamas` , `puntoshechizo` , `capital` , `energia` , `nivel` , `experiencia`, `tamaño`, `gfx`, `cuenta`, `celda`,`mapa`,`hechizos`, `objetosmercante`)" +
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'');"
         return try {
             val p = nueva_consulta(baseQuery, _dinamicos)
             p.setInt(1, perso.id)
@@ -839,7 +776,6 @@ object GestorSQL {
                 "`celda`= ?," +
                 "`puntosdevida`= ?," +
                 "`hechizos`= ?," +
-                "`objetos`= ?," +
                 "`objetosmercante`= ?," +
                 "`puntoguardado`= ?," +
                 "`zaaps`= ?," +
@@ -879,16 +815,15 @@ object GestorSQL {
             p.setInt(25, _perso.actualCelda.id)
             p.setInt(26, _perso._pdvper)
             p.setString(27, _perso.parseSpellToDB())
-            p.setString(28, _perso.parseObjetsToDB())
-            p.setString(29, _perso.parseStoreItemstoBD())
-            p.setString(30, _perso._savePos)
-            p.setString(31, _perso.parseZaaps())
-            p.setString(32, _perso.parseJobData())
-            p.setInt(33, _perso.mountXpGive)
-            p.setInt(34, if (_perso.mount != null) _perso.mount.id else -1)
-            p.setByte(35, _perso._title)
-            p.setInt(36, _perso.wife)
-            p.setInt(37, _perso.id)
+            p.setString(28, _perso.parseStoreItemstoBD())
+            p.setString(29, _perso._savePos)
+            p.setString(30, _perso.parseZaaps())
+            p.setString(31, _perso.parseJobData())
+            p.setInt(32, _perso.mountXpGive)
+            p.setInt(33, if (_perso.mount != null) _perso.mount.id else -1)
+            p.setByte(34, _perso._title)
+            p.setInt(35, _perso.wife)
+            p.setInt(36, _perso.id)
             p.executeUpdate()
             if (_perso.miembroGremio != null) actualizar_miembro_del_gremio(_perso.miembroGremio)
             if (_perso.mount != null) actualizar_informacion_monturas(_perso.mount)
@@ -1091,7 +1026,7 @@ object GestorSQL {
     }
 
     @JvmStatic
-	fun guardar_nuevo_objeto(item: Objeto, idpersonaje: Int) {
+	fun guardar_nuevo_objeto(item: Objeto) {
         try {
             val baseQuery = "REPLACE INTO `datos_objetos` VALUES(?,?,?,?,?,?);"
             val p = nueva_consulta(baseQuery, _dinamicos)
@@ -1100,7 +1035,7 @@ object GestorSQL {
             p.setInt(3, item.quantity)
             p.setInt(4, item.position)
             p.setString(5, item.parseToSave())
-            p.setInt(6, idpersonaje)
+            p.setInt(6, item.dueño)
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
@@ -1205,8 +1140,8 @@ object GestorSQL {
     }
 
     @JvmStatic
-	fun cargando_objetos(ids: Int) {
-        val req = "SELECT * FROM datos_objetos WHERE dueño = $ids;"
+	fun cargando_objetos() {
+        val req = "SELECT * FROM datos_objetos;"
         try {
             val RS = ejecutar_consulta(req, MainServidor.DB_DINAMICOS)
             while (RS!!.next()) {
@@ -1216,7 +1151,7 @@ object GestorSQL {
                 val pos = RS.getInt("ubicacion")
                 val stats = RS.getString("caracteristicas")
                 val dueño = RS.getInt("dueño")
-                addObjet(newObjet(guid, tempID, qua, pos, stats), dueño, false)
+                addObjet(newObjet(guid, tempID, qua, pos, stats, dueño), false)
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
@@ -1330,7 +1265,7 @@ object GestorSQL {
                         RS.getString("amigos"),
                         RS.getString("enemigos"))
                 addAccount(C)
-                ReassignAccountToChar(C)
+                getPersonajePorCuenta(C.id)
                 p.setInt(1, RS.getInt("guid"))
                 p.executeUpdate()
             }
@@ -1368,7 +1303,7 @@ object GestorSQL {
                         RS.getString("amigos"),
                         RS.getString("enemigos"))
                 addAccount(C)
-                ReassignAccountToChar(C)
+                Mundo.getPersonajePorCuenta(C.id)
                 p.setInt(1, RS.getInt("id"))
                 p.executeUpdate()
             }
@@ -1948,7 +1883,7 @@ object GestorSQL {
                         obj = t.createNewItem(1, false) //Si mis à "true" l'objet à des jets max. Sinon ce sont des jets aléatoire
                         if (obj == null) continue@loop
                         if (perso.addObjet(obj, true)) //Si le joueur n'avait pas d'item similaire
-                            addObjet(obj, perso.id,true)
+                            addObjet(obj, true)
                         JuegoServidor.addToSockLog("Objet " + nombre + " ajouter a " + perso.nombre + " avec des stats aleatoire")
                         GestorSalida.GAME_SEND_MESSAGE(perso, "L'objet \"" + t.name + "\" viens d'etre ajouter a votre personnage", couleur)
                     }
@@ -1958,7 +1893,7 @@ object GestorSQL {
                         obj = t.createNewItem(1, true) //Si mis à "true" l'objet à des jets max. Sinon ce sont des jets aléatoire
                         if (obj == null) continue@loop
                         if (perso.addObjet(obj, true)) //Si le joueur n'avait pas d'item similaire
-                            addObjet(obj, perso.id,true)
+                            addObjet(obj, true)
                         JuegoServidor.addToSockLog("Objet " + nombre + " ajoute a " + perso.nombre + " avec des stats MAX")
                         GestorSalida.GAME_SEND_MESSAGE(perso, "L'objet \"" + t.name + "\" avec des stats maximum, viens d'etre ajoute a votre personnage", couleur)
                     }
@@ -2059,7 +1994,7 @@ object GestorSQL {
                 val pos = RS.getInt("ubicacion")
                 val stats = RS.getString("caracteristicas")
                 val dueño = RS.getInt("dueño")
-                addObjet(Objeto(guid, tempID, qua, pos, stats), dueño, false)
+                addObjet(Objeto(guid, tempID, qua, pos, stats,dueño), false)
             }
             cerrar_resultado(RS)
         } catch (e: SQLException) {
@@ -2370,7 +2305,7 @@ object GestorSQL {
                 val pos = RS.getInt("ubicacion")
                 val stats = RS.getString("caracteristicas")
                 val dueño = RS.getInt("dueño")
-                addObjet(newObjet(guid, tempID, qua, pos, stats), dueño, false)
+                addObjet(newObjet(guid, tempID, qua, pos, stats, dueño), false)
             }
 
             //Load HDV entry

@@ -17,43 +17,35 @@ import objetos.Pelea.*;
 
 public class Inteligencia {
 
-	public static class IAThread implements Runnable
-	{
+	public static class IAThread implements Runnable {
 		private final Pelea _fight;
 		private final Peleador _fighter;
 		private static boolean stop = false;
 
-        public IAThread(Peleador fighter, Pelea fight)
-		{
+        public IAThread(Peleador fighter, Pelea fight) {
 			_fighter = fighter;
 			_fight = fight;
             Thread _t = new Thread(this);
 			_t.setDaemon(true);
 			_t.start();
 		}
-		public void run()
-		{
+
+		public void run() {
 			stop = false;
-			if(_fighter.getMob() == null)
-			{
-                if(_fighter.isDouble())
-                {
+			if(_fighter.getMob() == null) {
+                if(_fighter.isDouble()) {
                 	apply_type5(_fighter,_fight);
     				try {
     					Thread.sleep(2000);
     				} catch (InterruptedException ignored) {}
 					_fight.endTurn();
-                }
-                else if(_fighter.isPerco())
-				{
+                } else if(_fighter.isPerco()) {
 					apply_typePerco(_fighter,_fight);
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException ignored) {}
 					_fight.endTurn();
-				}
-				else
-				{
+				} else {
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException ignored) {}
@@ -63,8 +55,7 @@ public class Inteligencia {
 			if(_fighter.getMob().getTemplate() == null)
 			{
 				_fight.endTurn();
-			}else
-			{
+			}else {
 				switch (_fighter.getMob().getTemplate().getIAType()) {
 //Ne rien faire
 					case 0 -> apply_type0(_fighter, _fight);
@@ -97,23 +88,19 @@ public class Inteligencia {
 			stop = true;
 		}
 
-		private static void apply_type1(Peleador F, Pelea fight)
-		{
-			while(!stop && F.canPlay())
-			{
+		private static void apply_type1(Peleador F, Pelea fight) {
+			while(!stop && F.canPlay()) {
 				int PDVPER = (F.getPDV()*100)/F.getPDVMAX();
 				Peleador T = getNearestEnnemy(fight, F); // Ennemis
 				Peleador T2 = getNearestFriend(fight,F); // Amis
 				if(T == null)
 					return;
-				if(PDVPER > 15)
-				{
+				if(PDVPER > 15) {
 					int attack = attackIfPossible(fight,F);
 					if(attack != 0)//Attaque
 					{
 						if(attack == 5) stop = true;//EC
-						if(!moveToAttackIfPossible(fight,F))
-						{
+						if(!moveToAttackIfPossible(fight,F)) {
 							if(!buffIfPossible(fight,F,F))//auto-buff
 							{
 								if(!HealIfPossible(fight,F, false))//soin allié
@@ -132,9 +119,7 @@ public class Inteligencia {
 							}
 						}
 					}
-				}
-				else
-				{
+				} else {
 					if(!HealIfPossible(fight,F,true))//auto-soin
 					{
 						int attack = attackIfPossible(fight,F);
@@ -1211,50 +1196,37 @@ public class Inteligencia {
 			return ss;
 		}
 
-		private static int getBestTargetZone(Pelea fight, Peleador fighter, SortStats spell, int launchCell)
-		{
-			if(spell.getPorteeType().isEmpty() || (spell.getPorteeType().charAt(0) == 'P' && spell.getPorteeType().charAt(1) == 'a'))
-			{
+		private static int getBestTargetZone(Pelea fight, Peleador fighter, SortStats spell, int launchCell) {
+			if(spell.getPorteeType().isEmpty() || (spell.getPorteeType().charAt(0) == 'P' && spell.getPorteeType().charAt(1) == 'a')) {
 				return 0;
 			}
 			ArrayList<Case> possibleLaunch = new ArrayList<>();
 			int CellF = -1;
-			if(spell.getMaxPO() != 0)
-			{
+			if(spell.getMaxPO() != 0) {
 				char arg1 = 'a';
-				if(spell.isLineLaunch())
-				{	
+				if(spell.isLineLaunch()) {
 					arg1 = 'X';
-				}
-				else
-				{
+				} else {
 					arg1 = 'C';
 				}
 				char[] table = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v'};
 				char arg2 = 'a';
-				if(spell.getMaxPO() > 20)
-				{
+				if(spell.getMaxPO() > 20) {
 					arg2 = 'u';
-				}
-				else
-				{
+				} else {
 					arg2 = table[spell.getMaxPO()];
 				}
 				String args = Character.toString(arg1) + arg2;
 				possibleLaunch = Camino.getCellListFromAreaString(fight.get_map(),launchCell,launchCell,args,0,false);
-			}
-			else
-			{
+			} else {
 				possibleLaunch.add(fight.get_map().getMapa(launchCell));
 			}
 			
-			if(possibleLaunch == null)
-			{
+			if(possibleLaunch == null) {
 				return -1;
 			}
 			int nbTarget = 0;	
-			for(Case cell : possibleLaunch)
-			{
+			for(Case cell : possibleLaunch) {
 				try{
 					if(!fight.CanCastSpell(fighter, spell, cell, launchCell))
 						continue;
@@ -1262,8 +1234,7 @@ public class Inteligencia {
 					int curTarget = 0;
 					ArrayList<EfectoHechizo> test = new ArrayList<>(spell.getEffects());
 					
-					for(EfectoHechizo SE : test)
-					{
+					for(EfectoHechizo SE : test) {
 						try{
 							if(SE == null)
 								continue;
@@ -1295,27 +1266,22 @@ public class Inteligencia {
 				return 0;
 		}
 		
-		private static int calculInfluenceHeal(SortStats ss)
-		{
+		private static int calculInfluenceHeal(SortStats ss) {
 			int inf = 0;
-			for(EfectoHechizo SE : ss.getEffects())
-			{
+			for(EfectoHechizo SE : ss.getEffects()) {
 				if(SE.getEffectID() != 108)return 0;			
 				inf += 100 * Formulas.getMiddleJet(SE.getJet());
 			}
-			
 			return inf;
 		}
 		
-		private static int calculInfluence(Pelea fight, SortStats ss, Peleador C, Peleador T)
-		{		
+		private static int calculInfluence(Pelea fight, SortStats ss, Peleador C, Peleador T) {
 			//FIXME TODO
 			int infTot = 0;
 			double fact = 1;
 			int num = 0, POnum = 0;
 			int allies = 0, ennemies = 0;
-			for(EfectoHechizo SE : ss.getEffects())
-			{
+			for(EfectoHechizo SE : ss.getEffects()) {
 				allies = 0;
 				ennemies = 0;
 				POnum = 2*num;

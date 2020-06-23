@@ -14,10 +14,10 @@ import comunes.*;
 
 public class Cuenta {
 
-	private int _GUID;
-	private String _name;
-	private String _pass;
-	private String _pseudo;
+	private int _ID;
+	private String _nombre;
+	private String _contraseña;
+	private String _apodo;
 	private String _key;
 	private String _lastIP = "";
 	private String _question;
@@ -42,10 +42,10 @@ public class Cuenta {
 	private final Map<Integer, Personaje> _persos = new TreeMap<>();
 	
 	public Cuenta(int aGUID, String aName, String aPass, String aPseudo, String aQuestion, String aReponse, int aGmLvl, int vip, boolean aBanned, String aLastIp, String aLastConnectionDate, String bank, int bankKamas, String friends, String enemy) {
-		this._GUID 		= aGUID;
-		this._name 		= aName;
-		this._pass		= aPass;
-		this._pseudo 	= aPseudo;
+		this._ID = aGUID;
+		this._nombre = aName;
+		this._contraseña = aPass;
+		this._apodo = aPseudo;
 		this._question	= aQuestion;
 		this._reponse	= aReponse;
 		this._gmLvl		= aGmLvl;
@@ -54,7 +54,7 @@ public class Cuenta {
 		this._lastIP	= aLastIp;
 		this._lastConnectionDate = aLastConnectionDate;
 		this._bankKamas = bankKamas;
-		this._hdvsItems = Mundo.getMyItems(_GUID);
+		this._hdvsItems = Mundo.getMyItems(_ID);
 
 		//Cargando los bancos
 		for(String item : bank.split("\\|")) {
@@ -165,19 +165,19 @@ public class Cuenta {
 	}
 	
 	public int getID() {
-		return _GUID;
+		return _ID;
 	}
 	
 	public String getNombre() {
-		return _name;
+		return _nombre;
 	}
 
 	public String get_pass() {
-		return _pass;
+		return _contraseña;
 	}
 
 	public String getApodo() {
-		return _pseudo;
+		return _apodo;
 	}
 
 	public String get_key() {
@@ -230,7 +230,7 @@ public class Cuenta {
 	}
 	
 	public boolean isValidPass(String pass,String hash) {
-		return pass.equals(GestorEncriptador.CryptPassword(hash, _pass));
+		return pass.equals(GestorEncriptador.CryptPassword(hash, _contraseña));
 	}
 	
 	public int getNumeroDePersonajes() {
@@ -247,7 +247,7 @@ public class Cuenta {
 	}
 	
 	public boolean createPerso(String name, int sexe, int classe,int color1, int color2, int color3) {
-		Personaje perso = Personaje.CREATE_PERSONNAGE(name, sexe, classe, color1, color2, color3, this);
+		Personaje perso = Personaje.crear_personaje(name, sexe, classe, color1, color2, color3, this);
 		if(perso==null) {
 			return false;
 		}
@@ -272,10 +272,10 @@ public class Cuenta {
 	}
 
 	public void updateInfos(int aGUID,String aName,String aPass, String aPseudo,String aQuestion,String aReponse,int aGmLvl, boolean aBanned) {
-		this._GUID 		= aGUID;
-		this._name 		= aName;
-		this._pass		= aPass;
-		this._pseudo 	= aPseudo;
+		this._ID = aGUID;
+		this._nombre = aName;
+		this._contraseña = aPass;
+		this._apodo = aPseudo;
 		this._question	= aQuestion;
 		this._reponse	= aReponse;
 		this._gmLvl		= aGmLvl;
@@ -311,8 +311,8 @@ public class Cuenta {
 			P.resetVars();
 			if(save) GestorSQL.guardar_personaje(P,true);
 			Mundo.unloadPerso(P.getID());
-		}
-		_persos.clear();
+		}// cuando se desconecta borra los personajes no los guarda en memoria
+		//_persos.clear();
 	}
 
 	public String parseFriendList() {
@@ -326,7 +326,7 @@ public class Cuenta {
 			if(!C.isConectado())continue;
 			Personaje P = C.get_curPerso();
 			if(P == null)continue;
-			str.append(P.parseToFriendList(_GUID));
+			str.append(P.parseToFriendList(_ID));
 		}
 		return str.toString();
 	}
@@ -342,13 +342,13 @@ public class Cuenta {
 	}
 
 	public void addFriend(int guid) {
-		if(_GUID == guid) {
+		if(_ID == guid) {
 			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"Ey");
 			return;
 		}
 		if(!_friendGuids.contains(guid)) {
 			_friendGuids.add(guid);
-			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"K"+ Mundo.getCompte(guid).getApodo()+ Mundo.getCompte(guid).get_curPerso().parseToFriendList(_GUID));
+			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"K"+ Mundo.getCompte(guid).getApodo()+ Mundo.getCompte(guid).get_curPerso().parseToFriendList(_ID));
 			GestorSQL.actualizar_datos_cuenta(this);
 		}
 		else GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"Ea");
@@ -374,7 +374,7 @@ public class Cuenta {
 	}
 	
 	public void addEnemy(String packet, int guid) {
-		if(_GUID == guid) {
+		if(_ID == guid) {
 			GestorSalida.GAME_SEND_FA_PACKET(_curPerso,"Ey");
 			return;
 		}
@@ -417,7 +417,7 @@ public class Cuenta {
 			if(!C.isConectado())continue;
 			Personaje P = C.get_curPerso();
 			if(P == null)continue;
-			str.append(P.parseToEnemyList(_GUID));
+			str.append(P.parseToEnemyList(_ID));
 		}
 		return str.toString();
 	}

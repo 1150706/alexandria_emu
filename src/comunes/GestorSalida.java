@@ -144,7 +144,6 @@ public class GestorSalida {
 		String packet = "AxK31536000000";//Temps d'abonnement
 		if(number>0)
 			packet+= "|1," + number;//ServeurID
-		
 		enviar(out,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
 			RealmServer.addToSockLog("Conn: Send>>"+packet);	
@@ -930,14 +929,12 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Fight : Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_GA_PACKET_TO_FIGHT(Pelea fight, int teams, int actionID, String s1, String s2)
-	{
+	public static void GAME_SEND_GA_PACKET_TO_FIGHT(Pelea fight, int teams, int actionID, String s1, String s2) {
 		String packet = "GA;"+actionID+";"+s1;
 		if(!s2.equals(""))
 			packet+=";"+s2;
 		
-		for(Peleador f : fight.getFighters(teams))
-		{
+		for(Peleador f : fight.getFighters(teams)) {
 			if(f.hasLeft())continue;
 			if(f.getPersonnage() == null || !f.getPersonnage().isConectado())continue;
 			enviar(f.getPersonnage(),packet);

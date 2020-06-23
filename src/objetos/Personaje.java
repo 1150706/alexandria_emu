@@ -140,7 +140,7 @@ public class Personaje {
 	private final Map<Integer , Integer> _storeItems = new TreeMap<>();//<ObjID, Prix>
 	//Quêtes
     private int savestat;
-	
+
 	public static class traque {
 		private long _time;
 		private Personaje _traqued;
@@ -453,7 +453,7 @@ public class Personaje {
 	public Personaje(int _guid, String _name, int _sexe, int _classe,
 					 int _color1, int _color2, int _color3, long _kamas, int pts, int _capital, int _energy, int _lvl, long exp,
 					 int _size, int _gfxid, byte alignement, int _compte, Map<Integer,Integer> stats,
-					 byte seeFriend, byte seeAlign, byte seeSeller, String canaux, short map, int cell, String objetos, String storeObjets, int pdvPer, String spells, String savePos, String jobs,
+					 byte seeFriend, byte seeAlign, byte seeSeller, String canaux, short map, int cell, String storeObjets, int pdvPer, String spells, String savePos, String jobs,
 					 int mountXp, int mount, int honor, int deshonor, int alvl, String z, byte title, int wifeGuid)
 	{
 		this._GUID = _guid;
@@ -518,12 +518,14 @@ public class Personaje {
 			} catch (InterruptedException ignored) {}
 			MainServidor.closeServers();
 		}
-
+/*
 		if(!objetos.equals("")) {
 			if(objetos.charAt(objetos.length()-1) == '|')
 				objetos = objetos.substring(0,objetos.length()-1);
 			GestorSQL.cargando_objetos(this.getID());
-		}
+		}*/
+		_items.putAll(Mundo.getObjetoPersonaje(this.getID()));
+/*
 		for(String item : objetos.split("\\|")) {
 			if(item.equals(""))continue;
 			String[] infos = item.split(":");
@@ -536,7 +538,7 @@ public class Personaje {
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null)continue;
 			_items.put(obj.getID(), obj);
-	}
+	}*/
 
 		if(!storeObjets.equals("")) {
 			for(String _storeObjets : storeObjets.split("\\|")) {
@@ -597,20 +599,21 @@ public class Personaje {
 		this._size = _size;
 		this._gfxID = _gfxid;
 		this._baseStats = new Stats(stats,true,this);
-		if(!stuff.equals("")) {
+		/*if(!stuff.equals("")) {
 			if(stuff.charAt(stuff.length()-1) == '|')
 				stuff = stuff.substring(0,stuff.length()-1);
 			GestorSQL.cargando_objetos(this.getID());
-		}
-		for(String item : stuff.split("\\|")) {
+		}*/
+		/*for(String item : stuff.split("\\|")) {
 			if(item.equals(""))continue;
 			String[] infos = item.split(":");
 			int guid = Integer.parseInt(infos[0]);
 			Objeto obj = Mundo.getObjet(guid);
 			if( obj == null)continue;
 			_items.put(obj.getID(), obj);
-		}
-		
+		}*/
+
+		_items.putAll(Mundo.getObjetoPersonaje(this.getID()));
 		this._PDVMAX = (_lvl-1)*5+ Constantes.getBasePdv(_classe)+getTotalStats().getEffect(Constantes.STATS_ADD_VITA);
 		this._PDV = (_PDVMAX*pdvPer)/100;
 		
@@ -635,7 +638,7 @@ public class Personaje {
 		_PDV++;
 	}
 	
-	public static Personaje CREATE_PERSONNAGE(String name, int sexe, int classe, int color1, int color2, int color3, Cuenta compte) {
+	public static Personaje crear_personaje(String name, int sexe, int classe, int color1, int color2, int color3, Cuenta compte) {
 		StringBuilder z = new StringBuilder();
 		if(MainServidor.CONFIG_ZAAP) {
 			for(Entry<Integer, Integer> i : Constantes.ZAAPS.entrySet()) {
@@ -668,7 +671,6 @@ public class Personaje {
 				Constantes.getStartMap(classe),
 				Constantes.getStartCell(classe),
 				"",
-				"",
 				100,
 				"",
 				MainServidor.MAPA_INICIO_PERSONALIZADO + "," + MainServidor.CALDA_INICIO_PERSONALIZADA,
@@ -690,7 +692,6 @@ public class Personaje {
 			return null;
 		
 		Mundo.agregar_personaje(perso);
-	
 		return perso;
 	}
 
@@ -1652,6 +1653,7 @@ public class Personaje {
 				return false;
 			}
 		}
+		newObj.setDueño(this.getID());
 		_items.put(newObj.getID(), newObj);
 		GestorSalida.GAME_SEND_OAKO_PACKET(this,newObj);
 		return true;
@@ -2106,7 +2108,8 @@ public class Personaje {
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet a la banque et au monde
 				BankObj = Objeto.getCloneObjet(PersoObj, qua);
-				Mundo.addObjet(BankObj, this.getID(),true);
+				BankObj.setDueño(this.getID());
+				Mundo.addObjet(BankObj,true);
 				_compte.getBank().put(BankObj.getID(), BankObj);
 				
 				//Envoie des packets
@@ -2187,7 +2190,8 @@ public class Personaje {
 				//On crée une copy de l'item en banque
 				PersoObj = Objeto.getCloneObjet(BankObj, qua);
 				//On l'ajoute au monde
-				Mundo.addObjet(PersoObj, this.getID(),true);
+				PersoObj.setDueño(this.getID());
+				Mundo.addObjet(PersoObj,true);
 				//On retire X objet de la banque
 				BankObj.setQuantity(newQua);
 				//On l'ajoute au joueur
@@ -3029,7 +3033,6 @@ public class Personaje {
 				continue;
 			}
 		}
-		
 	}
 	
 	public traque get_traque()
@@ -3044,18 +3047,15 @@ public class Personaje {
 	
 	//Mariage
 	
-	public void MarryTo(Personaje wife)
-	{
+	public void MarryTo(Personaje wife) {
 		_wife = wife.getID();
 		GestorSQL.guardar_personaje(this,true);
 	}
 	
-	public String get_wife_friendlist()
-	{
+	public String get_wife_friendlist() {
 		Personaje wife = Mundo.getPersonnage(_wife);
 		StringBuilder str = new StringBuilder();
-		if(wife != null)
-		{
+		if(wife != null) {
 			str.append(wife.getNombre()).append("|").append(wife.getClase()+wife.getSexo()).append("|").append(wife.get_color1()).append("|").append(wife.get_color2()).append("|").append(wife.get_color3()).append("|");
 			if(!wife.isConectado()){
 				str.append("|");
@@ -3068,11 +3068,9 @@ public class Personaje {
 		return str.toString();
 	}
 	
-	public String parse_towife()
-	{
+	public String parse_towife() {
 		int f = 0;
-		if(_fight != null)
-		{
+		if(_fight != null) {
 			f = 1;
 		}
 		return _curCarte.getID() + "|" + _lvl + "|" + f;
@@ -3086,29 +3084,23 @@ public class Personaje {
 					+ (_curCarte.getY() - p.getActualMapa().getY())*(_curCarte.getY() - p.getActualMapa().getY());
 		if(dist > 100)// La distance est trop grande...
 		{
-			if(p.getSexo() == 0)
-			{
+			if(p.getSexo() == 0) {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "178");
-			}else
-			{
+			}else {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "179");
 			}
 			return;
 		}
 		
 		int cellPositiontoadd = Constantes.getNearCellidUnused(p);
-		if(cellPositiontoadd == -1)
-		{
-			if(p.getSexo() == 0)
-			{
+		if(cellPositiontoadd == -1) {
+			if(p.getSexo() == 0) {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "141");
-			}else
-			{
+			} else {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "142");
 			}
 			return;
 		}
-		
 		teletransportar(p.getActualMapa().getID(), (p.getActualCelda().getID()+cellPositiontoadd));
 	}
 	
@@ -3282,7 +3274,8 @@ public class Personaje {
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet a la banque et au monde
 				SimilarObj = Objeto.getCloneObjet(PersoObj, qua);
-				Mundo.addObjet(SimilarObj, this.getID(),true);
+				SimilarObj.setDueño(this.getID());
+				Mundo.addObjet(SimilarObj,true);
 				_storeItems.put(SimilarObj.getID(), price);
 				
 				//Envoie des packets

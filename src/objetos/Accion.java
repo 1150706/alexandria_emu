@@ -136,7 +136,7 @@ public class Accion {
 						Objeto O = T.createNewItem(count, false);
 						//Si retourne true, on l'ajoute au monde
 						if(perso.addObjet(O, true))
-							Mundo.addObjet(O, perso.getID(), true);
+							Mundo.addObjet(O, true);
 					}else {
 						perso.removeByTemplateID(tID,-count);
 					}
@@ -318,41 +318,33 @@ public class Accion {
 		    	perso.setisForgetingSpell(true);
 				GestorSalida.GAME_SEND_FORGETSPELL_INTERFACE('+', perso);
 			break;
-			case 15://Téléportation donjon
-				try
-				{
+
+			case 15://Teletransportar a mazmorra
+				try {
 					short newMapID = Short.parseShort(_argumento.split(",")[0]);
 					int newCellID = Integer.parseInt(_argumento.split(",")[1]);
 					int ObjetNeed = Integer.parseInt(_argumento.split(",")[2]);
 					int MapNeed = Integer.parseInt(_argumento.split(",")[3]);
-					if(ObjetNeed == 0)
-					{
+					if(ObjetNeed == 0) {
 						//Téléportation sans objets
 						perso.teletransportar(newMapID,newCellID);
-					}else if(ObjetNeed > 0)
-					{
-					if(MapNeed == 0)
-					{
+					}else if(ObjetNeed > 0) {
+					if(MapNeed == 0) {
 						//Téléportation sans map
 						perso.teletransportar(newMapID,newCellID);
-					}else if(MapNeed > 0)
-					{
-					if (perso.hasItemTemplate(ObjetNeed, 1) && perso.getActualMapa().getID() == MapNeed)
-					{
+					}else if(MapNeed > 0) {
+					if (perso.hasItemTemplate(ObjetNeed, 1) && perso.getActualMapa().getID() == MapNeed) {
 						//Le perso a l'item
 						//Le perso est sur la bonne map
 						//On téléporte, on supprime après
 						perso.teletransportar(newMapID,newCellID);
 						perso.removeByTemplateID(ObjetNeed, 1);
 						GestorSalida.GAME_SEND_Ow_PACKET(perso);
-					}
-					else if(perso.getActualMapa().getID() != MapNeed)
-					{
+					} else if(perso.getActualMapa().getID() != MapNeed) {
 						//Le perso n'est pas sur la bonne map
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1242");
 						GestorSalida.GAME_SEND_MESSAGE(perso, "Vous n'etes pas sur la bonne map du donjon pour etre teleporter.", "009900");
-					}
-					else
-					{
+					} else {
 						//Le perso ne possède pas l'item
 						GestorSalida.GAME_SEND_MESSAGE(perso, "Vous ne possedez pas la clef necessaire.", "009900");
 					}
@@ -361,6 +353,7 @@ public class Accion {
 				}catch(Exception e){
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
+
 			case 16://Ajout d'honneur HonorValue
 				try
 				{
@@ -398,12 +391,13 @@ public class Accion {
 					}
 				}
 			break;
+
 			case 19://Téléportation maison de guilde (ouverture du panneau de guilde)
 				GestorSalida.GAME_SEND_GUILDHOUSE_PACKET(perso);
 			break;
+
 			case 20://+Points de sorts
-				try
-				{
+				try {
 					int pts = Integer.parseInt(_argumento);
 					if(pts < 1) return;
 					perso.addAgregarPuntosDeHechizo(pts);
@@ -411,9 +405,9 @@ public class Accion {
 				}catch(Exception e){
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
+
 			case 21://+Energie
-				try
-				{
+				try {
 					int Energy = Integer.parseInt(_argumento);
 					if(Energy < 1) return;
 					
@@ -425,9 +419,9 @@ public class Accion {
 				}catch(Exception e){
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
+
 			case 22://+Xp
-				try
-				{
+				try {
 					long XpAdd = Integer.parseInt(_argumento);
 					if(XpAdd < 1) return;
 					
@@ -437,9 +431,9 @@ public class Accion {
 				}catch(Exception e){
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
+
 			case 23://UnlearnJob
-				try
-				{
+				try {
 					int Job = Integer.parseInt(_argumento);
 					if(Job < 1) return;
 					StatsMetier m = perso.getOficioPorID(Job);
@@ -564,11 +558,11 @@ public class Accion {
 					
 					//Si retourne true, on l'ajoute au monde
 					if(perso.addObjet(newObj, true)){
-						Mundo.addObjet(newObj, perso.getID(), true);
+						Mundo.addObjet(newObj, true);
 			} else {
 				perso.removeByTemplateID(T.getID(),20);
 			}
-			} else{
+			} else {
 			GestorSalida.GAME_SEND_MESSAGE(perso, "Thomas Sacre : Vous venez juste de signer un contrat, vous devez vous reposer." , "000000");
 				}
 

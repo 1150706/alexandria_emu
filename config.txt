@@ -7,7 +7,7 @@ USAR_IP = true
 HOST_IP = 127.0.0.1
 
 #Configuracion del servidor
-MOSTRAR_ENVIADOS = true
+MOSTRAR_ENVIADOS = false
 MOSTRAR_RECIBIDOS = true
 NOMBRE_DEL_SERVIDOR = Alexandria EMU
 WEB_DEL_SERVIDOR = http://privatedofus.net

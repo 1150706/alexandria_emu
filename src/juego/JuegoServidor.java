@@ -142,7 +142,7 @@ public class JuegoServidor implements Runnable{
 		}
 	}
 	
-	public ArrayList<JuegoThread> getClients() {
+	public ArrayList<JuegoThread> getClientes() {
 		return _clientes;
 	}
 
@@ -259,10 +259,10 @@ public class JuegoServidor implements Runnable{
 		return "BD"+annee+"|"+mois+"|"+jour;
 	}
 
-	public Thread getThread()
-	{
+	public Thread getThread() {
 		return _thread;
 	}
+
 	public static class AllFightsTurns
     implements Runnable {
     Timer _allFightsTurns;
@@ -274,23 +274,11 @@ public class JuegoServidor implements Runnable{
         _allFightsTurns.scheduleAtFixedRate(new TimerTask() {
           public void run() {
             try {
-              /*if (System.currentTimeMillis() - _lastFightsTurns > 3500L) {
-                SocketManager.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", "ERREUR TIMER-LAG Dans: _allFightsTurns; " + (System.currentTimeMillis() - _lastFightsTurns));
-              }*/
-              //long t = System.currentTimeMillis();
-              
-              try {
+            	try {
                 Mundo.ticAllFightersTurns();
               } catch (Exception e) {
                 GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", "ERREUR FATAL ------ No2 ---- (rar) Dans: ticAllFightersTurns(); " + e.getMessage());
               }
-
-              /*if (System.currentTimeMillis() - t > 5000L) {
-                SocketManager.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", "LAG: ticAllFightersTurns(); " + (System.currentTimeMillis() - t));
-              }*/
-              
-             // System.out.println("---- Tic! " + (System.currentTimeMillis() - _lastFightsTurns));
-              //_lastFightsTurns = System.currentTimeMillis();
             } catch (Exception e) {
               System.out.println("--------------- ERROR! " + e.getMessage());
               return;

@@ -158,10 +158,10 @@ public class Comandos {
 			String mess = 	"=========================================================\n"
 				+			"Lista de jugadores online:";
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, mess);
-			int diff = MainServidor.gameServer.getClients().size() -  30;
+			int diff = MainServidor.gameServer.getClientes().size() -  30;
 			for(byte b = 0; b < 30; b++) {
-				if(b == MainServidor.gameServer.getClients().size())break;
-				JuegoThread GT = MainServidor.gameServer.getClients().get(b);
+				if(b == MainServidor.gameServer.getClientes().size())break;
+				JuegoThread GT = MainServidor.gameServer.getClientes().get(b);
 				Personaje P = GT.getPerso();
 				if(P == null)continue;
 				mess = P.getNombre()+"("+P.getID()+") ";

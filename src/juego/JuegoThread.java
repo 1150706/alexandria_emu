@@ -3086,14 +3086,12 @@ public class JuegoThread implements Runnable {
 		return _personaje;
 	}
 	  
-	private void Basic_console(String packet)
-	{
+	private void Basic_console(String packet) {
 		if(_comandos == null) _comandos = new Comandos(_personaje);
 		_comandos.consoleCommand(packet);
 	}
 
-	public void closeSocket()
-	{
+	public void closeSocket() {
 		try {
 			this._s.close();
 		} catch (IOException ignored) {}
@@ -3115,16 +3113,21 @@ public class JuegoThread implements Runnable {
 				
 				//Comandos de los jugadores
 				if(msg.charAt(0) == '.') {
+
+					//Comando .start
 					if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("start")) {
-						if(_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES)return;
+						if(_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES){
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+							return;
+						}
 						_personaje.warpToSavePos();
 						return;
-					
-							
+
+					//Comando .vie
 					}else if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("vie")) {
 							if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-								String str = "Tu ne peux pa utiliser cette commande !";
-							GestorSalida.GAME_SEND_MESSAGE(_personaje, str, MainServidor.CONFIG_MOTD_COLOR);
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+							return;
 							}else {
 								int count = 100;
 								Personaje perso = _personaje;
@@ -3135,48 +3138,61 @@ public class JuegoThread implements Runnable {
 								}
 							return;
 							}
+
+					//Comando .astrub
 					}else if (msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("astrub")) {
 						if (_personaje.getPelea() != null|| !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+							return;
 						}else {
 							_personaje.teletransportar((short)7411, 369);
 							}
 						}
+
+					//Comando .shop
 					if (msg.length() > 4 && msg.substring(1, 5).equalsIgnoreCase("shop")) {
 						if(_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
 							return;
 						}else
 						_personaje.teletransportar(MainServidor.CONFIG_MAP_SHOP, MainServidor.CONFIG_CELL_SHOP);
 						return;
+
+					//Comando .enclos
 					}else if(msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("enclos")) {
 					    	if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-					    GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
-					    		return;
+								GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+								return;
 					    	}else
 					    		_personaje.teletransportar(MainServidor.CONFIG_ENCLOS_MAP, MainServidor.CONFIG_CELL_ENCLOS);
 					    	return;
-					    }else if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvm")) {
-						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES)
-						{
-						GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu ne peux pas utiliser cette commande !", MainServidor.CONFIG_MOTD_COLOR);
-						return;
+
+					//Comando .pvm
+					}else if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvm")) {
+						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+							return;
 						}else
 						_personaje.teletransportar(MainServidor.CONFIG_MAP_PVM, MainServidor.CONFIG_CELL_PVM);
 						return;
-					}
-					if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvp"))
-					{
-						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES)
-						{
-						GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu es en combat ou la commande est désactivée !", MainServidor.CONFIG_MOTD_COLOR);
-						return;
+
+					//Comando .pvp
+					} if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvp")) {
+						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+							return;
 						}else
 						_personaje.teletransportar(MainServidor.CONFIG_MAP_PVP, MainServidor.CONFIG_CELL_PVP);
 						return;
-					}
-						 if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("staff")) // Commande .staffonline
-						 	{
+
+						//Comando .deblo
+					} if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("deblo")) {
+						if (_personaje.getPelea() != null)
+							return;
+						_personaje.teletransportar(_personaje.getActualMapa().getID(), _personaje.getActualMapa().getRandomFreeCellID());
+
+					//Comando .staff
+					} if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("staff")) {
 						        StringBuilder staff = new StringBuilder("Membres du staff connectés :\n");
 						        boolean allOffline = true;
 						                                                    
@@ -3209,9 +3225,12 @@ public class JuegoThread implements Runnable {
 						        }
 						        return;
 						     					    }
-						if(msg.length() > 9 && msg.substring(1, 10).equalsIgnoreCase("bontarien")) //Commande bontarien
+
+					//Comando .bontarien
+						if(msg.length() > 9 && msg.substring(1, 10).equalsIgnoreCase("bontarien"))
 					if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-						GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu es en combat ou la commande est désactivée !", MainServidor.CONFIG_MOTD_COLOR);
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+						return;
 					}else {
 						byte align = 1;
 						Personaje target = _personaje;
@@ -3220,11 +3239,13 @@ public class JuegoThread implements Runnable {
 						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(target);
 						GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu es désormais Bontarien", MainServidor.CONFIG_MOTD_COLOR);
 						return;
-				}else if(msg.length() > 10 && msg.substring(1, 11).equalsIgnoreCase("brakmarien")) //Commande Brakmarien
+
+					//Comando .brakmarien
+					}else if(msg.length() > 10 && msg.substring(1, 11).equalsIgnoreCase("brakmarien")) //Commande Brakmarien
 						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu es en combat ou la commande est désactivée !", MainServidor.CONFIG_MOTD_COLOR);
-						}else
-					{
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+							return;
+						} else {
 					byte align = 2;
 					Personaje target = _personaje;
 					target.modifAlignement(align);
@@ -3234,9 +3255,11 @@ public class JuegoThread implements Runnable {
 					return;
 					}
 
+					//Comando .neutre
 					if(msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("neutre")) //Commande neutre
 						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu es en combat ou la commande est désactivée !", MainServidor.CONFIG_MOTD_COLOR);
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+							return;
 						}else {
 					byte align = 0;
 					Personaje target = _personaje;
@@ -3268,68 +3291,52 @@ public class JuegoThread implements Runnable {
 										break;
 									}
 	                            }
-	                            if(!containNeutre)
-	                            {
+	                            if(!containNeutre) {
 	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : votre arme n'a pas de dégats neutre", MainServidor.CONFIG_MOTD_COLOR);
 	                                    return;
 	                            }
 	                            
 	                            String answer;
 	                            
-	                            try
-	                            {
+	                            try {
 	                                answer = msg.substring(7, msg.length() - 1);
-	                            }
-	                            catch(Exception e)
-	                            {
+	                            } catch(Exception e) {
 	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : vous n'avez pas spécifié l'élément (air, feu, terre, eau) qui remplacera les dégats/vols de vies neutres", MainServidor.CONFIG_MOTD_COLOR);
 	                                    return;
 	                            }
 	                            
-	                            if(!answer.equalsIgnoreCase("air") && !answer.equalsIgnoreCase("terre") && !answer.equalsIgnoreCase("feu") && !answer.equalsIgnoreCase("eau"))
-	                            {
+	                            if(!answer.equalsIgnoreCase("air") && !answer.equalsIgnoreCase("terre") && !answer.equalsIgnoreCase("feu") && !answer.equalsIgnoreCase("eau")) {
 	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : l'élément " + answer + " n'existe pas ! (dispo : air, feu, terre, eau)", MainServidor.CONFIG_MOTD_COLOR);
 	                                    return;
 	                            }
 	                            
-	                            for(int i = 0; i < obj.getEffects().size(); i++)
-	                            {
-	                                    if(obj.getEffects().get(i).getEffectID() == 100)
-	                                    {
-	                                            if(answer.equalsIgnoreCase("air"))
-	                                            {
+	                            for(int i = 0; i < obj.getEffects().size(); i++) {
+	                                    if(obj.getEffects().get(i).getEffectID() == 100) {
+	                                            if(answer.equalsIgnoreCase("air")) {
 	                                                    obj.getEffects().get(i).setEffectID(98);
 	                                            }
-	                                            if(answer.equalsIgnoreCase("feu"))
-	                                            {
+	                                            if(answer.equalsIgnoreCase("feu")) {
 	                                                    obj.getEffects().get(i).setEffectID(99);
 	                                            }
-	                                            if(answer.equalsIgnoreCase("terre"))
-	                                            {
+	                                            if(answer.equalsIgnoreCase("terre")) {
 	                                                    obj.getEffects().get(i).setEffectID(97);
 	                                            }
-	                                            if(answer.equalsIgnoreCase("eau"))
-	                                            {
+	                                            if(answer.equalsIgnoreCase("eau")) {
 	                                                    obj.getEffects().get(i).setEffectID(96);
 	                                            }
 	                                    }
 	                                    
-	                                    if(obj.getEffects().get(i).getEffectID() == 95)
-	                                    {
-	                                            if(answer.equalsIgnoreCase("air"))
-	                                            {
+	                                    if(obj.getEffects().get(i).getEffectID() == 95) {
+	                                            if(answer.equalsIgnoreCase("air")) {
 	                                                    obj.getEffects().get(i).setEffectID(93);
 	                                            }
-	                                            if(answer.equalsIgnoreCase("feu"))
-	                                            {
+	                                            if(answer.equalsIgnoreCase("feu")) {
 	                                                    obj.getEffects().get(i).setEffectID(94);
 	                                            }
-	                                            if(answer.equalsIgnoreCase("terre"))
-	                                            {
+	                                            if(answer.equalsIgnoreCase("terre")) {
 	                                                    obj.getEffects().get(i).setEffectID(92);
 	                                            }
-	                                            if(answer.equalsIgnoreCase("eau"))
-	                                            {
+	                                            if(answer.equalsIgnoreCase("eau")) {
 	                                                    obj.getEffects().get(i).setEffectID(91);
 	                                            }
 	                                    }

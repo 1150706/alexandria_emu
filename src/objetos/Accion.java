@@ -502,8 +502,8 @@ public class Accion {
 					int diff = 0;
 					for(byte b = 0; b < 100; b++)
 					{
-					if(b == MainServidor.gameServer.getClients().size())break;
-					JuegoThread GT = MainServidor.gameServer.getClients().get(b);
+					if(b == MainServidor.gameServer.getClientes().size())break;
+					JuegoThread GT = MainServidor.gameServer.getClientes().get(b);
 					Personaje P = GT.getPerso();
 					if(P == null || P == perso)continue;
 					if(P.getCuenta().getActualIP().compareTo(perso.getCuenta().getActualIP()) == 0)continue;

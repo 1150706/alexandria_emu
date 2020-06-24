@@ -50,3 +50,4 @@ v0.00.5
 - Eliminada la columna objetos de la tabla datos_personajes
 - Correjido nullpoint en el movimiento automatico de los moobs del mapa
 - Eliminamos consultas obsoletas a la base de datos
+- Agregado comando .deblo al personaje por si se queda bug en alguna parte del mapa sin poder moverse

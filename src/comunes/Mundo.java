@@ -31,18 +31,18 @@ public class Mundo {
 	private static final Map<Integer, Objeto> Objetos = new TreeMap<>();
 	private static final Map<Integer,ExpLevel> Experiencias = new TreeMap<>();
 	private static final Map<Integer, Hechizos> Hechizos = new TreeMap<>();
-	private static final Map<Integer,ObjTemplate> ObjTemplates = new TreeMap<>();
-	private static final Map<Integer, Monstruo> MobTemplates = new TreeMap<>();
-	private static final Map<Integer, NPCModelo> NPCTemplates = new TreeMap<>();
-	private static final Map<Integer,NPC_question> NPCQuestions = new TreeMap<>();
-	private static final Map<Integer,NPC_reponse> NPCReponses = new TreeMap<>();
-	private static final Map<Integer,IOTemplate> IOTemplate = new TreeMap<>();
-	private static final Map<Integer, Dragopavo> Dragodindes = new TreeMap<>();
+	private static final Map<Integer,ObjTemplate> ObjetosModelos = new TreeMap<>();
+	private static final Map<Integer, Monstruo> MonstruosModelos = new TreeMap<>();
+	private static final Map<Integer, NPCModelo> NPCModelos = new TreeMap<>();
+	private static final Map<Integer,NPC_question> NPCPreguntas = new TreeMap<>();
+	private static final Map<Integer,NPC_reponse> NPCRespuestas = new TreeMap<>();
+	private static final Map<Integer, Mundo.ObjetosInteractivos> ObjetosInteractivos = new TreeMap<>();
+	private static final Map<Integer, Dragopavo> Dragopavos = new TreeMap<>();
 	private static final Map<Integer,SuperArea> SuperAreas = new TreeMap<>();
 	private static final Map<Integer,Area> Areas = new TreeMap<>();
 	private static final Map<Integer,SubArea> SubAreas = new TreeMap<>();
 	private static final Map<Integer, Oficio> Jobs = new TreeMap<>();
-	private static final Map<Integer,ArrayList<Couple<Integer,Integer>>> Crafts = new TreeMap<>();
+	private static final Map<Integer,ArrayList<Doble<Integer,Integer>>> Crafts = new TreeMap<>();
 	private static final Map<Integer,ItemSet> ItemSets = new TreeMap<>();
 	private static final Map<Integer, Gremio> Guildes = new TreeMap<>();
 	private static final Map<Integer, Mercadillo> Hdvs = new TreeMap<>();
@@ -302,46 +302,46 @@ public class Mundo {
 		}
 	}
 	
-	public static class Couple<L,R> {
-	    public final L first;
-	    public R second;
+	public static class Doble<L,R> {
+	    public final L primero;
+	    public R segundo;
 
-	    public Couple(L s, R i) {
-	         this.first = s;
-	         this.second = i;
+	    public Doble(L s, R i) {
+	         this.primero = s;
+	         this.segundo = i;
 	    }
 	}
 
-	public static class IOTemplate {
+	public static class ObjetosInteractivos {
 		private final int _id;
-		private final int _respawnTime;
-		private final int _duration;
-		private final int _unk;
-		private final boolean _walkable;
+		private final int _tiempoactualizar;
+		private final int _duracion;
+		private final int _desconocido;
+		private final boolean _caminable;
 		
-		public IOTemplate(int a_i,int a_r,int a_d,int a_u, boolean a_w) {
+		public ObjetosInteractivos(int a_i, int a_r, int a_d, int a_u, boolean a_w) {
 			_id = a_i;
-			_respawnTime = a_r;
-			_duration = a_d;
-			_unk = a_u;
-			_walkable = a_w;
+			_tiempoactualizar = a_r;
+			_duracion = a_d;
+			_desconocido = a_u;
+			_caminable = a_w;
 		}
 		
 		public int getId() {
 			return _id;
 		}	
 		public boolean isWalkable() {
-			return _walkable;
+			return _caminable;
 		}
 
 		public int getRespawnTime() {
-			return _respawnTime;
+			return _tiempoactualizar;
 		}
 		public int getDuration() {
-			return _duration;
+			return _duracion;
 		}
 		public int getUnk() {
-			return _unk;
+			return _desconocido;
 		}
 	}
 	
@@ -350,8 +350,8 @@ public class Mundo {
 		private final Personaje perso2;
 		private long kamas1 = 0;
 		private long kamas2 = 0;
-		private final ArrayList<Couple<Integer,Integer>> items1 = new ArrayList<>();
-		private final ArrayList<Couple<Integer,Integer>> items2 = new ArrayList<>();
+		private final ArrayList<Doble<Integer,Integer>> items1 = new ArrayList<>();
+		private final ArrayList<Doble<Integer,Integer>> items2 = new ArrayList<>();
 		private boolean ok1;
 		private boolean ok2;
 		
@@ -435,25 +435,25 @@ public class Mundo {
 			//Gestion des Kamas
 			perso1.addKamas((-kamas1+kamas2));
 			perso2.addKamas((-kamas2+kamas1));
-			for(Couple<Integer, Integer> couple : items1) {
-				if(couple.second == 0)continue;
-				if(!perso1.hasItemGuid(couple.first))//Si le perso n'a pas l'item (Ne devrait pas arriver)
+			for(Doble<Integer, Integer> couple : items1) {
+				if(couple.segundo == 0)continue;
+				if(!perso1.hasItemGuid(couple.primero))//Si le perso n'a pas l'item (Ne devrait pas arriver)
 				{
-					couple.second = 0;//On met la quantit? a 0 pour ?viter les problemes
+					couple.segundo = 0;//On met la quantit? a 0 pour ?viter les problemes
 					continue;
 				}	
-				Objeto obj = Mundo.getObjet(couple.first);
-				if((obj.getQuantity() - couple.second) <1)//S'il ne reste plus d'item apres l'?change
+				Objeto obj = Mundo.getObjet(couple.primero);
+				if((obj.getQuantity() - couple.segundo) <1)//S'il ne reste plus d'item apres l'?change
 				{
-					perso1.removeItem(couple.first);
-					couple.second = obj.getQuantity();
-					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(perso1, couple.first);
+					perso1.removeItem(couple.primero);
+					couple.segundo = obj.getQuantity();
+					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(perso1, couple.primero);
 					if(!perso2.addObjet(obj, true))//Si le joueur avait un item similaire
-						Mundo.removeItem(couple.first);//On supprime l'item inutile
+						Mundo.removeItem(couple.primero);//On supprime l'item inutile
 				}else {
-					obj.setQuantity(obj.getQuantity()-couple.second);
+					obj.setQuantity(obj.getQuantity()-couple.segundo);
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(perso1, obj);
-					Objeto newObj = Objeto.getCloneObjet(obj, couple.second);
+					Objeto newObj = Objeto.getCloneObjet(obj, couple.segundo);
 					if(perso2.addObjet(newObj, true)){
 						newObj.setDueño(perso2.getID());
 						Mundo.addObjet(newObj, true);//On ajoute l'item au World
@@ -461,25 +461,25 @@ public class Mundo {
 
 				}
 			}
-			for(Couple<Integer, Integer> couple : items2) {
-				if(couple.second == 0)continue;
-				if(!perso2.hasItemGuid(couple.first))//Si le perso n'a pas l'item (Ne devrait pas arriver)
+			for(Doble<Integer, Integer> couple : items2) {
+				if(couple.segundo == 0)continue;
+				if(!perso2.hasItemGuid(couple.primero))//Si le perso n'a pas l'item (Ne devrait pas arriver)
 				{
-					couple.second = 0;//On met la quantit? a 0 pour ?viter les problemes
+					couple.segundo = 0;//On met la quantit? a 0 pour ?viter les problemes
 					continue;
 				}	
-				Objeto obj = Mundo.getObjet(couple.first);
-				if((obj.getQuantity() - couple.second) <1)//S'il ne reste plus d'item apres l'?change
+				Objeto obj = Mundo.getObjet(couple.primero);
+				if((obj.getQuantity() - couple.segundo) <1)//S'il ne reste plus d'item apres l'?change
 				{
-					perso2.removeItem(couple.first);
-					couple.second = obj.getQuantity();
-					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(perso2, couple.first);
+					perso2.removeItem(couple.primero);
+					couple.segundo = obj.getQuantity();
+					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(perso2, couple.primero);
 					if(!perso1.addObjet(obj, true))//Si le joueur avait un item similaire
-						Mundo.removeItem(couple.first);//On supprime l'item inutile
+						Mundo.removeItem(couple.primero);//On supprime l'item inutile
 				}else {
-					obj.setQuantity(obj.getQuantity()-couple.second);
+					obj.setQuantity(obj.getQuantity()-couple.segundo);
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(perso2, obj);
-					Objeto newObj = Objeto.getCloneObjet(obj, couple.second);
+					Objeto newObj = Objeto.getCloneObjet(obj, couple.segundo);
 					if(perso1.addObjet(newObj, true)){//Si le joueur n'avait pas d'item similaire
 						newObj.setDueño(perso1.getID());
 						Mundo.addObjet(newObj,true);//On ajoute l'item au World
@@ -519,27 +519,27 @@ public class Mundo {
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
 			if(i == 1) {
-				Couple<Integer,Integer> couple = getCoupleInList(items1,guid);
+				Doble<Integer,Integer> couple = getCoupleInList(items1,guid);
 				if(couple != null) {
-					couple.second += qua;
-					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+couple.second);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
+					couple.segundo += qua;
+					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+couple.segundo);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+couple.segundo +add);
 					return;
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", str);
 				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", str+add);
-				items1.add(new Couple<>(guid, qua));
+				items1.add(new Doble<>(guid, qua));
 			}else if(i == 2) {
-				Couple<Integer,Integer> couple = getCoupleInList(items2,guid);
+				Doble<Integer,Integer> couple = getCoupleInList(items2,guid);
 				if(couple != null) {
-					couple.second += qua;
-					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+couple.second);
-					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+couple.second+add);
+					couple.segundo += qua;
+					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+couple.segundo);
+					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+couple.segundo +add);
 					return;
 				}
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", str);
 				GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", str+add);
-				items2.add(new Couple<>(guid, qua));
+				items2.add(new Doble<>(guid, qua));
 			}
 		}
 
@@ -562,21 +562,21 @@ public class Mundo {
 			if(obj == null)return;
 			String add = "|"+obj.getTemplate().getID()+"|"+obj.parseStatsString();
 			if(i == 1) {
-				Couple<Integer,Integer> couple = getCoupleInList(items1,guid);
-				int newQua = couple.second - qua;
+				Doble<Integer,Integer> couple = getCoupleInList(items1,guid);
+				int newQua = couple.segundo - qua;
 				if(newQua <1)//Si il n'y a pu d'item
 				{
 					items1.remove(couple);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "-", ""+guid);
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "-", ""+guid);
 				}else {
-					couple.second = newQua;
+					couple.segundo = newQua;
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso1, 'O', "+", ""+guid+"|"+newQua);
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso2.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
 				}
 			}else if(i ==2) {
-				Couple<Integer,Integer> couple = getCoupleInList(items2,guid);
-				int newQua = couple.second - qua;
+				Doble<Integer,Integer> couple = getCoupleInList(items2,guid);
+				int newQua = couple.segundo - qua;
 				
 				if(newQua <1)//Si il n'y a pu d'item
 				{
@@ -584,30 +584,30 @@ public class Mundo {
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "-", ""+guid);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "-", ""+guid);
 				}else {
-					couple.second = newQua;
+					couple.segundo = newQua;
 					GestorSalida.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(perso1.getCuenta().getJuegoThread().get_out(), 'O', "+", ""+guid+"|"+newQua+add);
 					GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'O', "+", ""+guid+"|"+newQua);
 				}
 			}
 		}
 
-		synchronized private Couple<Integer, Integer> getCoupleInList(ArrayList<Couple<Integer, Integer>> items,int guid) {
-			for(Couple<Integer, Integer> couple : items) {
-				if(couple.first == guid)
+		synchronized private Doble<Integer, Integer> getCoupleInList(ArrayList<Doble<Integer, Integer>> items, int guid) {
+			for(Doble<Integer, Integer> couple : items) {
+				if(couple.primero == guid)
 					return couple;
 			}
 			return null;
 		}
 		
 		public synchronized int getQuaItem(int itemID, int playerGuid) {
-			ArrayList<Couple<Integer, Integer>> items;
+			ArrayList<Doble<Integer, Integer>> items;
 			if(perso1.getID() == playerGuid)
 				items = items1;
 			else
 				items = items2;
-			for(Couple<Integer, Integer> curCoupl : items) {
-				if(curCoupl.first == itemID) {
-					return curCoupl.second;
+			for(Doble<Integer, Integer> curCoupl : items) {
+				if(curCoupl.primero == itemID) {
+					return curCoupl.segundo;
 				}
 			}
 			return 0;
@@ -641,19 +641,19 @@ public class Mundo {
 		System.out.println(Hechizos.size()+" hechizos cargados");
 		System.out.println("Cargando los modelo de los monstruos:");
 		GestorSQL.cargar_monstruo_modelo();
-		System.out.println(MobTemplates.size()+" modelos de monstruos cargados");
+		System.out.println(MonstruosModelos.size()+" modelos de monstruos cargados");
 		System.out.println("Cargando los modelos de los objetos:");
 		GestorSQL.cargar_objetos_modelo();
-		System.out.println(ObjTemplates.size()+" modelos de objetos cargados");
+		System.out.println(ObjetosModelos.size()+" modelos de objetos cargados");
 		System.out.println("Cargando los modelos de los NPC:");
 		GestorSQL.cargar_npc_modelo();
-		System.out.println(NPCTemplates.size()+" modelos de NPC cargados");
+		System.out.println(NPCModelos.size()+" modelos de NPC cargados");
 		System.out.println("Cargando las preguntas de los NPC:");
 		GestorSQL.cargar_preguntas_npc();
-		System.out.println(NPCQuestions.size()+" preguntas cargadas");
+		System.out.println(NPCPreguntas.size()+" preguntas cargadas");
 		System.out.println("Cargando las respuestas de los NPC:");
 		GestorSQL.cargar_respuestas_npc();
-		System.out.println(NPCReponses.size()+" respuestas cargadas");
+		System.out.println(NPCRespuestas.size()+" respuestas cargadas");
 		System.out.println("Cargando las zonas:");
 		GestorSQL.cargar_area();
 		System.out.println(Areas.size()+" zonas cargadas");
@@ -662,7 +662,7 @@ public class Mundo {
 		System.out.println(SubAreas.size()+" subzonas cargadas");
 		System.out.println("Cargando los objetos interactivos:");
 		GestorSQL.cargar_objetos_interactivos();
-		System.out.println(IOTemplate.size()+" objetos interactivos cargados");
+		System.out.println(ObjetosInteractivos.size()+" objetos interactivos cargados");
 		System.out.println("Cargando las recetas:");
 		GestorSQL.cargar_recetas();
 		System.out.println(Crafts.size()+" recetas cargadas");
@@ -715,7 +715,7 @@ public class Mundo {
 		System.out.println(Guildes.size()+" gremios cargados");
 		System.out.print("Cargando los dragopavos: ");
 		GestorSQL.cargar_montura();
-		System.out.println(Dragodindes.size()+" dragopavos cargados");
+		System.out.println(Dragopavos.size()+" dragopavos cargados");
 		System.out.print("Cargando los retos: ");
 		GestorSQL.cargar_retos();
 		System.out.println(Retos.toString().split(";").length+" retos cargados");
@@ -786,12 +786,12 @@ public class Mundo {
 	
 	public static void addNPCreponse(NPC_reponse rep)
 	{
-		NPCReponses.put(rep.get_id(), rep);
+		NPCRespuestas.put(rep.get_id(), rep);
 	}
 	
 	public static NPC_reponse getNPCreponse(int guid)
 	{
-		return NPCReponses.get(guid);
+		return NPCRespuestas.get(guid);
 	}
 	
 	public static int getExpLevelSize()
@@ -811,21 +811,21 @@ public class Mundo {
 	
 	public static void addNPCQuestion(NPC_question quest)
 	{
-		NPCQuestions.put(quest.get_id(), quest);
+		NPCPreguntas.put(quest.get_id(), quest);
 	}
 	
 	public static NPC_question getNPCQuestion(int guid)
 	{
-		return NPCQuestions.get(guid);
+		return NPCPreguntas.get(guid);
 	}
 	public static NPCModelo getNPCTemplate(int guid)
 	{
-		return NPCTemplates.get(guid);
+		return NPCModelos.get(guid);
 	}
 	
 	public static void addNpcTemplate(NPCModelo temp)
 	{
-		NPCTemplates.put(temp.getID(), temp);
+		NPCModelos.put(temp.getID(), temp);
 	}
 	
 	public static Mapa getCarte(short id)
@@ -1039,7 +1039,7 @@ public class Mundo {
 
 	public static void addObjTemplate(ObjTemplate obj)
 	{
-		ObjTemplates.put(obj.getID(), obj);
+		ObjetosModelos.put(obj.getID(), obj);
 	}
 	
 	public static Hechizos getSort(int id)
@@ -1049,7 +1049,7 @@ public class Mundo {
 
 	public static ObjTemplate getObjTemplate(int id)
 	{
-		return ObjTemplates.get(id);
+		return ObjetosModelos.get(id);
 	}
 	
 	public synchronized static int getNewItemGuid() {
@@ -1058,12 +1058,12 @@ public class Mundo {
 
 	public static void addMobTemplate(int id, Monstruo mob)
 	{
-		MobTemplates.put(id, mob);
+		MonstruosModelos.put(id, mob);
 	}
 
 	public static Monstruo getMonstre(int id)
 	{
-		return MobTemplates.get(id);
+		return MonstruosModelos.get(id);
 	}
 
 	public static List<Personaje> getOnlinePersos() {
@@ -1113,24 +1113,24 @@ public class Mundo {
 		return personajes;
 	}
 
-	public static void addIOTemplate(IOTemplate IOT)
+	public static void addIOTemplate(Mundo.ObjetosInteractivos IOT)
 	{
-		IOTemplate.put(IOT.getId(), IOT);
+		ObjetosInteractivos.put(IOT.getId(), IOT);
 	}
 	
 	public static Dragopavo getDragopavoPorID(int id)
 	{
-		return Dragodindes.get(id);
+		return Dragopavos.get(id);
 	}
 	
 	public static void addDragopavo(Dragopavo dragopavo)
 	{
-		Dragodindes.put(dragopavo.getID(), dragopavo);
+		Dragopavos.put(dragopavo.getID(), dragopavo);
 	}
 
 	public static void removeDragodinde(int DID)
 	{
-		Dragodindes.remove(DID);
+		Dragopavos.remove(DID);
 	}
 
 	public static void saveAll(Personaje saver) {
@@ -1229,9 +1229,9 @@ public class Mundo {
 		return Experiencias.get(lvl);
 	}
 
-	public static IOTemplate getIOTemplate(int id)
+	public static Mundo.ObjetosInteractivos getIOTemplate(int id)
 	{
-		return IOTemplate.get(id);
+		return ObjetosInteractivos.get(id);
 	}
 
 	public static Oficio getMetier(int id)
@@ -1244,9 +1244,9 @@ public class Mundo {
 		Jobs.put(metier.getId(), metier);
 	}
 
-	public static void addRecetas(int id, ArrayList<Couple<Integer, Integer>> m) { Crafts.put(id,m); }
+	public static void addRecetas(int id, ArrayList<Doble<Integer, Integer>> m) { Crafts.put(id,m); }
 	
-	public static ArrayList<Couple<Integer,Integer>> getCraft(int i)
+	public static ArrayList<Doble<Integer,Integer>> getCraft(int i)
 	{
 		return Crafts.get(i);
 	}
@@ -1254,16 +1254,16 @@ public class Mundo {
 	public static int getObjectByIngredientForJob( ArrayList<Integer> list, Map<Integer, Integer> ingredients) {
 		if(list == null)return -1;
 		for(int tID : list) {
-			ArrayList<Couple<Integer,Integer>> craft = Mundo.getCraft(tID);
+			ArrayList<Doble<Integer,Integer>> craft = Mundo.getCraft(tID);
 			if(craft == null) {
 				JuegoServidor.agregar_a_los_logs("/!\\Recette pour l'objet "+tID+" non existante !");
 				continue;
 			}
 			if(craft.size() != ingredients.size())continue;
 			boolean ok = true;
-			for(Couple<Integer,Integer> c : craft) {
+			for(Doble<Integer,Integer> c : craft) {
 				//si ingredient non pr?sent ou mauvaise quantit?
-				if(!ingredients.get(c.first).equals(c.second))ok = false;
+				if(!ingredients.get(c.primero).equals(c.segundo))ok = false;
 			}
 			if(ok)return tID;
 		}
@@ -1292,7 +1292,7 @@ public class Mundo {
 
 	public static int getNextIdForMount() {
 		int max = 1;
-		for(int a : Dragodindes.keySet())if(a > max)max = a;
+		for(int a : Dragopavos.keySet())if(a > max)max = a;
 		return max+1;
 	}
 
@@ -1359,7 +1359,7 @@ public class Mundo {
 
 	public static void delDragoByID(int getId)
 	{
-		Dragodindes.remove(getId);
+		Dragopavos.remove(getId);
 	}
 
 	public static void removeGuild(int id) {
@@ -1402,7 +1402,7 @@ public class Mundo {
 	public static Objeto newObjet(int Guid, int template, int qua, int pos, String strStats, int dueño) {
 		if(Mundo.getObjTemplate(template) == null) {
 			System.out.println("ItemTemplate "+template+" inexistant, GUID dans la table `items`:"+Guid);
-			MainServidor.closeServers();
+			MainServidor.cerrarservidor();
 		} 
 		
 		if(Mundo.getObjTemplate(template).getType() == 85)
@@ -1498,9 +1498,9 @@ public class Mundo {
 		return _hdvsItems.get(compteID);
 	}
 
-	public static Collection<ObjTemplate> getObjTemplates()
+	public static Collection<ObjTemplate> getObjetosModelos()
 	{
-		return ObjTemplates.values();
+		return ObjetosModelos.values();
 	}
 	
 	public static boolean mariageok(){ // Le mariage est-il ok ?

@@ -105,7 +105,7 @@ public class Comandos {
 			tiempo %= (1000*60);
 			int segundos = (int) (tiempo/(1000));
 			
-			String mess =	"===========\n"+ MainServidor.makeHeader()
+			String mess =	"===========\n"+ MainServidor.cabecerapersonalizada()
 				+			"\nTiempo online: "+dias+"D "+horas+"H "+minutos+"M "+segundos+"s\n"
 				+			"Jugadores online: "+ MainServidor.gameServer.getPlayerNumber()+"\n"
 				+			"Maximos conectados: "+ MainServidor.gameServer.getMaxPlayer()+"\n"
@@ -1593,7 +1593,7 @@ public class Comandos {
 		
 		int lastSend = 0;
 		long time1 = System.currentTimeMillis();//TIME
-		for (ObjTemplate curTemp : Mundo.getObjTemplates()){ //Boucler dans les template
+		for (ObjTemplate curTemp : Mundo.getObjetosModelos()){ //Boucler dans les template
 			try {
 				if(MainServidor.NOTINHDV.contains(curTemp.getID())) continue;
 				for (int j = 0; j < ofEachTemplate; j++) { //Ajouter plusieur fois le template

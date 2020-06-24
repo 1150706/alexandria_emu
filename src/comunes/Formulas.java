@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
-import comunes.Mundo.Couple;
+import comunes.Mundo.Doble;
 
 import objetos.*;
 import objetos.Pelea.*;
@@ -927,13 +927,13 @@ public class Formulas {
 		return base * MainServidor.HONOR;
 	}
 	
-	public static Couple<Integer, Integer> decompPierreAme(Objeto toDecomp)
+	public static Doble<Integer, Integer> decompPierreAme(Objeto toDecomp)
 	{
-		Couple<Integer, Integer> toReturn;
+		Doble<Integer, Integer> toReturn;
 		String[] stats = toDecomp.parseStatsString().split("#");
 		int lvlMax = Integer.parseInt(stats[3],16);
 		int chance = Integer.parseInt(stats[1],16);
-		toReturn = new Couple<>(chance, lvlMax);
+		toReturn = new Doble<>(chance, lvlMax);
 		
 		return toReturn;
 	}

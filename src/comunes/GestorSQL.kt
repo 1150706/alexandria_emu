@@ -3,7 +3,7 @@ package comunes
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import comunes.MainServidor.addToShopLog
-import comunes.MainServidor.closeServers
+import comunes.MainServidor.cerrarservidor
 import comunes.Mundo.*
 import juego.JuegoServidor
 import objetos.*
@@ -141,13 +141,13 @@ object GestorSQL {
         try {
             val RS = ejecutar_consulta("SELECT * FROM `datos_recetas`;", MainServidor.DB_ESTATICOS)
             while (RS!!.next()) {
-                val m = ArrayList<Couple<Int, Int>>()
+                val m = ArrayList<Doble<Int, Int>>()
                 var cont = true
                 for (str in RS.getString("recetas").split(";".toRegex()).toTypedArray()) {
                     try {
                         val tID = str.split("\\*".toRegex()).toTypedArray()[0].toInt()
                         val qua = str.split("\\*".toRegex()).toTypedArray()[1].toInt()
-                        m.add(Couple(tID, qua))
+                        m.add(Doble(tID, qua))
                     } catch (e: Exception) {
                         e.printStackTrace()
                         cont = false
@@ -305,7 +305,7 @@ object GestorSQL {
         try {
             val RS = ejecutar_consulta("SELECT * FROM datos_objetos_interactivos;", MainServidor.DB_ESTATICOS)
             while (RS!!.next()) {
-                addIOTemplate(IOTemplate(
+                addIOTemplate(ObjetosInteractivos(
                         RS.getInt("id"),
                         RS.getInt("actualizar"),
                         RS.getInt("duracion"),
@@ -532,7 +532,7 @@ object GestorSQL {
             } catch (e: SQLException) {
                 agregar_a_los_logs("SQL ERROR: " + e.message)
                 e.printStackTrace()
-                closeServers()
+                cerrarservidor()
             }
             return 0
         }
@@ -600,7 +600,7 @@ object GestorSQL {
         } catch (e: SQLException) {
             agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
-            closeServers()
+            cerrarservidor()
         }
     }
 
@@ -2230,7 +2230,7 @@ object GestorSQL {
         } catch (e: SQLException) {
             agregar_a_los_logs("SQL ERROR: " + e.message)
             e.printStackTrace()
-            closeServers()
+            cerrarservidor()
         }
         return 0
     }
@@ -2358,7 +2358,7 @@ object GestorSQL {
         var queries: PreparedStatement? = null
         try {
             queries = nueva_consulta(baseQuery, _estaticos)
-            for (curTemp in getObjTemplates()) {
+            for (curTemp in getObjetosModelos()) {
                 if (curTemp.sold == 0L) continue
                 queries.setLong(1, curTemp.sold)
                 queries.setInt(2, curTemp.avgPrice)

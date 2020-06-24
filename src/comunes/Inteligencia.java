@@ -1,7 +1,7 @@
 package comunes;
 
 import juego.JuegoServidor;
-import juego.JuegoThread.GameAction;
+import juego.JuegoThread.JuegoAccion;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -455,7 +455,7 @@ public class Inteligencia {
 				pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
 			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
-			GameAction GA = new GameAction(0,1, "");
+			JuegoAccion GA = new JuegoAccion(0,1, "");
 			GA._args = pathstr.toString();
 			boolean result = fight.fighterDeplace(F, GA);
 			try {
@@ -750,7 +750,7 @@ public class Inteligencia {
 				pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
 			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
-			GameAction GA = new GameAction(0,1, "");
+			JuegoAccion GA = new JuegoAccion(0,1, "");
 			GA._args = pathstr.toString();
 			boolean result = fight.fighterDeplace(F, GA);
 			try {
@@ -1003,7 +1003,7 @@ public class Inteligencia {
 				pathstr.append(GestorEncriptador.cellID_To_Code(curCaseID));
 			}catch(Exception e){e.printStackTrace();}
 			//Création d'une GameAction
-			GameAction GA = new GameAction(0,1, "");
+			JuegoAccion GA = new JuegoAccion(0,1, "");
 			GA._args = pathstr.toString();
 			boolean result = fight.fighterDeplace(fighter, GA);
 			try {

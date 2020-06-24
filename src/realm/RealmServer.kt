@@ -1,7 +1,7 @@
 package realm
 
 import comunes.MainServidor
-import comunes.MainServidor.closeServers
+import comunes.MainServidor.cerrarservidor
 import java.io.IOException
 import java.net.ServerSocket
 import java.util.*
@@ -79,7 +79,7 @@ class RealmServer : Runnable {
             thread!!.start()
         } catch (e: IOException) {
             agregar_a_los_logs("IOException: " + e.message)
-            closeServers()
+            cerrarservidor()
         }
     }
 }

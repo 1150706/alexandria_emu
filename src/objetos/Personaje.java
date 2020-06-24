@@ -1,7 +1,7 @@
 package objetos;
 
 import juego.JuegoServidor;
-import juego.JuegoThread.GameAction;
+import juego.JuegoThread.JuegoAccion;
 
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -496,7 +496,7 @@ public class Personaje {
 			this._curCell = _curCarte.getMapa(MainServidor.CALDA_INICIO_PERSONALIZADA);
 		}else if (_curCarte == null && Mundo.getCarte(MainServidor.MAPA_INICIO_PERSONALIZADO) == null) {
 			JuegoServidor.agregar_a_los_logs("Personnage mal positione, et position de départ non valide. Fermeture du serveur.");
-			MainServidor.closeServers();
+			MainServidor.cerrarservidor();
 		} else if(_curCarte != null) {
 			this._curCell = _curCarte.getMapa(cell);
 			if(_curCell == null) {
@@ -516,7 +516,7 @@ public class Personaje {
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException ignored) {}
-			MainServidor.closeServers();
+			MainServidor.cerrarservidor();
 		}
 /*
 		if(!objetos.equals("")) {
@@ -1950,7 +1950,7 @@ public class Personaje {
 		return nb;
 	}
 
-	public void startActionOnCell(GameAction GA) {
+	public void startActionOnCell(JuegoAccion GA) {
 		int cellID = -1;
 		int action = -1;
 		try {
@@ -1963,7 +1963,7 @@ public class Personaje {
 		_curCarte.getMapa(cellID).startAction(this,GA);
 	}
 
-	public void finishActionOnCell(GameAction GA) {
+	public void finishActionOnCell(JuegoAccion GA) {
 		int cellID = -1;
 		try {
 			cellID = Integer.parseInt(GA._args.split(";")[0]);
@@ -2345,13 +2345,13 @@ public class Personaje {
 		return _metiers;
 	}
 
-	public void doJobAction(int actionID, InteractiveObject object, GameAction GA,Case cell) {
+	public void doJobAction(int actionID, InteractiveObject object, JuegoAccion GA, Case cell) {
 		StatsMetier SM = getMetierBySkill(actionID);
 		if(SM == null)return;
 		SM.startAction(actionID,this, object,GA,cell);
 	}
 
-	public void finishJobAction(int actionID, InteractiveObject object, GameAction GA,Case cell) {
+	public void finishJobAction(int actionID, InteractiveObject object, JuegoAccion GA, Case cell) {
 		StatsMetier SM = getMetierBySkill(actionID);
 		if(SM == null)return;
 		SM.endAction(actionID,this, object,GA,cell);

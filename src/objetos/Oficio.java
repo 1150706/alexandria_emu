@@ -1,7 +1,7 @@
 package objetos;
 
 import juego.JuegoServidor;
-import juego.JuegoThread.GameAction;
+import juego.JuegoThread.JuegoAccion;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -101,7 +101,7 @@ public class Oficio {
 			return _xp;
 		}
 		
-		public void startAction(int id, Personaje P, InteractiveObject IO, GameAction GA, Case cell)
+		public void startAction(int id, Personaje P, InteractiveObject IO, JuegoAccion GA, Case cell)
 		{
 			for(JobAction JA : _posActions)
 			{
@@ -114,7 +114,7 @@ public class Oficio {
 			}
 		}
 		
-		public void endAction(int id, Personaje P, InteractiveObject IO, GameAction GA, Case cell)
+		public void endAction(int id, Personaje P, InteractiveObject IO, JuegoAccion GA, Case cell)
 		{
 			if(_curAction == null)return;
 			_curAction.endAction(P,IO,GA,cell);
@@ -236,7 +236,7 @@ public class Oficio {
             });
 		}
 		
-		public void endAction(Personaje P, InteractiveObject IO, GameAction GA, Case cell)
+		public void endAction(Personaje P, InteractiveObject IO, JuegoAccion GA, Case cell)
 		{
 			if(!_isCraft)
 			{
@@ -264,7 +264,7 @@ public class Oficio {
 			}
 		}
 
-		public void startAction(Personaje P, InteractiveObject IO, GameAction GA, Case cell)
+		public void startAction(Personaje P, InteractiveObject IO, JuegoAccion GA, Case cell)
 		{
 			_P = P;
 			if(!_isCraft)

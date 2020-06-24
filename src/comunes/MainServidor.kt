@@ -209,12 +209,11 @@ object MainServidor {
     fun main(args: Array<String>) {
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run() {
-                closeServers()
+                cerrarservidor()
             }
-        }
-        )
+        })
         println("==============================================================")
-        println(makeHeader())
+        println(cabecerapersonalizada())
         println("==============================================================\n")
         println("Cargando el archivo de configuracion:")
         CargarConfiguracion()
@@ -223,7 +222,7 @@ object MainServidor {
         println("Conectando a la base de datos:")
         if (GestorSQL.iniciar_conexion()) println("Conectado!") else {
             println("Conexion invalida")
-            closeServers()
+            cerrarservidor()
             exitProcess(0)
         }
         println("Creando el Mundo:")
@@ -238,9 +237,9 @@ object MainServidor {
         _passerTours!!.start()
         println("Lanzado!")
         println("Lanzamiento del server de juego con el puerto: $PUERTO_DE_JUEGO")
-        var Ip: String? = ""
+        var ip: String? = ""
         try {
-            Ip = InetAddress.getLocalHost().hostAddress
+            ip = InetAddress.getLocalHost().hostAddress
         } catch (e: Exception) {
             println(e.message)
             try {
@@ -249,8 +248,8 @@ object MainServidor {
             }
             exitProcess(1)
         }
-        Ip = IP
-        gameServer = JuegoServidor(Ip)
+        ip = IP
+        gameServer = JuegoServidor(ip)
         println("Lanzamiento del servidor de conexion por el puerto: $PUERTO_DE_CONEXION")
         realmServer = RealmServer()
         if (USAR_IP) println("IP del servidor $IP encriptada $GAMESERVER_IP")
@@ -522,15 +521,15 @@ object MainServidor {
     }
 
     @JvmStatic
-    fun closeServers() {
-        println("Arret du serveur demande ...")
+    fun cerrarservidor() {
+        println("Cerrando el servidor")
         if (isRunning) {
             isRunning = false
             gameServer!!.expulsar_a_todos()
             Mundo.saveAll(null)
             GestorSQL.cerrar_consulta()
         }
-        println("Arret du serveur: OK")
+        println("Servidor cerrado")
         isRunning = false
     }
 
@@ -561,7 +560,7 @@ object MainServidor {
     }
 
     @JvmStatic
-    fun makeHeader(): String {
+    fun cabecerapersonalizada(): String {
         return "Alexandria EMU - BY Player-xD - http://privatedofus.net\n" +
                 "Basado en Ancestra Remake rev47"
     }

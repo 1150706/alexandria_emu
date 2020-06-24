@@ -195,7 +195,7 @@ public class Mapa {
 		private final Case _cell;
 		private boolean _interactive = true;
 		private Timer _respawnTimer;
-		private final IOTemplate _template;
+		private final ObjetosInteractivos _template;
 		
 		public InteractiveObject(Mapa a_map, Case a_cell, int a_id) {
 			_id = a_id;
@@ -857,7 +857,7 @@ public class Mapa {
 			return null;
 		}
 
-		public void startAction(Personaje perso, GameAction GA)
+		public void startAction(Personaje perso, JuegoAccion GA)
 		{
 			int actionID = -1;
 			short CcellID = -1;
@@ -1030,7 +1030,7 @@ public class Mapa {
 			}
 		}
 
-		public void finishAction(Personaje perso, GameAction GA) {
+		public void finishAction(Personaje perso, JuegoAccion GA) {
 			int actionID = -1;
 			try {
 				actionID = Integer.parseInt(GA._args.split(";")[1]);

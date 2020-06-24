@@ -128,7 +128,7 @@ public class JuegoServidor implements Runnable{
 			_thread.start();
 		} catch (IOException e) {
 			agregar_a_los_logs("IOException: "+e.getMessage());
-			MainServidor.closeServers();
+			MainServidor.cerrarservidor();
 		}
 	}
 	
@@ -171,7 +171,7 @@ public class JuegoServidor implements Runnable{
 				agregar_a_los_logs("IOException: "+e.getMessage());
 				try {
 					if(!_SS.isClosed())_SS.close();
-					MainServidor.closeServers();
+					MainServidor.cerrarservidor();
 				} catch(IOException ignored){}
 			}
 		}

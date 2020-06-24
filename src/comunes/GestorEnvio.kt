@@ -6,23 +6,23 @@ import java.util.*
 import javax.swing.Timer
 
 object GestorEnvio {
-    private val PacketBuffer: MutableMap<Int, MutableMap<Long, Map<PrintWriter, String>>> = TreeMap() //<hachID, <PacketID, <PacketID,String>>>
-    private var packetid: Long = 1
-    private var BufferRemove = ""
-    private fun get_BufferRemove(): String {
-        return BufferRemove
+    private val paquetebuffer: MutableMap<Int, MutableMap<Long, Map<PrintWriter, String>>> = TreeMap() //<hachID, <PacketID, <PacketID,String>>>
+    private var paqueteid: Long = 1
+    private var eliminarbuffer = ""
+    private fun getEliminarBuffer(): String {
+        return eliminarbuffer
     }
 
-    private fun set_BufferRemove(str: String) {
-        BufferRemove += str
+    private fun setEliminarBuffer(str: String) {
+        eliminarbuffer += str
     }
 
     private fun del_BufferRemove() {
-        BufferRemove = ""
+        eliminarbuffer = ""
     }
 
     private fun getPacketBuffer(): Map<Int, MutableMap<Long, Map<PrintWriter, String>>> {
-        return PacketBuffer
+        return paquetebuffer
     }
 
     fun flush_timer(): Timer {
@@ -37,10 +37,10 @@ object GestorEnvio {
                         if (pw != null && pw.hashCode() == key2.hashCode()) continue
                         pw = key2
                     }
-                    set_BufferRemove("$key1,")
+                    setEliminarBuffer("$key1,")
                 }
                 if (datostotales.toString().isEmpty()) continue
-                for (id in get_BufferRemove().split(",".toRegex()).toTypedArray()) {
+                for (id in getEliminarBuffer().split(",".toRegex()).toTypedArray()) {
                     value.remove(id.toLong())
                 }
                 del_BufferRemove()
@@ -53,17 +53,17 @@ object GestorEnvio {
     }
 
     @JvmStatic
-	fun send(out: PrintWriter, packet: String) {
+	fun enviar(out: PrintWriter, packet: String) {
         if (!getPacketBuffer().containsKey(out.hashCode())) {
             val firstData: MutableMap<PrintWriter, String> = TreeMap()
             firstData[out] = packet
             val secondData: MutableMap<Long, Map<PrintWriter, String>> = TreeMap()
-            secondData[packetid++] = firstData
-            PacketBuffer[out.hashCode()] = secondData
+            secondData[paqueteid++] = firstData
+            paquetebuffer[out.hashCode()] = secondData
         } else {
             val data: MutableMap<PrintWriter, String> = TreeMap()
             data[out] = packet
-            PacketBuffer[out.hashCode()]!![packetid++] = data
+            paquetebuffer[out.hashCode()]!![paqueteid++] = data
         }
     }
 }

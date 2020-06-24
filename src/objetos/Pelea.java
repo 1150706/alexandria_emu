@@ -1,7 +1,7 @@
 package objetos;
 
 import juego.JuegoServidor;
-import juego.JuegoThread.GameAction;
+import juego.JuegoThread.JuegoAccion;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -2320,7 +2320,7 @@ public class Pelea {
 	    return this._challenges;
 	  }
 
-	public boolean fighterDeplace(Peleador f, GameAction GA)
+	public boolean fighterDeplace(Peleador f, JuegoAccion GA)
 	{
 		String path = GA._args;
 		if(path.equals(""))
@@ -2950,15 +2950,15 @@ public class Pelea {
 			    				_captureur.remove(f);
 		    					continue;
 		    				}
-			    			Couple<Integer,Integer> pierreJoueur = Formulas.decompPierreAme(f.getPersonnage().getObjetByPos(Constantes.ITEM_POS_ARME));//R?cup?re les stats de la pierre ?quipp?
+			    			Doble<Integer,Integer> pierreJoueur = Formulas.decompPierreAme(f.getPersonnage().getObjetByPos(Constantes.ITEM_POS_ARME));//R?cup?re les stats de la pierre ?quipp?
 			    			
-			    			if(pierreJoueur.second < maxLvl)	//Si la pierre est trop faible
+			    			if(pierreJoueur.segundo < maxLvl)	//Si la pierre est trop faible
 			    			{
 			    				_captureur.remove(f);
 		    					continue;
 		    				}
 			    			
-			    			int captChance = Formulas.totalCaptChance(pierreJoueur.first, f.getPersonnage());
+			    			int captChance = Formulas.totalCaptChance(pierreJoueur.primero, f.getPersonnage());
 			    			
 			    			if(Formulas.getRandomValue(1, 100) <= captChance)	//Si le joueur obtiens la capture
 			    			{

@@ -3,10 +3,10 @@ import java.util.ArrayList;
 
 import comunes.Constantes;
 import comunes.Mundo;
-import comunes.Mundo.Couple;
+import comunes.Mundo.Doble;
 
 public class PiedraAlma extends Objeto {
-	private final ArrayList<Couple<Integer, Integer>> _monsters;
+	private final ArrayList<Doble<Integer, Integer>> _monsters;
 	
 	public PiedraAlma(int Guid, int qua, int template, int pos, String strStats)
 	{
@@ -29,7 +29,7 @@ public class PiedraAlma extends Objeto {
 				int monstre = Integer.parseInt(s.split(",")[0]);
 				int level = Integer.parseInt(s.split(",")[1]);
 				
-				_monsters.add(new Couple<>(monstre, level));
+				_monsters.add(new Doble<>(monstre, level));
 				
 			}catch(Exception e){continue;}
 		}
@@ -39,14 +39,14 @@ public class PiedraAlma extends Objeto {
 	{
 		StringBuilder stats = new StringBuilder();
 		boolean isFirst = true;
-		for(Couple<Integer, Integer> coupl : _monsters)
+		for(Doble<Integer, Integer> coupl : _monsters)
 		{
 			if(!isFirst)
 				stats.append(",");
 			
 			try
 			{
-				stats.append("26f#0#0#").append(Integer.toHexString(coupl.first));
+				stats.append("26f#0#0#").append(Integer.toHexString(coupl.primero));
 			}catch(Exception e)
 			{
 				e.printStackTrace();
@@ -62,12 +62,12 @@ public class PiedraAlma extends Objeto {
 	{
 		StringBuilder toReturn = new StringBuilder();
 		boolean isFirst = true;
-		for(Couple<Integer, Integer> curMob : _monsters)
+		for(Doble<Integer, Integer> curMob : _monsters)
 		{
 			if(!isFirst)
 				toReturn.append(";");
 			
-			toReturn.append(curMob.first).append(",").append(curMob.second).append(",").append(curMob.second);
+			toReturn.append(curMob.primero).append(",").append(curMob.segundo).append(",").append(curMob.segundo);
 			
 			isFirst = false;
 		}
@@ -78,11 +78,11 @@ public class PiedraAlma extends Objeto {
 	{
 		StringBuilder toReturn = new StringBuilder();
 		boolean isFirst = true;
-		for(Couple<Integer, Integer> curMob : _monsters)
+		for(Doble<Integer, Integer> curMob : _monsters)
 		{
 			if(!isFirst)
 				toReturn.append("|");
-			toReturn.append(curMob.first).append(",").append(curMob.second);
+			toReturn.append(curMob.primero).append(",").append(curMob.segundo);
 			isFirst = false;
 		}
 		return toReturn.toString();

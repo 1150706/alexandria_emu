@@ -9,7 +9,7 @@ import java.util.Map;
 import comunes.GestorSQL;
 import comunes.GestorSalida;
 import comunes.Mundo;
-import comunes.Mundo.Couple;
+import comunes.Mundo.Doble;
 
 public class Mercadillo {
 	/**
@@ -403,7 +403,7 @@ public class Mercadillo {
 	private final short _lvlMax;
 	
 	private final Map<Integer,Categorie> _categories = new HashMap<>();
-	private final Map<Integer,Couple<Integer, Integer>> _path = new HashMap<>();	//<LigneID,<CategID,TemplateID>>
+	private final Map<Integer, Doble<Integer, Integer>> _path = new HashMap<>();	//<LigneID,<CategID,TemplateID>>
 	
 	private final DecimalFormat pattern = new DecimalFormat("0.0");
 	
@@ -463,8 +463,8 @@ public class Mercadillo {
 	
 	public Ligne getLigne(int ligneID) {
 		try {
-			int categ = _path.get(ligneID).first;
-			int template = _path.get(ligneID).second;
+			int categ = _path.get(ligneID).primero;
+			int template = _path.get(ligneID).segundo;
 			
 			return _categories.get(categ).getTemplate(template).getLigne(ligneID);
 		} catch(NullPointerException e) {
@@ -486,7 +486,7 @@ public class Mercadillo {
 		int categ = toAdd.getObjet().getTemplate().getType();
 		int template = toAdd.getObjet().getTemplate().getID();
 		_categories.get(categ).addEntry(toAdd);
-		_path.put(toAdd.getLigneID(), new Couple<>(categ, template));
+		_path.put(toAdd.getLigneID(), new Doble<>(categ, template));
 		
 		Mundo.addHdvItem(toAdd.getOwner(), _hdvID, toAdd);
 	}

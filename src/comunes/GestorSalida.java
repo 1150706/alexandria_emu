@@ -42,7 +42,7 @@ public class GestorSalida {
 		if(out != null && !paquete.equals("") && !paquete.equals(""+(char)0x00)) {
 			paquete = GestorEncriptador.toUtf(paquete);
 			if(MainServidor.CONFIG_SOCKET_USE_COMPACT_DATA) {
-				GestorEnvio.send(out, paquete);
+				GestorEnvio.enviar(out, paquete);
 			}else {
 				out.print((paquete)+(char)0x00);
 				out.flush();
@@ -54,7 +54,7 @@ public class GestorSalida {
 		if(out != null && !packet.equals("") && !packet.equals(""+(char)0x00)) {
 			packet = GestorEncriptador.toUtf(packet);
 			if(MainServidor.CONFIG_SOCKET_USE_COMPACT_DATA) {
-				GestorEnvio.send(out, packet);
+				GestorEnvio.enviar(out, packet);
 			}else {
 				out.print((packet)+(char)0x00);
 				out.flush();

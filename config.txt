@@ -8,7 +8,7 @@ HOST_IP = 127.0.0.1
 
 #Configuracion del servidor
 MOSTRAR_ENVIADOS = false
-MOSTRAR_RECIBIDOS = true
+MOSTRAR_RECIBIDOS = false
 NOMBRE_DEL_SERVIDOR = Alexandria EMU
 WEB_DEL_SERVIDOR = http://privatedofus.net
 MOTD_COLOR = FF0000
@@ -40,7 +40,7 @@ DB_PASS =
 DB_ESTATICOS = alexandria_estaticos
 DB_DINAMICOS = alexandria_dinamicos
 
-#Configuracion del juego
+#Configuracion general del juego
 LIMITE_DE_MAPAS = 13000
 MAXIMO_PERSONAJES_POR_CUENTA = 5
 USAR_MOOBS = true
@@ -50,23 +50,42 @@ CELDA_INICIO_PERSONALIZADA = 255
 NVEL_DE_INICIO = 80
 DAR_KAMAS_AL_INICIO = 5000000
 ZAAP = true
-LVL_PVP = 5000
-ALLOW_MULE_PVP = false
 MOSTRAR_AURAS = true
 #Tiempo en segundos - 1000 = 1MIN
 TIEMPO_DESCONECTAR_POR_AFK = 1000000
-TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA = 10
+TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA = 1000
 NOT_IN_HDV = 4820
-
 XP_DEFI = true
-PERMITIR_COMANDOS_JUGADORES = true
+
+#Configuracion de los dragopavos
 DD_LVL_DEPART = 100
 NOM_DD = AncestraDinde
+
+#Configuracion del PvP
+LVL_PVP = 5000
+ALLOW_MULE_PVP = false
+KAMAS_MINIMAS_GANADAS = 0
+KAMAS_MAXIMAS_GANADAS = 10000
+
+#Configuracion de Arena de combate
+MAPAS_DE_ARENA = 10134,10132,10131,10133,10137,10135,10136,10138
+TIEMPO_EN_ARENA = 600000
+
+#Configuracion de retos - Cantidad maxima 2
+NUMERO_DE_RETOS_PELEAS_NORMALES = 1
+NUMERO_DE_RETOS_EN_MAZMORRAS = 2
+
+#Configuracion de las estrellas - Bonus maximo normal 200 = 200%
+TIEMPO_AUMENTAR_ESTRELLAS = 60
+BONUS_ESTRELLAS_MAXIMO = 200
+
+#Configuracion de comandos
+PERMITIR_COMANDOS_JUGADORES = true
 
 MAP_SHOP = 7411
 CELL_SHOP = 369
 
-ENCLOS_MAP = 8746 
+ENCLOS_MAP = 8746
 CELL_ENCLOS = 369
 
 MAP_PVP = 7412
@@ -74,17 +93,3 @@ CELL_PVP = 369
 
 MAP_PVM = 7412
 CELL_PVM = 369
-
-# Arenes
-ARENA_MAP = 10134,10132,10131,10133,10137,10135,10136,10138
-ARENA_TIMER = 600000
-
-# Utilisation du SendManager (Ne pas utiliser pour le moment)
-USE_COMPACT_DATA = false
-TIME_COMPACT_DATA = 200
-
-# Sauvegarde atomatique (en secondes)
-LOAD_SAVE_DELAY = 1800
-
-# Temps pour l'apparition d'étoiles bonus (par defaut : 60)
-TIME_BONUS_ETOILES = 60

@@ -1173,14 +1173,14 @@ public class Mapa {
 	public void addEndFightAction(int type, Accion A) {
 		_endFightAction.computeIfAbsent(type, k -> new ArrayList<>());
 		//On retire l'action si elle existait déjà
-		delEndFightAction(type,A.get_id());
+		delEndFightAction(type,A.getID());
 		_endFightAction.get(type).add(A);
 	}
 
 	public void delEndFightAction(int type,int aType) {
 		if(_endFightAction.get(type) == null)return;
 		ArrayList<Accion> copy = new ArrayList<>(_endFightAction.get(type));
-		for(Accion A : copy)if(A.get_id() == aType)_endFightAction.get(type).remove(A);
+		for(Accion A : copy)if(A.getID() == aType)_endFightAction.get(type).remove(A);
 	}
 
 	public void MovimientoDeMonstruosEnMapas() {

@@ -194,7 +194,7 @@ public class NPCModelo {
 		public void addAction(Accion act)
 		{
             ArrayList<Accion> c = new ArrayList<>(_actions);
-			for(Accion a : c)if(a.get_id() == act.get_id())_actions.remove(a);
+			for(Accion a : c)if(a.getID() == act.getID())_actions.remove(a);
 			_actions.add(act);
 		}
 		
@@ -208,7 +208,7 @@ public class NPCModelo {
 		{
 			for(Accion curAct : _actions)
 			{
-				if(curAct.get_id() == 1) //1 = Discours NPC
+				if(curAct.getID() == 1) //1 = Discours NPC
 					return true;
 			}
 			

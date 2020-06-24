@@ -835,8 +835,7 @@ public class Formulas {
 		return Math.round(toGuild);
 	}
 	
-	public static long getMountXpWin(Peleador perso, AtomicReference<Long> xpWin)
-	{
+	public static long getMountXpWin(Peleador perso, AtomicReference<Long> xpWin) {
 		if(perso.getPersonnage()== null)return 0;
 		if(perso.getPersonnage().getMount() == null)return 0;
 		
@@ -870,28 +869,25 @@ public class Formulas {
 		return Math.round(xp * pToMount * coeff);
 	}
 
-	public static int getKamasWin(Peleador i, ArrayList<Peleador> winners, int maxk, int mink)
-	{
+	public static int getKamasGanadas(Peleador i, ArrayList<Peleador> winners, int maxk, int mink) {
 		maxk++;
 		int rkamas = (int)(Math.random() * (maxk-mink)) + mink;
 		return rkamas* MainServidor.KAMAS;
 	}
-	public static int getKamasWinPVP(Peleador i, ArrayList<Peleador> winners, int maxk, int mink)
-	{
+
+	public static int getKamasGanadasPvP(Peleador i, ArrayList<Peleador> winners, int maxk, int mink) {
 		maxk++;
-		int rkamas = (int)(Math.random() * (MainServidor.CONFIG_KAMASMAX- MainServidor.CONFIG_KAMASMIN)) + MainServidor.CONFIG_KAMASMIN;
+		int rkamas = (int)(Math.random() * (MainServidor.KAMAS_MAXIMAS_GANADAS - MainServidor.KAMAS_MINIMAS_GANADAS)) + MainServidor.KAMAS_MINIMAS_GANADAS;
 		return rkamas* MainServidor.KAMAS;
 	}
 	
-	public static int getKamasWinPerco(int maxk, int mink)
-	{
+	public static int getKamasGanadasRecaudadores(int maxk, int mink) {
 		maxk++;
 		int rkamas = (int)(Math.random() * (maxk-mink)) + mink;
 		return rkamas* MainServidor.KAMAS;
 	}
 	
-	public static int calculElementChangeChance(int lvlM,int lvlA,int lvlP)
-	{
+	public static int calculElementChangeChance(int lvlM,int lvlA,int lvlP) {
 		int K = 350;
 		if(lvlP == 1)K = 100;
 		else if (lvlP == 25)K = 175;
@@ -899,21 +895,18 @@ public class Formulas {
 		return (lvlM*100)/(K + lvlA);
 	}
 
-	public static int calculHonorWin(ArrayList<Peleador> winners, ArrayList<Peleador> loosers, Peleador F)
-	{
+	public static int calculHonorWin(ArrayList<Peleador> winners, ArrayList<Peleador> loosers, Peleador F) {
 		float totalGradeWin = 0;
 		float totalLevelWin = 0;
 		float totalGradeLoose = 0;
 		float totalLevelLoose = 0;
-		for(Peleador f : winners)
-		{
+		for(Peleador f : winners) {
 			if(f.getPersonnage() == null )continue;
 			totalLevelWin += f.get_lvl();
 			totalGradeWin += f.getPersonnage().getGrade();
 
 		}
-		for(Peleador f : loosers)
-		{
+		for(Peleador f : loosers) {
 			if(f.getPersonnage() == null)continue;
 			totalLevelLoose += f.get_lvl();
 			totalGradeLoose += f.getPersonnage().getGrade();
@@ -927,8 +920,7 @@ public class Formulas {
 		return base * MainServidor.HONOR;
 	}
 	
-	public static Doble<Integer, Integer> decompPierreAme(Objeto toDecomp)
-	{
+	public static Doble<Integer, Integer> decompPierreAme(Objeto toDecomp) {
 		Doble<Integer, Integer> toReturn;
 		String[] stats = toDecomp.parseStatsString().split("#");
 		int lvlMax = Integer.parseInt(stats[3],16);
@@ -938,8 +930,7 @@ public class Formulas {
 		return toReturn;
 	}
 	
-	public static int totalCaptChance(int pierreChance, Personaje p)
-	{
+	public static int totalCaptChance(int pierreChance, Personaje p) {
 		int sortChance = switch (p.getSortStatBySortIfHas(413).getLevel()) {
 			case 1 -> 1;
 			case 2 -> 3;
@@ -953,8 +944,7 @@ public class Formulas {
 		return sortChance + pierreChance;
 	}
 	
-	public static String parseReponse(String reponse)
-	{
+	public static String parseReponse(String reponse) {
 		StringBuilder toReturn = new StringBuilder();
 		
 		String[] cut = reponse.split("[%]");
@@ -964,8 +954,7 @@ public class Formulas {
 		toReturn.append(cut[0]);
 		
 		char charact;
-		for (int i = 1; i < cut.length; i++)
-		{
+		for (int i = 1; i < cut.length; i++) {
 			charact = (char) Integer.parseInt(cut[i].substring(0, 2),16);
 			toReturn.append(charact).append(cut[i].substring(2));
 		}
@@ -973,19 +962,15 @@ public class Formulas {
 		return toReturn.toString();
 	}
 	
-	public static int spellCost(int nb)
-	{
+	public static int spellCost(int nb) {
 		int total = 0;
-		for (int i = 1; i < nb ; i++)
-		{
+		for (int i = 1; i < nb ; i++) {
 			total += i;
 		}
-		
 		return total;
 	}
 	
-	public static int ChanceFM(int poidItemBase, int poidItemActual, int poidBaseJet, int poidActualJet, double poidRune, int Puis, double Coef)
-	{
+	public static int ChanceFM(int poidItemBase, int poidItemActual, int poidBaseJet, int poidActualJet, double poidRune, int Puis, double Coef) {
 		int Chance = 0;
 		int a = (poidItemBase+poidBaseJet+(Puis*2));
 		int b = (int) (Math.sqrt(poidItemActual+poidActualJet+poidRune));
@@ -998,8 +983,7 @@ public class Formulas {
 		return Chance;
 	}
 	
-	public static int getTraqueXP(int lvl)
-	{
+	public static int getTraqueXP(int lvl) {
 		if(lvl < 50)return 10000 * MainServidor.XP_PVM;
 		if(lvl < 60)return 65000 * MainServidor.XP_PVM;
 		if(lvl < 70)return 90000 * MainServidor.XP_PVM;
@@ -1024,8 +1008,7 @@ public class Formulas {
 		return 0;
 	}
 	
-	public static int getLoosEnergy(int lvl, boolean isAgression, boolean isPerco)
-	{
+	public static int getLoosEnergy(int lvl, boolean isAgression, boolean isPerco) {
 		int returned = 25*lvl;
 		if(isAgression) returned *= (7.0 /4);
 		if(isPerco) returned *= (3.0 /2);

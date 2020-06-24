@@ -322,7 +322,7 @@ public class Monstruo {
 					condition = "";
 					
 				}
-			}, MainServidor.CONFIG_ARENA_TIMER);
+			}, MainServidor.TIEMPO_EN_ARENA);
 		}
 		public void stopConditionTimer()
 		{
@@ -340,10 +340,10 @@ public class Monstruo {
 		}
 		// méthode utilisée pour avoir le bonus en étoiles
 		public int get_bonusValue() {
-			int toReturn = (int)get_timeElapsedInSeconds()/ MainServidor.CONFIG_SECONDS_FOR_BONUS;
-			if(toReturn > MainServidor.CONFIG_BONUS_MAX)
-				toReturn = MainServidor.CONFIG_BONUS_MAX;
-			return (int)get_timeElapsedInSeconds()/ MainServidor.CONFIG_SECONDS_FOR_BONUS;
+			int toReturn = (int)get_timeElapsedInSeconds()/ MainServidor.TIEMPO_AUMENTAR_ESTRELLAS;
+			if(toReturn > MainServidor.BONUS_ESTRELLAS_MAXIMO)
+				toReturn = MainServidor.BONUS_ESTRELLAS_MAXIMO;
+			return (int)get_timeElapsedInSeconds()/ MainServidor.TIEMPO_AUMENTAR_ESTRELLAS;
 		}	
 			
 	}

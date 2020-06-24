@@ -86,9 +86,9 @@ object MainServidor {
     @JvmField
     var LIMITE_DE_MAPAS = 20000
     @JvmField
-    var CONFIG_KAMASMIN = 101
+    var KAMAS_MINIMAS_GANADAS = 101
     @JvmField
-    var CONFIG_KAMASMAX = 10000
+    var KAMAS_MAXIMAS_GANADAS = 10000
     @JvmField
     var TIEMPO_DE_GUARDADO = 10 * 60 * 10000
     @JvmField
@@ -164,9 +164,9 @@ object MainServidor {
     var _passerTours: Thread? = null
     //Arene
     @JvmField
-    var arenaMap = ArrayList<Int>(8)
+    var mapasarena = ArrayList<Int>(8)
     @JvmField
-    var CONFIG_ARENA_TIMER = 10 * 60 * 1000 // 10 minutes
+    var TIEMPO_EN_ARENA = 10 * 60 * 1000 // 10 minutes
     @JvmField
     var TIEMPO_DESCONECTAR_POR_AFK = 10 * 60 * 1000 // 10 minutes
     //HDV
@@ -177,31 +177,24 @@ object MainServidor {
     var CONFIG_SOCKET_USE_COMPACT_DATA = false
     @JvmField
     var CONFIG_SOCKET_TIME_COMPACT_DATA = 200
-    //Guilde
     @JvmField
     var MEMBRE_MINI_GUILDE_VALIDE = 1
-    //Challenges et Etoiles
     @JvmField
-    var CONFIG_CHALLENGE_NUMBER = 1
+    var NUMERO_DE_RETOS_PELEAS_NORMALES = 1
     @JvmField
-    var CONFIG_INDUNGEON_CHALLENGE = 2
+    var NUMERO_DE_RETOS_EN_MAZMORRAS = 2
     @JvmField
-    var CONFIG_SECONDS_FOR_BONUS = 60
+    var TIEMPO_AUMENTAR_ESTRELLAS = 60
     @JvmField
-    var CONFIG_BONUS_MAX = 400
-    // Temps en combat
+    var BONUS_ESTRELLAS_MAXIMO = 400
     @JvmField
     var CONFIG_MS_PER_TURN: Long = 30000
     @JvmField
     var CONFIG_MS_FOR_START_FIGHT: Long = 45000
-    // Taille Percepteur
     @JvmField
     var CONFIG_TAILLE_VAR = true
-    // Qu�tes
     @JvmField
     var ari = "7695;1;1500;1500|"
-
-    // Montilier
     @JvmField
     var CONFIG_MONTILIER_ID = 30000
 
@@ -280,18 +273,18 @@ object MainServidor {
                     if (value.equals("true", ignoreCase = true)) {
                         ENVIAR_POLITICA_DE_PRIVACIDAD = true
                     }
-                } else if (param.equals("CHALLENGE_NUMBER", ignoreCase = true)) {
-                    CONFIG_CHALLENGE_NUMBER = value.toInt()
-                    if (CONFIG_CHALLENGE_NUMBER < 0) CONFIG_CHALLENGE_NUMBER = 0
-                    if (CONFIG_CHALLENGE_NUMBER > 4) CONFIG_CHALLENGE_NUMBER = 4
-                } else if (param.equals("INDUNGEON_CHALLENGE", ignoreCase = true)) {
-                    CONFIG_INDUNGEON_CHALLENGE = value.toInt()
-                    if (CONFIG_INDUNGEON_CHALLENGE < 0) CONFIG_INDUNGEON_CHALLENGE = 0
-                    if (CONFIG_INDUNGEON_CHALLENGE > 5) CONFIG_INDUNGEON_CHALLENGE = 5
-                } else if (param.equals("BONUS_MAX", ignoreCase = true)) {
-                    CONFIG_BONUS_MAX = value.toInt()
-                    if (CONFIG_BONUS_MAX < 0) CONFIG_BONUS_MAX = 0
-                    if (CONFIG_BONUS_MAX > 1000) CONFIG_BONUS_MAX = 1000
+                } else if (param.equals("NUMERO_DE_RETOS_PELEAS_NORMALES", ignoreCase = true)) {
+                    NUMERO_DE_RETOS_PELEAS_NORMALES = value.toInt()
+                    if (NUMERO_DE_RETOS_PELEAS_NORMALES < 0) NUMERO_DE_RETOS_PELEAS_NORMALES = 0
+                    if (NUMERO_DE_RETOS_PELEAS_NORMALES > 4) NUMERO_DE_RETOS_PELEAS_NORMALES = 4
+                } else if (param.equals("NUMERO_DE_RETOS_EN_MAZMORRAS", ignoreCase = true)) {
+                    NUMERO_DE_RETOS_EN_MAZMORRAS = value.toInt()
+                    if (NUMERO_DE_RETOS_EN_MAZMORRAS < 0) NUMERO_DE_RETOS_EN_MAZMORRAS = 0
+                    if (NUMERO_DE_RETOS_EN_MAZMORRAS > 5) NUMERO_DE_RETOS_EN_MAZMORRAS = 5
+                } else if (param.equals("BONUS_ESTRELLAS_MAXIMO", ignoreCase = true)) {
+                    BONUS_ESTRELLAS_MAXIMO = value.toInt()
+                    if (BONUS_ESTRELLAS_MAXIMO < 0) BONUS_ESTRELLAS_MAXIMO = 0
+                    if (BONUS_ESTRELLAS_MAXIMO > 1000) BONUS_ESTRELLAS_MAXIMO = 1000
                 } else if (param.equals("SECONDS_PER_TURN", ignoreCase = true)) {
                     CONFIG_MS_PER_TURN = value.toInt().toLong()
                     if (CONFIG_MS_PER_TURN < 1) CONFIG_MS_PER_TURN = 1
@@ -302,10 +295,10 @@ object MainServidor {
                     if (CONFIG_MS_FOR_START_FIGHT < 1) CONFIG_MS_FOR_START_FIGHT = 1
                     if (CONFIG_MS_FOR_START_FIGHT > 300) CONFIG_MS_FOR_START_FIGHT = 300
                     CONFIG_MS_FOR_START_FIGHT *= 1000
-                } else if (param.equals("SECONDS_FOR_BONUS", ignoreCase = true)) {
-                    CONFIG_SECONDS_FOR_BONUS = value.toInt()
-                    if (CONFIG_SECONDS_FOR_BONUS < 1) CONFIG_SECONDS_FOR_BONUS = 1
-                    if (CONFIG_SECONDS_FOR_BONUS > 3600) CONFIG_SECONDS_FOR_BONUS = 3600
+                } else if (param.equals("TIEMPO_AUMENTAR_ESTRELLAS", ignoreCase = true)) {
+                    TIEMPO_AUMENTAR_ESTRELLAS = value.toInt()
+                    if (TIEMPO_AUMENTAR_ESTRELLAS < 1) TIEMPO_AUMENTAR_ESTRELLAS = 1
+                    if (TIEMPO_AUMENTAR_ESTRELLAS > 3600) TIEMPO_AUMENTAR_ESTRELLAS = 3600
                 } else if (param.equals("MONTILIER_ID", ignoreCase = true)) {
                     CONFIG_MONTILIER_ID = value.toInt()
                     if (CONFIG_MONTILIER_ID < 1) CONFIG_MONTILIER_ID = 1
@@ -331,14 +324,14 @@ object MainServidor {
                     if (DAR_KAMAS_AL_INICIO > 1000000000) DAR_KAMAS_AL_INICIO = 1000000000
                 } else if (param.equals("LIMITE_DE_MAPAS", ignoreCase = true)) {
                     LIMITE_DE_MAPAS = value.toInt()
-                } else if (param.equals("KAMASMAX", ignoreCase = true)) {
-                    CONFIG_KAMASMAX = value.toInt()
-                    if (CONFIG_KAMASMAX < 0) CONFIG_KAMASMAX = 0
-                    if (CONFIG_KAMASMAX > 1000000000) CONFIG_KAMASMAX = 1000000000
-                } else if (param.equals("KAMASMIN", ignoreCase = true)) {
-                    CONFIG_KAMASMIN = value.toInt()
-                    if (CONFIG_KAMASMIN < 0) CONFIG_KAMASMIN = 0
-                    if (CONFIG_KAMASMIN > 1000000000) CONFIG_KAMASMIN = 1000000000
+                } else if (param.equals("KAMAS_MAXIMAS_GANADAS", ignoreCase = true)) {
+                    KAMAS_MAXIMAS_GANADAS = value.toInt()
+                    if (KAMAS_MAXIMAS_GANADAS < 0) KAMAS_MAXIMAS_GANADAS = 0
+                    if (KAMAS_MAXIMAS_GANADAS > 1000000000) KAMAS_MAXIMAS_GANADAS = 1000000000
+                } else if (param.equals("KAMAS_MINIMAS_GANADAS", ignoreCase = true)) {
+                    KAMAS_MINIMAS_GANADAS = value.toInt()
+                    if (KAMAS_MINIMAS_GANADAS < 0) KAMAS_MINIMAS_GANADAS = 0
+                    if (KAMAS_MINIMAS_GANADAS > 1000000000) KAMAS_MINIMAS_GANADAS = 1000000000
                 } else if (param.equals("NVEL_DE_INICIO", ignoreCase = true)) {
                     NIVEL_DE_INICIO = value.toInt()
                     if (NIVEL_DE_INICIO < 1) NIVEL_DE_INICIO = 1
@@ -440,12 +433,12 @@ object MainServidor {
                     TIEMPO_ENVIO_PUBLICIDAD_AUTOMATICA = value.toInt() * 1000
                 } else if (param.equals("MAXIMO_DE_CONECTADOS", ignoreCase = true)) {
                     MAXIMO_DE_CONECTADOS = value.toInt()
-                } else if (param.equals("ARENA_MAP", ignoreCase = true)) {
+                } else if (param.equals("MAPAS_DE_ARENA", ignoreCase = true)) {
                     for (curID in value.split(",".toRegex()).toTypedArray()) {
-                        arenaMap.add(curID.toInt())
+                        mapasarena.add(curID.toInt())
                     }
-                } else if (param.equals("ARENA_TIMER", ignoreCase = true)) {
-                    CONFIG_ARENA_TIMER = value.toInt()
+                } else if (param.equals("TIEMPO_EN_ARENA", ignoreCase = true)) {
+                    TIEMPO_EN_ARENA = value.toInt()
                 } else if (param.equals("MOSTRAR_AURAS", ignoreCase = true)) {
                     MOSTRAR_AURAS = value.equals("true", ignoreCase = true)
                 } else if (param.equals("ALLOW_MULE_PVP", ignoreCase = true)) {

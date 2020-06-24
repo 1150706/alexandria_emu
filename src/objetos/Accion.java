@@ -571,33 +571,30 @@ public class Accion {
 				String perr = "";
 				
 				perr = Mundo.getObjet(itemID).getTraquedName();
-				if(perr == null)
-				{
+				if(perr == null) {
 					break;	
 				}
 				Personaje cible = Mundo.getPersonajePorNombre(perr);
 				if(cible==null)break;
-				if(!cible.isConectado())
-				{
+				if(!cible.isConectado()) {
 					GestorSalida.GAME_SEND_MESSAGE(perso, "Ce joueur n'est pas connecte." , "000000");
 					break;
 				}
 				GestorSalida.GAME_SEND_FLAG_PACKET(perso, cible);
 			break;
+
 			case 52://recompenser pour traque
-				if(perso.get_traque() != null && perso.get_traque().get_time() == -2)
-				{
+				if(perso.get_traque() != null && perso.get_traque().get_time() == -2) {
 					int xp = Formulas.getTraqueXP(perso.get_lvl());
 					perso.addXp(xp);
 					perso.set_traque(null);//On supprime la traque
 					GestorSalida.GAME_SEND_MESSAGE(perso, "Vous venez de recevoir "+xp+" points d'experiences." , "000000");
-				}
-				else
-				{
+				} else {
 					GestorSalida.GAME_SEND_MESSAGE(perso, "Thomas Sacre : Reviens me voir quand tu aura abatu un ennemi." , "000000");
 				}
 
 			break;
+
 			case 100://Donner l'abilité 'args' à une dragodinde
                 Dragopavo dragopavo = perso.getMount();
                 Mundo.addDragopavo(new Dragopavo(
@@ -712,8 +709,7 @@ public class Accion {
 				break;
 
 			case 228://Faire animation Hors Combat
-				try
-				{
+				try {
 					int AnimationId = Integer.parseInt(_argumento);
 					Animaciones animation = Mundo.getAnimation(AnimationId);
 					if(perso.getPelea() != null) return;
@@ -723,13 +719,12 @@ public class Accion {
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;
 			default:
-				JuegoServidor.agregar_a_los_logs("Action ID="+ _id +" non implantee");
+				JuegoServidor.agregar_a_los_logs("Accion ID: "+ _id +" no implementada.");
 			break;
 		}
 	}
 
-
-	public int get_id()
+	public int getID()
 	{
 		return _id;
 	}

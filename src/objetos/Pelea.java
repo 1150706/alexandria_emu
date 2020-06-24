@@ -1735,7 +1735,7 @@ public class Pelea {
 	    	  
 	    	  String[] chalInfo;
 	    	  int challengeID, challengeXP, challengeDP, bonusGroupe;
-	    	  int challengeNumber = (inDungeon ? MainServidor.CONFIG_INDUNGEON_CHALLENGE : MainServidor.CONFIG_CHALLENGE_NUMBER);
+	    	  int challengeNumber = (inDungeon ? MainServidor.NUMERO_DE_RETOS_EN_MAZMORRAS : MainServidor.NUMERO_DE_RETOS_PELEAS_NORMALES);
 	    	  
 	    	  for(String chalInfos : Mundo.getRandomChallenge(challengeNumber, challenges)) {
 	    		  chalInfo = chalInfos.split(",");
@@ -3004,7 +3004,7 @@ public class Pelea {
               	      long xp = Formulas.XPDefie(i, TEAM1, TEAM2);
                         XP.set(Long.valueOf(xp));
                         guildxp = Formulas.getGuildXpWin(i, XP);
-                        int winKamas = Formulas.getKamasWinPVP(i, TEAM1, minkamas, maxkamas);
+                        int winKamas = Formulas.getKamasGanadasPvP(i, TEAM1, minkamas, maxkamas);
                         if ((i.getPersonnage() != null) && (i.getPersonnage().isOnMount()))
                         {
                           mountxp = Formulas.getMountXpWin(i,XP);
@@ -3013,7 +3013,7 @@ public class Pelea {
                         }
                 }
                 
-        		int winKamas	= Formulas.getKamasWin(i,TEAM1,minkamas,maxkamas);
+        		int winKamas	= Formulas.getKamasGanadas(i,TEAM1,minkamas,maxkamas);
         		StringBuilder drops = new StringBuilder();
         		//Drop system
 
@@ -3160,7 +3160,7 @@ public class Pelea {
 		{
 			Recaudador p = Recaudador.GetPercoByMapID(_map.getID());
 			long winxp 	= (int)Math.floor(Formulas.getXpWinPerco(p,TEAM1,TEAM2,totalXP)/100);
-			long winkamas 	= (int)Math.floor(Formulas.getKamasWinPerco(minkamas,maxkamas)/100);
+			long winkamas 	= (int)Math.floor(Formulas.getKamasGanadasRecaudadores(minkamas,maxkamas)/100);
 			p.setXp(p.getXp()+winxp);
 			p.setKamas(p.getKamas()+winkamas);
 			Packet.append("5;").append(p.getGuid()).append(";").append(p.get_N1()).append(",").append(p.get_N2()).append(";").append(Mundo.getGuild(p.get_guildID()).get_lvl()).append(";0;");

@@ -1392,7 +1392,7 @@ public class Mundo {
 	}
 	
 	public static boolean isArenaMap(int mapID) {
-		for(int curID : MainServidor.arenaMap) {
+		for(int curID : MainServidor.mapasarena) {
 			if(curID == mapID)
 				return true;
 		}

@@ -52,3 +52,6 @@ JRE Bell-Soft: <a href="https://download.bell-sw.com/java/14.0.1+8/bellsoft-jre1
 - Eliminada la columna objetos de la tabla datos_personajes
 - Correjido nullpoint en el movimiento automatico de los moobs del mapa
 - Eliminamos consultas obsoletas a la base de datos
+
+<b>v0.00.6</b>
+- Comandos de los jugadores totalmente personalizables desde la base de datos (Creditos: JEAUX)

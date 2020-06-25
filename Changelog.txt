@@ -51,3 +51,6 @@ v0.00.5
 - Correjido nullpoint en el movimiento automatico de los moobs del mapa
 - Eliminamos consultas obsoletas a la base de datos
 - Agregado comando .deblo al personaje por si se queda bug en alguna parte del mapa sin poder moverse
+
+v0.00.6
+- Comandos de los jugadores totalmente personalizables desde la base de datos (Creditos: JEAUX)

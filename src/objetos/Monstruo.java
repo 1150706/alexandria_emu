@@ -38,8 +38,7 @@ public class Monstruo {
 	private boolean ThereIsAmand;
 	private boolean ThereIsDore;
 	
-	public static class MobGroup
-	{
+	public static class MobGroup {
 		private final int id;
 		private int cellID;
 		private int orientation = 2;
@@ -51,8 +50,7 @@ public class Monstruo {
 		private Timer _condTimer;
 		private final long _creationDate;
 
-		public MobGroup(int Aid, int Aalign, ArrayList<MobGrade> possibles, Mapa Map, int cell, int maxSize)
-		{
+		public MobGroup(int Aid, int Aalign, ArrayList<MobGrade> possibles, Mapa Map, int cell, int maxSize) {
 			id = Aid;
 			align = Aalign;
 			//Détermination du nombre de mob du groupe

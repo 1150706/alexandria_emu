@@ -191,27 +191,22 @@ public class NPCModelo {
 			return _id;
 		}
 		
-		public void addAction(Accion act)
-		{
+		public void addAction(Accion act) {
             ArrayList<Accion> c = new ArrayList<>(_actions);
 			for(Accion a : c)if(a.getID() == act.getID())_actions.remove(a);
 			_actions.add(act);
 		}
 		
-		public void apply(Personaje perso)
-		{
+		public void apply(Personaje perso) {
 			for(Accion act : _actions)
 			act.apply(perso, null, -1, -1);
 		}
 		
-		public boolean isAnotherDialog()
-		{
-			for(Accion curAct : _actions)
-			{
+		public boolean isAnotherDialog() {
+			for(Accion curAct : _actions) {
 				if(curAct.getID() == 1) //1 = Discours NPC
 					return true;
 			}
-			
 			return false;
 		}
 	}

@@ -1607,7 +1607,7 @@ public class Comandos {
 					amount = (byte) Formulas.getRandomValue(1, 3);
 					
 					
-					entry = new HdvEntry(calculPrice(objet,amount), amount, -1, objet);
+					entry = new HdvEntry(CalcularPrecio(objet,amount), amount, -1, objet);
 					objet.setQuantity(entry.getAmount(true));
 					
 					
@@ -1894,7 +1894,7 @@ public class Comandos {
 		}
 	}
 
-	private int calculPrice(Objeto obj, int logAmount) {
+	private int CalcularPrecio(Objeto obj, int logAmount) {
 		int amount = (byte)(Math.pow(10, logAmount) / 10);
 		int stats = 0;
 		

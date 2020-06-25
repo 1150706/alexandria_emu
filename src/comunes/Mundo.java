@@ -57,6 +57,7 @@ public class Mundo {
 	public static final Map<Integer, Misiones.Step> Steps = new TreeMap<>();
 	public static final Map<Integer, Misiones> Quests = new TreeMap<>();
 	public static final ArrayList<String> Publicidad = new ArrayList<>();
+	public static final Map<String, ComandosJugadores> ComandosJugadores = new TreeMap<>();
 	 
 	private static int nextHdvID;	//Contient le derniere ID utilis? pour cr?e un HDV, pour obtenir un ID non utilis? il faut imp?rativement l'incr?menter
 	private static int nextLigneID;	//Contient le derniere ID utilis? pour cr?e une ligne dans un HDV
@@ -701,6 +702,9 @@ public class Mundo {
 		System.out.print("Cargando las ID maximas: ");
 		GestorSQL.cargar_maximo_de_objetos();
 		System.out.println("Cargado!");
+		System.out.print("Cargando los comandos de jugadores: ");
+		GestorSQL.cargar_comandos_jugadores();
+		System.out.println(ComandosJugadores.size()+" comandos cargados");
 		System.out.print("Cargando objetos de los personajes: ");
 		GestorSQL.cargando_objetos();
 		System.out.println(Objetos.size()+" objetos cargados");
@@ -855,7 +859,11 @@ public class Mundo {
 		Cuentas.put(compte.getID(), compte);
 		CuentaPorNombre.put(compte.getNombre().toLowerCase(), compte.getID());
 	}
-	
+
+	public static void addComandoJugador(ComandosJugadores comando) {
+		ComandosJugadores.put(comando.getNombre(), comando);
+	}
+
 	public static void addChallenge(String chal) {
 		//ChalID,gainXP,gainDrop,gainParMob,Conditions;...
 		if(!Retos.toString().isEmpty())

@@ -520,6 +520,26 @@ object GestorSQL {
     }
 
     @JvmStatic
+    fun cargar_comandos_jugadores() {
+        try {
+            val RS = ejecutar_consulta("SELECT * FROM datos_comandos_jugador;", MainServidor.DB_ESTATICOS)
+            while (RS!!.next()) {
+                val cmdjugadores = ComandosJugadores(
+                        RS.getInt("id"),
+                        RS.getString("nombre"),
+                        RS.getInt("accion"),
+                        RS.getString("argumento"),
+                        RS.getString("habilitado"))
+                addComandoJugador(cmdjugadores)
+            }
+            cerrar_resultado(RS)
+        } catch (e: SQLException) {
+            agregar_a_los_logs("SQL ERROR: " + e.message)
+            e.printStackTrace()
+        }
+    }
+
+    @JvmStatic
 	val siguienteIDPersonaje: Int
         get() {
             try {

@@ -460,11 +460,11 @@ public class JuegoThread implements Runnable {
 			}
 //Creation
 			case 'C' -> guild_create(packet);
-//T�l�portation enclo de guilde
+//Tï¿½lï¿½portation enclo de guilde
 			case 'f' -> guild_enclo(packet.substring(2));
 //Retirer percepteur
 			case 'F' -> guild_remove_perco(packet.substring(2));
-//T�l�portation maison de guilde
+//Tï¿½lï¿½portation maison de guilde
 			case 'h' -> guild_house(packet.substring(2));
 //Poser un percepteur
 			case 'H' -> guild_add_perco();
@@ -478,7 +478,7 @@ public class JuegoThread implements Runnable {
 			case 'P' -> guild_promote(packet.substring(2));
 //attaque sur percepteur
 			case 'T' -> guild_perco_join_fight(packet.substring(2));
-//Ferme le panneau de cr�ation de guilde
+//Ferme le panneau de crï¿½ation de guilde
 			case 'V' -> guild_CancelCreate();
 		}
 	}
@@ -562,12 +562,12 @@ public class JuegoThread implements Runnable {
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "182");
 			return;
 		}
-		if(Recaudador.GetPercoGuildID(_personaje.getActualMapa().getID()) > 0)//La carte poss�de un perco
+		if(Recaudador.GetPercoGuildID(_personaje.getActualMapa().getID()) > 0)//La carte possï¿½de un perco
 		{
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1168;1");
 			return;
 		}
-		if(_personaje.getActualMapa().getEsquemaPelea().length() < 5)//La map ne poss�de pas de "places"
+		if(_personaje.getActualMapa().getEsquemaPelea().length() < 5)//La map ne possï¿½de pas de "places"
 		{
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "113");
 			return;
@@ -658,7 +658,7 @@ public class JuegoThread implements Runnable {
 	
 	private void guild_promote(String packet)
 	{
-		if(_personaje.get_guild() == null)return;	//Si le personnage envoyeur n'a m�me pas de guilde
+		if(_personaje.get_guild() == null)return;	//Si le personnage envoyeur n'a mï¿½me pas de guilde
 		
 		String[] infos = packet.split("\\|");
 		
@@ -667,19 +667,19 @@ public class JuegoThread implements Runnable {
 		byte xpGive = Byte.parseByte(infos[2]);
 		int right = Integer.parseInt(infos[3]);
 		
-		Personaje p = Mundo.getPersonnage(guid);	//Cherche le personnage a qui l'on change les droits dans la m�moire
+		Personaje p = Mundo.getPersonnage(guid);	//Cherche le personnage a qui l'on change les droits dans la mï¿½moire
 		GuildMember toChange;
 		GuildMember changer = _personaje.getMiembroGremio();
 		
-		//R�cup�ration du personnage � changer, et verification de quelques conditions de base
-		if(p == null)	//Arrive lorsque le personnage n'est pas charg� dans la m�moire
+		//Rï¿½cupï¿½ration du personnage ï¿½ changer, et verification de quelques conditions de base
+		if(p == null)	//Arrive lorsque le personnage n'est pas chargï¿½ dans la mï¿½moire
 		{
-			int guildId = GestorSQL.personaje_esta_en_gremio(guid);	//R�cup�re l'id de la guilde du personnage qui n'est pas dans la m�moire
+			int guildId = GestorSQL.personaje_esta_en_gremio(guid);	//Rï¿½cupï¿½re l'id de la guilde du personnage qui n'est pas dans la mï¿½moire
 			
-			if(guildId < 0)return;	//Si le personnage � qui les droits doivent �tre modifi� n'existe pas ou n'a pas de guilde
+			if(guildId < 0)return;	//Si le personnage ï¿½ qui les droits doivent ï¿½tre modifiï¿½ n'existe pas ou n'a pas de guilde
 			
 			
-			if(guildId != _personaje.get_guild().get_id())					//Si ils ne sont pas dans la m�me guilde
+			if(guildId != _personaje.get_guild().get_id())					//Si ils ne sont pas dans la mï¿½me guilde
 			{
 				GestorSalida.GAME_SEND_gK_PACKET(_personaje, "Ed");
 				return;
@@ -688,7 +688,7 @@ public class JuegoThread implements Runnable {
 		}
 		else
 		{
-			if(p.get_guild() == null)return;	//Si la personne � qui changer les droits n'a pas de guilde
+			if(p.get_guild() == null)return;	//Si la personne ï¿½ qui changer les droits n'a pas de guilde
 			if(_personaje.get_guild().get_id() != p.get_guild().get_id())	//Si ils ne sont pas de la meme guilde
 			{
 				GestorSalida.GAME_SEND_gK_PACKET(_personaje, "Ea");
@@ -698,11 +698,11 @@ public class JuegoThread implements Runnable {
 			toChange = p.getMiembroGremio();
 		}
 		
-		//V�rifie ce que le personnage changeur � le droit de faire
+		//Vï¿½rifie ce que le personnage changeur ï¿½ le droit de faire
 		
 		if(changer.getRank() == 1)	//Si c'est le meneur
 		{
-			if(changer.getGuid() == toChange.getGuid())	//Si il se modifie lui m�me, reset tout sauf l'XP
+			if(changer.getGuid() == toChange.getGuid())	//Si il se modifie lui mï¿½me, reset tout sauf l'XP
 			{
 				rank = -1;
 				right = -1;
@@ -713,7 +713,7 @@ public class JuegoThread implements Runnable {
 				{
 					changer.setAllRights(2, (byte) -1, 29694);	//Met le meneur "Bras droit" avec tout les droits
 					
-					//D�fini les droits � mettre au nouveau meneur
+					//Dï¿½fini les droits ï¿½ mettre au nouveau meneur
 					rank = 1;
 					xpGive = -1;
 					right = 1;
@@ -777,11 +777,11 @@ public class JuegoThread implements Runnable {
 			toRemGuild = P.get_guild();
 			if(toRemGuild == null)//La guilde du personnage n'est pas charger ?
 			{
-					toRemGuild = Mundo.getGuild(_personaje.get_guild().get_id());//On prend la guilde du perso qui l'�jecte
+					toRemGuild = Mundo.getGuild(_personaje.get_guild().get_id());//On prend la guilde du perso qui l'ï¿½jecte
 			}
 			toRemMember = toRemGuild.getMember(P.getID());
 			if(toRemMember == null) return;//Si le membre n'est pas dans la guilde.
-			if(toRemMember.getGuild().get_id() != _personaje.get_guild().get_id()) return;//Si guilde diff�rente
+			if(toRemMember.getGuild().get_id() != _personaje.get_guild().get_id()) return;//Si guilde diffï¿½rente
 		}
 		//si pas la meme guilde
 		if(toRemGuild.get_id() != _personaje.get_guild().get_id())
@@ -789,13 +789,13 @@ public class JuegoThread implements Runnable {
 			GestorSalida.GAME_SEND_gK_PACKET(_personaje, "Ea");
 			return;
 		}
-		//S'il n'a pas le droit de kick, et que ce n'est pas lui m�me la cible
+		//S'il n'a pas le droit de kick, et que ce n'est pas lui mï¿½me la cible
 		if(!_personaje.getMiembroGremio().canDo(Constantes.G_BAN) && _personaje.getMiembroGremio().getGuid() != toRemMember.getGuid())
 		{
 			GestorSalida.GAME_SEND_gK_PACKET(_personaje, "Ed");
 			return;
 		}
-		//Si diff�rent : Kick
+		//Si diffï¿½rent : Kick
 		if(_personaje.getMiembroGremio().getGuid() != toRemMember.getGuid())
 		{
 			if(toRemMember.getRank() == 1) //S'il veut kicker le meneur
@@ -871,7 +871,7 @@ public class JuegoThread implements Runnable {
 			if(packet.substring(1).equalsIgnoreCase(_personaje.getInvitation()+""))
 			{
 				Personaje p = Mundo.getPersonnage(_personaje.getInvitation());
-				if(p == null)return;//Pas cens� arriver
+				if(p == null)return;//Pas censï¿½ arriver
 				GestorSalida.GAME_SEND_gJ_PACKET(p,"Ec");
 			}
 		break;
@@ -879,7 +879,7 @@ public class JuegoThread implements Runnable {
 			if(packet.substring(1).equalsIgnoreCase(_personaje.getInvitation()+""))
 			{
 				Personaje p = Mundo.getPersonnage(_personaje.getInvitation());
-				if(p == null)return;//Pas cens� arriver
+				if(p == null)return;//Pas censï¿½ arriver
 				Gremio G = p.get_guild();
 				GuildMember GM = G.addNewMember(_personaje);
 				GestorSQL.actualizar_miembro_del_gremio(GM);
@@ -944,7 +944,7 @@ public class JuegoThread implements Runnable {
 			//Validation du nom de la guilde
 			String tempName = name.toLowerCase();
 			boolean isValid = true;
-			//V�rifie d'abord si il contient des termes d�finit
+			//Vï¿½rifie d'abord si il contient des termes dï¿½finit
 			if(tempName.length() > 20
 					|| tempName.contains("mj")
 					|| tempName.contains("modo")
@@ -952,7 +952,7 @@ public class JuegoThread implements Runnable {
 			{
 				isValid = false;
 			}
-			//Si le nom passe le test, on v�rifie que les caract�re entr� sont correct.
+			//Si le nom passe le test, on vï¿½rifie que les caractï¿½re entrï¿½ sont correct.
 			if(isValid)
 			{
 				int tiretCount = 0;
@@ -991,7 +991,7 @@ public class JuegoThread implements Runnable {
 				GestorSalida.GAME_SEND_gC_PACKET(_personaje, "Eae");
 				return;
 			}
-			if(_personaje.getActualMapa().getID() == 2196)//Temple de cr�ation de guilde
+			if(_personaje.getActualMapa().getID() == 2196)//Temple de crï¿½ation de guilde
 			{
 				if(!_personaje.hasItemTemplate(1575,1))//Guildalogemme
 				{
@@ -1425,7 +1425,7 @@ public class JuegoThread implements Runnable {
 		if(_personaje == null)return;
 		Grupo g = _personaje.getActualGrupo();
 		if(g == null)return;
-		if(packet.length() == 2)//Si aucun guid est sp�cifi�, alors c'est que le joueur quitte
+		if(packet.length() == 2)//Si aucun guid est spï¿½cifiï¿½, alors c'est que le joueur quitte
 		{
 			 g.leave(_personaje);
 			 GestorSalida.GAME_SEND_PV_PACKET(_out,"");
@@ -1520,7 +1520,7 @@ public class JuegoThread implements Runnable {
 			case 'd' -> Object_delete(packet);
 //Depose l'objet au sol
 			case 'D' -> Object_drop(packet);
-//Bouger un objet (Equiper/d�s�quiper) // Associer obvijevan
+//Bouger un objet (Equiper/dï¿½sï¿½quiper) // Associer obvijevan
 			case 'M' -> Object_move(packet);
 //Utiliser un objet (potions)
 			case 'U' -> Object_use(packet);
@@ -1636,20 +1636,20 @@ public class JuegoThread implements Runnable {
 			// LES VERIFS
 			if(!_personaje.hasItemGuid(guid) || obj == null) // item n'existe pas ou perso n'a pas l'item
 				return;
-			if(_personaje.getPelea() != null) // si en combat d�marr�
+			if(_personaje.getPelea() != null) // si en combat dï¿½marrï¿½
 				if(_personaje.getPelea().get_state() > Constantes.FIGHT_STATE_ACTIVE)
 					return;
 			if(!Constantes.isValidPlaceForItem(obj.getTemplate(),pos) && pos != Constantes.ITEM_POS_NO_EQUIPED) // si mauvaise place
 				return;
 			if(!obj.getTemplate().getConditions().equalsIgnoreCase("") && !Condiciones.ValidarCondicion(_personaje,obj.getTemplate().getConditions())) {
-				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "119|43"); // si le perso ne v�rifie pas les conditions diverses
+				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "119|43"); // si le perso ne vï¿½rifie pas les conditions diverses
 				return;
 			}
 			if(obj.getTemplate().getLevel() > _personaje.get_lvl())  {// si le perso n'a pas le level
 				GestorSalida.GAME_SEND_OAEL_PACKET(_out);
 				return;
 			}
-			//On ne peut �quiper 2 items de panoplies identiques, ou 2 Dofus identiques
+			//On ne peut ï¿½quiper 2 items de panoplies identiques, ou 2 Dofus identiques
 			if(pos != Constantes.ITEM_POS_NO_EQUIPED && (obj.getTemplate().getPanopID() != -1 || obj.getTemplate().getType() == Constantes.ITEM_TYPE_DOFUS )&& _personaje.hasEquiped(obj.getTemplate().getID()))
 				return;
 			// FIN DES VERIFS
@@ -1665,16 +1665,16 @@ public class JuegoThread implements Runnable {
 					GestorSalida.enviar(_personaje, "Im1161");
 					return;	
 				}
-				if (exObj.getObvijevanPos() != 0) {// si il y a d�j� un obvi
+				if (exObj.getObvijevanPos() != 0) {// si il y a dï¿½jï¿½ un obvi
 					GestorSalida.GAME_SEND_BN(_personaje);
 					return;
 				}
 				// FIN DES VERIFS
 		        		
-				exObj.setObvijevanPos(obj.getObvijevanPos()); // L'objet qui �tait en place a maintenant un obvi
+				exObj.setObvijevanPos(obj.getObvijevanPos()); // L'objet qui ï¿½tait en place a maintenant un obvi
 					
-				_personaje.removeItem(obj.getID(), 1, false, false); // on enl�ve l'existance de l'obvi en lui-m�me
-				GestorSalida.enviar(_personaje, "OR" + obj.getID()); // on le pr�cise au client
+				_personaje.removeItem(obj.getID(), 1, false, false); // on enlï¿½ve l'existance de l'obvi en lui-mï¿½me
+				GestorSalida.enviar(_personaje, "OR" + obj.getID()); // on le prï¿½cise au client
 
 				exObj.clearStats();
 				String cibleNewStats = obj.parseStatsStringSansUserObvi() + "," + exObj.parseStatsStringSansUserObvi() +
@@ -1684,7 +1684,7 @@ public class JuegoThread implements Runnable {
 				GestorSalida.enviar(_personaje, exObj.obvijevanOCO_Packet(pos));
 					
 				if ((objGUID == 9233) || (objGUID == 9234)) 
-					GestorSalida.GAME_SEND_ON_EQUIP_ITEM(_personaje.getActualMapa(), _personaje); // Si l'obvi �tait cape ou coiffe : packet au client
+					GestorSalida.GAME_SEND_ON_EQUIP_ITEM(_personaje.getActualMapa(), _personaje); // Si l'obvi ï¿½tait cape ou coiffe : packet au client
 				// S'il y avait plusieurs objets
 				if(obj.getQuantity() > 1)
 				{
@@ -1702,13 +1702,13 @@ public class JuegoThread implements Runnable {
 					}
 				}
 				
-				return; // on s'arr�te l� pour l'obvi
+				return; // on s'arrï¿½te lï¿½ pour l'obvi
 			} // FIN DU CODE OBVI
 			
-			if(exObj != null)//S'il y avait d�ja un objet sur cette place on d�s�quipe
+			if(exObj != null)//S'il y avait dï¿½ja un objet sur cette place on dï¿½sï¿½quipe
 			{
 				Objeto obj2;
-				if((obj2 = _personaje.getSimilarItem(exObj)) != null)//On le poss�de deja
+				if((obj2 = _personaje.getSimilarItem(exObj)) != null)//On le possï¿½de deja
 				{
 					obj2.setQuantity(obj2.getQuantity()+exObj.getQuantity());
 					GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(_personaje, obj2);
@@ -1716,7 +1716,7 @@ public class JuegoThread implements Runnable {
 					_personaje.removeItem(exObj.getID());
 					GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_personaje, exObj.getID());
 				}
-				else//On ne le poss�de pas
+				else//On ne le possï¿½de pas
 				{
 					exObj.setPosition(Constantes.ITEM_POS_NO_EQUIPED);
 					GestorSalida.GAME_SEND_OBJET_MOVE_PACKET(_personaje,exObj);
@@ -1787,7 +1787,7 @@ public class JuegoThread implements Runnable {
 		
 			//Si familier
 			if(pos == Constantes.ITEM_POS_FAMILIER && _personaje.isOnMount()) _personaje.toogleOnMount();
-			//Verif pour les outils de m�tier
+			//Verif pour les outils de mï¿½tier
 			if(pos == Constantes.ITEM_POS_NO_EQUIPED && _personaje.getObjetByPos(Constantes.ITEM_POS_ARME) == null)
 				GestorSalida.GAME_SEND_OT_PACKET(_out, -1);
 			
@@ -1851,35 +1851,30 @@ public class JuegoThread implements Runnable {
 		}
 	}
 
-	private void parseDialogPacket(String packet)
-	{
+	private void parseDialogPacket(String packet) {
 		switch (packet.charAt(1)) {
-//Demande de l'initQuestion
+			//Demande de l'initQuestion
 			case 'C' -> Dialog_start(packet);
-//R�ponse du joueur
+			//Rï¿½ponse du joueur
 			case 'R' -> Dialog_response(packet);
-//Fin du dialog
+			//Fin du dialog
 			case 'V' -> Dialog_end();
 		}
 	}
 
-	private void Dialog_response(String packet)
-	{
+	private void Dialog_response(String packet) {
 		String[] infos = packet.substring(2).split("\\|");
-		try
-		{
+		try {
 			int qID = Integer.parseInt(infos[0]);
 			int rID = Integer.parseInt(infos[1]);
 			NPC_question quest = Mundo.getNPCQuestion(qID);
 			NPC_reponse rep = Mundo.getNPCreponse(rID);
-			if(quest == null || rep == null || !rep.isAnotherDialog())
-			{
+			if(quest == null || rep == null || !rep.isAnotherDialog()) {
 				GestorSalida.GAME_SEND_END_DIALOG_PACKET(_out);
 				_personaje.set_isTalkingWith(0);
 			}
 			rep.apply(_personaje);
-		}catch(Exception e)
-		{
+		}catch(Exception e) {
 			GestorSalida.GAME_SEND_END_DIALOG_PACKET(_out);
 		}
 	}
@@ -1914,17 +1909,17 @@ public class JuegoThread implements Runnable {
 	private void parseExchangePacket(String packet)
 	{
 		switch (packet.charAt(1)) {
-//Accepter demande d'�change
+//Accepter demande d'ï¿½change
 			case 'A' -> Exchange_accept();
 //Achat
 			case 'B' -> Exchange_onBuyItem(packet);
-//Demande prix moyen + cat�gorie
+//Demande prix moyen + catï¿½gorie
 			case 'H' -> Exchange_HDV(packet);
 //Ok
 			case 'K' -> Exchange_isOK();
-//jobAction : Refaire le craft pr�cedent
+//jobAction : Refaire le craft prï¿½cedent
 			case 'L' -> Exchange_doAgain();
-//Move (Ajouter//retirer un objet a l'�change)
+//Move (Ajouter//retirer un objet a l'ï¿½change)
 			case 'M' -> Exchange_onMoveItem(packet);
 //Mode marchand
 			case 'q' -> {
@@ -1954,7 +1949,7 @@ public class JuegoThread implements Runnable {
 			case 'R' -> Exchange_start(packet);
 //Vente
 			case 'S' -> Exchange_onSellItem(packet);
-//Fin de l'�change
+//Fin de l'ï¿½change
 			case 'V' -> Exchange_finish_buy();
 		}
 	}
@@ -1973,7 +1968,7 @@ public class JuegoThread implements Runnable {
 				if (curHdv.buyItem(ligneID, amount, Integer.parseInt(info[2]), _personaje)) {
 					GestorSalida.GAME_SEND_EHm_PACKET(_personaje, "-", ligneID + "");//Enleve la ligne
 					if (curHdv.getLigne(ligneID) != null && !curHdv.getLigne(ligneID).isEmpty())
-						GestorSalida.GAME_SEND_EHm_PACKET(_personaje, "+", curHdv.getLigne(ligneID).parseToEHm());//R�ajoute la ligne si elle n'est pas vide
+						GestorSalida.GAME_SEND_EHm_PACKET(_personaje, "+", curHdv.getLigne(ligneID).parseToEHm());//Rï¿½ajoute la ligne si elle n'est pas vide
 
 					/*if(curHdv.getLigne(ligneID) != null)
 					{
@@ -1984,7 +1979,7 @@ public class JuegoThread implements Runnable {
 
 					_personaje.refreshStats();
 					GestorSalida.GAME_SEND_Ow_PACKET(_personaje);
-					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "068");//Envoie le message "Lot achet�"
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "068");//Envoie le message "Lot achetï¿½"
 				} else {
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "172");//Envoie un message d'erreur d'achat
 				}
@@ -2004,7 +1999,7 @@ public class JuegoThread implements Runnable {
 				templateID = Integer.parseInt(packet.substring(3));
 				GestorSalida.GAME_SEND_EHP_PACKET(_personaje, templateID);
 			}
-//Demande des template de la cat�gorie
+//Demande des template de la catï¿½gorie
 			case 'T' -> {
 				int categ = Integer.parseInt(packet.substring(3));
 				String allTemplate = Mundo.getHdv(Math.abs(_personaje.get_isTradingWith())).parseTemplate(categ);
@@ -2037,10 +2032,10 @@ public class JuegoThread implements Runnable {
 						return;
 					}
 					Objeto obj = Mundo.getObjet(guid);
-					//on prend la DD demand�e
+					//on prend la DD demandï¿½e
 					int DDid = obj.getStats().getEffect(995);
 					Dragopavo DD = Mundo.getDragopavoPorID(DDid);
-					//FIXME mettre return au if pour ne pas cr�er des nouvelles dindes
+					//FIXME mettre return au if pour ne pas crï¿½er des nouvelles dindes
 					if(DD == null)
 					{
 						int color = Constantes.getMountColorByParchoTemplate(obj.getTemplate().getID());
@@ -2050,7 +2045,7 @@ public class JuegoThread implements Runnable {
 					//On enleve l'objet du Monde et du Perso
 					_personaje.removeItem(guid);
 					Mundo.removeItem(guid);
-					//on ajoute la dinde a l'�table
+					//on ajoute la dinde a l'ï¿½table
 					MP.addData(DD.getID(), _personaje.getID());
 					GestorSQL.actualizar_cercado(MP);
 					//On envoie les packet
@@ -2064,26 +2059,26 @@ public class JuegoThread implements Runnable {
 					if(MP.getData().get(DD1.getID()) != _personaje.getID() &&
 						Mundo.getPersonnage(MP.getData().get(DD1.getID())).get_guild() != _personaje.get_guild())
 					{
-						//Pas la m�me guilde, pas le m�me perso
+						//Pas la mï¿½me guilde, pas le mï¿½me perso
 						return;
 					}
 					if(MP.getData().get(DD1.getID()) != _personaje.getID() &&
 							Mundo.getPersonnage(MP.getData().get(DD1.getID())).get_guild() == _personaje.get_guild() &&
 							!_personaje.getMiembroGremio().canDo(Constantes.G_OTHDINDE))
 					{
-						//M�me guilde, pas le droit
+						//Mï¿½me guilde, pas le droit
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1101");
 						return;
 					}
-					//on retire la dinde de l'�table
+					//on retire la dinde de l'ï¿½table
 					MP.removeData(DD1.getID());
 					GestorSQL.actualizar_cercado(MP);
-					//On cr�er le parcho
+					//On crï¿½er le parcho
 					ObjTemplate T = Constantes.getParchoTemplateByMountColor(DD1.getColor());
 					Objeto obj1 = T.createNewItem(1, false);
 					//On efface les stats
 					obj1.clearStats();
-					//on ajoute la possibilit� de voir la dinde
+					//on ajoute la possibilitï¿½ de voir la dinde
 					obj1.getStats().addOneStat(995, DD1.getID());
 					obj1.addTxtStat(996, _personaje.getNombre());
 					obj1.addTxtStat(997, DD1.get_nom());
@@ -2104,14 +2099,14 @@ public class JuegoThread implements Runnable {
 					if(MP.getData().get(DD3.getID()) != _personaje.getID() &&
 							Mundo.getPersonnage(MP.getData().get(DD3.getID())).get_guild() != _personaje.get_guild())
 					{
-						//Pas la m�me guilde, pas le m�me perso
+						//Pas la mï¿½me guilde, pas le mï¿½me perso
 						return;
 					}
 					if(MP.getData().get(DD3.getID()) != _personaje.getID() &&
 							Mundo.getPersonnage(MP.getData().get(DD3.getID())).get_guild() == _personaje.get_guild() &&
 							!_personaje.getMiembroGremio().canDo(Constantes.G_OTHDINDE))
 					{
-						//M�me guilde, pas le droit
+						//Mï¿½me guilde, pas le droit
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1101");
 						return;
 					}
@@ -2125,13 +2120,13 @@ public class JuegoThread implements Runnable {
 					GestorSalida.GAME_SEND_Ee_PACKET(_personaje,'-',DD3.getID()+"");
 					GestorSalida.GAME_SEND_Rx_PACKET(_personaje);
 				break;
-				case 'p'://Equip� => Stocker
-					//Si c'est la dinde �quip�
+				case 'p'://Equipï¿½ => Stocker
+					//Si c'est la dinde ï¿½quipï¿½
 					if(_personaje.getMount() != null && _personaje.getMount().getID() == guid)
 					{
 						//Si le perso est sur la monture on le fait descendre
 						if(_personaje.isOnMount()) _personaje.toogleOnMount();
-						//Si ca n'a pas r�ussie, on s'arrete l� (Items dans le sac ?)
+						//Si ca n'a pas rï¿½ussie, on s'arrete lï¿½ (Items dans le sac ?)
 						if(_personaje.isOnMount())return;
 						
 						Dragopavo DD2 = _personaje.getMount();
@@ -2288,7 +2283,7 @@ public class JuegoThread implements Runnable {
 					if (amount <= 0 || price <= 0) return;
 					Mercadillo curHdv = Mundo.getHdv(Math.abs(_personaje.get_isTradingWith()));
 					int taxe = (int) (price * (curHdv.getTaxe() / 100));
-					if (!_personaje.hasItemGuid(itmID))//V�rifie si le personnage a bien l'item sp�cifi� et l'argent pour payer la taxe
+					if (!_personaje.hasItemGuid(itmID))//Vï¿½rifie si le personnage a bien l'item spï¿½cifiï¿½ et l'argent pour payer la taxe
 						return;
 					if (_personaje.getCuenta().countHdvItems(curHdv.getHdvID()) >= curHdv.getMaxItemCompte()) {
 						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "058");
@@ -2300,14 +2295,14 @@ public class JuegoThread implements Runnable {
 					}
 					_personaje.addKamas(taxe * -1);//Retire le montant de la taxe au personnage
 					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_personaje);//Met a jour les kamas du client
-					Objeto obj = Mundo.getObjet(itmID);//R�cup�re l'item
-					if (amount > obj.getQuantity())//S'il veut mettre plus de cette objet en vente que ce qu'il poss�de
+					Objeto obj = Mundo.getObjet(itmID);//Rï¿½cupï¿½re l'item
+					if (amount > obj.getQuantity())//S'il veut mettre plus de cette objet en vente que ce qu'il possï¿½de
 						return;
 					int rAmount = (int) (Math.pow(10, amount) / 10);
 					int newQua = (obj.getQuantity() - rAmount);
-					if (newQua <= 0)//Si c'est plusieurs objets ensemble enleve seulement la quantit� de mise en vente
+					if (newQua <= 0)//Si c'est plusieurs objets ensemble enleve seulement la quantitï¿½ de mise en vente
 					{
-						_personaje.removeItem(itmID);//Enl�ve l'item de l'inventaire du personnage
+						_personaje.removeItem(itmID);//Enlï¿½ve l'item de l'inventaire du personnage
 						GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(_personaje, itmID);//Envoie un packet au client pour retirer l'item de son inventaire
 					} else {
 						obj.setQuantity(obj.getQuantity() - rAmount);
@@ -2599,14 +2594,14 @@ public class JuegoThread implements Runnable {
                 {
                 	seller.getStoreItems().remove(itemStore.getID());
                 	_personaje.addObjet(itemStore, true);
-                }else // si l'�change peut se faire
+                }else // si l'ï¿½change peut se faire
                 {
-                	seller.getStoreItems().remove(itemStore.getID()); // on enl�ve enti�rement l'objet en vente
-                	itemStore.setQuantity(itemStore.getQuantity()-qua); // on modifie la quantit� dans le magasin
+                	seller.getStoreItems().remove(itemStore.getID()); // on enlï¿½ve entiï¿½rement l'objet en vente
+                	itemStore.setQuantity(itemStore.getQuantity()-qua); // on modifie la quantitï¿½ dans le magasin
                 	GestorSQL.guardar_objeto(itemStore, _personaje.getID());					// on sauvegarde le magasin
                 	seller.addStoreItem(itemStore.getID(), price);	// on remet dans le magasin
                 	
-                	Objeto clone = Objeto.getCloneObjet(itemStore, qua);	// on clone l'objet achet�
+                	Objeto clone = Objeto.getCloneObjet(itemStore, qua);	// on clone l'objet achetï¿½
 					_personaje.addObjet(clone, true);
 					GestorSQL.guardar_nuevo_objeto(clone);					// on sauvegarde celui-ci
 					// et on le donne au joueur
@@ -2642,7 +2637,7 @@ public class JuegoThread implements Runnable {
 			if(qua <= 0) return;
 			
 			ObjTemplate template = Mundo.getObjTemplate(tempID);
-			if(template == null)//Si l'objet demand� n'existe pas(ne devrait pas arriv�)
+			if(template == null)//Si l'objet demandï¿½ n'existe pas(ne devrait pas arrivï¿½)
 			{
 				JuegoServidor.agregar_a_los_logs(_personaje.getNombre()+" tente d'acheter l'itemTemplate "+tempID+" qui est inexistant");
 				GestorSalida.GAME_SEND_BUY_ERROR_PACKET(_out);
@@ -2688,7 +2683,7 @@ public class JuegoThread implements Runnable {
 		   _personaje.getInTrunk() == null)
 			return;
 		
-		//Si �change avec un personnage
+		//Si ï¿½change avec un personnage
 		if(_personaje.get_curExchange() != null)
 		{
 			_personaje.get_curExchange().cancel();
@@ -2696,7 +2691,7 @@ public class JuegoThread implements Runnable {
 			_personaje.set_away(false);
 			return;
 		}
-		//Si m�tier
+		//Si mï¿½tier
 		if(_personaje.getCurJobAction() != null)
 		{
 			_personaje.getCurJobAction().resetCraft();
@@ -2755,7 +2750,7 @@ public class JuegoThread implements Runnable {
 	{
 		if(packet.startsWith("11", 2))//Ouverture HDV achat
 		{
-			if(_personaje.get_isTradingWith() < 0)//Si d�j� ouvert
+			if(_personaje.get_isTradingWith() < 0)//Si dï¿½jï¿½ ouvert
 				GestorSalida.GAME_SEND_EV_PACKET(_out);
 			
 			if(_personaje.getDeshonor() >= 5)
@@ -2776,12 +2771,12 @@ public class JuegoThread implements Runnable {
 						";-1;"+
 						toOpen.getSellTime();
 			GestorSalida.GAME_SEND_ECK_PACKET(_personaje,11,info);
-			_personaje.set_isTradingWith(0 - _personaje.getActualMapa().getID());	//R�cup�re l'ID de la map et rend cette valeur n�gative
+			_personaje.set_isTradingWith(0 - _personaje.getActualMapa().getID());	//Rï¿½cupï¿½re l'ID de la map et rend cette valeur nï¿½gative
 			return;
 		}
 		else if(packet.startsWith("10", 2))//Ouverture HDV vente
 		{
-			if(_personaje.get_isTradingWith() < 0)//Si d�j� ouvert
+			if(_personaje.get_isTradingWith() < 0)//Si dï¿½jï¿½ ouvert
 				GestorSalida.GAME_SEND_EV_PACKET(_out);
 			
 			if(_personaje.getDeshonor() >= 5)
@@ -2802,7 +2797,7 @@ public class JuegoThread implements Runnable {
 						";-1;"+
 						toOpen.getSellTime();
 			GestorSalida.GAME_SEND_ECK_PACKET(_personaje,10,info);
-			_personaje.set_isTradingWith(0 - _personaje.getActualMapa().getID());	//R�cup�re l'ID de la map et rend cette valeur n�gative
+			_personaje.set_isTradingWith(0 - _personaje.getActualMapa().getID());	//Rï¿½cupï¿½re l'ID de la map et rend cette valeur nï¿½gative
 			
 			GestorSalida.GAME_SEND_HDVITEM_SELLING(_personaje);
 			return;
@@ -2902,9 +2897,9 @@ public class JuegoThread implements Runnable {
 		}catch(Exception ignored){}
 		if(emote == -1)return;
 		if(_personaje == null)return;
-		if(_personaje.getPelea() != null)return;//Pas d'�mote en combat
+		if(_personaje.getPelea() != null)return;//Pas d'ï¿½mote en combat
 
-		//effets sp�ciaux des �motes
+		//effets spï¿½ciaux des ï¿½motes
 		switch (emote) {
 // s'asseoir
 			case 19, 1 -> _personaje.setSitted(!_personaje.isSitted());
@@ -2999,7 +2994,7 @@ public class JuegoThread implements Runnable {
 		try
 		{
 			switch (packet.charAt(1)) {
-//D�tails d'un combat (liste des combats)
+//Dï¿½tails d'un combat (liste des combats)
 				case 'D' -> {
 					int key = -1;
 					try {
@@ -3113,349 +3108,16 @@ public class JuegoThread implements Runnable {
 				
 				//Comandos de los jugadores
 				if(msg.charAt(0) == '.') {
-
-					//Comando .start
-					if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("start")) {
-						if(_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES){
-							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
+					String comando = msg.substring(1).split("\\|",2)[0];
+					if(Mundo.ComandosJugadores.containsKey(comando)){
+						ComandosJugadores comand = Mundo.ComandosJugadores.get(comando);
+						if(comand.getHabilitado().equals("true")){
+							comand.TipoAcciones(_personaje);
 							return;
 						}
-						_personaje.warpToSavePos();
-						return;
-
-					//Comando .vie
-					}else if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("vie")) {
-							if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-							return;
-							}else {
-								int count = 100;
-								Personaje perso = _personaje;
-								int newPDV = (perso.get_PDVMAX() * count) / 100;
-								perso.set_PDV(newPDV);
-								if(perso.isConectado()) {
-								GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(perso);
-								}
-							return;
-							}
-
-					//Comando .astrub
-					}else if (msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("astrub")) {
-						if (_personaje.getPelea() != null|| !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-							return;
-						}else {
-							_personaje.teletransportar((short)7411, 369);
-							}
-						}
-
-					//Comando .shop
-					if (msg.length() > 4 && msg.substring(1, 5).equalsIgnoreCase("shop")) {
-						if(_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-							return;
-						}else
-						_personaje.teletransportar(MainServidor.CONFIG_MAP_SHOP, MainServidor.CONFIG_CELL_SHOP);
-						return;
-
-					//Comando .enclos
-					}else if(msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("enclos")) {
-					    	if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-								GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-								return;
-					    	}else
-					    		_personaje.teletransportar(MainServidor.CONFIG_ENCLOS_MAP, MainServidor.CONFIG_CELL_ENCLOS);
-					    	return;
-
-					//Comando .pvm
-					}else if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvm")) {
-						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-							return;
-						}else
-						_personaje.teletransportar(MainServidor.CONFIG_MAP_PVM, MainServidor.CONFIG_CELL_PVM);
-						return;
-
-					//Comando .pvp
-					} if(msg.length() > 3 && msg.substring(1, 4).equalsIgnoreCase("pvp")) {
-						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-							return;
-						}else
-						_personaje.teletransportar(MainServidor.CONFIG_MAP_PVP, MainServidor.CONFIG_CELL_PVP);
-						return;
-
-						//Comando .deblo
-					} if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("deblo")) {
-						if (_personaje.getPelea() != null)
-							return;
-						_personaje.teletransportar(_personaje.getActualMapa().getID(), _personaje.getActualMapa().getRandomFreeCellID());
-
-					//Comando .staff
-					} if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("staff")) {
-						        StringBuilder staff = new StringBuilder("Membres du staff connect�s :\n");
-						        boolean allOffline = true;
-						                                                    
-						        for(int i = 0; i < Mundo.getOnlinePersos().size(); i++) {
-						            if(Mundo.getOnlinePersos().get(i).getCuenta().getGMLVL() > 0) {
-						                staff.append("- ").append(Mundo.getOnlinePersos().get(i).getNombre()).append(" (");
-						    
-						                if(Mundo.getOnlinePersos().get(i).getCuenta().getGMLVL() == 1)
-						                    staff.append("Animateur)");
-						                else if(Mundo.getOnlinePersos().get(i).getCuenta().getGMLVL() == 2)
-						                    staff.append("Mod�rateur)");
-						                else if(Mundo.getOnlinePersos().get(i).getCuenta().getGMLVL() == 3)
-						                    staff.append("MJ)");
-						                else if(Mundo.getOnlinePersos().get(i).getCuenta().getGMLVL() == 4)
-						                    staff.append("Administrateur)");
-						                else if(Mundo.getOnlinePersos().get(i).getCuenta().getGMLVL() == 5)
-						                    staff.append("Cr�ateur)");
-						                else
-						                    staff.append("Unknown");
-						                                                            
-						                staff.append("\n");
-						                                                                    
-						                allOffline = false;
-						            }
-						        }
-						        if((staff.length() > 0) && !allOffline) {
-						            GestorSalida.GAME_SEND_MESSAGE(_personaje, staff.toString(), MainServidor.CONFIG_MOTD_COLOR);
-						        } else if (allOffline) {
-						            GestorSalida.GAME_SEND_MESSAGE(_personaje, "Aucun membre du staff est pr�sent !", MainServidor.CONFIG_MOTD_COLOR);
-						        }
-						        return;
-						     					    }
-
-					//Comando .bontarien
-						if(msg.length() > 9 && msg.substring(1, 10).equalsIgnoreCase("bontarien"))
-					if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-						return;
-					}else {
-						byte align = 1;
-						Personaje target = _personaje;
-						target.modifAlignement(align);
-						if(target.isConectado())
-						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(target);
-						GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu es d�sormais Bontarien", MainServidor.CONFIG_MOTD_COLOR);
-						return;
-
-					//Comando .brakmarien
-					}else if(msg.length() > 10 && msg.substring(1, 11).equalsIgnoreCase("brakmarien")) //Commande Brakmarien
-						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-							return;
-						} else {
-					byte align = 2;
-					Personaje target = _personaje;
-					target.modifAlignement(align);
-					if(target.isConectado())
-					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(target);
-					GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu es d�sormais Brakmarien", MainServidor.CONFIG_MOTD_COLOR);
-					return;
 					}
-
-					//Comando .neutre
-					if(msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("neutre")) //Commande neutre
-						if (_personaje.getPelea() != null || !MainServidor.PERMITIR_COMANDOS_JUGADORES) {
-							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1243;");
-							return;
-						}else {
-					byte align = 0;
-					Personaje target = _personaje;
-					target.modifAlignement(align);
-					if(target.isConectado())
-					GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(target);
-					GestorSalida.GAME_SEND_MESSAGE(_personaje, "Tu es d�sormais Neutre", MainServidor.CONFIG_MOTD_COLOR);
-					return;
-					}
-						if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("fmcac")) //Adlesne Commande
-						{
-	                            Objeto obj = _personaje.getObjetByPos(Constantes.ITEM_POS_ARME);
-	                            
-	                            if(_personaje.getKamas() < 500000) {
-	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : vous avez moins de 500.000 k", MainServidor.CONFIG_MOTD_COLOR);
-	                                    return;
-	                            }else if(_personaje.getPelea() != null) {
-	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : vous ne devez pas �tre en combat", MainServidor.CONFIG_MOTD_COLOR);
-	                                    return;
-	                            }else if(obj == null) {
-	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : vous ne portez pas d'arme", MainServidor.CONFIG_MOTD_COLOR);
-	                                    return;
-	                            }
-	                            
-	                            boolean containNeutre = false;
-	                            for(EfectoHechizo effect :  obj.getEffects()) {
-									if (effect.getEffectID() == 100 || effect.getEffectID() == 95) {
-										containNeutre = true;
-										break;
-									}
-	                            }
-	                            if(!containNeutre) {
-	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : votre arme n'a pas de d�gats neutre", MainServidor.CONFIG_MOTD_COLOR);
-	                                    return;
-	                            }
-	                            
-	                            String answer;
-	                            
-	                            try {
-	                                answer = msg.substring(7, msg.length() - 1);
-	                            } catch(Exception e) {
-	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : vous n'avez pas sp�cifi� l'�l�ment (air, feu, terre, eau) qui remplacera les d�gats/vols de vies neutres", MainServidor.CONFIG_MOTD_COLOR);
-	                                    return;
-	                            }
-	                            
-	                            if(!answer.equalsIgnoreCase("air") && !answer.equalsIgnoreCase("terre") && !answer.equalsIgnoreCase("feu") && !answer.equalsIgnoreCase("eau")) {
-	                                    GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Action impossible : l'�l�ment " + answer + " n'existe pas ! (dispo : air, feu, terre, eau)", MainServidor.CONFIG_MOTD_COLOR);
-	                                    return;
-	                            }
-	                            
-	                            for(int i = 0; i < obj.getEffects().size(); i++) {
-	                                    if(obj.getEffects().get(i).getEffectID() == 100) {
-	                                            if(answer.equalsIgnoreCase("air")) {
-	                                                    obj.getEffects().get(i).setEffectID(98);
-	                                            }
-	                                            if(answer.equalsIgnoreCase("feu")) {
-	                                                    obj.getEffects().get(i).setEffectID(99);
-	                                            }
-	                                            if(answer.equalsIgnoreCase("terre")) {
-	                                                    obj.getEffects().get(i).setEffectID(97);
-	                                            }
-	                                            if(answer.equalsIgnoreCase("eau")) {
-	                                                    obj.getEffects().get(i).setEffectID(96);
-	                                            }
-	                                    }
-	                                    
-	                                    if(obj.getEffects().get(i).getEffectID() == 95) {
-	                                            if(answer.equalsIgnoreCase("air")) {
-	                                                    obj.getEffects().get(i).setEffectID(93);
-	                                            }
-	                                            if(answer.equalsIgnoreCase("feu")) {
-	                                                    obj.getEffects().get(i).setEffectID(94);
-	                                            }
-	                                            if(answer.equalsIgnoreCase("terre")) {
-	                                                    obj.getEffects().get(i).setEffectID(92);
-	                                            }
-	                                            if(answer.equalsIgnoreCase("eau")) {
-	                                                    obj.getEffects().get(i).setEffectID(91);
-	                                            }
-	                                    }
-	                            }
-	                            
-	                            long new_kamas = _personaje.getKamas() - 500000;
-	                            if(new_kamas < 0) //Ne devrait pas arriver...
-	                                    new_kamas = 0;
-	                            _personaje.setKamas(new_kamas);
-	                            
-	                            GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_personaje);
-	                            
-	                            GestorSalida.GAME_SEND_MESSAGE(_personaje,  "Votre objet : " + obj.getTemplate().getName() + " a �t� FM avec succ�s en " + answer, MainServidor.CONFIG_MOTD_COLOR);
-	                            GestorSalida.GAME_SEND_MESSAGE(_personaje,  " Penser � vous deco/reco pour voir les changement !", MainServidor.CONFIG_MOTD_COLOR);
-	                            return;
-	                    }
-						
-						else
-						if(msg.length() > 6 && msg.substring(1, 7).equalsIgnoreCase("parcho"))
-					      {
-					        if(_personaje.getPelea() != null)
-					            return;  
-					                                              
-					        String element = "";
-					        int nbreElement = 0;
-					        if(_personaje.get_baseStats().getEffect(125) < 101)
-					        {
-					            _personaje.get_baseStats().addOneStat(125, 101 - _personaje.get_baseStats().getEffect(125));
-					            element += "vitalit�";
-					            nbreElement++;
-					        }
-
-					        if(_personaje.get_baseStats().getEffect(124) < 101)
-					        {
-					            _personaje.get_baseStats().addOneStat(124, 101 - _personaje.get_baseStats().getEffect(124));
-					        if(nbreElement == 0)
-					            element += "sagesse";
-					        else
-					            element += ", sagesse";
-					        nbreElement++;
-					        }
-
-					        if(_personaje.get_baseStats().getEffect(118) < 101)
-					        {
-					            _personaje.get_baseStats().addOneStat(118, 101 - _personaje.get_baseStats().getEffect(118));
-					        if(nbreElement == 0)
-					            element += "force";
-					        else
-					            element += ", force";
-					            nbreElement++;
-					        }
-
-					        if(_personaje.get_baseStats().getEffect(126) < 101)
-					        {
-					            _personaje.get_baseStats().addOneStat(126, 101 - _personaje.get_baseStats().getEffect(126));
-					        if(nbreElement == 0)
-					            element += "intelligence";
-					        else
-					            element += ", intelligence";
-					            nbreElement++;
-					        }
-
-					        if(_personaje.get_baseStats().getEffect(119) < 101)
-					        {
-					            _personaje.get_baseStats().addOneStat(119, 101 - _personaje.get_baseStats().getEffect(119));
-					        if(nbreElement == 0)
-					            element += "agilit�";
-					        else
-					            element += ", agilit�";
-					            nbreElement++;
-					        }
-
-					        if(_personaje.get_baseStats().getEffect(123) < 101)
-					        {
-					            _personaje.get_baseStats().addOneStat(123, 101 - _personaje.get_baseStats().getEffect(123));
-					        if(nbreElement == 0)
-					            element += "chance";
-					        else
-					            element += ", chance";
-					            nbreElement++;
-					        }
-					                                                
-					        if(nbreElement == 0)
-					        {
-					            GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "116;<i>System</i>~Vous avez d�j� plus de 100 partout !");
-					        }
-					        else
-					        {
-					            GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_personaje);
-					            GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "116;<i>System</i>~Vous �tes parcho 101 en " + element + " !");
-					        }
-					        return;
-					      }else if(msg.length() > 4 && msg.substring(1, 5).equalsIgnoreCase("vote")) {
-                        GestorSalida.GAME_SEND_MESSAGE(_personaje, "<b><a href=\""+ MainServidor.CONFIG_URLVOTE+"\">Votez pour nous en cliquant sur ce lien !</a></b>", MainServidor.CONFIG_PUB_COLOR);
-                        return;
-                    } else if(msg.length() > 5 && msg.substring(1, 6).equalsIgnoreCase("infos"))
-                    {
-                    	
-                        long uptime = System.currentTimeMillis() - MainServidor.gameServer.getStartTime();
-                        int jour = (int) (uptime/(1000*3600*24));
-                        uptime %= (1000*3600*24);
-                        int hour = (int) (uptime/(1000*3600));
-                        uptime %= (1000*3600);
-                        int min = (int) (uptime/(1000*60));
-                        uptime %= (1000*60);
-                        int sec = (int) (uptime/(1000));
-
-                        String mess =	"===========\n"+ MainServidor.cabecerapersonalizada()
-                            +			"Tiempo online: "+jour+"j "+hour+"h "+min+"m "+sec+"s\n"
-                            +			"Jugadores en linea: "+ MainServidor.gameServer.getPlayerNumber()+"\n"
-                            +			"Maximos conectados: "+ MainServidor.gameServer.getMaxPlayer()+"\n"
-                            +			"===========";
-                        GestorSalida.GAME_SEND_MESSAGE(_personaje, mess, MainServidor.CONFIG_MOTD_COLOR);
-                        return;
-                    }else if(msg.length() > 4 && msg.substring(1, 5).equalsIgnoreCase("help")){
-                        GestorSalida.GAME_SEND_MESSAGE(_personaje, "Comandos disponibles : \n<b>.start</b> - T�l�porte  a la map de d�part\n<b>.fmcac</b> - FM le CAC equip� selon votre choix. (ex: .fmcac air)\n<b>.shop</b> - T�l�porte a la map shop\n<b>.pvp</b> - T�l�porte a la map pvp\n<b>.enclos</b> - T�l�porte a l'enclos\n<b>.vie</b> - R�g�n�re votre vie.\n<b>.parcho</b> - Vous parchotte 101 partout.\n<b>.astrub</b> - Vous t�l�porte � Astrub\n<b>.pvm</b> - Vous t�l�porte a la map PVM\n<b>.staff</b> - Fournis les membres du staff en ligne\n<b>.bontarien/brakmarien/neutre - Change votre alignement\n<b>.help</b> - Affiche ce message\n", MainServidor.CONFIG_PUB_COLOR);
-                        return;
-                    }
 				}
+
 				if(_personaje.getPelea() == null)
 					GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_personaje.getActualMapa(), "", _personaje.getID(), _personaje.getNombre(), msg);
 				else
@@ -3483,7 +3145,7 @@ public class JuegoThread implements Runnable {
 				long l;
 				if((l = System.currentTimeMillis() - _timeLastTradeMsg) < MainServidor.FLOOD_TIME)
 				{
-					l = (MainServidor.FLOOD_TIME  - l)/1000;//On calcul la diff�rence en secondes
+					l = (MainServidor.FLOOD_TIME  - l)/1000;//On calcul la diffï¿½rence en secondes
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "0115;"+((int)Math.ceil(l)+1));
 					return;
 				}
@@ -3501,7 +3163,7 @@ public class JuegoThread implements Runnable {
 				long j;
 				if((j = System.currentTimeMillis() - _timeLastRecrutmentMsg) < MainServidor.FLOOD_TIME)
 				{
-					j = (MainServidor.FLOOD_TIME  - j)/1000;//On calcul la diff�rence en secondes
+					j = (MainServidor.FLOOD_TIME  - j)/1000;//On calcul la diffï¿½rence en secondes
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "0115;"+((int)Math.ceil(j)+1));
 					return;
 				}
@@ -3528,7 +3190,7 @@ public class JuegoThread implements Runnable {
 				long k;
 				if((k = System.currentTimeMillis() - _timeLastAlignMsg) < MainServidor.FLOOD_TIME)
 				{
-					k = (MainServidor.FLOOD_TIME  - k)/1000;//On calcul la diff�rence en secondes
+					k = (MainServidor.FLOOD_TIME  - k)/1000;//On calcul la diffï¿½rence en secondes
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "0115;"+((int)Math.ceil(k)+1));
 					return;
 				}
@@ -3541,7 +3203,7 @@ public class JuegoThread implements Runnable {
 				long x; 
 				if((x = System.currentTimeMillis() - _timeLastIncarnamMsg) < MainServidor.FLOOD_TIME)
 				{
-					x = (MainServidor.FLOOD_TIME - x)/1000;//Calculamos a diferen�a em segundos
+					x = (MainServidor.FLOOD_TIME - x)/1000;//Calculamos a diferenï¿½a em segundos
 					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "0115;"+((int)Math.ceil(x)+1));
 					return; 
 				} 
@@ -3657,7 +3319,7 @@ public class JuegoThread implements Runnable {
 		if(targetID > 0)//Expulsion d'un joueurs autre que soi-meme
 		{
 			Personaje target = Mundo.getPersonnage(targetID);
-			//On ne quitte pas un joueur qui : est null, ne combat pas, n'est pas de �a team.
+			//On ne quitte pas un joueur qui : est null, ne combat pas, n'est pas de ï¿½a team.
 			if(target == null || target.getPelea() == null || target.getPelea().getTeamID(target.getID()) != _personaje.getPelea().getTeamID(_personaje.getID()))return;
 			_personaje.getPelea().leftFight(_personaje, target);
 			
@@ -3736,11 +3398,11 @@ public class JuegoThread implements Runnable {
 						_personaje.getActualCelda().removePlayer(_personaje.getID());
 						GestorSalida.GAME_SEND_BN(_out);
 						String path = GA._args;
-						//On prend la case cibl�e
+						//On prend la case ciblï¿½e
 						Case nextCell = _personaje.getActualMapa().getMapa(GestorEncriptador.cellCode_To_ID(path.substring(path.length()-2)));
 						Case targetCell = _personaje.getActualMapa().getMapa(GestorEncriptador.cellCode_To_ID(GA._packet.substring(GA._packet.length()-2)));
 						
-						//On d�finie la case et on ajoute le personnage sur la case
+						//On dï¿½finie la case et on ajoute le personnage sur la case
 						_personaje.set_curCell(nextCell);
 						_personaje.set_orientation(GestorEncriptador.getIntByHashedValue(path.charAt(path.length()-3)));
 						_personaje.getActualCelda().addPerso(_personaje);
@@ -3748,7 +3410,7 @@ public class JuegoThread implements Runnable {
 						
 						if(targetCell.getObject() != null)
 						{
-							//Si c'est une "borne" comme Emotes, ou Cr�ation guilde
+							//Si c'est une "borne" comme Emotes, ou Crï¿½ation guilde
 							if(targetCell.getObject().getID() == 1324)
 							{
 								Constantes.applyPlotIOAction(_personaje, _personaje.getActualMapa().getID(),targetCell.getID());
@@ -3847,7 +3509,7 @@ public class JuegoThread implements Runnable {
 			case 303 -> game_tryCac(packet);
 //Action Sur Map
 			case 500 -> AccionDeJuego(GA);
-//Panneau int�rieur de la maison
+//Panneau intï¿½rieur de la maison
 			case 507 -> house_action(packet);
 //Mariage oui
 			case 618 -> {
@@ -3887,7 +3549,7 @@ public class JuegoThread implements Runnable {
 		Casas h = _personaje.getInHouse();
 		if(h == null) return;
 		switch (actionID) {
-//V�rouiller maison
+//Vï¿½rouiller maison
 			case 81 -> h.Lock(_personaje);
 //Acheter maison
 			case 97 -> h.BuyIt(_personaje);
@@ -4070,7 +3732,7 @@ public class JuegoThread implements Runnable {
 			AtomicReference<String> pathRef = new AtomicReference<>(path);
 			int result = Camino.isValidPath(_personaje.getActualMapa(), _personaje.getActualCelda().getID(),pathRef, null);
 			
-			//Si d�placement inutile
+			//Si dï¿½placement inutile
 			if(result == 0) {
 				GestorSalida.GAME_SEND_GA_PACKET(_out, "", "0", "", "");
 				removeAction(GA);
@@ -4121,8 +3783,8 @@ public class JuegoThread implements Runnable {
 	}
 
 	private void parseAccountPacket(String packet) {
-		//V�rifie d'abord si il contient des termes d�finit
-		//Si le nom passe le test, on v�rifie que les caract�re entr� sont correct.
+		//Vï¿½rifie d'abord si il contient des termes dï¿½finit
+		//Si le nom passe le test, on vï¿½rifie que les caractï¿½re entrï¿½ sont correct.
 		//Si le nom est invalide
 		//SocketManager.GAME_SEND_HIDE_GENERATE_NAME(_out);
 		switch (packet.charAt(1)) {
@@ -4432,7 +4094,7 @@ public class JuegoThread implements Runnable {
 			if (Obv.eatItem(_perso, Food)) {
 				SQLManager.UPDATE_SPEAKING(Obv);//on save
 
-				SocketManager.GAME_SEND_OCO_PACKET(_perso, Obj);//Update affichage (li� obligatoirement pour nourrir)
+				SocketManager.GAME_SEND_OCO_PACKET(_perso, Obj);//Update affichage (liï¿½ obligatoirement pour nourrir)
 
 				//On envoit le reste (apparence)
 				SocketManager.GAME_SEND_Ow_PACKET(_perso);
@@ -4451,7 +4113,7 @@ public class JuegoThread implements Runnable {
 				SocketManager.GAME_SEND_BN(_perso);
 			} else {
 				if (Ancestrar.CONFIG_DEBUG) {
-					Ancestrar.printIn("Ne peut pas �tre nourri", true);
+					Ancestrar.printIn("Ne peut pas ï¿½tre nourri", true);
 				}
 				SocketManager.GAME_SEND_BN(_perso);
 				return;
@@ -4486,7 +4148,7 @@ public class JuegoThread implements Runnable {
 			SQLManager.UPDATE_SPEAKING(Obv);//on save
 
 			if (Obj.is_linked()) {
-				SocketManager.GAME_SEND_OCO_PACKET(_perso, Obj);//Update affichage si li�
+				SocketManager.GAME_SEND_OCO_PACKET(_perso, Obj);//Update affichage si liï¿½
 			} else {
 				SocketManager.GAME_SEND_OCO_PACKET(_perso, Obv);//Update affichage si seul
 			}

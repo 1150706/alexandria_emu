@@ -1,7 +1,7 @@
 package comunes
 
 import juego.JuegoServidor
-import juego.JuegoServidor.AllFightsTurns
+import juego.JuegoServidor.todoslosturnospelea
 import realm.RealmServer
 import java.io.*
 import java.net.InetAddress
@@ -226,7 +226,7 @@ object MainServidor {
         println("Creado en: $differenceTime segundos")
         isRunning = true
         print("Lanzando el Timer global: ")
-        _passerTours = Thread(AllFightsTurns())
+        _passerTours = Thread(todoslosturnospelea())
         _passerTours!!.start()
         println("Lanzado!")
         println("Lanzamiento del server de juego con el puerto: $PUERTO_DE_JUEGO")
@@ -518,7 +518,7 @@ object MainServidor {
         println("Cerrando el servidor")
         if (isRunning) {
             isRunning = false
-            gameServer!!.expulsar_a_todos()
+            gameServer!!.expulsaratodos()
             Mundo.saveAll(null)
             GestorSQL.cerrar_consulta()
         }

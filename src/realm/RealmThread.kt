@@ -220,7 +220,7 @@ class RealmThread(sock: Socket?) : Runnable {
                     GestorSalida.REALM_SEND_PERSO_LIST(_imprimir, _cuenta!!.numeroDePersonajes)
                 }
                 packet == "AX1" -> {
-                    MainServidor.gameServer!!.addWaitingCompte(_cuenta)
+                    _cuenta?.let { MainServidor.gameServer!!.addWaitingCompte(it) }
                     val ip = _cuenta!!.actualIP
                     Mundo.getPersonajePorCuenta(_cuenta!!.id)
                     GestorSalida.REALM_SEND_GAME_SERVER_IP(_imprimir, _cuenta!!.id, ip == "127.0.0.1")

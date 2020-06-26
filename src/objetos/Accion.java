@@ -720,7 +720,7 @@ public class Accion {
 					Animaciones animation = Mundo.getAnimation(AnimationId);
 					if(perso.getPelea() != null) return;
 					perso.changeOrientation(1);
-					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "0", 228, perso.getID()+";"+cellid+","+ Animaciones.PrepareToGA(animation), "");
+					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "0", 228, perso.getID()+";"+cellid+","+ Animaciones.prepararparaGA(animation), "");
 				}catch(Exception e){
 					JuegoServidor.agregar_a_los_logs(e.getMessage());}
 				break;

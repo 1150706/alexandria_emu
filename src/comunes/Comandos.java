@@ -1059,10 +1059,10 @@ public class Comandos {
 	        GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "isAlive= " + MainServidor._passerTours.isAlive() + ", SDATA= " + MainServidor._passerTours.toString());
 		} else 
 			if (command.equalsIgnoreCase("EXPULSAR_A_TODOS")) {
-				MainServidor.gameServer.expulsar_a_todos();
+				MainServidor.gameServer.expulsaratodos();
 			}else
 		if (command.equalsIgnoreCase("FINALIZAR_TURNOS")) {
-			MainServidor._passerTours = new Thread(new JuegoServidor.AllFightsTurns());
+			MainServidor._passerTours = new Thread(new JuegoServidor.todoslosturnospelea());
 			MainServidor._passerTours.start();
 			GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_imprimir, "Finalizados");
 		} else    

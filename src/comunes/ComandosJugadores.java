@@ -9,7 +9,6 @@ public class ComandosJugadores {
     public static int _accion;
     public static String _argumento;
     public static String _habilitado;
-    public static Accion _accionJugador;
 
     public ComandosJugadores(int id, String nombre, int accion, String argumento, String habilitado) {
         _id = id;
@@ -17,7 +16,6 @@ public class ComandosJugadores {
         _accion = accion;
         _argumento = argumento;
         _habilitado = habilitado;
-        _accionJugador = new Accion(getAccion(),getArgumento(),"");
     }
 
     public int getID() { return _id; }
@@ -33,6 +31,7 @@ public class ComandosJugadores {
     public void TipoAcciones(Personaje perso) {
         if(perso == null)return;
         if(perso.getCuenta().getJuegoThread() == null) return;
-        _accionJugador.apply(perso,null,-1,-1);
+        Accion comando = new Accion(getAccion(),getArgumento(),"");
+        comando.apply(perso,null,-1,-1);
     }
 }

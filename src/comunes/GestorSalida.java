@@ -943,8 +943,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Fight("+fight.getFighters(teams).size()+") : Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_GA_PACKET(PrintWriter out, String actionID,String s0,String s1, String s2)
-	{
+	public static void GAME_SEND_GA_PACKET(PrintWriter out, String actionID,String s0,String s1, String s2) {
 		String packet = "GA"+actionID+";"+s0;
 		if(!s1.equals(""))
 			packet += ";"+s1;
@@ -1663,7 +1662,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>"+packet);
 	}
 	
-	public static void GAME_SEND_EL_TRUNK_PACKET(Personaje perso, Cofres t) {
+	public static void ENVIAR_PAQUETE_COFRE(Personaje perso, Cofres t) {
 		String packet = "EL"+t.parseToTrunkPacket();
 		enviar(perso,packet);
 		if(MainServidor.MOSTRAR_ENVIADOS)
@@ -2104,7 +2103,7 @@ public class GestorSalida {
 			JuegoServidor.addToSockLog("Game: Send>>" + packet);
 	}
 	
-    public static void GAME_SEND_KODE(Personaje perso, String str) {
+    public static void EVIAR_CODIGO(Personaje perso, String str) {
         String packet = "K" + str;
         enviar(perso, packet);
         if(MainServidor.MOSTRAR_ENVIADOS)

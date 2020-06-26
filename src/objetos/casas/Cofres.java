@@ -12,234 +12,201 @@ import comunes.Constantes;
 import comunes.GestorSQL;
 import comunes.GestorSalida;
 import comunes.Mundo;
+import objetos.Accion;
 import objetos.Cuenta;
 import objetos.Objeto;
 import objetos.Personaje;
 
-
-/** Adlesne **/
-
 public class Cofres {
 	
 	private final int _id;
-	private final int _house_id;
-	private final short _mapid;
-	private final int _cellid;
-	private final Map<Integer, Objeto> _object = new TreeMap<>();
+	private final int _casa;
+	private final short _mapa;
+	private final int _celda;
+	private final Map<Integer, Objeto> _objetos = new TreeMap<>();
 	private long _kamas;
-	private String _key;
-	private int _owner_id;
+	private String _llave;
+	private int _dueño;
+	private Personaje _personaje = null;
 	
-	public Cofres(int id, int house_id, short mapid, int cellid, String object, long kamas, String key, int owner_id)
-	{
+	public Cofres(int id, int casa, short mapa, int celda, String objeto, long kamas, String llave, int dueño) {
 		_id = id;
-		_house_id = house_id;
-		_mapid = mapid;
-		_cellid = cellid;
+		_casa = casa;
+		_mapa = mapa;
+		_celda = celda;
 		
-		for(String item : object.split("\\|"))
-		{
-			if(item.equals(""))continue;
-			String[] infos = item.split(":");
+		for(String objetos : objeto.split("\\|")) {
+			if(objetos.equals(""))continue;
+			String[] infos = objetos.split(":");
 			int guid = Integer.parseInt(infos[0]);
 
 			Objeto obj = Mundo.getObjet(guid);
 			if( obj == null)continue;
-			_object.put(obj.getID(), obj);
+			_objetos.put(obj.getID(), obj);
 		}
 
 		_kamas = kamas;
-		_key = key;
-		_owner_id = owner_id;
+		_llave = llave;
+		_dueño = dueño;
 	}
 	
-	public int get_id()
+	public int getID()
 	{
 		return _id;
 	}
 	
-    public int get_house_id()
+    public int getCasa()
     {
-            return _house_id;
+            return _casa;
     }
 	
-	public int get_mapid()
+	public int getMapa()
 	{
-		return _mapid;
+		return _mapa;
 	}
 	
-	public int get_cellid()
+	public int getCelda()
 	{
-		return _cellid;
+		return _celda;
 	}
 	
-	public Map<Integer, Objeto> get_object()
+	public Map<Integer, Objeto> getObjetos()
 	{
-		return _object;
+		return _objetos;
 	}
 	
-	public long get_kamas()
+	public long getKamas()
 	{
 		return _kamas;
 	}
 	
-	public void set_kamas(long kamas)
+	public void setKamas(long kamas)
 	{
 		_kamas = kamas;
 	}
 	
-	public String get_key()
+	public String getLlave()
 	{
-		return _key;
+		return _llave;
 	}
 	
-	public void set_key(String key)
+	public void setLlave(String key)
 	{
-		_key = key;
+		_llave = key;
 	}
 	
-	public int get_owner_id()
+	public int getDueño()
 	{
-		return _owner_id;
+		return _dueño;
 	}
 	
-	public void set_owner_id(int owner_id)
+	public void setDueño(int owner_id)
 	{
-		_owner_id = owner_id;
+		_dueño = owner_id;
+	}
+
+	public Personaje getPersonaje() { return _personaje; }
+
+	public void setPersonaje(Personaje personaje) {
+		this._personaje = personaje;
 	}
 	
-	public void Lock(Personaje P)
+	public void cerradura(Personaje personaje)
 	{
-		GestorSalida.GAME_SEND_KODE(P, "CK1|8");
+		GestorSalida.EVIAR_CODIGO(personaje, "CK1|8");
 	}
 	
-	public static Cofres get_trunk_id_by_coord(int map_id, int cell_id)
-	{
+	public static Cofres get_trunk_id_by_coord(int map_id, int cell_id) {
 		for(Entry<Integer, Cofres> trunk : Mundo.getTrunks().entrySet())
-		{
-			if(trunk.getValue().get_mapid() == map_id && trunk.getValue().get_cellid() == cell_id)
-			{
+			if(trunk.getValue().getMapa() == map_id && trunk.getValue().getCelda() == cell_id)
 				return trunk.getValue();
-			}
-		}
 		return null;
 	}
 	
-	public static void LockTrunk(Personaje P, String packet)
-	{
+	public static void LockTrunk(Personaje P, String packet) {
 		Cofres t = P.getInTrunk();
 		if(t == null) return;
-		if(t.isTrunk(P, t))
-		{
+		if(t.isTrunk(P, t)) {
 			GestorSQL.cofre_codigo(P, t, packet);//Change le code
-			t.set_key(packet);
+			t.setLlave(packet);
 			closeCode(P);
-		}else
-		{
+		} else {
 			closeCode(P);
 		}
 		P.setInTrunk(null);
 		return;
 	}
-	
-	public void HopIn(Personaje P)//Ouvrir coffre
-	{
-		// En gros si il fait quelque chose :)
-		if(P.getPelea() != null ||
-		   P.get_isTalkingWith() != 0 ||
-		   P.get_isTradingWith() != 0 ||
-		   P.getCurJobAction() != null ||
-		   P.get_curExchange() != null)
-		{
+
+	public void EntrarEnCofre(Personaje player) {
+		if (player.getPelea() != null || player.getExchangeAction() != null)
 			return;
-		}
-		
-		Cofres t = P.getInTrunk();
-		Casas h = Mundo.getHouse(_house_id);
-		
-		if(t == null) return;
-		if(t.get_owner_id() == P.getAccID() || (P.get_guild() == null ? false : P.get_guild().get_id() == h.get_guild_id() && h.canDo(Constantes.C_GNOCODE)))
-		{
-			OpenTrunk(P, "-", true);
-		}
-		else if(P.get_guild() == null && h.canDo(Constantes.C_OCANTOPEN))//si on compare par id ça bug (guild null)
-		{
-			GestorSalida.GAME_SEND_MESSAGE(P, "Ce coffre ne peut être ouvert que par les membres de la guilde !", MainServidor.CONFIG_MOTD_COLOR);
-		return;
-		}
-		else if(t.get_owner_id() > 0)//Une personne autre le possède, il faut le code pour rentrer
-		{
-			GestorSalida.GAME_SEND_KODE(P, "CK0|8");//8 étant le nombre de chiffre du code
-		}
-		else if(t.get_owner_id() == 0)//Coffre a personne
-		{
-			return;
-		}else
-		{
-			return;
-		}
+
+		Casas house = Mundo.getHouse(getCasa());
+
+		if(house.get_dueño() == player.getAccID() && this.getDueño() != player.getAccID())
+			this.setDueño(player.getAccID());
+		if (this.getDueño() == player.getAccID() ||(player.getActualGrupo() != null)|| (player.get_guild() != null && player.get_guild().get_id() == house.get_gremio() && house.canDo(Constantes.C_GNOCODE))) {
+			player.setExchangeAction(new Accion.AccionIntercambiar<>(Accion.AccionIntercambiar.IN_TRUNK, this));
+			AbrirCofre(player, "-", true);
+		} else if (player.get_guild() == null && house.canDo(Constantes.C_OCANTOPEN))
+			GestorSalida.GAME_SEND_MESSAGE(player, "Ce coffre ne peut être ouvert que par les membres de la guilde !", MainServidor.CONFIG_MOTD_COLOR);
+		else if (this.getDueño() > 0)
+			GestorSalida.EVIAR_CODIGO(player, "CK0|8");
 	}
-	
-	public static void OpenTrunk(Personaje P, String packet, boolean isTrunk)//Ouvrir un coffre
-	{	
-		Cofres t = P.getInTrunk();
-		if(t == null) return;
-		
-		if(packet.compareTo(t.get_key()) == 0 || isTrunk)//Si c'est chez lui ou que le mot de passe est bon
+
+	public static void AbrirCofre(Personaje P, String packet, boolean isTrunk) {//Ouvrir un coffre
+		Cofres t = (Cofres) P.getExchangeAction().getValue();
+		if (t == null)
+			return;
+		if (packet.compareTo(t.getLlave()) == 0 || isTrunk)//Si c'est chez lui ou que le mot de passe est bon
 		{
+			t._personaje = P;
 			GestorSalida.GAME_SEND_ECK_PACKET(P.getCuenta().getJuegoThread().get_out(), 5, "");
-			GestorSalida.GAME_SEND_EL_TRUNK_PACKET(P, t);
+			GestorSalida.ENVIAR_PAQUETE_COFRE(P, t);
 			closeCode(P);
-		}
-		
-		else if(packet.compareTo(t.get_key()) != 0)//Mauvais code
+			P.setExchangeAction(new Accion.AccionIntercambiar<>(Accion.AccionIntercambiar.IN_TRUNK, t));
+		} else if (packet.compareTo(t.getLlave()) != 0)//Mauvais code
 		{
-			GestorSalida.GAME_SEND_KODE(P, "KE");
+			GestorSalida.EVIAR_CODIGO(P, "KE");
 			closeCode(P);
-			P.setInTrunk(null);
+			P.setExchangeAction(null);
 		}
 	}
 	
 	public static void closeCode(Personaje P)
 	{
-		GestorSalida.GAME_SEND_KODE(P, "V");
+		GestorSalida.EVIAR_CODIGO(P, "V");
 	}
 	
 	public boolean isTrunk(Personaje P, Cofres t)//Savoir si c'est son coffre
 	{
-		if(t.get_owner_id() == P.getAccID()) return true;
+		if(t.getDueño() == P.getAccID()) return true;
 		else return false;
 	}
 	
-    public static ArrayList<Cofres> getTrunksByHouse(Casas h)
-    {
+    public static ArrayList<Cofres> getTrunksByHouse(Casas h) {
             ArrayList<Cofres> trunks = new ArrayList<>();
-            for(Entry<Integer, Cofres> trunk : Mundo.getTrunks().entrySet())
-            {
-                    if(trunk.getValue().get_house_id() == h.get_id())
-                    {
+            for(Entry<Integer, Cofres> trunk : Mundo.getTrunks().entrySet()) {
+                    if(trunk.getValue().getCasa() == h.get_id()) {
                             trunks.add(trunk.getValue());
                     }
             }
-           
             return trunks;
     }
     
-	public String parseToTrunkPacket()
-	{
+	public String parseToTrunkPacket() {
 		StringBuilder packet = new StringBuilder();
-		for(Objeto obj : _object.values())
+		for(Objeto obj : _objetos.values())
 			packet.append("O").append(obj.parseItem()).append(";");
-		if(get_kamas() != 0)
-			packet.append("G").append(get_kamas());
+		if(getKamas() != 0)
+			packet.append("G").append(getKamas());
 		return packet.toString();
 	}
 	
-	public void addInTrunk(int guid, int qua, Personaje P)
-	{
-		if(P.getInTrunk().get_id() != get_id()) return;
+	public void addInTrunk(int guid, int qua, Personaje P) {
+		if(P.getInTrunk().getID() != getID()) return;
 		
-		if(_object.size() >= 80) // Le plus grand c'est pour si un admin ajoute des objets via la bdd...
+		if(_objetos.size() >= 80) // Le plus grand c'est pour si un admin ajoute des objets via la bdd...
 		{
 			GestorSalida.GAME_SEND_MESSAGE(P, "Le nombre d'objets maximal de ce coffre à été atteint !", MainServidor.CONFIG_MOTD_COLOR);
 			return;
@@ -268,19 +235,18 @@ public class Cofres {
 				//On enleve l'objet du sac du joueur
 				P.removeItem(PersoObj.getID());
 				//On met l'objet du sac dans le coffre, avec la meme quantité
-				_object.put(PersoObj.getID() ,PersoObj);
+				_objetos.put(PersoObj.getID() ,PersoObj);
 				str = "O+"+PersoObj.getID()+"|"+PersoObj.getQuantity()+"|"+PersoObj.getTemplate().getID()+"|"+PersoObj.parseStatsString();
 				GestorSalida.GAME_SEND_REMOVE_ITEM_PACKET(P, guid);
 				
-			}
-			else//S'il reste des objets au joueur
+			} else//S'il reste des objets au joueur
 			{
 				//on modifie la quantité d'item du sac
 				PersoObj.setQuantity(newQua);
 				//On ajoute l'objet au coffre et au monde
 				TrunkObj = Objeto.getCloneObjet(PersoObj, qua);
 				Mundo.addObjet(TrunkObj, true);
-				_object.put(TrunkObj.getID() ,TrunkObj);
+				_objetos.put(TrunkObj.getID() ,TrunkObj);
 				
 				//Envoie des packets
 				str = "O+"+TrunkObj.getID()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
@@ -316,7 +282,7 @@ public class Cofres {
 		
 		for(Personaje perso : P.getActualMapa().getPersos())
 		{
-			if(perso.getInTrunk() != null && get_id() == perso.getInTrunk().get_id())
+			if(perso.getInTrunk() != null && getID() == perso.getInTrunk().getID())
 			{
 				GestorSalida.GAME_SEND_EsK_PACKET(perso, str);
 			}
@@ -328,12 +294,12 @@ public class Cofres {
 	
 	public void removeFromTrunk(int guid, int qua, Personaje P)
 	{
-		if(P.getInTrunk().get_id() != get_id()) return;
+		if(P.getInTrunk().getID() != getID()) return;
 		
 		Objeto TrunkObj = Mundo.getObjet(guid);
 		if(TrunkObj == null) return;
 		//Si le joueur n'a pas l'item dans son coffre
-		if(_object.get(guid) == null)
+		if(_objetos.get(guid) == null)
 		{
 			JuegoServidor.agregar_a_los_logs("Le joueur "+P.getNombre()+" a tenter de retirer un objet dans un coffre qu'il n'avait pas.");
 			return;
@@ -351,7 +317,7 @@ public class Cofres {
 			if(newQua <= 0)
 			{
 				//On retire l'item du coffre
-				_object.remove(guid);
+				_objetos.remove(guid);
 				//On l'ajoute au joueur
 				P.getItems().put(guid, TrunkObj);
 				
@@ -375,14 +341,11 @@ public class Cofres {
 				str = "O+"+TrunkObj.getID()+"|"+TrunkObj.getQuantity()+"|"+TrunkObj.getTemplate().getID()+"|"+TrunkObj.parseStatsString();
 				
 			}
-		}
-		else
-		{
+		} else {
 			//S'il ne reste rien dans le coffre
-			if(newQua <= 0)
-			{
+			if(newQua <= 0) {
 				//On retire l'item du coffre
-				_object.remove(TrunkObj.getID());
+				_objetos.remove(TrunkObj.getID());
 				Mundo.removeItem(TrunkObj.getID());
 				//On Modifie la quantité de l'item du sac du joueur
 				PersoObj.setQuantity(PersoObj.getQuantity() + TrunkObj.getQuantity());
@@ -391,9 +354,7 @@ public class Cofres {
 				GestorSalida.GAME_SEND_OBJECT_QUANTITY_PACKET(P, PersoObj);
 				str = "O-"+guid;
 				
-			}
-			else//S'il reste des objets dans le coffre
-			{
+			} else { //S'il reste des objets dans le coffre
 				//On retire X objet du coffre
 				TrunkObj.setQuantity(newQua);
 				//On ajoute X objets au joueurs
@@ -405,10 +366,8 @@ public class Cofres {
 			}
 		}
 		
-		for(Personaje perso : P.getActualMapa().getPersos())
-		{
-			if(perso.getInTrunk() != null && get_id() == perso.getInTrunk().get_id())
-			{
+		for(Personaje perso : P.getActualMapa().getPersos()) {
+			if(perso.getInTrunk() != null && getID() == perso.getInTrunk().getID()) {
 				GestorSalida.GAME_SEND_EsK_PACKET(perso, str);
 			}
 		}
@@ -419,7 +378,7 @@ public class Cofres {
 	
 	private Objeto getSimilarTrunkItem(Objeto obj)
 	{
-		for(Objeto value : _object.values())
+		for(Objeto value : _objetos.values())
 		{
 			if(value.getTemplate().getType() == 85)
 				continue;
@@ -432,7 +391,7 @@ public class Cofres {
 	public String parseTrunkObjetsToDB()
 	{
 		StringBuilder str = new StringBuilder();
-		for(Entry<Integer, Objeto> entry : _object.entrySet())
+		for(Entry<Integer, Objeto> entry : _objetos.entrySet())
 		{
 			Objeto obj = entry.getValue();
 			str.append(obj.getID()).append("|");
@@ -442,19 +401,19 @@ public class Cofres {
 	
 	public void purgeTrunk()
 	{
-		for(Entry<Integer, Objeto> obj : get_object().entrySet())
+		for(Entry<Integer, Objeto> obj : getObjetos().entrySet())
 		{
 			Mundo.removeItem(obj.getKey());
 		}
-		get_object().clear();
+		getObjetos().clear();
 	}
 	
 	public void moveTrunktoBank(Cuenta Cbank)
 	{
-		for(Entry<Integer, Objeto> obj : get_object().entrySet())
+		for(Entry<Integer, Objeto> obj : getObjetos().entrySet())
 		{
 			Cbank.getBank().put(obj.getKey(), obj.getValue());
 		}
-		get_object().clear();
+		getObjetos().clear();
 	}
 }

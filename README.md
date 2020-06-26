@@ -55,3 +55,4 @@ JRE Bell-Soft: <a href="https://download.bell-sw.com/java/14.0.1+8/bellsoft-jre1
 
 <b>v0.00.6</b>
 - Comandos de los jugadores totalmente personalizables desde la base de datos (Creditos: JEAUX)
+- Sistema de auto agregado de los cofres a la base de datos cuando el cofre no existe

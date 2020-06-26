@@ -54,3 +54,4 @@ v0.00.5
 
 v0.00.6
 - Comandos de los jugadores totalmente personalizables desde la base de datos (Creditos: JEAUX)
+- Sistema de auto agregado de los cofres a la base de datos cuando el cofre no existe

@@ -22,7 +22,6 @@ import objetos.Objeto.ObjTemplate;
 import objetos.Personaje.Grupo;
 import objetos.casas.Casas;
 import objetos.casas.Cofres;
-import objetos.hechizos.EfectoHechizo;
 import objetos.hechizos.Hechizos.SortStats;
 import comunes.*;
 
@@ -198,57 +197,54 @@ public class JuegoThread implements Runnable {
 		}
 	}
 	
-	private void parseHousePacket(String packet)
-	{
+	private void parseHousePacket(String packet) {
 		switch (packet.charAt(1)) {
-//Acheter la maison
+			//Acheter la maison
 			case 'B' -> {
 				packet = packet.substring(2);
 				Casas.HouseAchat(_personaje);
 			}
-//Maison de guilde
+			//Maison de guilde
 			case 'G' -> {
 				packet = packet.substring(2);
 				if (packet.isEmpty()) packet = null;
 				Casas.parseHG(_personaje, packet);
 			}
-//Quitter/Expulser de la maison
+			//Quitter/Expulser de la maison
 			case 'Q' -> {
 				packet = packet.substring(2);
 				Casas.Leave(_personaje, packet);
 			}
-//Modification du prix de vente
+			//Modification du prix de vente
 			case 'S' -> {
 				packet = packet.substring(2);
 				Casas.SellPrice(_personaje, packet);
 			}
-//Fermer fenetre d'achat
+			//Fermer fenetre d'achat
 			case 'V' -> Casas.closeBuy(_personaje);
 		}
 	}
 	
-	private void parseHouseKodePacket(String packet)
-	{
+	private void parseHouseKodePacket(String packet) {
 		switch (packet.charAt(1)) {
-//Fermer fenetre du code
+			//Fermer fenetre du code
 			case 'V' -> Casas.closeCode(_personaje);
-//Envoi du code
+			//Envoi du code
 			case 'K' -> House_code(packet);
 		}
 	}
 	
-	private void House_code(String packet)
-	{
+	private void House_code(String packet) {
 		switch (packet.charAt(2)) {
-//Envoi du code
+			//Envoi du code
 			case '0' -> {
 				packet = packet.substring(4);
 				if (_personaje.getInTrunk() != null)
-					Cofres.OpenTrunk(_personaje, packet, false);
+					Cofres.AbrirCofre(_personaje, packet, false);
 				else
 					Casas.OpenHouse(_personaje, packet, false);
 			}
-//Changement du code
+			//Changement du code
 			case '1' -> {
 				packet = packet.substring(4);
 				if (_personaje.getInTrunk() != null)
@@ -259,14 +255,13 @@ public class JuegoThread implements Runnable {
 		}
 	}
 	
-	private void parse_enemyPacket(String packet)
-	{
+	private void parse_enemyPacket(String packet) {
 		switch (packet.charAt(1)) {
-//Ajouter
+			//Ajouter
 			case 'A' -> Enemy_add(packet);
-//Delete
+			//Delete
 			case 'D' -> Enemy_delete(packet);
-//Liste
+			//Liste
 			case 'L' -> GestorSalida.GAME_SEND_ENEMY_LIST(_personaje);
 		}
 	}
@@ -635,7 +630,7 @@ public class JuegoThread implements Runnable {
 		int HouseID = Integer.parseInt(packet);
 		Casas h = Mundo.getHouses().get(HouseID);
 		if(h == null) return;
-		if(_personaje.get_guild().get_id() != h.get_guild_id())
+		if(_personaje.get_guild().get_id() != h.get_gremio())
 		{
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1135");
 			return;
@@ -648,7 +643,7 @@ public class JuegoThread implements Runnable {
 		if (_personaje.hasItemTemplate(8883, 1))
 		{
 			_personaje.removeByTemplateID(8883,1);
-			_personaje.teletransportar((short)h.get_mapid(), h.get_caseid());
+			_personaje.teletransportar((short)h.get_mapainterior(), h.get_celdainterior());
 		}else
 		{
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "1137");
@@ -2435,20 +2430,20 @@ public class JuegoThread implements Runnable {
 					if (kamas > 0)//Si On ajoute des kamas au coffre
 					{
 						if (_personaje.getKamas() < kamas) kamas = _personaje.getKamas();
-						t.set_kamas(t.get_kamas() + kamas);//On ajoute les kamas au coffre
+						t.setKamas(t.getKamas() + kamas);//On ajoute les kamas au coffre
 						_personaje.setKamas(_personaje.getKamas() - kamas);//On retire les kamas du personnage
 						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_personaje);
 					} else // On retire des kamas au coffre
 					{
 						kamas = -kamas;//On repasse en positif
-						if (t.get_kamas() < kamas) kamas = t.get_kamas();
-						t.set_kamas(t.get_kamas() - kamas);//On retire les kamas de la banque
+						if (t.getKamas() < kamas) kamas = t.getKamas();
+						t.setKamas(t.getKamas() - kamas);//On retire les kamas de la banque
 						_personaje.setKamas(_personaje.getKamas() + kamas);//On ajoute les kamas du personnage
 						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_personaje);
 					}
 					for (Personaje P : Mundo.getOnlinePersos()) {
-						if (P.getInTrunk() != null && _personaje.getInTrunk().get_id() == P.getInTrunk().get_id()) {
-							GestorSalida.GAME_SEND_EsK_PACKET(P, "G" + t.get_kamas());
+						if (P.getInTrunk() != null && _personaje.getInTrunk().getID() == P.getInTrunk().getID()) {
+							GestorSalida.GAME_SEND_EsK_PACKET(P, "G" + t.getKamas());
 						}
 					}
 					GestorSQL.actualizar_cofre(t);
@@ -3501,17 +3496,17 @@ public class JuegoThread implements Runnable {
 		JuegoAccion GA = new JuegoAccion(nextGameActionID,actionID,packet);
 
 		switch (actionID) {
-//Deplacement
+			//Deplacement
 			case 1 -> game_parseDeplacementPacket(GA);
-//Sort
+			//Sort
 			case 300 -> game_tryCastSpell(packet);
-//Attaque CaC
+			//Attaque CaC
 			case 303 -> game_tryCac(packet);
-//Action Sur Map
+			//Action Sur Map
 			case 500 -> AccionDeJuego(GA);
-//Panneau intï¿½rieur de la maison
+			//Panneau intï¿½rieur de la maison
 			case 507 -> house_action(packet);
-//Mariage oui
+			//Mariage oui
 			case 618 -> {
 				_personaje.setisOK(Integer.parseInt(packet.substring(5, 6)));
 				GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(_personaje.getActualMapa(), "", _personaje.getID(), _personaje.getNombre(), "Oui");
@@ -3731,9 +3726,21 @@ public class JuegoThread implements Runnable {
 			}
 			AtomicReference<String> pathRef = new AtomicReference<>(path);
 			int result = Camino.isValidPath(_personaje.getActualMapa(), _personaje.getActualCelda().getID(),pathRef, null);
-			
+
 			//Si dï¿½placement inutile
+			Mapa.Case targetCell = this._personaje.getActualMapa().getMapa(GestorEncriptador.cellCode_To_ID(path.substring(path.length() - 2)));
+
 			if(result == 0) {
+				if (targetCell.getObject() != null) {
+					if (MainServidor.MOSTRAR_ENVIADOS) {
+						System.out.println("Objeto interactivo "+targetCell.getObject().getID()+" en la celda "+targetCell.getID()+" se ha detenido");
+						}
+					Mapa.InteractiveObject.getActionIO(this._personaje, targetCell, targetCell.getObject().getID());
+					Mapa.InteractiveObject.getSignIO(this._personaje, targetCell.getID(), targetCell.getObject().getID());
+					GestorSalida.GAME_SEND_GA_PACKET(_out, "", "0", "", "");
+					removeAction(GA);
+					return;
+				}
 				GestorSalida.GAME_SEND_GA_PACKET(_out, "", "0", "", "");
 				removeAction(GA);
 				return;

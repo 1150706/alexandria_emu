@@ -1170,14 +1170,14 @@ public class Mundo {
 			}
 			JuegoServidor.agregar_a_los_logs("Guardando las casas");
 			for(Casas house : Houses.values()) {
-				if(house.get_owner_id() > 0) {
+				if(house.get_dueño() > 0) {
 					Thread.sleep(100);//0.1 sec. pour 1 maison
 					GestorSQL.actualizar_casa(house);
 				}
 			}
 			JuegoServidor.agregar_a_los_logs("Guardando los cofres");
 			for(Cofres t : Trunks.values()) {
-				if(t.get_owner_id() > 0) {
+				if(t.getDueño() > 0) {
 					Thread.sleep(100);//0.1 sec. pour 1 coffre
 					GestorSQL.actualizar_cofre(t);
 				}
@@ -1616,7 +1616,7 @@ public class Mundo {
 		return Percepteurs;
 	}
 	
-	public static void addTrunk(Cofres trunk) { Trunks.put(trunk.get_id(), trunk); }
+	public static void addCofre(Cofres trunk) { Trunks.put(trunk.getID(), trunk); }
 	
 	public static Cofres getTrunk(int id)
 	{

@@ -2055,11 +2055,11 @@ object GestorSQL {
             p.setInt(2, h._id)
             p.execute()
             cerrar_nueva_consulta(p)
-            h._sale = 0
-            h._owner_id = P.accID
-            h._guild_id = 0
-            h._access = 0
-            h._key = "-"
+            h._venta = 0
+            h._dueño = P.accID
+            h._gremio = 0
+            h._acceso = 0
+            h._llave = "-"
             h._guild_rights = 0
         } catch (e: SQLException) {
             JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
@@ -2067,8 +2067,8 @@ object GestorSQL {
         }
         val trunks = Cofres.getTrunksByHouse(h)
         for (trunk in trunks) {
-            trunk._owner_id = P.accID
-            trunk._key = "-"
+            trunk.dueño = P.accID
+            trunk.llave = "-"
         }
         query = "UPDATE `datos_cofres` SET `dueño`=?, `llave`='-' WHERE `casa`=?;"
         try {
@@ -2085,7 +2085,7 @@ object GestorSQL {
 
     @JvmStatic
 	fun vender_casa(h: Casas, price: Int) {
-        h._sale = price
+        h._venta = price
         val p: PreparedStatement
         val query = "UPDATE `datos_casas` SET `venta`=? WHERE `id`=?;"
         try {
@@ -2111,7 +2111,7 @@ object GestorSQL {
             p.setInt(3, P.accID)
             p.execute()
             cerrar_nueva_consulta(p)
-            h._key = packet
+            h._llave = packet
         } catch (e: SQLException) {
             JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
             JuegoServidor.agregar_a_los_logs("Game: Query: $query")
@@ -2129,7 +2129,7 @@ object GestorSQL {
             p.setInt(3, h._id)
             p.execute()
             cerrar_nueva_consulta(p)
-            h._guild_id = GuildID
+            h._gremio = GuildID
             h._guild_rights = GuildRights
         } catch (e: SQLException) {
             JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
@@ -2157,11 +2157,11 @@ object GestorSQL {
         val baseQuery = "UPDATE `datos_casas` SET `dueño` = ?, `venta` = ?, `gremio` = ?, `acceso` = ?, `llave` = ?, `derechosgremio` = ? WHERE id = ?;"
         try {
             val p = nueva_consulta(baseQuery, _dinamicos)
-            p.setInt(1, h._owner_id)
-            p.setInt(2, h._sale)
-            p.setInt(3, h._guild_id)
-            p.setInt(4, h._access)
-            p.setString(5, h._key)
+            p.setInt(1, h._dueño)
+            p.setInt(2, h._venta)
+            p.setInt(3, h._gremio)
+            p.setInt(4, h._acceso)
+            p.setString(5, h._llave)
             p.setInt(6, h._guild_rights)
             p.setInt(7, h._id)
             p.execute()
@@ -2245,6 +2245,23 @@ object GestorSQL {
             var guid = 0
             val found = RS!!.first()
             if (found) guid = RS.getInt("max")
+            cerrar_resultado(RS)
+            return guid
+        } catch (e: SQLException) {
+            agregar_a_los_logs("SQL ERROR: " + e.message)
+            e.printStackTrace()
+            cerrarservidor()
+        }
+        return 0
+    }
+
+    @JvmStatic
+    fun siguiente_id_cofres(): Int {
+        try {
+            val RS = ejecutar_consulta("SELECT MAX(id) AS max FROM datos_cofres;", MainServidor.DB_DINAMICOS)
+            var guid = 0
+            val found = RS!!.first()
+            if (found) guid = RS.getInt("max") + 1
             cerrar_resultado(RS)
             return guid
         } catch (e: SQLException) {
@@ -2418,7 +2435,7 @@ object GestorSQL {
         try {
             val RS = ejecutar_consulta("SELECT * FROM datos_cofres;", MainServidor.DB_DINAMICOS)
             while (RS!!.next()) {
-                addTrunk(Cofres(
+                addCofre(Cofres(
                         RS.getInt("id"),
                         RS.getInt("casa"),
                         RS.getShort("mapa"),
@@ -2445,8 +2462,30 @@ object GestorSQL {
         try {
             p = nueva_consulta(query, _dinamicos)
             p.setString(1, packet)
-            p.setInt(2, t._id)
+            p.setInt(2, t.id)
             p.setInt(3, P.accID)
+            p.execute()
+            cerrar_nueva_consulta(p)
+        } catch (e: SQLException) {
+            JuegoServidor.agregar_a_los_logs("Game: SQL ERROR: " + e.message)
+            JuegoServidor.agregar_a_los_logs("Game: Query: $query")
+        }
+    }
+
+    @JvmStatic
+    fun agregar_cofre_a_casa(t: Cofres) {
+        val p: PreparedStatement
+        val query = "INSERT INTO `datos_cofres` (`id`,`casa`,`mapa`,`celda`,`objeto`,`kamas`,`llave`,`dueño`) VALUES (?,?,?,?,?,?,?,?)"
+        try {
+            p = nueva_consulta(query, _dinamicos)
+            p.setInt(1, t.id)
+            p.setInt(2, t.casa)
+            p.setInt(3, t.mapa)
+            p.setInt(4, t.celda)
+            p.setString(5, t.objetos.toString())
+            p.setInt(6, t.kamas.toInt())
+            p.setString(7, t.llave)
+            p.setInt(8, t.dueño)
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
@@ -2461,9 +2500,9 @@ object GestorSQL {
         val query = "UPDATE `datos_cofres` SET `kamas`=?, `objeto`=? WHERE `id`=?"
         try {
             p = nueva_consulta(query, _dinamicos)
-            p.setLong(1, t._kamas)
+            p.setLong(1, t.kamas)
             p.setString(2, t.parseTrunkObjetsToDB())
-            p.setInt(3, t._id)
+            p.setInt(3, t.id)
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {

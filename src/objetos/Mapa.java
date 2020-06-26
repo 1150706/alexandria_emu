@@ -6,6 +6,7 @@ import juego.JuegoThread.*;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.Timer;
+
 import objetos.Pelea.*;
 import objetos.Monstruo.*;
 import objetos.NPCModelo.*;
@@ -267,6 +268,57 @@ public class Mapa {
 		public boolean isWalkable() {
 			if(_template == null)return false;
 			return _template.isWalkable() && _state == Constantes.IOBJECT_STATE_FULL;
+		}
+
+		public static void getActionIO(final Personaje player, Mapa.Case cell, int id) {
+			switch(id) {
+				case 7041:
+				case 7042:
+				case 7043:
+				case 7044:
+				case 7045:
+				case 1748:
+					break;
+			}
+			switch (id) {
+				case 1524:
+				case 542://Statue Phoenix.
+					break;
+
+				case 684://Portillon donjon squelette.
+				case 1330://Pierre de kwak
+				case 1679:
+				case 3000://Ep?e Crocoburio
+				case 7546://Foire au troll
+				case 7547:
+
+				case 1324:// Plot Rouge des ?motes
+				case 1694://Village brigandin tire ?olienne
+				case 1695://Village brigandin tire ?olienne
+				case 7041: // Bas
+				case 7042: // Haut
+				case 7043: // Gauche
+				case 7044: // Droite
+				default:
+					break;
+			}
+		}
+
+		public static void getSignIO(Personaje perso, int cell, int id) {
+			switch (perso.getActualMapa().getID()) {
+				case 7460:
+				case 7411:
+				case 7543:
+				case 7314:
+				case 7417:
+				case 2698:
+				case 2814:
+				case 4493:
+				case 3087:
+				case 3018:
+				case 3433:
+				case 4876:
+			}
 		}
 	}
 	
@@ -768,7 +820,7 @@ public class Mapa {
 				//Coffre	
 				case 104://Ouvrir
 				case 105://Code
-					return (_object.getID() == 7350 || _object.getID() == 7351 || _object.getID() == 7353);
+					return (this._object.getID() == 7350 || this._object.getID() == 7351 || this._object.getID() == 7353);
 				//Action ID non trouvé
 				default:
 					JuegoServidor.agregar_a_los_logs("MapActionID non existant dans Case.canDoAction: "+id);
@@ -781,33 +833,31 @@ public class Mapa {
 			return _id;
 		}
 		
-		public void addOnCellStopAction(int id, String args, String cond)
-		{
+		public void addOnCellStopAction(int id, String args, String cond) {
 			if(_onCellStop == null) _onCellStop = new ArrayList<>();
 			
 			_onCellStop.add(new Accion(id,args,cond));
 		}
 		
-		public void applyOnCellStopActions(Personaje perso)
-		{
+		public void applyOnCellStopActions(Personaje perso) {
 			if(_onCellStop == null) return;
 			
-			for(Accion act : _onCellStop)
-			{
+			for(Accion act : _onCellStop) {
 				act.apply(perso, null, -1, -1);
 			}
 		}
-		public void addPerso(Personaje perso)
-		{
+
+		public void addPerso(Personaje perso) {
 			if(_persos == null) _persos = new TreeMap<>();
 			_persos.put(perso.getID(),perso);
 			
 		}
-		public void addFighter(Peleador fighter)
-		{
+
+		public void addFighter(Peleador fighter) {
 			if(_fighters == null) _fighters = new TreeMap<>();
 			_fighters.put(fighter.getID(),fighter);
 		}
+
 		public void removeFighter(Peleador fighter)
 		{
 			_fighters.remove(fighter.getID());
@@ -822,34 +872,34 @@ public class Mapa {
 		public boolean blockLoS() {
 			if(_fighters == null) return _LoS;
 			boolean fighter = true;
-			for(Entry<Integer, Peleador> f : _fighters.entrySet())
-			{
+			for(Entry<Integer, Peleador> f : _fighters.entrySet()) {
 				if(!f.getValue().isHide())fighter = false;
 			}
 			return _LoS && fighter;
 		}
+
 		public boolean isLoS()
 		{
 			return _LoS;
 		}
-		public void removePlayer(int _guid)
-		{
+
+		public void removePlayer(int _guid) {
 			if(_persos == null) return;
 			_persos.remove(_guid);
 			if(_persos.isEmpty()) _persos = null;
 		}
-		public Map<Integer, Personaje> getPersos()
-		{
+
+		public Map<Integer, Personaje> getPersos() {
 			if(_persos == null) return new TreeMap<>();
 			return _persos;
 		}
-		public Map<Integer, Peleador> getFighters()
-		{
+
+		public Map<Integer, Peleador> getFighters() {
 			if(_fighters == null) return new TreeMap<>();
 			return _fighters;
 		}
-		public Peleador getFirstFighter()
-		{
+
+		public Peleador getFirstFighter() {
 			if(_fighters == null) 
 				return null;
 			for(Entry<Integer, Peleador> entry : _fighters.entrySet())
@@ -857,57 +907,55 @@ public class Mapa {
 			return null;
 		}
 
-		public void startAction(Personaje perso, JuegoAccion GA)
-		{
+		public void IniciarAccion(Personaje personaje, JuegoAccion GA) {
 			int actionID = -1;
 			short CcellID = -1;
-			try
-			{
+			try {
 				actionID = Integer.parseInt(GA._args.split(";")[1]);
 				CcellID = Short.parseShort(GA._args.split(";")[0]);
 			}catch(Exception e){e.printStackTrace();}
 			if(actionID == -1)return;
 			if(Constantes.isJobAction(actionID))
 			{
-				perso.doJobAction(actionID,_object,GA,this);
+				personaje.doJobAction(actionID,_object,GA,this);
 				return;
 			}
 			//SocketManager.GAME_SEND_GDF_PACKET_TO_MAP(perso.get_curCarte(),this);
 			switch (actionID) {
-//Sauvegarder pos
+				//Sauvegarder pos
 				case 44 -> {
 					String str = _map + "," + _id;
-					perso.set_savePos(str);
-					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "06");
+					personaje.set_savePos(str);
+					GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "06");
 				}
-//Puiser
+				//Puiser
 				case 102 -> {
 					if (!_object.isInteractive()) return;//Si l'objet est utilisé
 					if (_object.getState() != Constantes.IOBJECT_STATE_FULL) return;//Si le puits est vide
 					_object.setState(Constantes.IOBJECT_STATE_EMPTYING);
 					_object.setInteractive(false);
-					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(perso.getActualMapa(), "" + GA._id, 501, perso.getID() + "", _id + "," + _object.getUseDuration() + "," + _object.getUnknowValue());
-					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(perso.getActualMapa(), this);
+					GestorSalida.GAME_SEND_GA_PACKET_TO_MAP(personaje.getActualMapa(), "" + GA._id, 501, personaje.getID() + "", _id + "," + _object.getUseDuration() + "," + _object.getUnknowValue());
+					GestorSalida.GAME_SEND_GDF_PACKET_TO_MAP(personaje.getActualMapa(), this);
 				}
-//Utiliser (zaap)
+				//Utilizar zaap
 				case 114 -> {
-					perso.openZaapMenu();
-					perso.getCuenta().getJuegoThread().removeAction(GA);
+					personaje.openZaapMenu();
+					personaje.getCuenta().getJuegoThread().removeAction(GA);
 				}
-//Zaapis
+				//Utilizar zaapis
 				case 157 -> {
 					StringBuilder ZaapiList = new StringBuilder();
 					String[] Zaapis;
 					int count = 0;
 					int price = 20;
-					if (perso.getActualMapa()._subArea.get_area().get_id() == 7 && (perso.get_align() == 1 || perso.get_align() == 0 || perso.get_align() == 3))//Ange, Neutre ou Sérianne
+					if (personaje.getActualMapa()._subArea.get_area().get_id() == 7 && (personaje.get_align() == 1 || personaje.get_align() == 0 || personaje.get_align() == 3))//Ange, Neutre ou Sérianne
 					{
 						Zaapis = Constantes.ZAAPI.get(Constantes.ALIGNEMENT_BONTARIEN).split(",");
-						if (perso.get_align() == 1) price = 10;
-					} else if (perso.getActualMapa()._subArea.get_area().get_id() == 11 && (perso.get_align() == 2 || perso.get_align() == 0 || perso.get_align() == 3))//Démons, Neutre ou Sérianne
+						if (personaje.get_align() == 1) price = 10;
+					} else if (personaje.getActualMapa()._subArea.get_area().get_id() == 11 && (personaje.get_align() == 2 || personaje.get_align() == 0 || personaje.get_align() == 3))//Démons, Neutre ou Sérianne
 					{
 						Zaapis = Constantes.ZAAPI.get(Constantes.ALIGNEMENT_BRAKMARIEN).split(",");
-						if (perso.get_align() == 2) price = 10;
+						if (personaje.get_align() == 2) price = 10;
 					} else {
 						Zaapis = Constantes.ZAAPI.get(Constantes.ALIGNEMENT_NEUTRE).split(",");
 					}
@@ -919,112 +967,128 @@ public class Mapa {
 								ZaapiList.append(s).append(";").append(price).append("|");
 							count++;
 						}
-						perso.SetZaaping(true);
-						GestorSalida.GAME_SEND_ZAAPI_PACKET(perso, ZaapiList.toString());
+						personaje.SetZaaping(true);
+						GestorSalida.GAME_SEND_ZAAPI_PACKET(personaje, ZaapiList.toString());
 					}
 				}
 //Acceder a un enclos
 				case 175 -> {
 					if (_object.getState() != Constantes.IOBJECT_STATE_EMPTY) ;
-					perso.openMountPark();
+					personaje.openMountPark();
 				}
 //Achat enclo
 				case 176 -> {
-					MountPark MP = perso.getActualMapa().getMountPark();
+					MountPark MP = personaje.getActualMapa().getMountPark();
 					if (MP.get_owner() == -1)//Public
 					{
-						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "196");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "196");
 						return;
 					}
 					if (MP.get_price() == 0)//Non en vente
 					{
-						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "197");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "197");
 						return;
 					}
-					if (perso.get_guild() == null)//Pas de guilde
+					if (personaje.get_guild() == null)//Pas de guilde
 					{
-						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1135");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "1135");
 						return;
 					}
-					if (perso.getMiembroGremio().getRank() != 1)//Non meneur
+					if (personaje.getMiembroGremio().getRank() != 1)//Non meneur
 					{
-						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "198");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "198");
 						return;
 					}
-					GestorSalida.GAME_SEND_R_PACKET(perso, "D" + MP.get_price() + "|" + MP.get_price());
+					GestorSalida.GAME_SEND_R_PACKET(personaje, "D" + MP.get_price() + "|" + MP.get_price());
 				}
 //Modifier prix de vente
 				case 177, 178 -> {
-					MountPark MP1 = perso.getActualMapa().getMountPark();
+					MountPark MP1 = personaje.getActualMapa().getMountPark();
 					if (MP1.get_owner() == -1) {
-						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "194");
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "194");
 						return;
 					}
-					if (MP1.get_owner() != perso.getID()) {
-						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "195");
+					if (MP1.get_owner() != personaje.getID()) {
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "195");
 						return;
 					}
-					GestorSalida.GAME_SEND_R_PACKET(perso, "D" + MP1.get_price() + "|" + MP1.get_price());
+					GestorSalida.GAME_SEND_R_PACKET(personaje, "D" + MP1.get_price() + "|" + MP1.get_price());
 				}
-//Retourner sur Incarnam
+				//Retourner sur Incarnam
 				case 183 -> {
-					if (perso.get_lvl() > 15) {
-						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(perso, "1127");
-						perso.getCuenta().getJuegoThread().removeAction(GA);
+					if (personaje.get_lvl() > 15) {
+						GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "1127");
+						personaje.getCuenta().getJuegoThread().removeAction(GA);
 						return;
 					}
-					short mapID = Constantes.getStartMap(perso.getClase());
-					int cellID = Constantes.getStartCell(perso.getClase());
-					perso.teletransportar(mapID, cellID);
-					perso.getCuenta().getJuegoThread().removeAction(GA);
+					short mapID = Constantes.getStartMap(personaje.getClase());
+					int cellID = Constantes.getStartCell(personaje.getClase());
+					personaje.teletransportar(mapID, cellID);
+					personaje.getCuenta().getJuegoThread().removeAction(GA);
 				}
-//Vérouiller maison
+				//Vérouiller maison
 				case 81 -> {
-					Casas h = Casas.get_house_id_by_coord(perso.getActualMapa().getID(), CcellID);
+					Casas h = Casas.get_house_id_by_coord(personaje.getActualMapa().getID(), CcellID);
 					if (h == null) return;
-					perso.setInHouse(h);
-					h.Lock(perso);
+					personaje.setInHouse(h);
+					h.Lock(personaje);
 				}
-//Rentrer dans une maison
+				//Rentrer dans une maison
 				case 84 -> {
-					Casas h2 = Casas.get_house_id_by_coord(perso.getActualMapa().getID(), CcellID);
+					Casas h2 = Casas.get_house_id_by_coord(personaje.getActualMapa().getID(), CcellID);
 					if (h2 == null) return;
-					perso.setInHouse(h2);
-					h2.HopIn(perso);
+					personaje.setInHouse(h2);
+					h2.HopIn(personaje);
 				}
-//Acheter maison
+				//Acheter maison
 				case 97 -> {
-					Casas h3 = Casas.get_house_id_by_coord(perso.getActualMapa().getID(), CcellID);
+					Casas h3 = Casas.get_house_id_by_coord(personaje.getActualMapa().getID(), CcellID);
 					if (h3 == null) return;
-					perso.setInHouse(h3);
-					h3.BuyIt(perso);
+					personaje.setInHouse(h3);
+					h3.BuyIt(personaje);
 				}
-//Ouvrir coffre privé
+				//Abrir un cofre privado
 				case 104 -> {
-					Cofres trunk = Cofres.get_trunk_id_by_coord(perso.getActualMapa().getID(), CcellID);
-					if (trunk == null) {
-						JuegoServidor.agregar_a_los_logs("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().getID() + " CELLID : " + CcellID);
-						return;
+					Cofres cofre = Cofres.get_trunk_id_by_coord(personaje.getActualMapa().getID(), CcellID);
+					if (cofre == null) {
+						cofre = new Cofres(GestorSQL.siguiente_id_cofres(), personaje.getInHouse().get_id(), personaje.getActualMapa().getID(), CcellID, " ", 0, "-", personaje.getID());
+						GestorSQL.agregar_cofre_a_casa(cofre);
+						Mundo.addCofre(cofre);
+					} else {
+					cofre.EntrarEnCofre(personaje);
 					}
-					perso.setInTrunk(trunk);
-					trunk.HopIn(perso);
 				}
-//Vérouiller coffre
+				//Vérouiller coffre
 				case 105 -> {
-					Cofres t = Cofres.get_trunk_id_by_coord(perso.getActualMapa().getID(), CcellID);
-					if (t == null) {
-						JuegoServidor.agregar_a_los_logs("Game: INVALID TRUNK ON MAP : " + perso.getActualMapa().getID() + " CELLID : " + CcellID);
-						return;
+					Cofres cofre = Cofres.get_trunk_id_by_coord(personaje.getActualMapa().getID(), CcellID);
+					if (cofre == null) {
+						cofre = new Cofres(GestorSQL.siguiente_id_cofres(), personaje.getInHouse().get_id(), personaje.getActualMapa().getID(), CcellID, "", 0, "-", personaje.getID());
+						GestorSQL.agregar_cofre_a_casa(cofre);
+						Mundo.addCofre(cofre);
 					}
-					perso.setInTrunk(t);
-					t.Lock(perso);
+					personaje.setInTrunk(cofre);
+					cofre.cerradura(personaje);
 				}
-//Modifier prix de vente
+
+				//Vérouiller coffre
+				case 153 -> {
+					Cofres cofre = Cofres.get_trunk_id_by_coord(personaje.getActualMapa().getID(), CcellID);
+
+					if(cofre != null) {
+						if (cofre.getPersonaje() != null) {
+							GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(personaje, "120;");
+							return;
+						}
+						personaje.setExchangeAction(new Accion.AccionIntercambiar<>(Accion.AccionIntercambiar.IN_TRUNK, cofre));
+						Cofres.AbrirCofre(personaje, "-", true);
+					}
+				}
+				//Modifier prix de vente
 				case 98, 108 -> {
-					Casas h4 = Casas.get_house_id_by_coord(perso.getActualMapa().getID(), CcellID);
+					Casas h4 = Casas.get_house_id_by_coord(personaje.getActualMapa().getID(), CcellID);
 					if (h4 == null) return;
-					perso.setInHouse(h4);
-					h4.SellIt(perso);
+					personaje.setInHouse(h4);
+					h4.SellIt(personaje);
 				}
 				default -> JuegoServidor.agregar_a_los_logs("Case.startAction non definie pour l'actionID = " + actionID);
 			}
@@ -1043,7 +1107,7 @@ public class Mapa {
 			}
 			switch(actionID) {
 				case 44://Sauvegarder a un zaap
-				case 81://Vérouiller maison
+				case 81://V?rouiller maison
 				case 84://ouvrir maison
 				case 97://Acheter maison.
 				case 98://Vendre
@@ -1051,7 +1115,12 @@ public class Mapa {
 				case 105://Code coffre
 				case 108://Modifier prix de vente
 				case 157://Zaapi
-				break;
+				case 121://Briser une ressource
+				case 181://Concasseur
+				case 110:
+				case 153:
+				case 183:
+					break;
 				case 102://Puiser
 					_object.setState(Constantes.IOBJECT_STATE_EMPTY);
 					_object.setInteractive(false);
@@ -1062,9 +1131,6 @@ public class Mapa {
 					if(perso.addObjet(obj, true))
 						Mundo.addObjet(obj,true);
 					GestorSalida.GAME_SEND_IQ_PACKET(perso,perso.getID(),qua);
-				break;
-				
-				case 183:
 				break;
 				
 				default:

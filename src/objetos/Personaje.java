@@ -518,27 +518,8 @@ public class Personaje {
 			} catch (InterruptedException ignored) {}
 			MainServidor.cerrarservidor();
 		}
-/*
-		if(!objetos.equals("")) {
-			if(objetos.charAt(objetos.length()-1) == '|')
-				objetos = objetos.substring(0,objetos.length()-1);
-			GestorSQL.cargando_objetos(this.getID());
-		}*/
+
 		_items.putAll(Mundo.getObjetoPersonaje(this.getID()));
-/*
-		for(String item : objetos.split("\\|")) {
-			if(item.equals(""))continue;
-			String[] infos = item.split(":");
-
-			int guid = 0;
-			try {
-				guid = Integer.parseInt(infos[0]);
-			}catch(Exception e ){continue;}
-
-			Objeto obj = Mundo.getObjet(guid);
-			if(obj == null)continue;
-			_items.put(obj.getID(), obj);
-	}*/
 
 		if(!storeObjets.equals("")) {
 			for(String _storeObjets : storeObjets.split("\\|")) {
@@ -599,19 +580,6 @@ public class Personaje {
 		this._size = _size;
 		this._gfxID = _gfxid;
 		this._baseStats = new Stats(stats,true,this);
-		/*if(!stuff.equals("")) {
-			if(stuff.charAt(stuff.length()-1) == '|')
-				stuff = stuff.substring(0,stuff.length()-1);
-			GestorSQL.cargando_objetos(this.getID());
-		}*/
-		/*for(String item : stuff.split("\\|")) {
-			if(item.equals(""))continue;
-			String[] infos = item.split(":");
-			int guid = Integer.parseInt(infos[0]);
-			Objeto obj = Mundo.getObjet(guid);
-			if( obj == null)continue;
-			_items.put(obj.getID(), obj);
-		}*/
 
 		_items.putAll(Mundo.getObjetoPersonaje(this.getID()));
 		this._PDVMAX = (_lvl-1)*5+ Constantes.getBasePdv(_classe)+getTotalStats().getEffect(Constantes.STATS_ADD_VITA);
@@ -939,7 +907,18 @@ public class Personaje {
 	public int get_capital() {
 		return _capital;
 	}
-	
+
+	private Accion.AccionIntercambiar<?> exchangeAction;
+
+	public Accion.AccionIntercambiar<?> getExchangeAction() {
+		return exchangeAction;
+	}
+
+	public synchronized void setExchangeAction(Accion.AccionIntercambiar<?> exchangeAction) {
+		if(exchangeAction == null) this.set_away(false);
+		this.exchangeAction = exchangeAction;
+	}
+
 	public boolean AprenderHechizo(int spellID, int level, boolean save, boolean send) {
 		if(Mundo.getSort(spellID).getStatsByLevel(level)==null) {
 			JuegoServidor.agregar_a_los_logs("[ERROR]Sort "+spellID+" lvl "+level+" non trouve.");
@@ -1107,13 +1086,13 @@ public class Personaje {
 		GestorSalida.GAME_SEND_SEE_FRIEND_CONNEXION(out,_showFriendConnection);
 		this._compte.SendOnline();
 		
-		//Messages de bienvenue
+		//Mensaje de bienvenida
 		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "189");
 		if(!_compte.getLastConnectionDate().equals("") && !_compte.get_lastIP().equals(""))
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "0152;"+_compte.getLastConnectionDate()+"~"+_compte.get_lastIP());
 		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "0153;"+_compte.getActualIP());
-		//Fin messages
-		//Actualisation de l'ip
+
+		//Actualizacion de la ip
 		_compte.setLastIP(_compte.getActualIP());
 		
 		//Mise a jour du lastConnectionDate
@@ -1960,7 +1939,7 @@ public class Personaje {
 		if(cellID == -1 || action == -1)return;
 		//Si case invalide
 		if(!_curCarte.getMapa(cellID).canDoAction(action))return;
-		_curCarte.getMapa(cellID).startAction(this,GA);
+		_curCarte.getMapa(cellID).IniciarAccion(this,GA);
 	}
 
 	public void finishActionOnCell(JuegoAccion GA) {
@@ -3191,10 +3170,7 @@ public class Personaje {
             _curHouse = h;
     }
    
-    public Casas getInHouse()
-    {
-            return _curHouse;
-    }
+    public Casas getInHouse() { return _curHouse; }
     
 	public Map<Integer, Integer> getStoreItems()
 	{

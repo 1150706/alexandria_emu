@@ -58,18 +58,18 @@ public class Mundo {
 	public static final Map<Integer, Misiones> Quests = new TreeMap<>();
 	public static final ArrayList<String> Publicidad = new ArrayList<>();
 	public static final Map<String, ComandosJugadores> ComandosJugadores = new TreeMap<>();
-	 
+
 	private static int nextHdvID;	//Contient le derniere ID utilis? pour cr?e un HDV, pour obtenir un ID non utilis? il faut imp?rativement l'incr?menter
 	private static int nextLigneID;	//Contient le derniere ID utilis? pour cr?e une ligne dans un HDV
-	
+
 	private static int saveTry = 1;
 	//Statut du serveur 1: accesible; 0: inaccesible; 2: sauvegarde
 	private static short _state = 1;
-	
+
 	private static byte _GmAccess = 0;
-	
+
 	private static int nextObjetID; //Contient le derniere ID utilis? pour cr?e un Objet
-	
+
 	public static void ticAllFightersTurns() {
 	    for (Mapa map : Mapas.values())
 	      try {
@@ -90,33 +90,33 @@ public class Mundo {
 	      		GestorSalida.GAME_SEND_cMK_PACKET_TO_ADMIN("@", 0, "DEBUG-TIC", ", mapID: " + map.getID());
 	      	}
 	  	}
-	
+
 	public static void addStep(Misiones.Step s)
 	{
 		Steps.put(s.get_id(), s);
 	}
-	
+
 	public static Misiones.Step getStep(int guid) {
 		return Steps.get(guid);
 	}
-	
+
 	public static void addquest(Misiones q) {
 		Quests.put(q.get_id(), q);
 		System.out.println("Quest ID : " + q.get_id());
 		System.out.println("Ali ID : " + q.get_ali());
 		System.out.println("Lvl : " + q.get_lvl());
 	}
-	
+
 	public static Misiones getQuest(int q) {
 		return Quests.get(q);
 	}
-	
+
 	public static class Drop {
 		private final int _itemID;
 		private final int _prosp;
 		private final float _taux;
 		private int _max;
-		
+
 		public Drop(int itm,int p,float t,int m) {
 			_itemID = itm;
 			_prosp = p;
@@ -150,7 +150,7 @@ public class Mundo {
 		private final int _id;
 		private final ArrayList<ObjTemplate> _itemTemplates = new ArrayList<>();
 		private final ArrayList<Stats> _bonuses = new ArrayList<>();
-		
+
 		public ItemSet (int id,String items, String bonuses) {
 			_id = id;
 			//parse items String
@@ -161,7 +161,7 @@ public class Mundo {
 					_itemTemplates.add(t);
 				}catch(Exception ignored){}
 			}
-			
+
 			//on ajoute un bonus vide pour 1 item
 			_bonuses.add(new Stats());
 			//parse bonuses String
@@ -186,18 +186,18 @@ public class Mundo {
 		{
 			return _id;
 		}
-		
+
 		public Stats getBonusStatByItemNumb(int numb) {
 			if(numb>_bonuses.size())return new Stats();
 			return _bonuses.get(numb-1);
 		}
-		
+
 		public ArrayList<ObjTemplate> getItemTemplates()
 		{
 			return _itemTemplates;
 		}
 	}
-	
+
 	public static class SuperArea {
 		private final int _id;
 		private final ArrayList<Area> _areas = new ArrayList<>();
@@ -206,24 +206,24 @@ public class Mundo {
 		{
 			_id = a_id;
 		}
-		
+
 		public void addArea(Area A)
 		{
 			_areas.add(A);
 		}
-		
+
 		public int get_id()
 		{
 			return _id;
 		}
 	}
-	
+
 	public static class Area {
 		private final int _id;
 		private SuperArea _superArea;
 		private final String _name;
 		private final ArrayList<SubArea> _subAreas = new ArrayList<>();
-		
+
 		public Area(int id, int superArea,String name) {
 			_id = id;
 			_name = name;
@@ -244,38 +244,38 @@ public class Mundo {
 		{
 			return _id;
 		}
-		
+
 		public SuperArea get_superArea()
 		{
 			return _superArea;
 		}
-		
+
 		public void addSubArea(SubArea sa)
 		{
 			_subAreas.add(sa);
 		}
-		
+
 		public ArrayList<Mapa> getMaps() {
 			ArrayList<Mapa> maps = new ArrayList<>();
 			for(SubArea SA : _subAreas)maps.addAll(SA.getMaps());
 			return maps;
 		}
 	}
-	
+
 	public static class SubArea {
 		private final int _id;
 		private final Area _area;
 		private final int _alignement;
 		private final String _name;
 		private final ArrayList<Mapa> _maps = new ArrayList<>();
-		
+
 		public SubArea(int id, int areaID, int alignement,String name) {
 			_id = id;
 			_name = name;
 			_area =  Mundo.getArea(areaID);
 			_alignement = alignement;
 		}
-		
+
 		public String get_name()
 		{
 			return _name;
@@ -302,7 +302,7 @@ public class Mundo {
 			_maps.add(carte);
 		}
 	}
-	
+
 	public static class Doble<L,R> {
 	    public final L primero;
 	    public R segundo;
@@ -319,7 +319,7 @@ public class Mundo {
 		private final int _duracion;
 		private final int _desconocido;
 		private final boolean _caminable;
-		
+
 		public ObjetosInteractivos(int a_i, int a_r, int a_d, int a_u, boolean a_w) {
 			_id = a_i;
 			_tiempoactualizar = a_r;
@@ -327,10 +327,10 @@ public class Mundo {
 			_desconocido = a_u;
 			_caminable = a_w;
 		}
-		
+
 		public int getId() {
 			return _id;
-		}	
+		}
 		public boolean isWalkable() {
 			return _caminable;
 		}
@@ -345,7 +345,7 @@ public class Mundo {
 			return _desconocido;
 		}
 	}
-	
+
 	public static class Exchange {
 		private final Personaje perso1;
 		private final Personaje perso2;
@@ -355,33 +355,33 @@ public class Mundo {
 		private final ArrayList<Doble<Integer,Integer>> items2 = new ArrayList<>();
 		private boolean ok1;
 		private boolean ok2;
-		
+
 		public Exchange(Personaje p1, Personaje p2) {
 			perso1 = p1;
 			perso2 = p2;
 		}
-		
+
 		synchronized public long getKamas(int guid) {
 			int i = 0;
 			if(perso1.getID() == guid)
 				i = 1;
 			else if(perso2.getID() == guid)
 				i = 2;
-			
+
 			if(i == 1)
 				return kamas1;
 			else if (i == 2)
 				return kamas2;
 			return 0;
 		}
-		
+
 		synchronized public void toogleOK(int guid) {
 			int i = 0;
 			if(perso1.getID() == guid)
 				i = 1;
 			else if(perso2.getID() == guid)
 				i = 2;
-			
+
 			if(i == 1) {
 				ok1 = !ok1;
 				GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,guid);
@@ -392,15 +392,15 @@ public class Mundo {
 				GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,guid);
 			} else
 				return;
-			
+
 			if(ok1 && ok2)
 				apply();
 		}
-		
+
 		synchronized public void setKamas(int guid, long k) {
 			ok1 = false;
 			ok2 = false;
-			
+
 			int i = 0;
 			if(perso1.getID() == guid)
 				i = 1;
@@ -410,7 +410,7 @@ public class Mundo {
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
-			
+
 			if(i == 1)
 			{
 				kamas1 = k;
@@ -422,7 +422,7 @@ public class Mundo {
 				GestorSalida.GAME_SEND_EXCHANGE_MOVE_OK(perso2, 'G', "", k+"");
 			}
 		}
-		
+
 		synchronized public void cancel() {
 			if(perso1.getCuenta() != null)if(perso1.getCuenta().getJuegoThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso1.getCuenta().getJuegoThread().get_out());
 			if(perso2.getCuenta() != null)if(perso2.getCuenta().getJuegoThread() != null) GestorSalida.GAME_SEND_EV_PACKET(perso2.getCuenta().getJuegoThread().get_out());
@@ -431,7 +431,7 @@ public class Mundo {
 			perso1.setCurExchange(null);
 			perso2.setCurExchange(null);
 		}
-		
+
 		synchronized public void apply() {
 			//Gestion des Kamas
 			perso1.addKamas((-kamas1+kamas2));
@@ -442,7 +442,7 @@ public class Mundo {
 				{
 					couple.segundo = 0;//On met la quantit? a 0 pour ?viter les problemes
 					continue;
-				}	
+				}
 				Objeto obj = Mundo.getObjet(couple.primero);
 				if((obj.getQuantity() - couple.segundo) <1)//S'il ne reste plus d'item apres l'?change
 				{
@@ -468,7 +468,7 @@ public class Mundo {
 				{
 					couple.segundo = 0;//On met la quantit? a 0 pour ?viter les problemes
 					continue;
-				}	
+				}
 				Objeto obj = Mundo.getObjet(couple.primero);
 				if((obj.getQuantity() - couple.segundo) <1)//S'il ne reste plus d'item apres l'?change
 				{
@@ -504,13 +504,13 @@ public class Mundo {
 		synchronized public void addItem(int guid, int qua, int pguid) {
 			ok1 = false;
 			ok2 = false;
-			
+
 			Objeto obj = Mundo.getObjet(guid);
 			int i = 0;
-			
+
 			if(perso1.getID() == pguid) i = 1;
 			if(perso2.getID() == pguid) i = 2;
-			
+
 			if(qua == 1) qua = 1;
 			String str = guid+"|"+qua;
 			if(obj == null)return;
@@ -544,7 +544,7 @@ public class Mundo {
 			}
 		}
 
-		
+
 		synchronized public void removeItem(int guid, int qua, int pguid) {
 			int i = 0;
 			if(perso1.getID() == pguid)
@@ -553,12 +553,12 @@ public class Mundo {
 				i = 2;
 			ok1 = false;
 			ok2 = false;
-			
+
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok1,perso1.getID());
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso1.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
 			GestorSalida.ENVIAR_INTERCAMBIO_EXITOSO(perso2.getCuenta().getJuegoThread().get_out(),ok2,perso2.getID());
-			
+
 			Objeto obj = Mundo.getObjet(guid);
 			if(obj == null)return;
 			String add = "|"+obj.getTemplate().getID()+"|"+obj.parseStatsString();
@@ -578,7 +578,7 @@ public class Mundo {
 			}else if(i ==2) {
 				Doble<Integer,Integer> couple = getCoupleInList(items2,guid);
 				int newQua = couple.segundo - qua;
-				
+
 				if(newQua <1)//Si il n'y a pu d'item
 				{
 					items2.remove(couple);
@@ -599,7 +599,7 @@ public class Mundo {
 			}
 			return null;
 		}
-		
+
 		public synchronized int getQuaItem(int itemID, int playerGuid) {
 			ArrayList<Doble<Integer, Integer>> items;
 			if(perso1.getID() == playerGuid)
@@ -621,7 +621,7 @@ public class Mundo {
 		public final int dinde;
 		public final int pvp;
 		public final long guilde;
-		
+
 		public ExpLevel(long c, int m, int d, int p) {
 			perso = c;
 			metier = m;
@@ -629,9 +629,9 @@ public class Mundo {
 			pvp = p;
 			guilde = perso*10;
 		}
-		
+
 	}
-	
+
 	public static void crear_el_mundo() {
 		System.out.println("====> Cargando datos estaticos <====");
 		System.out.println("Cargando las experiencias:");
@@ -694,7 +694,7 @@ public class Mundo {
 		System.out.println("Cargando las animaciones: ");
 		GestorSQL.cargar_animaciones();
 		System.out.println(Animations.size() + " animaciones cargadas");
-		
+
 		System.out.println("====> Cargando los datos dinamicos <====");
 		System.out.print("Actualizar a 0 los conectados: ");
 		GestorSQL.conectado_a_0();
@@ -757,7 +757,7 @@ public class Mundo {
 		GestorSQL.cargar_publicidades_automaticas();
 		System.out.println(Publicidad.size()+" publicidades cargadas.\n");
 	}
-	
+
 	public static Area getArea(int areaID)
 	{
 		return Areas.get(areaID);
@@ -767,57 +767,57 @@ public class Mundo {
 	{
 		return SuperAreas.get(areaID);
 	}
-	
+
 	public static SubArea getSubArea(int areaID)
 	{
 		return SubAreas.get(areaID);
 	}
-	
+
 	public static void addArea(Area area)
 	{
 		Areas.put(area.get_id(), area);
 	}
-	
+
 	public static void addSuperArea(SuperArea SA)
 	{
 		SuperAreas.put(SA.get_id(), SA);
 	}
-	
+
 	public static void addSubArea(SubArea SA)
 	{
 		SubAreas.put(SA.get_id(), SA);
 	}
-	
+
 	public static void addNPCreponse(NPC_reponse rep)
 	{
 		NPCRespuestas.put(rep.get_id(), rep);
 	}
-	
+
 	public static NPC_reponse getNPCreponse(int guid)
 	{
 		return NPCRespuestas.get(guid);
 	}
-	
+
 	public static int getExpLevelSize()
 	{
 		return Experiencias.size();
 	}
-	
+
 	public static void addExpLevel(int lvl,ExpLevel exp)
 	{
 		Experiencias.put(lvl, exp);
 	}
-	
+
 	public static Cuenta getCompte(int guid)
 	{
 		return Cuentas.get(guid);
 	}
-	
+
 	public static void addNPCQuestion(NPC_question quest)
 	{
 		NPCPreguntas.put(quest.get_id(), quest);
 	}
-	
+
 	public static NPC_question getNPCQuestion(int guid)
 	{
 		return NPCPreguntas.get(guid);
@@ -826,35 +826,35 @@ public class Mundo {
 	{
 		return NPCModelos.get(guid);
 	}
-	
+
 	public static void addNpcTemplate(NPCModelo temp)
 	{
 		NPCModelos.put(temp.getID(), temp);
 	}
-	
+
 	public static Mapa getCarte(short id)
 	{
 		return Mapas.get(id);
 	}
-	
+
 	public static  void addCarte(Mapa map) {
 		if(!Mapas.containsKey(map.getID()))
 			Mapas.put(map.getID(),map);
 	}
-	
+
 	public static void delCarte(Mapa map) {
 		Mapas.remove(map.getID());
 	}
-	
+
 	public static Cuenta getCompteByName(String name) {
 		return (CuentaPorNombre.get(name.toLowerCase())!=null? Cuentas.get(CuentaPorNombre.get(name.toLowerCase())):null);
 	}
-	
+
 	public static Personaje getPersonnage(int guid)
 	{
 		return Personajes.get(guid);
 	}
-	
+
 	public static void addAccount(Cuenta compte) {
 		Cuentas.put(compte.getID(), compte);
 		CuentaPorNombre.put(compte.getNombre().toLowerCase(), compte.getID());
@@ -870,7 +870,7 @@ public class Mundo {
 			Retos.append(";");
 		Retos.append(chal);
 	}
-	
+
 	public static String getChallengeFromConditions(boolean sevEnn, boolean sevAll, boolean bothSex, boolean EvenEnn,boolean MoreEnn,boolean hasCaw,boolean hasChaf,boolean hasRoul,boolean hasArak, boolean isBoss) {
 		String noBossChals = ";2;5;9;17;19;24;38;47;50;"; // ceux impossibles contre boss
 		StringBuilder toReturn = new StringBuilder();
@@ -917,7 +917,7 @@ public class Mundo {
 		}
 		return toReturn.toString();
 	}
-	
+
 	public static ArrayList<String> getRandomChallenge(int nombreChal, String challenges) {
 		String MovingChals = ";1;2;8;36;37;39;40;"; // Challenges de d?placements incompatibles
 		boolean hasMovingChal = false;
@@ -929,30 +929,30 @@ public class Mundo {
 		boolean hasKillerChal = false;
 		String HealChals = ";18;43;"; // ceux qui emp?chent de soigner
 		boolean hasHealChal = false;
-		
+
 		int compteur = 0, i = 0;
 		ArrayList<String> toReturn = new ArrayList<>();
 		String chal;
 		while(compteur < 100 && toReturn.size() < nombreChal) {
-			
+
 			compteur++;
 			i = Formulas.getRandomValue(1, challenges.split(";").length);
 			chal = challenges.split(";")[i-1]; // challenge au hasard dans la liste
-			
+
 			if(!toReturn.contains(chal)) {// si le challenge n'y ?tait pas encore
-				if(MovingChals.contains(";"+chal.split(",")[0]+";")) // s'il appartient ? une liste 
+				if(MovingChals.contains(";"+chal.split(",")[0]+";")) // s'il appartient ? une liste
 					if(!hasMovingChal) { // et qu'aucun de la liste n'a ?t? choisi d?j?
 						hasMovingChal = true;
 						toReturn.add(chal);
 						continue;
 					} else continue;
-				if(TargetChals.contains(";"+chal.split(",")[0]+";")) 
+				if(TargetChals.contains(";"+chal.split(",")[0]+";"))
 					if(!hasTargetChal) {
 						hasTargetChal = true;
 						toReturn.add(chal);
 						continue;
 					} else continue;
-				if(SpellChals.contains(";"+chal.split(",")[0]+";")) 
+				if(SpellChals.contains(";"+chal.split(",")[0]+";"))
 					if(!hasSpellChal) {
 						hasSpellChal = true;
 						toReturn.add(chal);
@@ -971,7 +971,7 @@ public class Mundo {
 						continue;
 					} else continue;
 				toReturn.add(chal); // s'il n'appartient ? aucune liste
-					
+
 			}
 			compteur++;
 		}
@@ -1027,19 +1027,19 @@ public class Mundo {
 		/* TODO: Sous Zone Alignement */
 		return data;
 	}
-	
+
 	public static long getPersoXpMin(int _lvl) {
 		if(_lvl > getExpLevelSize()) 	_lvl = getExpLevelSize();
 		if(_lvl < 1) 	_lvl = 1;
 		return Experiencias.get(_lvl).perso;
 	}
-	
+
 	public static long getPersoXpMax(int _lvl) {
 		if(_lvl >= getExpLevelSize()) 	_lvl = (getExpLevelSize()-1);
 		if(_lvl <= 1)	 	_lvl = 1;
 		return Experiencias.get(_lvl+1).perso;
 	}
-	
+
 	public static void addSort(Hechizos sort)
 	{
 		Hechizos.put(sort.getSpellID(), sort);
@@ -1049,7 +1049,7 @@ public class Mundo {
 	{
 		ObjetosModelos.put(obj.getID(), obj);
 	}
-	
+
 	public static Hechizos getSort(int id)
 	{
 		return Hechizos.get(id);
@@ -1059,7 +1059,7 @@ public class Mundo {
 	{
 		return ObjetosModelos.get(id);
 	}
-	
+
 	public synchronized static int getNewItemGuid() {
 		return nextObjetID++;
 	}
@@ -1125,12 +1125,12 @@ public class Mundo {
 	{
 		ObjetosInteractivos.put(IOT.getId(), IOT);
 	}
-	
+
 	public static Dragopavo getDragopavoPorID(int id)
 	{
 		return Dragopavos.get(id);
 	}
-	
+
 	public static void addDragopavo(Dragopavo dragopavo)
 	{
 		Dragopavos.put(dragopavo.getID(), dragopavo);
@@ -1145,7 +1145,7 @@ public class Mundo {
 		PrintWriter _out = null;
 		if(saver != null)
 		_out = saver.getCuenta().getJuegoThread().get_out();
-		
+
 		set_state((short)2);
 
 		try {
@@ -1198,7 +1198,7 @@ public class Mundo {
 			JuegoServidor.agregar_a_los_logs("Guardado completado con exito");
 			set_state((short)1);
 			//TODO : Rafraichir
-			
+
 		}catch(ConcurrentModificationException e) {
 			if(saveTry < 10) {
 				JuegoServidor.agregar_a_los_logs("Nouvelle tentative de sauvegarde");
@@ -1208,13 +1208,13 @@ public class Mundo {
 				saveAll(saver);
 			} else {
 				set_state((short)1);
-				//TODO : Rafraichir 
+				//TODO : Rafraichir
 				String mess = "Echec de la sauvegarde apres " + saveTry + " tentatives";
 				if(saver != null && _out != null)
 					GestorSalida.ENVIAR_TEXTO_EN_CONSOLA(_out, mess);
 				JuegoServidor.agregar_a_los_logs(mess);
 			}
-				
+
 		}catch(Exception e) {
 			JuegoServidor.agregar_a_los_logs("Erreur lors de la sauvegarde : " + e.getMessage());
 			e.printStackTrace();
@@ -1253,7 +1253,7 @@ public class Mundo {
 	}
 
 	public static void addRecetas(int id, ArrayList<Doble<Integer, Integer>> m) { Crafts.put(id,m); }
-	
+
 	public static ArrayList<Doble<Integer,Integer>> getCraft(int i)
 	{
 		return Crafts.get(i);
@@ -1398,7 +1398,7 @@ public class Mundo {
 		toRem = null;
 		//Persos.remove(g);
 	}
-	
+
 	public static boolean isArenaMap(int mapID) {
 		for(int curID : MainServidor.mapasarena) {
 			if(curID == mapID)
@@ -1411,30 +1411,30 @@ public class Mundo {
 		if(Mundo.getObjTemplate(template) == null) {
 			System.out.println("ItemTemplate "+template+" inexistant, GUID dans la table `items`:"+Guid);
 			MainServidor.cerrarservidor();
-		} 
-		
+		}
+
 		if(Mundo.getObjTemplate(template).getType() == 85)
 			return new PiedraAlma(Guid, qua, template, pos, strStats);
 		else
 			return new Objeto(Guid, template, qua, pos, strStats, dueño);
 	}
-	
-	
+
+
 	public static short get_state()
 	{
 		return _state;
 	}
-	
+
 	public static void set_state(short state)
 	{
 		_state = state;
 	}
-	
+
 	public static byte getGmAccess()
 	{
 		return _GmAccess;
 	}
-	
+
 	public static void setGmAccess(byte GmAccess)
 	{
 		_GmAccess = GmAccess;
@@ -1444,7 +1444,7 @@ public class Mundo {
 	{
 		return Hdvs.get(mapID);
 	}
-	
+
 	public synchronized static int getNextHdvID()//ATTENTION A NE PAS EXECUTER POUR RIEN CETTE METHODE CHANGE LE PROCHAIN ID DE L'HDV LORS DE SON EXECUTION
 	{
 		nextHdvID++;
@@ -1464,20 +1464,20 @@ public class Mundo {
 	{
 		nextLigneID = ligneID;
 	}
-	
+
 	public static void addHdvItem(int compteID, int hdvID, HdvEntry toAdd) {
         //Si le compte n'est pas dans la memoire
         _hdvsItems.computeIfAbsent(compteID, k -> new HashMap<>());    //Ajout du compte cl?:compteID et un nouveau map<hdvID,items<>>
 
         _hdvsItems.get(compteID).computeIfAbsent(hdvID, k -> new ArrayList<>());
-			
+
 		_hdvsItems.get(compteID).get(hdvID).add(toAdd);
 	}
-	
+
 	public static void removeHdvItem(int compteID,int hdvID,HdvEntry toDel) {
 		_hdvsItems.get(compteID).get(hdvID).remove(toDel);
 	}
-	
+
 	public static int getHdvNumber()
 	{
 		return Hdvs.size();
@@ -1485,7 +1485,7 @@ public class Mundo {
 
 	public static int getHdvObjetsNumber() {
 		int size = 0;
-		
+
 		for(Map<Integer,ArrayList<HdvEntry>> curCompte : _hdvsItems.values()) {
 			for(ArrayList<HdvEntry> curHdv : curCompte.values()) {
 				size += curHdv.size();
@@ -1502,7 +1502,7 @@ public class Mundo {
 	public static Map<Integer, ArrayList<HdvEntry>> getMyItems(int compteID) {
         //Si le compte n'est pas dans la memoire
         _hdvsItems.computeIfAbsent(compteID, k -> new HashMap<>());//Ajout du compte cl?:compteID et un nouveau map<hdvID,items
-			
+
 		return _hdvsItems.get(compteID);
 	}
 
@@ -1510,7 +1510,7 @@ public class Mundo {
 	{
 		return ObjetosModelos.values();
 	}
-	
+
 	public static boolean mariageok(){ // Le mariage est-il ok ?
 		boolean a = false;
 		boolean b = false;
@@ -1518,17 +1518,17 @@ public class Mundo {
 			if(Married.get(1) != null) a = true;
 			if(Married.get(2) != null) b = true;
 		}catch(Exception ignored){
-			
+
 		}
 		if(a == true && b == true)return true;
 		return false;
 	}
-	
+
 	public static Personaje getMarried(int ordre)
 	{
 		return Married.get(ordre);
 	}
-	
+
 	public static void AddMarried(int ordre, Personaje perso) {
 		Personaje Perso = Married.get(ordre);
 		if(Perso != null) {
@@ -1540,14 +1540,14 @@ public class Mundo {
 				Married.put(ordre, perso);
 				return;
 			}
-			
+
 			return;
 		}else {
 			Married.put(ordre, perso);
 			return;
 		}
 	}
-	
+
 	public static void PriestRequest(Personaje perso, Mapa carte, int IdPretre) {
 		Personaje Homme = Married.get(0);
 		Personaje Femme = Married.get(1);
@@ -1562,7 +1562,7 @@ public class Mundo {
 		GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(perso.getActualMapa(), "", -1, "Pr?tre", perso.getNombre()+" acceptez-vous d'?pouser "+getMarried((perso.getSexo()==1?0:1)).getNombre()+" ?");
 		GestorSalida.GAME_SEND_WEDDING(carte, 617, (Homme==perso?Homme.getID():Femme.getID()), (Homme==perso?Femme.getID():Homme.getID()), IdPretre);
 	}
-	
+
 	public static void Wedding(Personaje Homme, Personaje Femme, int isOK) {
 		if(isOK > 0) {
 			GestorSalida.GAME_SEND_cMK_PACKET_TO_MAP(Homme.getActualMapa(), "", -1, "Pr?tre", "Je d?clare "+Homme.getNombre()+" et "+Femme.getNombre()+" unis par les liens sacr?s du mariage.");
@@ -1575,75 +1575,75 @@ public class Mundo {
 		Married.get(1).setisOK(0);
 		Married.clear();
 	}
-	
+
 	public static Animaciones getAnimation(int AnimationId)
 	{
 		return Animations.get(AnimationId);
 	}
-	
+
 	public static void addAnimation(Animaciones animation)
 	{
 		Animations.put(animation.getId(), animation);
 	}
-	
+
 	public static void addHouse(Casas house)
 	{
 		Houses.put(house.getID(), house);
 	}
-	
+
 	public static Map<Integer, Casas> getHouses()
 	{
 		return Houses;
 	}
-	
+
 	public static Casas getHouse(int id)
 	{
 		return Houses.get(id);
 	}
-	
+
 	public static void addPerco(Recaudador perco)
 	{
 		Percepteurs.put(perco.getGuid(), perco);
 	}
-	
+
 	public static Recaudador getPerco(int percoID)
 	{
 		return Percepteurs.get(percoID);
 	}
-	
+
 	public static Map<Integer, Recaudador> getPercos()
 	{
 		return Percepteurs;
 	}
-	
+
 	public static void addCofre(Cofres trunk) { Trunks.put(trunk.getID(), trunk); }
-	
+
 	public static Cofres getTrunk(int id)
 	{
 		return Trunks.get(id);
 	}
-	
+
 	public static Map<Integer, Cofres> getTrunks()
 	{
 		return Trunks;
 	}
-	
+
 	public static void addMountPark(Mapa.MountPark mp)
 	{
 		MountPark.put(mp.get_map().getID(), mp);
 	}
-	
+
 	public static Map<Short, Mapa.MountPark> getMountPark()
 	{
 		return MountPark;
 	}
-	
+
 	public static String parseMPtoGuild(int GuildID) {
 		Gremio G = Mundo.getGuild(GuildID);
 		byte enclosMax = (byte)Math.floor(G.get_lvl()/10);
 		StringBuilder packet = new StringBuilder();
 		packet.append(enclosMax);
-		
+
 		for(Entry<Short, Mapa.MountPark> mp : MountPark.entrySet()) {
 			if(mp.getValue().getGremio() != null && mp.getValue().getGremio().get_id() == GuildID) {
 				packet.append("|").append(mp.getValue().get_map().getID()).append(";").append(mp.getValue().get_size()).append(";").append(mp.getValue().getObjectNumb());// Nombre d'objets pour le dernier
@@ -1653,7 +1653,7 @@ public class Mundo {
 		}
 		return packet.toString();
 	}
-	
+
 	public static int totalMPGuild(int GuildID) {
 		int i = 0;
 		for(Entry<Short, Mapa.MountPark> mp : MountPark.entrySet()) {
@@ -1665,7 +1665,7 @@ public class Mundo {
 		}
 		return i;
 	}
-	
+
 	public static void addSeller(Personaje p) {
 		if(Seller.get(p.getActualMapa().getID()) == null) {
 			ArrayList<Integer> PersoID = new ArrayList<>();
@@ -1678,12 +1678,12 @@ public class Mundo {
 			Seller.put(p.getActualMapa().getID(), PersoID);
 		}
 	}
-	
+
 	public static Collection<Integer> getSeller(short mapID)
 	{
 		return Seller.get(mapID);
 	}
-	
+
 	public static void removeSeller(int pID, short mapID)
 	{
 		Seller.get(mapID).remove(pID);

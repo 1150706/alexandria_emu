@@ -1066,14 +1066,11 @@ public class Mapa {
 				}
 				//Vérouiller coffre
 				case 105 -> {
-					Cofres cofre = Cofres.getCofrePorCoordenadas(personaje.getActualMapa().getID(), CcellID);
-					if (cofre == null) {
-						cofre = new Cofres(GestorSQL.siguiente_id_cofres(), personaje.getEnCasa().getID(), personaje.getActualMapa().getID(), CcellID, "", 0, "-", personaje.getID());
-						GestorSQL.agregar_cofre_a_casa(cofre);
-						Mundo.addCofre(cofre);
-					}
-					personaje.setEnCofre(cofre);
-					cofre.cerradura(personaje);
+					Cofres t = Cofres.getCofrePorCoordenadas(personaje.getActualMapa().getID(), CcellID);
+
+					if (t == null)
+						return;
+					t.cerradura(personaje);
 				}
 
 				//Vérouiller coffre

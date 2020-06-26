@@ -122,7 +122,7 @@ class JuegoServidor(Ip: String?) : Runnable {
 
         @JvmStatic
 		@Synchronized
-        fun agregar_a_los_logs(str: String) {
+        fun agregar_a_los_logs(str: String?) {
             println(str)
             if (MainServidor.canLog) {
                 try {

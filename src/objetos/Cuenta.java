@@ -154,8 +154,7 @@ public class Cuenta {
 		_lastConnectionDate = connectionDate;
 	}
 
-	public JuegoThread getJuegoThread()
-	{
+	public JuegoThread getJuegoThread() {
 		return _gameThread;
 	}
 	

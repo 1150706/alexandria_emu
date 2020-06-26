@@ -212,8 +212,7 @@ public class Cofres {
 		Objeto PersoObj = Mundo.getObjet(guid);
 		if(PersoObj == null) return;
 		//Si le joueur n'a pas l'item dans son sac ...
-		if(P.getItems().get(guid) == null)
-		{
+		if(P.getItems().get(guid) == null) {
 			JuegoServidor.agregar_a_los_logs("Le joueur "+P.getNombre()+" a tenter d'ajouter un objet dans un coffre qu'il n'avait pas.");
 			return;
 		}

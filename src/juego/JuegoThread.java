@@ -2557,26 +2557,21 @@ public class JuegoThread implements Runnable {
 		}
 	}
 
-	private void Exchange_onBuyItem(String packet)
-	{
+	private void Exchange_onBuyItem(String packet) {
 		String[] infos = packet.substring(2).split("\\|");
 		
-        if (_personaje.get_isTradingWith() > 0)
-        {
+        if (_personaje.get_isTradingWith() > 0) {
             Personaje seller = Mundo.getPersonnage(_personaje.get_isTradingWith());
-            if (seller != null) 
-            {
+            if (seller != null) {
             	int itemID = 0;
             	int qua = 0;
             	int price = 0;
-            	try
-        		{
+            	try {
             		itemID = Integer.valueOf(infos[0]);
             		qua = Integer.valueOf(infos[1]);
         		}catch(Exception e){return;}
         		
-                if (!seller.getStoreItems().containsKey(itemID) || qua <= 0) 
-                {
+                if (!seller.getStoreItems().containsKey(itemID) || qua <= 0) {
                     GestorSalida.GAME_SEND_BUY_ERROR_PACKET(_out);
                     return;
                 }
@@ -2585,8 +2580,7 @@ public class JuegoThread implements Runnable {
                 if(itemStore == null) return;
                 
                 if(qua > itemStore.getQuantity()) qua = itemStore.getQuantity();
-                if(qua == itemStore.getQuantity())
-                {
+                if(qua == itemStore.getQuantity()) {
                 	seller.getStoreItems().remove(itemStore.getID());
                 	_personaje.addObjet(itemStore, true);
                 }else // si l'ï¿½change peut se faire
@@ -2611,8 +2605,7 @@ public class JuegoThread implements Runnable {
 	            GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_personaje);
 	            GestorSalida.GAME_SEND_ITEM_LIST_PACKET_SELLER(seller, _personaje);
 	            GestorSalida.GAME_SEND_BUY_OK_PACKET(_out);
-	            if(seller.getStoreItems().isEmpty())
-	            {
+	            if(seller.getStoreItems().isEmpty()) {
 	            	if(Mundo.getSeller(seller.getActualMapa().getID()) != null && Mundo.getSeller(seller.getActualMapa().getID()).contains(seller.getID()))
 	        		{
 	        			Mundo.removeSeller(seller.getID(), seller.getActualMapa().getID());
@@ -2624,8 +2617,7 @@ public class JuegoThread implements Runnable {
             return;
         }
         
-		try
-		{
+		try {
 			int tempID = Integer.parseInt(infos[0]);
 			int qua = Integer.parseInt(infos[1]);
 			
@@ -2659,16 +2651,14 @@ public class JuegoThread implements Runnable {
 			GestorSalida.GAME_SEND_BUY_OK_PACKET(_out);
 			GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_personaje);
 			GestorSalida.GAME_SEND_Ow_PACKET(_personaje);
-		}catch(Exception e)
-		{
+		}catch(Exception e) {
 			e.printStackTrace();
 			GestorSalida.GAME_SEND_BUY_ERROR_PACKET(_out);
 			return;
 		}
 	}
 
-	private void Exchange_finish_buy()
-	{
+	private void Exchange_finish_buy() {
 		if(_personaje.get_isTradingWith() == 0 &&
 		   _personaje.get_curExchange() == null &&
 		   _personaje.getCurJobAction() == null &&
@@ -2679,28 +2669,23 @@ public class JuegoThread implements Runnable {
 			return;
 		
 		//Si ï¿½change avec un personnage
-		if(_personaje.get_curExchange() != null)
-		{
+		if(_personaje.get_curExchange() != null) {
 			_personaje.get_curExchange().cancel();
 			_personaje.set_isTradingWith(0);
 			_personaje.set_away(false);
 			return;
 		}
 		//Si mï¿½tier
-		if(_personaje.getCurJobAction() != null)
-		{
+		if(_personaje.getCurJobAction() != null) {
 			_personaje.getCurJobAction().resetCraft();
 		}
 		//Si dans un enclos
 		if(_personaje.getInMountPark() != null) _personaje.leftMountPark();
 		//prop d'echange avec un joueur
-		if(_personaje.get_isTradingWith() > 0)
-		{
+		if(_personaje.get_isTradingWith() > 0) {
 			Personaje p = Mundo.getPersonnage(_personaje.get_isTradingWith());
-			if(p != null)
-			{
-				if(p.isConectado())
-				{
+			if(p != null) {
+				if(p.isConectado()) {
 					PrintWriter out = p.getCuenta().getJuegoThread().get_out();
 					GestorSalida.GAME_SEND_EV_PACKET(out);
 					p.set_isTradingWith(0);
@@ -2708,14 +2693,11 @@ public class JuegoThread implements Runnable {
 			}
 		}
 		//Si perco
-		if(_personaje.get_isOnPercepteurID() != 0)
-		{
+		if(_personaje.get_isOnPercepteurID() != 0) {
 			Recaudador perco = Mundo.getPerco(_personaje.get_isOnPercepteurID());
 			if(perco == null) return;
-			for(Personaje z : Mundo.getGuild(perco.get_guildID()).getMembers())
-			{
-				if(z.isConectado())
-				{
+			for(Personaje z : Mundo.getGuild(perco.get_guildID()).getMembers()) {
+				if(z.isConectado()) {
 					GestorSalida.GAME_SEND_gITM_PACKET(z, Recaudador.parsetoGuild(z.get_guild().get_id()));
 					String str = "";
 					str += "G"+perco.get_N1()+","+perco.get_N2();
@@ -2741,15 +2723,13 @@ public class JuegoThread implements Runnable {
 		_personaje.setEnCofre(null);
 	}
 
-	private void Exchange_start(String packet)
-	{
+	private void Exchange_start(String packet) {
 		if(packet.startsWith("11", 2))//Ouverture HDV achat
 		{
 			if(_personaje.get_isTradingWith() < 0)//Si dï¿½jï¿½ ouvert
 				GestorSalida.GAME_SEND_EV_PACKET(_out);
 			
-			if(_personaje.getDeshonor() >= 5)
-			{
+			if(_personaje.getDeshonor() >= 5) {
 				GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(_personaje, "183");
 				return;
 			}

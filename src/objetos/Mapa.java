@@ -1103,6 +1103,7 @@ public class Mapa {
 				}
 				default -> JuegoServidor.agregar_a_los_logs("Case.startAction non definie pour l'actionID = " + actionID);
 			}
+			personaje.getCuenta().getJuegoThread().removeAction(GA);
 		}
 
 		public void finishAction(Personaje perso, JuegoAccion GA) {

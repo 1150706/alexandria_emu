@@ -17,6 +17,7 @@ import comunes.*;
 import comunes.Mundo.*;
 import objetos.casas.Casas;
 import objetos.casas.Cofres;
+import objetos.Accion.AccionIntercambiar;
 
 public class Mapa {
 	private final short _id;
@@ -821,6 +822,11 @@ public class Mapa {
 				case 104://Ouvrir
 				case 105://Code
 					return (this._object.getID() == 7350 || this._object.getID() == 7351 || this._object.getID() == 7353);
+				case 179://Libro de los artesanos
+					return (this._object.getID() == 7041 || this._object.getID() == 7042 || this._object.getID() == 7043 || this._object.getID() == 7044 || this._object.getID() == 7045);
+				case 170://Livre des artisants.
+					return this._object.getID() == 7035;
+
 				//Action ID non trouvé
 				default:
 					JuegoServidor.agregar_a_los_logs("MapActionID non existant dans Case.canDoAction: "+id);
@@ -971,12 +977,12 @@ public class Mapa {
 						GestorSalida.GAME_SEND_ZAAPI_PACKET(personaje, ZaapiList.toString());
 					}
 				}
-//Acceder a un enclos
+				//Acceder a un enclos
 				case 175 -> {
 					if (_object.getState() != Constantes.IOBJECT_STATE_EMPTY) ;
 					personaje.openMountPark();
 				}
-//Achat enclo
+				//Achat enclo
 				case 176 -> {
 					MountPark MP = personaje.getActualMapa().getMountPark();
 					if (MP.get_owner() == -1)//Public
@@ -1001,7 +1007,7 @@ public class Mapa {
 					}
 					GestorSalida.GAME_SEND_R_PACKET(personaje, "D" + MP.get_price() + "|" + MP.get_price());
 				}
-//Modifier prix de vente
+				//Modifier prix de vente
 				case 177, 178 -> {
 					MountPark MP1 = personaje.getActualMapa().getMountPark();
 					if (MP1.get_owner() == -1) {
@@ -1030,28 +1036,28 @@ public class Mapa {
 				case 81 -> {
 					Casas h = Casas.get_house_id_by_coord(personaje.getActualMapa().getID(), CcellID);
 					if (h == null) return;
-					personaje.setInHouse(h);
+					personaje.setEnCasa(h);
 					h.Lock(personaje);
 				}
 				//Rentrer dans une maison
 				case 84 -> {
 					Casas h2 = Casas.get_house_id_by_coord(personaje.getActualMapa().getID(), CcellID);
 					if (h2 == null) return;
-					personaje.setInHouse(h2);
+					personaje.setEnCasa(h2);
 					h2.HopIn(personaje);
 				}
 				//Acheter maison
 				case 97 -> {
 					Casas h3 = Casas.get_house_id_by_coord(personaje.getActualMapa().getID(), CcellID);
 					if (h3 == null) return;
-					personaje.setInHouse(h3);
+					personaje.setEnCasa(h3);
 					h3.BuyIt(personaje);
 				}
 				//Abrir un cofre privado
 				case 104 -> {
-					Cofres cofre = Cofres.get_trunk_id_by_coord(personaje.getActualMapa().getID(), CcellID);
+					Cofres cofre = Cofres.getCofrePorCoordenadas(personaje.getActualMapa().getID(), CcellID);
 					if (cofre == null) {
-						cofre = new Cofres(GestorSQL.siguiente_id_cofres(), personaje.getInHouse().get_id(), personaje.getActualMapa().getID(), CcellID, " ", 0, "-", personaje.getID());
+						cofre = new Cofres(GestorSQL.siguiente_id_cofres(), personaje.getEnCasa().getID(), personaje.getActualMapa().getID(), CcellID, " ", 0, "-", personaje.getID());
 						GestorSQL.agregar_cofre_a_casa(cofre);
 						Mundo.addCofre(cofre);
 					} else {
@@ -1060,19 +1066,19 @@ public class Mapa {
 				}
 				//Vérouiller coffre
 				case 105 -> {
-					Cofres cofre = Cofres.get_trunk_id_by_coord(personaje.getActualMapa().getID(), CcellID);
+					Cofres cofre = Cofres.getCofrePorCoordenadas(personaje.getActualMapa().getID(), CcellID);
 					if (cofre == null) {
-						cofre = new Cofres(GestorSQL.siguiente_id_cofres(), personaje.getInHouse().get_id(), personaje.getActualMapa().getID(), CcellID, "", 0, "-", personaje.getID());
+						cofre = new Cofres(GestorSQL.siguiente_id_cofres(), personaje.getEnCasa().getID(), personaje.getActualMapa().getID(), CcellID, "", 0, "-", personaje.getID());
 						GestorSQL.agregar_cofre_a_casa(cofre);
 						Mundo.addCofre(cofre);
 					}
-					personaje.setInTrunk(cofre);
+					personaje.setEnCofre(cofre);
 					cofre.cerradura(personaje);
 				}
 
 				//Vérouiller coffre
 				case 153 -> {
-					Cofres cofre = Cofres.get_trunk_id_by_coord(personaje.getActualMapa().getID(), CcellID);
+					Cofres cofre = Cofres.getCofrePorCoordenadas(personaje.getActualMapa().getID(), CcellID);
 
 					if(cofre != null) {
 						if (cofre.getPersonaje() != null) {
@@ -1087,8 +1093,13 @@ public class Mapa {
 				case 98, 108 -> {
 					Casas h4 = Casas.get_house_id_by_coord(personaje.getActualMapa().getID(), CcellID);
 					if (h4 == null) return;
-					personaje.setInHouse(h4);
+					personaje.setEnCasa(h4);
 					h4.SellIt(personaje);
+				}
+				case 170 -> {
+					personaje.setLibroArtesanos(true);
+					personaje.setExchangeAction(new AccionIntercambiar<>(AccionIntercambiar.CRAFTING_BOOK, new Oficio.RomperObjetos()));
+					GestorSalida.GAME_SEND_ECK_PACKET(personaje, 14, "2;11;13;14;15;16;17;18;19;20;24;25;26;27;28;31;33;36;41;43;44;45;46;47;48;49;50;56;58;62;63;64;65");
 				}
 				default -> JuegoServidor.agregar_a_los_logs("Case.startAction non definie pour l'actionID = " + actionID);
 			}

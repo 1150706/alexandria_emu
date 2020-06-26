@@ -239,7 +239,7 @@ public class JuegoThread implements Runnable {
 			//Envoi du code
 			case '0' -> {
 				packet = packet.substring(4);
-				if (_personaje.getInTrunk() != null)
+				if (_personaje.getEnCofre() != null)
 					Cofres.AbrirCofre(_personaje, packet, false);
 				else
 					Casas.OpenHouse(_personaje, packet, false);
@@ -247,8 +247,8 @@ public class JuegoThread implements Runnable {
 			//Changement du code
 			case '1' -> {
 				packet = packet.substring(4);
-				if (_personaje.getInTrunk() != null)
-					Cofres.LockTrunk(_personaje, packet);
+				if (_personaje.getEnCofre() != null)
+					Cofres.BloquearCofre(_personaje, packet);
 				else
 					Casas.LockHouse(_personaje, packet);
 			}
@@ -2412,10 +2412,10 @@ public class JuegoThread implements Runnable {
 			return;
 		}
 		//Coffre
-	    if(_personaje.getInTrunk() != null)
+	    if(_personaje.getEnCofre() != null)
         {
                 if(_personaje.get_curExchange() != null)return;
-                Cofres t = _personaje.getInTrunk();
+                Cofres t = _personaje.getEnCofre();
                 if(t == null) return;
 
 			switch (packet.charAt(2)) {
@@ -2442,7 +2442,7 @@ public class JuegoThread implements Runnable {
 						GestorSalida.ENVIAR_PAQUETE_CARACTERISTICAS(_personaje);
 					}
 					for (Personaje P : Mundo.getOnlinePersos()) {
-						if (P.getInTrunk() != null && _personaje.getInTrunk().getID() == P.getInTrunk().getID()) {
+						if (P.getEnCofre() != null && _personaje.getEnCofre().getID() == P.getEnCofre().getID()) {
 							GestorSalida.GAME_SEND_EsK_PACKET(P, "G" + t.getKamas());
 						}
 					}
@@ -2675,7 +2675,7 @@ public class JuegoThread implements Runnable {
 		   _personaje.getInMountPark() == null &&
 		   !_personaje.isInBank() &&
 		   _personaje.get_isOnPercepteurID() == 0 &&
-		   _personaje.getInTrunk() == null)
+		   _personaje.getEnCofre() == null)
 			return;
 		
 		//Si ï¿½change avec un personnage
@@ -2738,7 +2738,7 @@ public class JuegoThread implements Runnable {
 		_personaje.set_isTradingWith(0);
 		_personaje.set_away(false);
 		_personaje.setInBank(false);
-		_personaje.setInTrunk(null);
+		_personaje.setEnCofre(null);
 	}
 
 	private void Exchange_start(String packet)
@@ -3541,7 +3541,7 @@ public class JuegoThread implements Runnable {
 	private void house_action(String packet)
 	{
 		int actionID = Integer.parseInt(packet.substring(5));
-		Casas h = _personaje.getInHouse();
+		Casas h = _personaje.getEnCasa();
 		if(h == null) return;
 		switch (actionID) {
 //Vï¿½rouiller maison

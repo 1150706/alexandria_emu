@@ -1588,7 +1588,7 @@ public class Mundo {
 	
 	public static void addHouse(Casas house)
 	{
-		Houses.put(house.get_id(), house);
+		Houses.put(house.getID(), house);
 	}
 	
 	public static Map<Integer, Casas> getHouses()

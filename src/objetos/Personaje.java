@@ -140,6 +140,8 @@ public class Personaje {
 	private final Map<Integer , Integer> _storeItems = new TreeMap<>();//<ObjID, Prix>
 	//Quêtes
     private int savestat;
+    //Oficios
+	private boolean _libroartesanos = false;
 
 	public static class traque {
 		private long _time;
@@ -3083,32 +3085,26 @@ public class Personaje {
 		teletransportar(p.getActualMapa().getID(), (p.getActualCelda().getID()+cellPositiontoadd));
 	}
 	
-	public void Divorce()
-	{
+	public void Divorce() {
 		if(isConectado())
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(this, "047;"+ Mundo.getPersonnage(_wife).getNombre());
-		
 		_wife = 0;
 		GestorSQL.guardar_personaje(this, true);
 	}
 	
-	public int getWife()
-	{
+	public int getWife() {
 		return _wife;
 	}
 	
-	public int setisOK(int ok)
-	{
+	public int setisOK(int ok) {
 		return _isOK = ok;
 	}
 	
-	public int getisOK()
-	{
+	public int getisOK() {
 		return _isOK;
 	}
 	
-	public void changeOrientation(int toOrientation)
-	{
+	public void changeOrientation(int toOrientation) {
 		if(this.getOrientacion() == 0
 				|| this.getOrientacion() == 2
 				|| this.getOrientacion() == 4
@@ -3118,15 +3114,8 @@ public class Personaje {
 			GestorSalida.GAME_SEND_eD_PACKET_TO_MAP(getActualMapa(), this.getID(), toOrientation);
 		}
 	}
-	/*
-	public void set_FuneralStone()
-	{
-		// Ce transformer en tombe TODO
-		set_gfxID(Integer.parseInt(get_classe()+"3"));
-	}
-	*/
-	public void set_Ghosts()
-	{
+
+	public void set_Ghosts() {
 		if(isOnMount()) toogleOnMount();
 		_isGhosts = true;
 		setGFX(8004);
@@ -3134,11 +3123,6 @@ public class Personaje {
 		set_away(true);
 		set_Speed(-40);
 		teletransportar((short)20020, 397);
-		//Le teleporter aux zone de mort la plus proche
-		/*for(Carte map : ) FIXME
-		{
-			map.
-		}*/
 	}
 	
 	public void set_Alive()
@@ -3155,22 +3139,13 @@ public class Personaje {
 		GestorSalida.ENVIAR_AGREGAR_PERSONAJE_EN_MAPA(getActualMapa(), this);
 	}
    
-    public void setInTrunk(Cofres t)
-    {
-            _curTrunk = t;
-    }
+    public void setEnCofre(Cofres t) { _curTrunk = t; }
    
-    public Cofres getInTrunk()
-    {
-            return _curTrunk;
-    }
+    public Cofres getEnCofre() { return _curTrunk; }
     
-    public void setInHouse(Casas h)
-    {
-            _curHouse = h;
-    }
+    public void setEnCasa(Casas h) { _curHouse = h; }
    
-    public Casas getInHouse() { return _curHouse; }
+    public Casas getEnCasa() { return _curHouse; }
     
 	public Map<Integer, Integer> getStoreItems()
 	{
@@ -3373,5 +3348,11 @@ public class Personaje {
 	public int get_Speed() {
 		return _Speed;
 	}
+
+	public boolean getLibroArtesanos() {
+		return _libroartesanos;
+	}
+
+	public void setLibroArtesanos(boolean b) { _libroartesanos = b; }
 
 }

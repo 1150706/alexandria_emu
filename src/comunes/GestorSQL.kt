@@ -2052,7 +2052,7 @@ object GestorSQL {
         try {
             p = nueva_consulta(query, _dinamicos)
             p.setInt(1, P.accID)
-            p.setInt(2, h._id)
+            p.setInt(2, h.id)
             p.execute()
             cerrar_nueva_consulta(p)
             h._venta = 0
@@ -2074,7 +2074,7 @@ object GestorSQL {
         try {
             p = nueva_consulta(query, _dinamicos)
             p.setInt(1, P.accID)
-            p.setInt(2, h._id)
+            p.setInt(2, h.id)
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
@@ -2091,7 +2091,7 @@ object GestorSQL {
         try {
             p = nueva_consulta(query, _dinamicos)
             p.setInt(1, price)
-            p.setInt(2, h._id)
+            p.setInt(2, h.id)
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {
@@ -2107,7 +2107,7 @@ object GestorSQL {
         try {
             p = nueva_consulta(query, _dinamicos)
             p.setString(1, packet)
-            p.setInt(2, h._id)
+            p.setInt(2, h.id)
             p.setInt(3, P.accID)
             p.execute()
             cerrar_nueva_consulta(p)
@@ -2126,7 +2126,7 @@ object GestorSQL {
             p = nueva_consulta(query, _dinamicos)
             p.setInt(1, GuildID)
             p.setInt(2, GuildRights)
-            p.setInt(3, h._id)
+            p.setInt(3, h.id)
             p.execute()
             cerrar_nueva_consulta(p)
             h._gremio = GuildID
@@ -2163,7 +2163,7 @@ object GestorSQL {
             p.setInt(4, h._acceso)
             p.setString(5, h._llave)
             p.setInt(6, h._guild_rights)
-            p.setInt(7, h._id)
+            p.setInt(7, h.id)
             p.execute()
             cerrar_nueva_consulta(p)
         } catch (e: SQLException) {

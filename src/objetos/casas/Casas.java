@@ -46,9 +46,9 @@ public class Casas
 		_celdainterior = celdainterior;
 	}
 	
-	public int get_id() { return _id; }
+	public int getID() { return _id; }
 	
-	public short get_mapa()
+	public short getMapa()
 	{
 		return _mapa;
 	}
@@ -127,7 +127,7 @@ public class Casas
 	
 	public static Casas get_house_id_by_coord(int map_id, int cell_id) {
 		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet()) {
-			if(house.getValue().get_mapa() == map_id && house.getValue().get_celda() == cell_id) {
+			if(house.getValue().getMapa() == map_id && house.getValue().get_celda() == cell_id) {
 				return house.getValue();
 			}
 		}
@@ -137,9 +137,9 @@ public class Casas
 	public static void LoadHouse(Personaje P, int newMapID)//Affichage des maison + Blason
 	{
 		for(Entry<Integer, Casas> house : Mundo.getHouses().entrySet()) {
-			if(house.getValue().get_mapa() == newMapID) {
+			if(house.getValue().getMapa() == newMapID) {
 				StringBuilder packet = new StringBuilder();
-				packet.append("P").append(house.getValue().get_id()).append("|");
+				packet.append("P").append(house.getValue().getID()).append("|");
 				if(house.getValue().get_dueño() > 0) {
 					Cuenta C = Mundo.getCompte(house.getValue().get_dueño());
 					if(C == null)//Ne devrait pas arriver
@@ -183,7 +183,7 @@ public class Casas
 
 				if(house.getValue().get_dueño() == P.getAccID()) {
 					StringBuilder packet1 = new StringBuilder();
-					packet1.append("L+|").append(house.getValue().get_id()).append(";").append(house.getValue().get_acceso()).append(";");
+					packet1.append("L+|").append(house.getValue().getID()).append(";").append(house.getValue().get_acceso()).append(";");
 					
 					if(house.getValue().get_venta() <= 0) {
 						packet1.append("0;").append(house.getValue().get_venta());
@@ -200,7 +200,7 @@ public class Casas
     public void HopIn(Personaje P) {
         if(P.getPelea() != null || P.get_isTalkingWith() != 0 || P.get_isTradingWith() != 0 || P.getCurJobAction() != null || P.get_curExchange() != null)
             return;
-        Casas h = P.getInHouse();
+        Casas h = P.getEnCasa();
         if(h == null)
             return;
         if(h.get_dueño() == P.getAccID() || P.get_guild() != null && P.get_guild().get_id() == h.get_gremio() && canDo(Constantes.H_GNOCODE))
@@ -217,7 +217,7 @@ public class Casas
 
     public static void OpenHouse(Personaje P, String packet, boolean isHome) {
         if(P.get_savestat() == 0) {
-            Casas h = P.getInHouse();
+            Casas h = P.getEnCasa();
             GestorSQL.guardar_personaje(P, true);
             if(!h.canDo(Constantes.H_OCANTOPEN) && packet.compareTo(h.get_llave()) == 0 || isHome) {
                 P.teletransportar((short)h.get_mapainterior(), h.get_celdainterior());
@@ -240,14 +240,14 @@ public class Casas
 	
 	public void BuyIt(Personaje P)//Acheter une maison
 	{
-		Casas h = P.getInHouse();
-		String str = "CK"+h.get_id()+"|"+h.get_venta();//ID + Prix
+		Casas h = P.getEnCasa();
+		String str = "CK"+h.getID()+"|"+h.get_venta();//ID + Prix
 		GestorSalida.GAME_SEND_hOUSE(P, str);
 	}
 
 	public static void HouseAchat(Personaje P)//Acheter une maison
 	{
-		Casas h = P.getInHouse();
+		Casas h = P.getEnCasa();
 		if(AlreadyHaveHouse(P)) {
 			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(P, "132;1");
 			return;
@@ -298,9 +298,9 @@ public class Casas
 	
 	public void SellIt(Personaje P)//Vendre une maison
 	{
-		Casas h = P.getInHouse();
+		Casas h = P.getEnCasa();
 		if(isHouse(P, h)) {
-			String str = "CK"+h.get_id()+"|"+h.get_venta();//ID + Prix
+			String str = "CK"+h.getID()+"|"+h.get_venta();//ID + Prix
 			GestorSalida.GAME_SEND_hOUSE(P, str);
 				return;
 		}else {
@@ -310,11 +310,11 @@ public class Casas
 	
 	public static void SellPrice(Personaje P, String packet)//Vendre une maison
 	{
-		Casas h = P.getInHouse();
+		Casas h = P.getEnCasa();
 		int price = Integer.parseInt(packet);	
 		if(h.isHouse(P, h)) {
 			GestorSalida.GAME_SEND_hOUSE(P, "V");
-			GestorSalida.GAME_SEND_hOUSE(P, "SK"+h.get_id()+"|"+price);
+			GestorSalida.GAME_SEND_hOUSE(P, "SK"+h.getID()+"|"+price);
 				
 			//Vente de la maison
 			GestorSQL.vender_casa(h, price);
@@ -354,7 +354,7 @@ public class Casas
 	
 	public static void LockHouse(Personaje P, String packet)
 	{
-		Casas h = P.getInHouse();
+		Casas h = P.getEnCasa();
 		if(h.isHouse(P, h)) {
 			GestorSQL.codigo_casa(P, h, packet);//Change le code
 			closeCode(P);
@@ -394,7 +394,7 @@ public class Casas
 	}
 	
 	public static void parseHG(Personaje P, String packet) {
-		Casas h = P.getInHouse();
+		Casas h = P.getEnCasa();
 		
 		if(P.get_guild() == null) return;
 		
@@ -416,9 +416,9 @@ public class Casas
 			}
 		} else if(packet == null) {
 		if(h.get_gremio() <= 0) {
-			GestorSalida.GAME_SEND_hOUSE(P, "G"+h.get_id());
+			GestorSalida.GAME_SEND_hOUSE(P, "G"+h.getID());
 		}else if(h.get_gremio() > 0) {
-			GestorSalida.GAME_SEND_hOUSE(P, "G"+h.get_id()+";"+P.get_guild().get_name()+";"+P.get_guild().get_emblem()+";"+h.get_guild_rights());
+			GestorSalida.GAME_SEND_hOUSE(P, "G"+h.getID()+";"+P.get_guild().get_name()+";"+P.get_guild().get_emblem()+";"+h.get_guild_rights());
 		}
 		}
 	}
@@ -475,12 +475,12 @@ public class Casas
 	}
 	
 	public static void Leave(Personaje P, String packet) {
-		Casas h = P.getInHouse();
+		Casas h = P.getEnCasa();
 		if(!h.isHouse(P, h)) return;
 		int Pguid = Integer.parseInt(packet);
 		Personaje Target = Mundo.getPersonnage(Pguid);
 		if(Target == null || !Target.isConectado() || Target.getPelea() != null || Target.getActualMapa().getID() != P.getActualMapa().getID()) return;
-		Target.teletransportar(h.get_mapa(), h.get_celda());
+		Target.teletransportar(h.getMapa(), h.get_celda());
 		GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(Target, "018;"+P.getNombre());
 	}
 	

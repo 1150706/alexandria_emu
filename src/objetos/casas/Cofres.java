@@ -116,25 +116,24 @@ public class Cofres {
 		GestorSalida.EVIAR_CODIGO(personaje, "CK1|8");
 	}
 	
-	public static Cofres get_trunk_id_by_coord(int map_id, int cell_id) {
+	public static Cofres getCofrePorCoordenadas(int map_id, int cell_id) {
 		for(Entry<Integer, Cofres> trunk : Mundo.getTrunks().entrySet())
 			if(trunk.getValue().getMapa() == map_id && trunk.getValue().getCelda() == cell_id)
 				return trunk.getValue();
 		return null;
 	}
 	
-	public static void LockTrunk(Personaje P, String packet) {
-		Cofres t = P.getInTrunk();
-		if(t == null) return;
-		if(t.isTrunk(P, t)) {
-			GestorSQL.cofre_codigo(P, t, packet);//Change le code
-			t.setLlave(packet);
-			closeCode(P);
+	public static void BloquearCofre(Personaje personaje, String packet) {
+		Cofres cofre = personaje.getEnCofre();
+		if(cofre == null) return;
+		if(cofre.isCofre(personaje, cofre)) {
+			GestorSQL.cofre_codigo(personaje, cofre, packet); //Cambiar el codigo
+			cofre.setLlave(packet);
+			closeCode(personaje);
 		} else {
-			closeCode(P);
+			closeCode(personaje);
 		}
-		P.setInTrunk(null);
-		return;
+		personaje.setEnCofre(null);
 	}
 
 	public void EntrarEnCofre(Personaje player) {
@@ -149,7 +148,7 @@ public class Cofres {
 			player.setExchangeAction(new Accion.AccionIntercambiar<>(Accion.AccionIntercambiar.IN_TRUNK, this));
 			AbrirCofre(player, "-", true);
 		} else if (player.get_guild() == null && house.canDo(Constantes.C_OCANTOPEN))
-			GestorSalida.GAME_SEND_MESSAGE(player, "Ce coffre ne peut être ouvert que par les membres de la guilde !", MainServidor.CONFIG_MOTD_COLOR);
+			GestorSalida.ENVIAR_MENSAJE_DESDE_LANG(player, "1244;"); //Enviar ERROR_244 - LANG
 		else if (this.getDueño() > 0)
 			GestorSalida.EVIAR_CODIGO(player, "CK0|8");
 	}
@@ -173,13 +172,11 @@ public class Cofres {
 		}
 	}
 	
-	public static void closeCode(Personaje P)
-	{
+	public static void closeCode(Personaje P) {
 		GestorSalida.EVIAR_CODIGO(P, "V");
 	}
 	
-	public boolean isTrunk(Personaje P, Cofres t)//Savoir si c'est son coffre
-	{
+	public boolean isCofre(Personaje P, Cofres t) { //Saber si es un cofre
 		if(t.getDueño() == P.getAccID()) return true;
 		else return false;
 	}
@@ -187,7 +184,7 @@ public class Cofres {
     public static ArrayList<Cofres> getTrunksByHouse(Casas h) {
             ArrayList<Cofres> trunks = new ArrayList<>();
             for(Entry<Integer, Cofres> trunk : Mundo.getTrunks().entrySet()) {
-                    if(trunk.getValue().getCasa() == h.get_id()) {
+                    if(trunk.getValue().getCasa() == h.getID()) {
                             trunks.add(trunk.getValue());
                     }
             }
@@ -195,16 +192,16 @@ public class Cofres {
     }
     
 	public String parseToTrunkPacket() {
-		StringBuilder packet = new StringBuilder();
-		for(Objeto obj : _objetos.values())
-			packet.append("O").append(obj.parseItem()).append(";");
+		StringBuilder paquete = new StringBuilder();
+		for(Objeto objetos : _objetos.values())
+			paquete.append("O").append(objetos.parseItem()).append(";");
 		if(getKamas() != 0)
-			packet.append("G").append(getKamas());
-		return packet.toString();
+			paquete.append("G").append(getKamas());
+		return paquete.toString();
 	}
 	
 	public void addInTrunk(int guid, int qua, Personaje P) {
-		if(P.getInTrunk().getID() != getID()) return;
+		if(P.getEnCofre().getID() != getID()) return;
 		
 		if(_objetos.size() >= 80) // Le plus grand c'est pour si un admin ajoute des objets via la bdd...
 		{
@@ -282,7 +279,7 @@ public class Cofres {
 		
 		for(Personaje perso : P.getActualMapa().getPersos())
 		{
-			if(perso.getInTrunk() != null && getID() == perso.getInTrunk().getID())
+			if(perso.getEnCofre() != null && getID() == perso.getEnCofre().getID())
 			{
 				GestorSalida.GAME_SEND_EsK_PACKET(perso, str);
 			}
@@ -294,7 +291,7 @@ public class Cofres {
 	
 	public void removeFromTrunk(int guid, int qua, Personaje P)
 	{
-		if(P.getInTrunk().getID() != getID()) return;
+		if(P.getEnCofre().getID() != getID()) return;
 		
 		Objeto TrunkObj = Mundo.getObjet(guid);
 		if(TrunkObj == null) return;
@@ -367,7 +364,7 @@ public class Cofres {
 		}
 		
 		for(Personaje perso : P.getActualMapa().getPersos()) {
-			if(perso.getInTrunk() != null && getID() == perso.getInTrunk().getID()) {
+			if(perso.getEnCofre() != null && getID() == perso.getEnCofre().getID()) {
 				GestorSalida.GAME_SEND_EsK_PACKET(perso, str);
 			}
 		}
